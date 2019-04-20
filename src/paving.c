@@ -24,7 +24,6 @@ on_cancel_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <cancel cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                      GTK_RESPONSE_CANCEL);
 
@@ -40,7 +39,6 @@ on_recent1_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent1 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON1);
 
@@ -54,7 +52,6 @@ on_recent2_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent2 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON2);
 
@@ -69,7 +66,6 @@ on_recent3_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent3 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON3);
 
@@ -84,7 +80,6 @@ on_recent4_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent4 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON4);
 
@@ -99,7 +94,6 @@ on_recent5_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent5 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON5);
 
@@ -113,7 +107,6 @@ on_recent6_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent6 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON6);
 
@@ -128,7 +121,6 @@ on_recent7_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent7 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON7);
 
@@ -143,7 +135,6 @@ on_recent8_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent8 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON8);
 
@@ -158,7 +149,6 @@ on_recent9_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent9 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON9);
 
@@ -173,7 +163,6 @@ on_recent10_clicked (GtkButton *button, APP_data *data)
 {
 
 
- printf("bouton <recent10 cliqué \n");
  gtk_dialog_response (GTK_DIALOG(lookup_widget(GTK_WIDGET(button), "pavingDialog") ),
                        PAVING_BUTTON10);
 
@@ -256,7 +245,7 @@ GtkWidget *paving_window(APP_data *user_data )
   GtkWidget *button1, *button2, *button3, *button4, *button5, *button6, *button7, *button8, *button9, *button10, *buttonCancel;
   GKeyFile *keyString;
   gchar *recent_prev, *content_prev;
-  gint i;
+  gint i, count=0;
 
 
   keyString=g_object_get_data(G_OBJECT(user_data->appWindow), "config");
@@ -267,7 +256,7 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_window_set_position (GTK_WINDOW (pavingDialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal (GTK_WINDOW (pavingDialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (pavingDialog), TRUE);
-  gtk_window_set_default_size(GTK_WINDOW(pavingDialog), 800, 600);
+  gtk_window_set_default_size(GTK_WINDOW(pavingDialog), 850, 600);
   gtk_window_set_resizable (GTK_WINDOW(pavingDialog), TRUE);
   gtk_window_set_type_hint (GTK_WINDOW (pavingDialog), GDK_WINDOW_TYPE_HINT_DIALOG);
   gtk_window_set_transient_for (GTK_WINDOW (pavingDialog),  GTK_WINDOW(window1)); 
@@ -303,7 +292,6 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_widget_set_hexpand(GTK_WIDGET(labelTitle), FALSE);
   gtk_grid_attach(GTK_GRID(gridTitle), labelTitle, 1,0,1,1);
   subTitle= gtk_label_new("");
-  gtk_label_set_markup (GTK_LABEL (subTitle),_("<i>Here is the last 10 notes you've used. The file's complete name and path and first words are displayed.\nClick on a note to reload it ...</i>"));
   gtk_grid_attach(GTK_GRID(gridTitle), subTitle, 1,1,2,1);
 
   /* grid for files  */
@@ -335,6 +323,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-file-0", NULL));
                  if(strlen(recent_prev)>0) {
                    /* summaries */
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-0", NULL));
                    button1=paving_new_button_block(1, recent_prev, content_prev );
@@ -351,6 +340,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-file-1", NULL));
                  if(strlen(recent_prev)>0) {
                    /* summaries */
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-1", NULL));
                    button2=paving_new_button_block(2, recent_prev, content_prev );
@@ -367,6 +357,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-file-2", NULL));
                  if(strlen(recent_prev)>0) {
                    /* summaries */
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-2", NULL));
                    button3=paving_new_button_block(3, recent_prev, content_prev );
@@ -382,6 +373,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-file-3", NULL));
                  if(strlen(recent_prev)>0) {
                    /* summaries */
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-3", NULL));
                    button4=paving_new_button_block(4, recent_prev, content_prev );
@@ -397,6 +389,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-file-4", NULL));
                  if(strlen(recent_prev)>0) {
                    /* summaries */
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-4", NULL));
                    button5=paving_new_button_block(5, recent_prev, content_prev );
@@ -413,6 +406,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-file-5", NULL));
                  if(strlen(recent_prev)>0) {
                    /* summaries */
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-5", NULL));
                    button6=paving_new_button_block(6, recent_prev, content_prev );
@@ -429,6 +423,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-file-6", NULL));
                  if(strlen(recent_prev)>0) {
                    /* summaries */
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-6", NULL));
                    button7=paving_new_button_block(7, recent_prev, content_prev );
@@ -444,6 +439,7 @@ GtkWidget *paving_window(APP_data *user_data )
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-file-7", NULL));
                  if(strlen(recent_prev)>0) {
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-7", NULL));
                    button8=paving_new_button_block(8, recent_prev, content_prev );
@@ -459,6 +455,7 @@ GtkWidget *paving_window(APP_data *user_data )
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-file-8", NULL));
                  if(strlen(recent_prev)>0) {
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-8", NULL));
                    button9=paving_new_button_block(9, recent_prev, content_prev );
@@ -474,6 +471,7 @@ GtkWidget *paving_window(APP_data *user_data )
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-file-9", NULL));
                  if(strlen(recent_prev)>0) {
+                   count++;
                    content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-content-9", NULL));
                    button10=paving_new_button_block(10, recent_prev, content_prev );
@@ -484,6 +482,16 @@ GtkWidget *paving_window(APP_data *user_data )
                  }
                  g_free(recent_prev);
   }
+  if(count==1) {
+      gtk_label_set_markup (GTK_LABEL (subTitle),
+                  _("<i>Here is the last note you've used. The file's complete name and path and first words are displayed.\nClick on a note to reload it ...</i>"));
+  }
+  else {
+      gtk_label_set_markup (GTK_LABEL (subTitle),
+                  g_strdup_printf(_("<i>Here is the last %d notes you've used. The file's complete name and path and first words are displayed.\nClick on a note to reload it ...</i>"), count));
+
+  }
+
   /* branch signals */
   g_signal_connect(G_OBJECT(buttonCancel), "clicked", 
         G_CALLBACK(on_cancel_clicked), user_data);
@@ -491,17 +499,7 @@ GtkWidget *paving_window(APP_data *user_data )
 
   GLADE_HOOKUP_OBJECT_NO_REF (pavingDialog, pavingDialog, "pavingDialog");
   GLADE_HOOKUP_OBJECT (pavingDialog, buttonCancel, "buttonCancel");
-/* si tu laisses sur un objet non initialisé = plantage 
-  GLADE_HOOKUP_OBJECT (pavingDialog, button1, "button1");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button2, "button2");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button3, "button3");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button4, "button4");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button5, "button5");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button6, "button6");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button7, "button7");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button8, "button8");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button9, "button9");
-  GLADE_HOOKUP_OBJECT (pavingDialog, button10, "button10");*/
+
   gtk_widget_show_all(pavingDialog);
   return pavingDialog;
 }
