@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="qquotation.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3787">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3789" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3791" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3769">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3771" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3773" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3769"
+       id="radialGradient3777"
+       cx="243.67969"
+       cy="299.97797"
+       fx="243.67969"
+       fy="299.97797"
+       r="22.226562"
+       gradientTransform="matrix(1,0,0,0.72636204,0,82.085361)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3787"
+       id="radialGradient3793"
+       cx="243.67969"
+       cy="299.97797"
+       fx="243.67969"
+       fy="299.97797"
+       r="22.540006"
+       gradientTransform="matrix(1,0,0,0.73016727,0,80.943874)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.75829407"
+     inkscape:cx="372.04724"
+     inkscape:cy="526.18109"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1231"
+     inkscape:window-height="1002"
+     inkscape:window-x="49"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2985"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#767676;fill-opacity:1;stroke:#282828;font-family:Sans;stroke-opacity:1;stroke-width:2.41127461999999992;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(4.1471842,0,0,4.1471842,-698.52736,-894.84971)"
+       inkscape:export-filename="/home/luc/Bureau/quotation.png"
+       inkscape:export-xdpi="15.454896"
+       inkscape:export-ydpi="15.454896"><flowRegion
+         id="flowRegion2987"
+         style="stroke:url(#radialGradient3777);fill-opacity:1;fill:url(#radialGradient3793)"><rect
+           id="rect2989"
+           width="174.52541"
+           height="183.64241"
+           x="216.20312"
+           y="265.6954"
+           style="fill:#767676;stroke:#282828;stroke-opacity:1;stroke-width:2.41127461999999992;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara2991"
+         style="font-size:144px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Fontin;-inkscape-font-specification:Fontin;fill:#767676;stroke:#282828;stroke-opacity:1;stroke-width:2.41127461999999992;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1">&quot;</flowPara></flowRoot>  </g>
+</svg>

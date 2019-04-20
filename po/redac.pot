@@ -1,0 +1,964 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-18 16:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/misc.c:433
+msgid " "
+msgstr ""
+
+#: src/mttfiles.c:93 src/mttfiles.c:147
+#, c-format
+msgid " %s settings auto-generated - Do not edit!"
+msgstr ""
+
+#: src/callbacks.c:2025 src/callbacks.c:2092
+#, c-format
+msgid "%d hits"
+msgstr ""
+
+#: src/callbacks.c:206 src/callbacks.c:2654
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: src/interface.c:1171
+msgid "--hits"
+msgstr ""
+
+#: src/misc.c:168 src/misc.c:246 src/misc.c:322
+msgid "0 hits"
+msgstr ""
+
+#: src/interface.c:1441
+msgid ""
+"<b><big>Alignment shortcuts:\n"
+"</big></b>"
+msgstr ""
+
+#: src/interface.c:1448
+msgid ""
+"<b><big>Application shortcuts:\n"
+"</big></b>"
+msgstr ""
+
+#: src/interface.c:1434
+msgid ""
+"<b><big>Format shortcuts:\n"
+"</big></b>"
+msgstr ""
+
+#: src/interface.c:2288
+msgid ""
+"<b><big>Select a new time position : \n"
+"</big></b><i>Please choose a time location within the audio file.\n"
+"</i>"
+msgstr ""
+
+#: src/interface.c:2061
+msgid ""
+"<b>Back or forward jump in seconds.</b>\n"
+"<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"
+msgstr ""
+
+#: src/interface.c:1455
+msgid "<b>Bold</b>"
+msgstr ""
+
+#: src/interface.c:1603
+msgid "<b>Call main menu</b>"
+msgstr ""
+
+#: src/interface.c:1548
+msgid "<b>Center</b>"
+msgstr ""
+
+#: src/interface.c:2296
+msgid "<b>Current position :</b>"
+msgstr ""
+
+#: src/interface.c:1558
+msgid "<b>Fill</b>"
+msgstr ""
+
+#: src/interface.c:1633
+msgid "<b>Find for selected text</b>"
+msgstr ""
+
+#: src/interface.c:1583
+msgid "<b>Help</b>"
+msgstr ""
+
+#: src/interface.c:1643
+msgid "<b>Hide/show main toolbar</b>"
+msgstr ""
+
+#: src/interface.c:1491
+msgid "<b>Highlight</b>"
+msgstr ""
+
+#: src/interface.c:1461
+msgid "<b>Italic</b>"
+msgstr ""
+
+#: src/interface.c:1543
+msgid "<b>Left</b>"
+msgstr ""
+
+#: src/interface.c:1623
+msgid "<b>Load PDF file </b>"
+msgstr ""
+
+#: src/interface.c:1593
+msgid "<b>Paste image</b>"
+msgstr ""
+
+#: src/interface.c:2052
+msgid ""
+"<b>Play/pause rewind jump in seconds.</b>\n"
+"<i>Minimum : 1sec, maximum 10 secs.</i>"
+msgstr ""
+
+#: src/interface.c:1613
+msgid "<b>Quick save</b>"
+msgstr ""
+
+#: src/interface.c:1686
+msgid "<b>Quit application</b>"
+msgstr ""
+
+#: src/interface.c:1497
+msgid "<b>Quotation</b>"
+msgstr ""
+
+#: src/interface.c:1553
+msgid "<b>Right</b>"
+msgstr ""
+
+#: src/interface.c:1485
+msgid "<b>Strikethrough</b>"
+msgstr ""
+
+#: src/interface.c:1479
+msgid "<b>Subscript</b>"
+msgstr ""
+
+#: src/interface.c:1473
+msgid "<b>Superscript</b>"
+msgstr ""
+
+#: src/interface.c:1663
+msgid "<b>Switch to PDF pane</b>"
+msgstr ""
+
+#: src/interface.c:1653
+msgid "<b>Switch to editor pane</b>"
+msgstr ""
+
+#: src/interface.c:1674
+msgid "<b>Switch to sketch pane</b>"
+msgstr ""
+
+#: src/interface.c:1467
+msgid "<b>Underline</b>"
+msgstr ""
+
+#: src/paving.c:300
+msgid "<big><b>Recent notes :</b></big>"
+msgstr ""
+
+#: src/interface.c:2303
+#, c-format
+msgid "<i> %s of %s</i>"
+msgstr ""
+
+#: src/interface.c:2312
+msgid ""
+"<i><b>\n"
+"New position : </b></i>"
+msgstr ""
+
+#: src/paving.c:305
+msgid ""
+"<i>Here is the last 10 notes you've used. The file's complete name and path "
+"and first words are displayed.\n"
+"Click on a note to reload it ...</i>"
+msgstr ""
+
+#: src/mttfiles.c:759 src/mttfiles.c:832
+#, c-format
+msgid "<small><b>%s-<span foreground=\"green\">saved</span></b></small>"
+msgstr ""
+
+#: src/callbacks.c:208
+#, c-format
+msgid "<small><b>%s-<span foreground=\"red\">modified</span></b></small>"
+msgstr ""
+
+#: src/main.c:280 src/mttfiles.c:665 src/mttfiles.c:1343
+#, c-format
+msgid "<small><b>%s</b></small>"
+msgstr ""
+
+#: src/mttfiles.c:582
+#, c-format
+msgid "<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"
+msgstr ""
+
+#: src/interface.c:1089
+msgid "<small><b>noname</b></small>"
+msgstr ""
+
+#: src/interface.c:691
+msgid ""
+"Align to center \n"
+"the whole current paragraph."
+msgstr ""
+
+#: src/interface.c:685
+msgid ""
+"Align to left \n"
+"the whole current paragraph."
+msgstr ""
+
+#: src/interface.c:698
+msgid ""
+"Align to right \n"
+"the whole current paragraph."
+msgstr ""
+
+#: src/interface.c:183
+msgid "Annotation _color ... "
+msgstr ""
+
+#: src/interface.c:2013
+msgid "Annotation text font:"
+msgstr ""
+
+#: src/interface.c:1085
+msgid "Application settings."
+msgstr ""
+
+#: src/interface.c:663
+msgid ""
+"Apply highlighting \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:1905
+msgid "Ask before overwriting files"
+msgstr ""
+
+#: src/interface.c:1900
+msgid "Ask before quit program"
+msgstr ""
+
+#: src/interface.c:2076
+msgid "Audio"
+msgstr ""
+
+#: src/mttfiles.c:945
+msgid "Audio files"
+msgstr ""
+
+#: src/interface.c:2071
+msgid "Auto rewind to start after playing completed."
+msgstr ""
+
+#: src/interface.c:1203
+msgid ""
+"Automatic background saving of your work (editor part)\n"
+"is activated."
+msgstr ""
+
+#: src/interface.c:196 src/interface.c:259
+msgid "C_ancel"
+msgstr ""
+
+#: src/paving.c:321
+msgid "Cancel"
+msgstr ""
+
+#: src/callbacks.c:2953
+msgid "Choose annotation color ..."
+msgstr ""
+
+#: src/interface.c:823
+msgid ""
+"Choose here the playing speed. 1 for a normal speed,\n"
+"over 1 for a faster speed,\n"
+"under 1 for a slower speed."
+msgstr ""
+
+#: src/interface.c:425
+msgid "Clear current sketch"
+msgstr ""
+
+#: src/interface.c:812
+msgid ""
+"Click here to choose color for :\n"
+"- highlighting of PDF areas.\n"
+"-annotation color for PDF and sketches documents.\n"
+"-pencil color for sketches."
+msgstr ""
+
+#: src/interface.c:1133
+msgid ""
+"Click here to go to the next hit.\n"
+"With PDF documents we jump to next PAGE with hits"
+msgstr ""
+
+#: src/interface.c:1136
+msgid ""
+"Click here to replace text.\n"
+"You can't change text inside PDF documents."
+msgstr ""
+
+#: src/interface.c:1130
+msgid ""
+"Click here to to go to the previous hit.\n"
+"With PDF documents we jump to previous PAGE with hits"
+msgstr ""
+
+#: src/interface.c:1140
+msgid "Click to Zoom in the PDF document."
+msgstr ""
+
+#: src/interface.c:1143
+msgid "Click to Zoom out the PDF document."
+msgstr ""
+
+#: src/interface.c:1146
+msgid "Click to display the PDF document at its best size."
+msgstr ""
+
+#: src/interface.c:769
+msgid ""
+"Copy selected area inside PDF files\n"
+"to clipboard as pure text."
+msgstr ""
+
+#: src/interface.c:775
+msgid ""
+"Copy selected area inside PDF files or sketches \n"
+"to clipboard as pure image."
+msgstr ""
+
+#: src/support.c:95 src/support.c:119
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr ""
+
+#: src/interface.c:1767
+msgid "Current font : "
+msgstr ""
+
+#: src/callbacks.c:882
+msgid ""
+"Do you really want to erase your sketch ?\n"
+"This operation can't be cancelled once done ! "
+msgstr ""
+
+#: src/mttfiles.c:697
+msgid ""
+"Do you really want to quit this program ?\n"
+"Take it easy, your work\n"
+"will be automatically saved."
+msgstr ""
+
+#: src/interface.c:1977
+msgid ""
+"Document paper color\n"
+"(Please reload PDF to complete operation):"
+msgstr ""
+
+#: src/interface.c:1960
+msgid "Editor"
+msgstr ""
+
+#: src/mttfiles.c:461
+#, c-format
+msgid "Error saving %s: %s\n"
+msgstr ""
+
+#: src/interface.c:1910
+msgid "File management"
+msgstr ""
+
+#: src/interface.c:1908
+msgid "Force a prompt before any files are overwrote"
+msgstr ""
+
+#: src/interface.c:1903
+msgid ""
+"Force a prompt before quit program. Take it easy, your work will be "
+"automatically saved\n"
+"whatever you check or not this option."
+msgstr ""
+
+#: src/interface.c:804
+msgid "Freehand drawing tool"
+msgstr ""
+
+#: src/interface.c:1422
+msgid "Help..."
+msgstr ""
+
+#: src/interface.c:784
+msgid ""
+"Highlight selected area inside PDF document. \n"
+"Please don't forget to save your PDF document !"
+msgstr ""
+
+#: src/interface.c:2320
+msgid "Hour :"
+msgstr ""
+
+#: src/callbacks.c:2395
+msgid "I save you work ... wait a moment, please. "
+msgstr ""
+
+#: src/interface.c:1898
+msgid ""
+"If available in your system, the last PDF document used will be "
+"automatically\n"
+"reload when the programm starts."
+msgstr ""
+
+#: src/interface.c:865
+msgid ""
+"Jump backward in current audio file.\n"
+"Jump's length is defined in 'audio' settings."
+msgstr ""
+
+#: src/interface.c:870
+msgid ""
+"Jump forward in current audio file.\n"
+"Jump's length is defined in 'audio' settings."
+msgstr ""
+
+#: src/interface.c:875
+msgid "Jump to a specifed position within current audio file."
+msgstr ""
+
+#: src/interface.c:2259
+msgid "Jump to..."
+msgstr ""
+
+#: src/interface.c:705
+msgid ""
+"Justify left AND right \n"
+"the whole current paragraph."
+msgstr ""
+
+#: src/interface.c:405
+msgid "Load A_udio file ..."
+msgstr ""
+
+#: src/interface.c:385
+msgid "Load _PDF file ..."
+msgstr ""
+
+#: src/interface.c:1070
+msgid "Menu to access various file's operations"
+msgstr ""
+
+#: src/interface.c:2326
+msgid "Minute :"
+msgstr ""
+
+#: src/interface.c:1740
+msgid "New Annotation ..."
+msgstr ""
+
+#: src/misc.c:423
+msgid "No PDF Document"
+msgstr ""
+
+#: src/main.c:153
+msgid "Notes"
+msgstr ""
+
+#: src/undo.c:172
+msgid "Nothing to undo"
+msgstr ""
+
+#: src/interface.c:1319
+msgid "Open file..."
+msgstr ""
+
+#: src/interface.c:377
+msgid "PDF "
+msgstr ""
+
+#: src/misc.c:419
+#, c-format
+msgid "PDF : %s"
+msgstr ""
+
+#: src/interface.c:1986
+msgid "PDF document"
+msgstr ""
+
+#: src/mttfiles.c:1081 src/mttfiles.c:1169
+msgid "PDF files"
+msgstr ""
+
+#: src/mttfiles.c:1249
+msgid "PNG Image files"
+msgstr ""
+
+#: src/interface.c:2004
+msgid ""
+"Paper color \n"
+"(Will be unchanged until you clear sketch):"
+msgstr ""
+
+#: src/callbacks.c:75
+#, c-format
+msgid "Paragraph: %d/%d  %d Chars  %d Words"
+msgstr ""
+
+#: src/interface.c:250
+msgid "Paste and _center image "
+msgstr ""
+
+#: src/interface.c:2022
+msgid "Pen width in pixels :"
+msgstr ""
+
+#: src/interface.c:1270
+msgid "Pg:"
+msgstr ""
+
+#: src/interface.c:844
+msgid ""
+"Play or pause-rewind current audio file.\n"
+"Rewind's length is defined in 'audio' settings."
+msgstr ""
+
+#: src/interface.c:1210
+msgid ""
+"Please, notice that that the current PDF is modifyed\n"
+"and should be saved."
+msgstr ""
+
+#: src/interface.c:848
+msgid "Position within current audio file"
+msgstr ""
+
+#: src/mttfiles.c:752
+#, c-format
+msgid ""
+"Problem during quick save of :\n"
+"%s"
+msgstr ""
+
+#: src/paving.c:264
+msgid "Recent notes ..."
+msgstr ""
+
+#: src/mttfiles.c:632
+msgid "Redac files"
+msgstr ""
+
+#: src/undo.c:91
+msgid "Redo set paragraph to quotation style"
+msgstr ""
+
+#: src/undo.c:31
+msgid "Redo set text to bold"
+msgstr ""
+
+#: src/undo.c:71
+msgid "Redo set text to highlight"
+msgstr ""
+
+#: src/undo.c:47
+msgid "Redo set text to italic"
+msgstr ""
+
+#: src/undo.c:79
+msgid "Redo set text to strikethrought"
+msgstr ""
+
+#: src/undo.c:63
+msgid "Redo set text to subscript"
+msgstr ""
+
+#: src/undo.c:55
+msgid "Redo set text to superscript"
+msgstr ""
+
+#: src/undo.c:39
+msgid "Redo set text to underline"
+msgstr ""
+
+#: src/main.c:154
+msgid "Reference"
+msgstr ""
+
+#: src/interface.c:1895
+msgid "Reload last used PDF at program's start "
+msgstr ""
+
+#: src/interface.c:717
+msgid ""
+"Remove all character \n"
+"formattings from current selection."
+msgstr ""
+
+#: src/interface.c:389
+msgid "Save _modifyed PDF file ..."
+msgstr ""
+
+#: src/interface.c:1890
+msgid "Save current editor document every 5 minutes"
+msgstr ""
+
+#: src/interface.c:422
+msgid "Save current s_ketch ..."
+msgstr ""
+
+#: src/interface.c:1368
+msgid "Save your work and export to standard Word processor file..."
+msgstr ""
+
+#: src/interface.c:2332
+msgid "Second :"
+msgstr ""
+
+#: src/interface.c:791
+msgid ""
+"Set-up text annotation inside \n"
+"selected area on PDF or sketch document. \n"
+"Please don't forget to save your PDF/sketch document to keep \n"
+"your changes !"
+msgstr ""
+
+#: src/interface.c:1869
+msgid "Settings ..."
+msgstr ""
+
+#: src/interface.c:2033 src/main.c:155
+msgid "Sketch"
+msgstr ""
+
+#: src/interface.c:415
+msgid "Sketches"
+msgstr ""
+
+#: src/interface.c:1942
+msgid "Text background color:"
+msgstr ""
+
+#: src/interface.c:1932
+msgid "Text font:"
+msgstr ""
+
+#: src/interface.c:1951
+msgid "Text foreground color:"
+msgstr ""
+
+#: src/mttfiles.c:1197
+#, c-format
+msgid ""
+"The file :\n"
+"%s already exists !\n"
+"Do you really want to Overwrite an existing PDF file ?"
+msgstr ""
+
+#: src/mttfiles.c:818 src/mttfiles.c:1275
+#, c-format
+msgid ""
+"The file :%s exists !\n"
+"Overwrite existing file ?"
+msgstr ""
+
+#: src/mttfiles.c:567
+#, c-format
+msgid ""
+"The file :%s isn't a correct file\n"
+"or it's currupted. Operation cancelled !"
+msgstr ""
+
+#: src/undo.c:707
+msgid "There is nothing to undo."
+msgstr ""
+
+#: src/interface.c:635
+msgid ""
+"Toggle to/from bold either \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:641
+msgid ""
+"Toggle to/from italic either \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:667
+msgid ""
+"Toggle to/from quotation style either \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:659
+msgid ""
+"Toggle to/from strikethrough \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:655
+msgid ""
+"Toggle to/from subscript either \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:651
+msgid ""
+"Toggle to/from superscript either \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:646
+msgid ""
+"Toggle to/from underline either \n"
+"for current selection\n"
+"or next typing."
+msgstr ""
+
+#: src/interface.c:856
+msgid "Total duration of current audio file"
+msgstr ""
+
+#: src/interface.c:1286
+msgid "Type here the #of PDF page where you want to jump."
+msgstr ""
+
+#: src/interface.c:1169
+msgid "Type here the expression to find."
+msgstr ""
+
+#: src/interface.c:1189
+msgid "Type here the replacing expression."
+msgstr ""
+
+#: src/undo.c:123
+msgid "Undo delete block of text"
+msgstr ""
+
+#: src/undo.c:115
+msgid "Undo delete char"
+msgstr ""
+
+#: src/undo.c:131
+msgid "Undo delete image"
+msgstr ""
+
+#: src/undo.c:119
+msgid "Undo insert block of text"
+msgstr ""
+
+#: src/undo.c:111
+msgid "Undo insert char"
+msgstr ""
+
+#: src/undo.c:127
+msgid "Undo insert image"
+msgstr ""
+
+#: src/undo.c:155
+msgid "Undo last drawing inside sketch"
+msgstr ""
+
+#: src/undo.c:159
+msgid "Undo last image pasting inside sketch"
+msgstr ""
+
+#: src/interface.c:722
+msgid "Undo last operation."
+msgstr ""
+
+#: src/undo.c:135
+msgid "Undo new PDF text annot"
+msgstr ""
+
+#: src/undo.c:151
+msgid "Undo remove annotation inside PDF"
+msgstr ""
+
+#: src/undo.c:87
+msgid "Undo replace text"
+msgstr ""
+
+#: src/undo.c:143
+msgid "Undo set color of current annotation inside PDF"
+msgstr ""
+
+#: src/undo.c:147
+msgid "Undo set current annotation text content inside PDF"
+msgstr ""
+
+#: src/undo.c:139
+msgid "Undo set highlighting inside PDF"
+msgstr ""
+
+#: src/undo.c:99
+msgid ""
+"Undo set paragraph to center alignment, and \n"
+"go back to previous alignment"
+msgstr ""
+
+#: src/undo.c:107
+msgid ""
+"Undo set paragraph to fill alignment, and \n"
+"go back to previous alignment"
+msgstr ""
+
+#: src/undo.c:95
+msgid ""
+"Undo set paragraph to left alignment, and \n"
+"go back to previous alignment."
+msgstr ""
+
+#: src/undo.c:83
+msgid "Undo set paragraph to quotation style"
+msgstr ""
+
+#: src/undo.c:103
+msgid ""
+"Undo set paragraph to right alignment, and \n"
+"go back to previous alignment"
+msgstr ""
+
+#: src/undo.c:27
+msgid "Undo set text to bold"
+msgstr ""
+
+#: src/undo.c:67
+msgid "Undo set text to highlight"
+msgstr ""
+
+#: src/undo.c:43
+msgid "Undo set text to italic"
+msgstr ""
+
+#: src/undo.c:75
+msgid "Undo set text to strikethrought"
+msgstr ""
+
+#: src/undo.c:59
+msgid "Undo set text to subscript"
+msgstr ""
+
+#: src/undo.c:51
+msgid "Undo set text to superscript"
+msgstr ""
+
+#: src/undo.c:35
+msgid "Undo set text to underline"
+msgstr ""
+
+#: src/callbacks.c:3007
+msgid ""
+"Warning !\n"
+"I can't, for now, *undo* removing for\n"
+"this kind of annotation !\n"
+"Proceed aniway ?"
+msgstr ""
+
+#: src/interface.c:397
+msgid "_Audio "
+msgstr ""
+
+#: src/interface.c:408
+msgid "_Close current Audio file"
+msgstr ""
+
+#: src/interface.c:179
+msgid "_Edit annotation ... "
+msgstr ""
+
+#: src/interface.c:330
+msgid "_New note "
+msgstr ""
+
+#: src/interface.c:346
+msgid "_Open a previous note ..."
+msgstr ""
+
+#: src/interface.c:246
+msgid "_Paste image in place "
+msgstr ""
+
+#: src/interface.c:359
+msgid "_Recent notes ..."
+msgstr ""
+
+#: src/interface.c:187
+msgid "_Remove annotation "
+msgstr ""
+
+#: src/interface.c:338
+msgid "_Save the note as ...  "
+msgstr ""
+
+#: src/interface.c:1088 src/mttfiles.c:1257
+msgid "noname"
+msgstr ""
+
+#: src/misc.c:407
+#, c-format
+msgid "of %d"
+msgstr ""
+
+#: src/interface.c:1290
+msgid "of--"
+msgstr ""
+
+#: src/undo.c:163
+msgid "undo last text annot paste inside sketch - TODO"
+msgstr ""
+
+#: src/interface.c:830
+msgid "×0.5"
+msgstr ""
+
+#: src/interface.c:829
+msgid "×0.8"
+msgstr ""
+
+#: src/interface.c:828
+msgid "×1.0"
+msgstr ""
+
+#: src/interface.c:827
+msgid "×1.2"
+msgstr ""
+
+#: src/interface.c:826
+msgid "×1.5"
+msgstr ""

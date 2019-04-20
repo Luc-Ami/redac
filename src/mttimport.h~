@@ -1,0 +1,25 @@
+/*
+ * File: mttimport.c header
+ * Description: Contains importation specific functions so that widgets can keep their
+ *              settings betweeen saves.
+ *
+ *
+ *
+ */
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#ifndef MTTIMPORT_H
+#define MTTIMPORT_H
+
+#include <gtk/gtk.h>
+#include "misc.h"
+
+/* Local macros */
+
+
+void
+on_import_clicked (GtkButton *button, APP_data *data_app);
+
+#endif /* MTTIMPORT_H */
