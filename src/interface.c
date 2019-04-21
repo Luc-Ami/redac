@@ -276,7 +276,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *submenu2;
   GtkWidget *submenu3;
   GtkWidget *submenu4;
-
+  GtkWidget *submenu5;
   GtkWidget *new1;
   GtkWidget *image58;
   GtkWidget *save3;
@@ -297,6 +297,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *AudioCloseFile;
   GtkWidget *recent1;
   GtkWidget *import1;
+  GtkWidget *insertWPFile;
   GtkWidget *imageImport1;
   GtkWidget *image61;
   GtkWidget *separator14;
@@ -365,11 +366,16 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
 
   /* import */
   imageImport1=gtk_image_new_from_icon_name ("insert-text", GTK_ICON_SIZE_MENU);
-  import1=gtk_image_menu_item_new_with_mnemonic (_("_Insert a word processor file ..."));
+  import1=gtk_image_menu_item_new_with_mnemonic (_("_Insert text from a file "));
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (import1), imageImport1);
   gtk_widget_show (import1);
   gtk_container_add (GTK_CONTAINER (menu1), import1);
-
+  /* insert/import submenu */
+  submenu5 = gtk_menu_new ();
+  gtk_menu_item_set_submenu(GTK_MENU_ITEM(import1), submenu5);
+  insertWPFile=gtk_menu_item_new_with_mnemonic (_("from a RTF file ..."));
+  gtk_widget_show (insertWPFile);
+  gtk_container_add (GTK_CONTAINER (submenu5), insertWPFile);
 
   separator14 = gtk_separator_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu1), separator14);
@@ -445,7 +451,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   g_signal_connect ((gpointer) recent1, "activate",
                     G_CALLBACK (menuitem_response),
                     data_app);
-  g_signal_connect ((gpointer) import1, "activate",
+  g_signal_connect ((gpointer) insertWPFile, "activate",
                     G_CALLBACK (on_import_clicked),
                     data_app);
   g_signal_connect ((gpointer) loadPDF, "activate",
@@ -481,14 +487,10 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GLADE_HOOKUP_OBJECT_NO_REF (menu1, menu1, "menu1");
   GLADE_HOOKUP_OBJECT (menu1, new1, "new1");
   GLADE_HOOKUP_OBJECT (menu1, import1, "import1");
-  GLADE_HOOKUP_OBJECT (menu1, image58, "image58");
   GLADE_HOOKUP_OBJECT (menu1, save3, "save3");
   GLADE_HOOKUP_OBJECT (menu1, image59, "image59");
   GLADE_HOOKUP_OBJECT (menu1, open2, "open2");
-  GLADE_HOOKUP_OBJECT (menu1, image60, "image60");
   GLADE_HOOKUP_OBJECT (menu1, recent1, "recent1");
-  GLADE_HOOKUP_OBJECT (menu1, image61, "image61");
-  GLADE_HOOKUP_OBJECT (menu1, separator14, "separator14");
   return menu1;
 }
 
@@ -1033,7 +1035,7 @@ GtkWidget *UI_main_window(void)
 
   win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);
-  gtk_window_set_default_size(GTK_WINDOW(win), 950, 400);
+  gtk_window_set_default_size(GTK_WINDOW(win), 950, 700);
   gtk_window_set_resizable (GTK_WINDOW(win), TRUE);
   gtk_window_set_decorated (GTK_WINDOW(win), TRUE);
   gtk_window_set_title(GTK_WINDOW(win), "Redac !");
