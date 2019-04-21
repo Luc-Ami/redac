@@ -21,10 +21,11 @@ You can also find a tutorial (in french) for this software in **datas/** directo
 
 Compilation :
 -------------
-once all dependancies are installed, just type (within redac/ source directory) :
-make
+once all dependancies are installed, just type (within **redac/** source directory) :
 
-if something is wrong, re-type :
+**make**
+
+if something is wrong, retry :
 
 **make**
 
