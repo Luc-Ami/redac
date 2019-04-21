@@ -188,6 +188,7 @@ GtkWidget *paving_new_button_block(gint rank, gchar *strFile, gchar *str )
   grid=gtk_grid_new();
   label_title=gtk_label_new("");
   label_content=gtk_label_new("");
+  gtk_misc_set_alignment (GTK_MISC(label_content), 0,0);
   gtk_label_set_markup (GTK_LABEL (label_title), 
                         g_markup_printf_escaped("<u><b>%s</b></u>",  strFile));
   gtk_label_set_markup (GTK_LABEL (label_content), 
