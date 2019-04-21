@@ -44,12 +44,15 @@ from catdoc and me ;-)
 #define iXmlOdsFile 10
 #define iXmlMsXlsFile 11
 #define iXmlMsPptFile 12
+#define iGtkRtfFile 13
 /* for code pages conversions */
 #define iCpUtf16 1
 #define iCpW1252 2
 #define iCpIbm437 3
 #define iCpIso8859_1 4
 
+void
+on_merge_clicked (GtkButton *button, APP_data *data_app);
 
 void
 on_import_clicked (GtkButton *button, APP_data *data_app);

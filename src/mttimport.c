@@ -40,6 +40,7 @@ static gint get_file_type_by_signature(gchar *path_to_file)
   gint retval = iUnknownFile;
   gchar *buffer;
   glong fileSize;
+  gchar gtk_rtf_sign[]="GTKTEXTBUFFERCONTENTS";
   gchar rtf_sign[]="{\\rtf";
   gchar start_sign[]={0x00, 0xD9, 0x00, 0x00, 0x00, 0x00};
   gchar old_word_sign[]={0xdb,0xa5,0};
@@ -67,6 +68,8 @@ static gint get_file_type_by_signature(gchar *path_to_file)
    fileSize = fread(buffer, sizeof(gchar), sz, inputFile);
    fclose(inputFile);
    /* now we attempt to recognize signature */
+   if (strncmp(buffer,&gtk_rtf_sign,21)==0)
+      return iGtkRtfFile;
    if (strncmp(buffer,&write_sign,2)==0)
       return iMsWriteFile;
    if (strncmp(buffer,&old_word_sign,2)==0)
@@ -117,6 +120,12 @@ gboolean is_font_family(gchar *buffer)
    return TRUE;
    else return FALSE;
 }
+
+
+/*********************************************
+  test character formating
+*********************************************/
+
 /*********************************************
    ms-RTF parser
  from Searchmonkey search.c module
@@ -346,9 +355,53 @@ gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
 
 /**********************************
   callback : button open clicked 
-Please Note : we only reload NATIVE
- rich text (as Gtk meaning) datas,
-not standard Word Processor file
+  Please Note : we merge
+ from Gtk Rich text files
+
+************************************/
+void
+on_merge_clicked (GtkButton *button, APP_data *data_app)
+{
+  GKeyFile *keyString;
+  GtkTextBuffer *buffer;
+  gchar *path_to_file, *filename;
+  gint ret, sign, ret_conv;
+  GtkFileFilter *filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.kw");
+  gtk_file_filter_set_name (filter, _("Redac notes"));
+
+  buffer = data_app->buffer;
+  GtkWidget *window1 = data_app->appWindow;
+  keyString = g_object_get_data(G_OBJECT(window1), "config");
+
+
+  GtkWidget *dialog = create_loadFileDialog();
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  /* run dialog */
+  ret=gtk_dialog_run(GTK_DIALOG(dialog));
+  if(ret == GTK_RESPONSE_OK) {
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    gtk_widget_destroy (dialog); 
+    sign=get_file_type_by_signature(filename);
+ printf("fichier à importer:%s signature du fichier =%d \n", filename, sign);
+    if(sign==iGtkRtfFile) { 
+       printf("OK, signature Gtk Rtf \n");
+       /* first, we save once more time the current file */
+       path_to_file = g_key_file_get_string(keyString, "application", "current-file", NULL);
+       ret = save_gtk_rich_text(path_to_file, buffer);
+       g_free(path_to_file);
+       /* TODO we import datas at current insertion point */
+       ret_conv=RTFCheckFile(filename, buffer);
+    }/* endif iRtfFile RTF file signature */ 
+    g_free(filename);
+  }/* endif ret */
+  else   gtk_widget_destroy (dialog); ;
+}
+/**********************************
+  callback : button open clicked 
+  Please Note : we only reload pure
+ text from ms-RTF files.
 
 ************************************/
 void
