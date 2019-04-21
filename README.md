@@ -1,7 +1,8 @@
 # redac
-Redac is a note taker, PDF editor and sketch manager for students and teachers, written with Gtk3 toolkit
 
-In order to successfuly compile with the providen Makefile, you mus install in your GNU/linux machine :
+Redac is a note taker, PDF editor,sketch manager and audio transcriber tool for students and teachers, written with Gtk3 toolkit
+
+In order to successfuly compile with the providen Makefile, you must install in your GNU/linux machine :
 
 - libgtk3 and its development files
 - libinitl "      "      "      "
