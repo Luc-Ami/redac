@@ -298,6 +298,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *recent1;
   GtkWidget *import1;
   GtkWidget *insertWPFile;
+  GtkWidget *insertRedacFile;
   GtkWidget *imageImport1;
   GtkWidget *image61;
   GtkWidget *separator14;
@@ -377,6 +378,10 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   gtk_widget_show (insertWPFile);
   gtk_container_add (GTK_CONTAINER (submenu5), insertWPFile);
 
+  insertRedacFile=gtk_menu_item_new_with_mnemonic (_("Merge with a _note ..."));
+  gtk_widget_show (insertRedacFile);
+  gtk_container_add (GTK_CONTAINER (submenu5), insertRedacFile);
+
   separator14 = gtk_separator_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu1), separator14);
   gtk_widget_set_sensitive (separator14, FALSE);
@@ -451,12 +456,21 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   g_signal_connect ((gpointer) recent1, "activate",
                     G_CALLBACK (menuitem_response),
                     data_app);
+
   g_signal_connect ((gpointer) insertWPFile, "activate",
                     G_CALLBACK (on_import_clicked),
                     data_app);
+  g_signal_connect ((gpointer) insertRedacFile, "activate",
+                    G_CALLBACK (on_merge_clicked),
+                    data_app);
+
   g_signal_connect ((gpointer) loadPDF, "activate",
                     G_CALLBACK (on_loadPDF_clicked),
                     data_app);
+  g_signal_connect ((gpointer) savePDF, "activate",
+                    G_CALLBACK (on_savePDF_clicked),
+                    data_app);
+
   g_signal_connect ((gpointer) clearSketch, "activate",
                     G_CALLBACK (on_clearSketch_clicked),
                     data_app);
@@ -464,31 +478,19 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
                     G_CALLBACK (on_saveSketch_clicked),
                     data_app);
 
-  g_signal_connect ((gpointer) savePDF, "activate",
-                    G_CALLBACK (on_savePDF_clicked),
-                    data_app);
 
   g_signal_connect ((gpointer) AudioLoad, "activate",
                     G_CALLBACK (on_loadAudio_clicked),
                     data_app);
-
   g_signal_connect ((gpointer) AudioCloseFile, "activate",
                     G_CALLBACK (on_AudioCloseFile_clicked),
                     data_app);
-
- // g_signal_connect ((gpointer) recent1, "activate",
-   //                 G_CALLBACK (menuitem_response),
-     //               NULL);
- // g_signal_connect ((gpointer) cancel1, "activate",
-   //                 G_CALLBACK (menuitem_response),
-     //               data_app);
 
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (menu1, menu1, "menu1");
   GLADE_HOOKUP_OBJECT (menu1, new1, "new1");
   GLADE_HOOKUP_OBJECT (menu1, import1, "import1");
   GLADE_HOOKUP_OBJECT (menu1, save3, "save3");
-  GLADE_HOOKUP_OBJECT (menu1, image59, "image59");
   GLADE_HOOKUP_OBJECT (menu1, open2, "open2");
   GLADE_HOOKUP_OBJECT (menu1, recent1, "recent1");
   return menu1;
