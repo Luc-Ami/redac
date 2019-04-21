@@ -364,8 +364,12 @@ on_merge_clicked (GtkButton *button, APP_data *data_app)
 {
   GKeyFile *keyString;
   GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+  guint8 *txtbuffer;
   gchar *path_to_file, *filename;
-  gint ret, sign, ret_conv;
+  FILE *inputFile;
+  glong fileSize;
+  gint ret, sign;
   GtkFileFilter *filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.kw");
   gtk_file_filter_set_name (filter, _("Redac notes"));
@@ -374,6 +378,7 @@ on_merge_clicked (GtkButton *button, APP_data *data_app)
   GtkWidget *window1 = data_app->appWindow;
   keyString = g_object_get_data(G_OBJECT(window1), "config");
 
+  GdkAtom format = gtk_text_buffer_register_deserialize_tagset(buffer, "application/x-gtk-text-buffer-rich-text");
 
   GtkWidget *dialog = create_loadFileDialog();
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
@@ -384,7 +389,7 @@ on_merge_clicked (GtkButton *button, APP_data *data_app)
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy (dialog); 
     sign=get_file_type_by_signature(filename);
- printf("fichier à importer:%s signature du fichier =%d \n", filename, sign);
+
     if(sign==iGtkRtfFile) { 
        printf("OK, signature Gtk Rtf \n");
        /* first, we save once more time the current file */
@@ -392,7 +397,27 @@ on_merge_clicked (GtkButton *button, APP_data *data_app)
        ret = save_gtk_rich_text(path_to_file, buffer);
        g_free(path_to_file);
        /* TODO we import datas at current insertion point */
-       ret_conv=RTFCheckFile(filename, buffer);
+       /* we open the file */
+       inputFile = fopen(filename,"rb");
+       if(inputFile==NULL) {
+          printf("* ERROR : can't open for merging with Redac file:%s *\n", filename);
+          return;
+       }
+       /* we compute the size before dynamically allocate buffer */
+       glong prev = ftell(inputFile);   
+       fseek(inputFile, 0L, SEEK_END);
+       glong sz = ftell(inputFile);
+       fseek(inputFile, prev, SEEK_SET);
+       /* we allocate the buffer */
+       if(sz<=0)
+         return;
+       txtbuffer = g_malloc0(sz*sizeof(guint8)+sizeof(guint8));
+       fileSize = fread(txtbuffer, sizeof(guint8), sz, inputFile);
+       fclose(inputFile);
+
+       gtk_text_buffer_get_end_iter (buffer, &end);
+       gboolean deserialized = gtk_text_buffer_deserialize(buffer, buffer, format, &end, txtbuffer, fileSize, NULL);/* NULL mandatory ? ! */
+       g_free(txtbuffer);
     }/* endif iRtfFile RTF file signature */ 
     g_free(filename);
   }/* endif ret */
@@ -429,14 +454,13 @@ on_import_clicked (GtkButton *button, APP_data *data_app)
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy (dialog); 
     sign=get_file_type_by_signature(filename);
- printf("fichier à importer:%s signature du fichier =%d \n", filename, sign);
+
     if(sign==iRtfFile) { 
-       printf("OK, signature RTF \n");
        /* first, we save once more time the current file */
        path_to_file = g_key_file_get_string(keyString, "application", "current-file", NULL);
        ret = save_gtk_rich_text(path_to_file, buffer);
        g_free(path_to_file);
-       /* TODO we import datas at current insertion point */
+       /* we import datas at current insertion point */
        ret_conv=RTFCheckFile(filename, buffer);
     }/* endif iRtfFile RTF file signature */ 
     g_free(filename);
