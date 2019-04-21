@@ -1,7 +1,8 @@
-# redac
+# Redac
 
 ![Redac Icon](https://nsa40.casimages.com/img/2019/04/21/190421110735999272.png)
 Redac is a note taker, PDF editor, sketch manager and audio transcriber tool for students and teachers, written with Gtk3 toolkit
+![iHM preview](https://nsa40.casimages.com/img/2019/04/21/19042111032873051.png)
 
 Required libraries
 ---
