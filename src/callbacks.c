@@ -2409,6 +2409,11 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
   gchar *tmpStr;
   GtkTextIter start, end, iter;
   GtkTextMark *mark1, *mark2;
+  gdouble pen_width;
+  GKeyFile *keyString;
+
+  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config"); 
+  pen_width=g_key_file_get_double(keyString, "sketch", "pen-width", NULL);
 
  printf("key=%s\n", gdk_keyval_name (event->keyval));
   search_entry = lookup_widget(GTK_WIDGET(data->appWindow), "search_entry");
@@ -2508,16 +2513,30 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
            break;
          }
          case GDK_KEY_plus:case GDK_KEY_KP_Add:{
-             if(data->currentStack==CURRENT_STACK_PDF) {
+           if(data->currentStack==CURRENT_STACK_PDF) {
                  on_PDF_zoom_in_clicked(widget, data);
-             return TRUE;
+           return TRUE;
+           }
+          if(data->currentStack==CURRENT_STACK_SKETCH) {
+                 pen_width=pen_width+1;
+                 if(pen_width>20)
+                    pen_width=20;
+                 g_key_file_set_double(keyString, "sketch", "pen-width", pen_width);
+           return TRUE;
            }
            break;
          }
          case GDK_KEY_minus:case GDK_KEY_KP_Subtract:{
-             if(data->currentStack==CURRENT_STACK_PDF) {
+           if(data->currentStack==CURRENT_STACK_PDF) {
                  on_PDF_zoom_out_clicked(widget, data);
-             return TRUE;
+           return TRUE;
+           }
+          if(data->currentStack==CURRENT_STACK_SKETCH) {
+                 pen_width=pen_width-1;
+                 if(pen_width<1)
+                    pen_width=1;
+                 g_key_file_set_double(keyString, "sketch", "pen-width", pen_width);
+           return TRUE;
            }
            break;
          }

@@ -1873,16 +1873,12 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   GtkWidget *table6;
   GtkWidget *label249;
   GtkWidget *label250;
-
-  GtkWidget *label271;
- 
+  GtkWidget *label271; 
   GtkWidget *label993;
   GtkWidget *label264;
-
   GtkWidget *label991;
   GtkWidget *vbox28;
   GtkWidget *label274;
-
   GtkWidget *label992;
   GtkWidget *label273;
   GtkWidget *labelAudio;
@@ -2013,9 +2009,9 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   label991 = gtk_label_new (_("PDF document"));
   gtk_widget_show (label991);
 
-  GtkWidget   *tab_boxCSVSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+  GtkWidget *tab_boxCSVSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show(tab_boxCSVSettings);
-  GtkWidget    *iconCSVSettings = gtk_image_new_from_icon_name ("application-pdf", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  GtkWidget *iconCSVSettings = gtk_image_new_from_icon_name ("application-pdf", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconCSVSettings);
   gtk_misc_set_padding(GTK_MISC(iconCSVSettings), 0, 2);
   gtk_box_pack_start(GTK_BOX(tab_boxCSVSettings), iconCSVSettings, FALSE, FALSE, 2);
@@ -2060,9 +2056,9 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   label273 = gtk_label_new (_("Sketch"));
   gtk_widget_show (label273);
  
-  GtkWidget   *tab_boxSystemSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+  GtkWidget *tab_boxSystemSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show(tab_boxSystemSettings);
-  GtkWidget    *iconSystemSettings = gtk_image_new_from_icon_name ("applications-graphics", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  GtkWidget *iconSystemSettings = gtk_image_new_from_icon_name ("applications-graphics", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconSystemSettings);
   gtk_misc_set_padding(GTK_MISC(iconSystemSettings), 0, 2);
   gtk_box_pack_start(GTK_BOX(tab_boxSystemSettings), iconSystemSettings, FALSE, FALSE, 2);
