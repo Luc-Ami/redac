@@ -616,10 +616,26 @@ gint misc_get_paragraph_quadding(GtkTextBuffer *buffer, GtkTextIter iter)
   a simple function to get 
   a Pango string in order to
   display shortcuts
+  modifier : NONE =0
+  1=CTRL, 2=SHIFT
 ********************************/
-gchar *misc_get_pango_string(const gchar *key)
+gchar *misc_get_pango_string(const gchar *key, const gint modifier)
 {
-  return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"#352EDA\"><b>CTRL</b></span> + <span font=\"11\" foreground=\"white\" background=\"orange\"><b> %s </b></span>", key);
+  switch(modifier) {
+    case 0:{
+     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"orange\"><b> %s </b></span>", key);
+     break;
+    }
+    case 1:{
+     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"#352EDA\"><b>CTRL</b></span> + <span font=\"11\" foreground=\"white\" background=\"orange\"><b> %s </b></span>", key);
+     break;
+    }
+   case 2:{
+     return g_strdup_printf(_(" <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></span> + <span font=\"11\" foreground=\"white\" background=\"orange\"><b> %s </b></span>"), key);
+     break;
+    }
+   default:;
+  }/* end switch */
 }
 
 

@@ -139,7 +139,7 @@ gdouble misc_get_PDF_ratio(gdouble pdf_width, gdouble draw_width);
 void misc_clear_text(GtkTextBuffer *buffer, const gchar  *tag);
 void misc_append_empty_paragraph(GtkTextBuffer *buffer, gint row, gint total);
 void misc_remove_alignment_tags(GtkTextBuffer *buffer, GtkTextIter start, GtkTextIter end);
-gchar *misc_get_pango_string(const gchar *key);
+gchar *misc_get_pango_string(const gchar *key, const gint modifier);
 void undo_popup_menu(GtkWidget *attach_widget, GtkMenu *menu);
 gint misc_get_paragraph_quadding(GtkTextBuffer *buffer, GtkTextIter iter);
 GtkTextTag *misc_get_tag_from_code(GtkTextBuffer *buffer, gint code);
