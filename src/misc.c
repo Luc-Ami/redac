@@ -425,12 +425,15 @@ void update_statusbarPDF(APP_data *data)
   g_free(msg);
 }
 
-void update_statusbarSketch(GtkStatusbar  *statusbar) 
+void update_statusbarSketch(APP_data *data) 
 {
+  GtkStatusbar  *statusbar;
   gchar *msg;
+  GKeyFile *keyString=data->keystring;
 
+  statusbar = GTK_STATUSBAR(data->statusbar1);
   gtk_statusbar_pop(statusbar, 0); 
-  msg=g_strdup_printf("%s",_(" "));
+  msg=g_strdup_printf(_("Pen width:  %.2f"),g_key_file_get_double(keyString, "sketch", "pen-width", NULL));
   gtk_statusbar_push(statusbar, 0, msg);
   g_free(msg);
 }

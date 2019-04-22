@@ -2522,6 +2522,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
                  if(pen_width>20)
                     pen_width=20;
                  g_key_file_set_double(keyString, "sketch", "pen-width", pen_width);
+                 update_statusbarSketch(data);
            return TRUE;
            }
            break;
@@ -2536,6 +2537,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
                  if(pen_width<1)
                     pen_width=1;
                  g_key_file_set_double(keyString, "sketch", "pen-width", pen_width);
+                 update_statusbarSketch(data);
            return TRUE;
            }
            break;
@@ -2777,7 +2779,7 @@ on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
          gtk_widget_grab_focus(GTK_WIDGET(user_data->PDFScrollable));
        }
        else if(g_ascii_strncasecmp ((gchar*)  tmpStr,"Sket",4* sizeof(gchar))  ==  0 ) {
-                  update_statusbarSketch(GTK_STATUSBAR(statusbar) );
+                  update_statusbarSketch(user_data);
                   user_data->currentStack = CURRENT_STACK_SKETCH;
                   misc_set_gui_in_sketch_mode(user_data->appWindow, prevStack);// tempo until sketch built !!!!
              }

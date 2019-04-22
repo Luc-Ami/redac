@@ -131,7 +131,7 @@ void misc_colorinvert_picture(GdkPixbuf *pb);
 void misc_set_gui_in_PDF_mode(GtkWidget *window1, gint prevStack);
 void misc_set_gui_in_editor_mode(GtkWidget *window1, gint prevStack);
 void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack);
-void update_statusbarSketch(GtkStatusbar  *statusbar);
+void update_statusbarSketch(APP_data *data);
 void update_statusbarPDF(APP_data *data);
 void update_PDF_state(APP_data *data, gint state);
 void misc_setup_text_buffer_tags(GtkTextBuffer *buffer);
