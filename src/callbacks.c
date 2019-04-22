@@ -2416,7 +2416,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
   page_entry = lookup_widget(GTK_WIDGET(data->appWindow), "page_entry");
   if(gtk_widget_is_focus (search_entry) || gtk_widget_is_focus (replace_entry) || gtk_widget_is_focus (page_entry)) {
     fdont_care=FALSE;
-    printf("I shortcur for fdont_care \n");
+    printf("DEBUG : I shortcut for fdont_care \n");
     return FALSE;
   }
   
@@ -2507,6 +2507,21 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
            }                      
            break;
          }
+         case GDK_KEY_plus:case GDK_KEY_KP_Add:{
+             if(data->currentStack==CURRENT_STACK_PDF) {
+                 on_PDF_zoom_in_clicked(widget, data);
+             return TRUE;
+           }
+           break;
+         }
+         case GDK_KEY_minus:case GDK_KEY_KP_Subtract:{
+             if(data->currentStack==CURRENT_STACK_PDF) {
+                 on_PDF_zoom_out_clicked(widget, data);
+             return TRUE;
+           }
+           break;
+         }
+
          default:;
        }/* end switch */
      }
@@ -2793,41 +2808,7 @@ void on_PDF_size_changed (GtkWidget *widget, GdkRectangle *allocation, APP_data 
   }
 }
 
-/******************
-  zoom IN PDF
-******************/
-void on_PDF_zoom_in_clicked  (GtkButton *button,  APP_data *data)
-{
-  GKeyFile *keyString;
 
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
-
-  if(data->doc) {
-     data->PDFratio=data->PDFratio*1.1;
-     if(data->PDFratio*data->PDFWidth>PDF_VIEW_MAX_WIDTH)
-         data->PDFratio=PDF_VIEW_MAX_WIDTH/data->PDFWidth;
-     PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
-     g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
-  }
-}
-
-/**************
-  zoom OUT PDF
-***************/
-void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data)
-{
-  GKeyFile *keyString;
-
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
-
-  if(data->doc) {
-     data->PDFratio=data->PDFratio*0.9;
-     if(data->PDFratio<0.5)
-         data->PDFratio=0.5;
-     PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
-     g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
-  }
-}
 
 /******************
   zoom fit-best PDF
@@ -2872,7 +2853,7 @@ gboolean on_PDF_scroll_event (GtkWidget *widget, GdkEvent *event, APP_data *data
 /*************************************
   CB : called by paste in sketch menu
 **************************************/
-void on_menuPasteSketch(GtkMenuItem *menuitem,  APP_data *user_data)
+void on_menuPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
 {
 
   gtk_widget_destroy(GTK_WIDGET(lookup_widget(GTK_WIDGET(menuitem), "menu1Sketch")));
@@ -3031,7 +3012,6 @@ on_play_pause_clicked (GtkButton *button, APP_data *data)
 
   keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
   step=(gint64)g_key_file_get_double(keyString, "application", "audio-file-rewind-step", NULL);
-printf("valeur step %d\n", step); 
 
   if(data->fAudioPlaying)  {
     /* thus we must pause playing */
@@ -3074,7 +3054,6 @@ on_jump_prev_clicked (GtkButton *button, APP_data *data)
  
   keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
   step=(gint64)g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
-printf("valeur step %d\n", step); 
 
   audio_get_position(data->pipeline, &pos );
   audio_seek_backward(data->pipeline, step, pos, data->audio_total_duration);
@@ -3097,7 +3076,6 @@ on_jump_next_clicked (GtkButton *button, APP_data *data)
 
   keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
   step=(gint64)g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
-printf("valeur step %d\n", step); 
 
   audio_get_position(data->pipeline, &pos );
   audio_seek_forward(data->pipeline, step, pos, data->audio_total_duration);
@@ -3211,23 +3189,23 @@ void on_audioPlaySpeed_changed(GtkComboBox *combobox, APP_data *data)
 
   speed=gtk_combo_box_get_active (GTK_COMBO_BOX(lookup_widget(GTK_WIDGET(data->appWindow), "audioPlaySpeed")));
   switch((gint)speed) {
-    case 0:{printf("1,5\n");
+    case 0:{
        speed=1.5;
        break;
     }
-    case 1:{printf("1,2\n");
+    case 1:{
        speed=1.2;
        break;
     }
-    case 2:{printf("1,0\n");
+    case 2:{
        speed=1;
        break;
     }
-    case 3:{printf("0,8\n");
+    case 3:{
        speed=0.8;
        break;
     }
-    case 4:{printf("0,5\n");
+    case 4:{
        speed=0.5;
        break;
     }
@@ -3243,7 +3221,7 @@ void on_audioPlaySpeed_changed(GtkComboBox *combobox, APP_data *data)
         GST_SEEK_TYPE_SET, pos, GST_SEEK_TYPE_NONE, 0);
   result=gst_element_send_event(data->pipeline, seek_event);
   if(!result) {
-     printf("* Can't set the new speed ! *\n");
+     printf("* Warning ! Can't set up the requested audio speed ! *\n");
   }
 }
 
