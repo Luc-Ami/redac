@@ -25,4 +25,6 @@ GList *PDF_get_annot_mapping(APP_data    *data);
 PopplerAnnot * PDF_find_annot_at_position(gint x, gint y, APP_data    *data);
 void PDF_set_free_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page, PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data *data);
 void undo_free_all_PDF_ops(APP_data *data);
+void on_PDF_zoom_in_clicked  (GtkButton *button, APP_data *data);
+void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data);
 #endif /* PDF_H */

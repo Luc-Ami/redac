@@ -508,3 +508,38 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   g_free(tmpStr);
 }
 
+/******************
+  zoom IN PDF
+******************/
+void on_PDF_zoom_in_clicked  (GtkButton *button, APP_data *data)
+{
+  GKeyFile *keyString;
+
+  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
+
+  if(data->doc) {
+     data->PDFratio=data->PDFratio*1.1;
+     if(data->PDFratio*data->PDFWidth>PDF_VIEW_MAX_WIDTH)
+         data->PDFratio=PDF_VIEW_MAX_WIDTH/data->PDFWidth;
+     PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
+     g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
+  }
+}
+
+/**************
+  zoom OUT PDF
+***************/
+void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data)
+{
+  GKeyFile *keyString;
+
+  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
+
+  if(data->doc) {
+     data->PDFratio=data->PDFratio*0.9;
+     if(data->PDFratio<0.5)
+         data->PDFratio=0.5;
+     PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
+     g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
+  }
+}
