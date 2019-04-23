@@ -45,7 +45,7 @@ void output_RTF_image_string(gchar *buffer, gsize lg, FILE *outputFile, gint wid
  
   tmpstr= g_strdup_printf("{\\pict\\pngblip\\picw%d\\pich%d\\picwgoal%d\\picscalex%d\\pichgoal%d\\picscaley%d \n", 
               width, height,
-              get_twips(width, 96), 100, get_twips(height, 96), 100);
+              get_twips(width, 144), 100, get_twips(height, 144), 100);
   /* we put the image section header */
   fwrite(tmpstr, sizeof(gchar), strlen(tmpstr), outputFile);
   g_free(tmpstr);
@@ -64,26 +64,6 @@ void output_RTF_image_string(gchar *buffer, gsize lg, FILE *outputFile, gint wid
   }
   /* and the image trailer */
   fwrite("}\n", sizeof(gchar), 2, outputFile);
-}
-
-/* function test to be removed !!!!! */
-void out_RTF_image_string(gchar *buffer, gsize lg, gint width, gint height)
-{
-  glong i, k;
-  gchar *tmpstr;
- 
-
-printf("{\\pict\\pngblip\\picw%d\\pich%d\\picwgoal%d\\picscalex%d\\pichgoal%d\\picscaley%d \n", width, height,
-              get_twips(width, 96), 100, get_twips(height, 96), 100);
-  k=0;
-  for(i=0;i<lg;i++) {
-     tmpstr = g_strdup_printf("%x",(unsigned char)buffer[i]); 
-     printf("%s", tmpstr);
-
-       
-     g_free(tmpstr);
-  }
-printf("}\n");
 }
 
 
