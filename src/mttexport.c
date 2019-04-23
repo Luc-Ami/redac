@@ -260,7 +260,7 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
        if(!fHighlight) {
          fHighlight=TRUE;
          //fwrite("\\cb3 ", sizeof(gchar), 5, outputFile);
-         //fwrite("{\\highlight3 ", sizeof(gchar), 13,outputFile);
+         fwrite("{\\highlight3 ", sizeof(gchar), 13,outputFile);
          /* and the trick ! we must add all others formatings in order to keep them */
        }
      }
@@ -268,8 +268,8 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
        if(fHighlight) {
           fHighlight =FALSE;
           //fwrite("\\cb2 ", sizeof(gchar), 5, outputFile);
-         // fwrite("\\highlight0 ", sizeof(gchar), 12,outputFile);
-         // fwrite("}\n", sizeof(gchar), 2, outputFile);
+         fwrite("\\highlight0 ", sizeof(gchar), 12,outputFile);
+         fwrite("}\n", sizeof(gchar), 2, outputFile);
        }
      }
      /* quotation */
