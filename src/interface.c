@@ -45,7 +45,13 @@ for paddings and removing inner border from entries, many thanks to them : https
 ************************************/
 void set_up_view( GtkWidget *window1, APP_data *data_app )
 {
+  guint major, minor;
   GtkCssProvider* css_provider = gtk_css_provider_new();
+
+  /* check Gtk 3.x version */
+  major=gtk_get_major_version ();
+  minor=gtk_get_minor_version ();
+
   const char css[] = 
 "    #labelHitsFrame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 2px; padding: 0px; }\n"
 "    #search_entry { border: none; padding: 4px; }\n"
