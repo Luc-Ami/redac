@@ -28,9 +28,9 @@ Compilation :
 Redac if built upon standard GNU compilation chain and autootols.
 Before compiling, prepare building chain  :
 
-**chmod +x autogen.sh
+**chmod +x autogen.sh**
 
-./autogen.sh**
+**./autogen.sh**
 
 Then, after installation of dependencies :
 
