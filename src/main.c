@@ -3,6 +3,7 @@
 #include <locale.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <glib.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
@@ -72,7 +73,7 @@ int main(int argc, char *argv[]) {
   GtkWidget *headBar=gtk_grid_new ();
   /* main vbox packing widget */
   vGrid=gtk_grid_new();
-  gtk_grid_set_row_homogeneous (vGrid,FALSE);
+  gtk_grid_set_row_homogeneous (GTK_GRID(vGrid),FALSE);
   gtk_container_add(GTK_CONTAINER(mainWindow), vGrid);
   /* guess the style for current theme */
   check_up_theme( mainWindow, &app_data );
@@ -84,7 +85,7 @@ int main(int argc, char *argv[]) {
   switcher = GTK_STACK_SWITCHER(gtk_stack_switcher_new ());
   gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);// or GTK_STACK_TRANSITION_TYPE_CROSSFADE
   gtk_stack_switcher_set_stack (switcher, stack);
-  gtk_grid_attach(GTK_GRID(headBar),switcher, 2, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(headBar),GTK_WIDGET(switcher), 2, 0, 1, 1);
   /* in order to breath some extra space from window's edges */
   g_object_set (stack, "margin-left", 12, NULL);
   g_object_set (stack, "margin-right", 12, NULL);
@@ -222,7 +223,7 @@ int main(int argc, char *argv[]) {
   app_data.iAudioSmartJump=g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
   /* default font, sorry, outdated since Gtk 3.16 TODO */
 
-  PangoContext* context = gtk_widget_get_pango_context  (app_data.view);
+  PangoContext* context = gtk_widget_get_pango_context  (GTK_WIDGET(app_data.view));
   PangoFontDescription *desc = pango_context_get_font_description(context);   
   desc = pango_font_description_from_string (g_key_file_get_string(keyString, "editor", "font", NULL));
   if (desc != NULL) {
@@ -273,7 +274,7 @@ int main(int argc, char *argv[]) {
      strftime(buffer_date, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
      /* now we set-up a new default filename */
      path_to_file =  get_path_to_datas_file(buffer_date);
-     gtk_label_set_markup (lookup_widget(GTK_WIDGET(mainWindow), "labelMainTitle"),
+     gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(mainWindow), "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
      
      /* rearrange list of recent files */

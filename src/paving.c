@@ -500,7 +500,17 @@ GtkWidget *paving_window(APP_data *user_data )
 
   GLADE_HOOKUP_OBJECT_NO_REF (pavingDialog, pavingDialog, "pavingDialog");
   GLADE_HOOKUP_OBJECT (pavingDialog, buttonCancel, "buttonCancel");
-
+/* si tu laisses sur un objet non initialisé = plantage 
+  GLADE_HOOKUP_OBJECT (pavingDialog, button1, "button1");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button2, "button2");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button3, "button3");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button4, "button4");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button5, "button5");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button6, "button6");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button7, "button7");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button8, "button8");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button9, "button9");
+  GLADE_HOOKUP_OBJECT (pavingDialog, button10, "button10");*/
   gtk_widget_show_all(pavingDialog);
   return pavingDialog;
 }
