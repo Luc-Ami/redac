@@ -27,18 +27,27 @@ Compilation :
 
 Redac if built upon standard GNU compilation chain and autootols.
 Before compiling, prepare building chain  :
-**chmod +x autogen.gh
+
+**chmod +x autogen.sh
 ./autogen.sh**
 
 Then, after installation of dependencies :
+
 **./configure**
 Build Redac locally :
+
 **make**
+
 Test Redac locally :
+
 **./src/redac**
+
 Install Redac for your system
+
 **sudo make install**
+
 Clean directories :
+
 **make clean**
 
 
