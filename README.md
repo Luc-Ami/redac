@@ -29,11 +29,13 @@ Redac if built upon standard GNU compilation chain and autootols.
 Before compiling, prepare building chain  :
 
 **chmod +x autogen.sh
+
 ./autogen.sh**
 
 Then, after installation of dependencies :
 
 **./configure**
+
 Build Redac locally :
 
 **make**
