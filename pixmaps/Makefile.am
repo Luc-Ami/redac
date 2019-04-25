@@ -2,7 +2,11 @@ iconsdir = $(datadir)/icons/hicolor
 
 nobase_dist_icons_DATA = \
 	16x16/apps/redac.png \
-	48x48/apps/redac.png
+	22x22/apps/redac.png \
+	24x24/apps/redac.png \
+	32x32/apps/redac.png \
+	48x48/apps/redac.png \
+	96x96/apps/redac.png 
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(iconsdir)
 
