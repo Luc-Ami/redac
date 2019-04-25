@@ -1,0 +1,15 @@
+# List of source files containing translatable strings.
+
+src/main.c
+src/undo.c
+src/misc.c
+src/pdf.c
+src/search.c
+src/mttfiles.c
+src/mttexport.c
+src/mttimport.c
+src/interface.c
+src/callbacks.c
+src/support.c
+src/audio.c
+src/paving.c

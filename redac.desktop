@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=0.1
+Name=Redac
+Name[fr]=Redac utilitaire de rédaction
+Name[ru]=Redac
+Name[es]=Redac
+Comment=Utilitie to take notes from PDF documents, export to RTF, annotate PDF and produce small sketches
+Comment[fr]=Utilitaire d'aide à la rédaction combinant mini traitement de texte, éditeur/lecteur PDF et mini outil de dessin
+Comment[ru]=
+Comment[es]=
+Exec=redac
+Icon=redac
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=utilities;GTK
