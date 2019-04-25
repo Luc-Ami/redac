@@ -23,31 +23,23 @@ You can also find a tutorial (in french) for this software in **datas/** directo
 
 Compilation :
 -------------
-Since there isn't, for yet, any **configure** script, you're supposed to install yourself required libraries. There is a **makefile** in root directory, when you've unzipped or 'branched' Redac sources. You can examine and edit/change default values (the makefile is **very simple**) if your Gnu/linux system isn't standard.
 
-Once all dependancies are installed, just type (within **redac/** source directory) :
 
+Redac if built upon standard GNU compilation chain and autootols.
+Before compiling, prepare building chain  :
+**chmod +x autogen.gh
+./autogen.sh**
+
+Then, after installation of dependencies :
+**./configure**
+Build Redac locally :
 **make**
-
-if something is wrong, retry :
-
-**make**
-
-If you want to test Redac before installation, just type, within source directory :
-
-**./redac**
-
-In order to install software :
-
+Test Redac locally :
+**./src/redac**
+Install Redac for your system
 **sudo make install**
-
-Once installed, 'Redac' is present in your **desktop menu.**
-
-In order to clean directory of object files :
-
+Clean directories :
 **make clean**
 
-And of course, if you want to remove Redac :
 
-**sudo make uninstall** 
 
