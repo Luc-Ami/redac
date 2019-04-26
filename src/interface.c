@@ -53,30 +53,31 @@ void set_up_view( GtkWidget *window1, APP_data *data_app )
   minor=gtk_get_minor_version ();
 
   const char css[] = 
-"    #labelHitsFrame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 2px; padding: 0px; }\n"
-"    #search_entry { border: none; padding: 4px; }\n"
-"    #page_frame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 2px; padding: 2px; }\n"
-"   #page_title { font-weight:600; border: none; padding: 2px; }\n"
-"   #page_entry { border: none; padding: 2px; }\n"
-"   #page_label { font-weight:600; border: none; padding: 2px; }\n"
+"  #labelHitsFrame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 2px; padding: 0px; }\n"
+"  #search_entry { border: none; padding: 4px; }\n"
+"  #page_frame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 2px; padding: 2px; }\n"
+"  #page_title { font-weight:600; border: none; padding: 2px; }\n"
+"  #page_entry { border: none; padding: 2px; }\n"
+"  #page_label { font-weight:600; border: none; padding: 2px; }\n"
 
-"   #recentGrid {  border-style: none; border-width: 5px;  border-radius: 5px;}\n"
-"   #myButtonCancel{  font-family: DejaVu Sans;font-style: normal; border-radius: 3px; background-image: none;}\n"
-"   #myButtonCancel:hover { background-color: red; }\n"
+"  #recentGrid {  border-style: none; border-width: 5px;  border-radius: 5px;}\n"
+"  #myButtonCancel{  font-family: DejaVu Sans;font-style: normal; border-radius: 3px; background-image: none;}\n"
+"  #myButtonCancel:hover { background-color: red; }\n"
 
-"   #myButton_label_title_1, #myButton_label_title_2, #myButton_label_title_3, #myButton_label_title_4, #myButton_label_title_5, #myButton_label_title_6, #myButton_label_title_7, #myButton_label_title_8, #myButton_label_title_9, #myButton_label_title_10 {  background-color: #6F7DC8; color: white; box-shadow: 2px 2px 4px #888888; }\n"
-"   #myButton_label_content_1, #myButton_label_content_2, #myButton_label_content_3, #myButton_label_content_4, #myButton_label_content_5, #myButton_label_content_6, #myButton_label_content_7, #myButton_label_content_8, #myButton_label_content_9, #myButton_label_content_10 {  background-color: white; color: black; box-shadow: 2px 2px 4px #888888;}\n"
-"   #myButton_1, #myButton_2, #myButton_3, #myButton_4, #myButton_5, #myButton_6, #myButton_7, #myButton_8, #myButton_9, #myButton_10{ color: black; font-family: DejaVu Sans; font-style: normal; border-radius: 3px; border-width: 2px; border-image: none;  padding: 0px 0px;}\n"
-"   #myButton_1:hover, #myButton_2:hover, #myButton_3:hover, #myButton_4:hover, #myButton_5:hover, #myButton_6:hover, #myButton_7:hover, #myButton_8:hover, #myButton_9:hover, #myButton_10:hover{  border-color: green; border-style: solid; border-image: none; border-top: none; border-left: none; border-right: none; border-width: 4px;}\n"
-"   GtkMenu .menuitem {   padding: 4px 0px; }\n"
-"   #myButton_1:focus, #myButton_2:focus, #myButton_3:focus, #myButton_4:focus, #myButton_5:focus, #myButton_6:focus, #myButton_7:focus, #myButton_8:focus, #myButton_9:focus, #myButton_10:focus{  border-style: solid; border-color:orange; border-image: none; border-top: none; border-left: none; border-right: none; border-width: 4px;}\n"
-"   .menuitem { background-color:  @dark_bg_color; color: @menu_fg_color;  font-weight:600; border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 0px; }\n"
-"   Label#PDF_modified_label { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 6px; }\n";
+"  #myButton_label_title_1, #myButton_label_title_2, #myButton_label_title_3, #myButton_label_title_4, #myButton_label_title_5, #myButton_label_title_6, #myButton_label_title_7, #myButton_label_title_8, #myButton_label_title_9, #myButton_label_title_10 {  border-top-left-radius: 8px; border-top-right-radius: 8px; background-color: #6F7DC8; color: white; box-shadow: 2px 2px 4px #888888; }\n"
+"  #myButton_label_content_1, #myButton_label_content_2, #myButton_label_content_3, #myButton_label_content_4, #myButton_label_content_5, #myButton_label_content_6, #myButton_label_content_7, #myButton_label_content_8, #myButton_label_content_9, #myButton_label_content_10 { border-radius: 8px; background-color: white; color: black; box-shadow: 2px 2px 4px #888888;}\n"
+"  #myButton_1, #myButton_2, #myButton_3, #myButton_4, #myButton_5, #myButton_6, #myButton_7, #myButton_8, #myButton_9, #myButton_10{ color: black; font-family: DejaVu Sans; font-style: normal; border-radius: 8px;  border-image: none;  padding: 0px 0px;}\n"
+"  #myButton_1:hover, #myButton_2:hover, #myButton_3:hover, #myButton_4:hover, #myButton_5:hover, #myButton_6:hover, #myButton_7:hover, #myButton_8:hover, #myButton_9:hover, #myButton_10:hover{  border-color: green; border-style: solid; border-image: none; border-top: none; border-left: none; border-right: none; border-width: 4px;}\n"
+"  #myButton_1:focus, #myButton_2:focus, #myButton_3:focus, #myButton_4:focus, #myButton_5:focus, #myButton_6:focus, #myButton_7:focus, #myButton_8:focus, #myButton_9:focus, #myButton_10:focus{  border-style: solid; border-color:orange; border-image: none; border-top: none; border-left: none; border-right: none; border-width: 4px;}\n"
+"  GtkMenu .menuitem {   padding: 4px 0px; }\n"
+
+"  .menuitem { background-color:  @dark_bg_color; color: @menu_fg_color;  font-weight:600; border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 0px; }\n"
+"  Label#PDF_modified_label { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 6px; }\n";
   gtk_css_provider_load_from_data(css_provider,css,sizeof(css)-1,NULL);
  /*----- css *****/
   GdkScreen* screen = gdk_screen_get_default();
   GtkStyleContext* style_context = gtk_widget_get_style_context(window1);
-  gtk_style_context_add_provider_for_screen (screen,css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 /********************************
@@ -473,6 +474,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   about1=gtk_menu_item_new_with_mnemonic (_("_About Redac ..."));
   gtk_widget_show (about1);
   gtk_container_add (GTK_CONTAINER (submenu6), about1);
+
  
   g_signal_connect ((gpointer) new1, "activate",
                     G_CALLBACK (new_project),
@@ -508,6 +510,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
                     G_CALLBACK (on_saveSketch_clicked),
                     data_app);
 
+
   g_signal_connect ((gpointer) AudioLoad, "activate",
                     G_CALLBACK (on_loadAudio_clicked),
                     data_app);
@@ -520,6 +523,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   g_signal_connect ((gpointer) keyHelp1, "activate",
                     G_CALLBACK (on_keyHelp1_activate),
                     data_app);
+
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (menu1, menu1, "menu1");
   GLADE_HOOKUP_OBJECT (menu1, new1, "new1");
@@ -704,9 +708,9 @@ GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app)
    gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_quotation, -1); 
    gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_quotation),icon_quotation);
 gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quotation style either \nfor current selection\nor next typing."));
-  gtk_toggle_tool_button_set_active (GTK_TOOL_BUTTON(button_bold), FALSE);
-  gtk_toggle_tool_button_set_active (GTK_TOOL_BUTTON(button_italic), FALSE);
-  gtk_toggle_tool_button_set_active (GTK_TOOL_BUTTON(button_underline), FALSE);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_bold), FALSE);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_italic), FALSE);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_underline), FALSE);
  
   /* radiobuttons : thanks to Pascal developers 
    here: https://fr.wikibooks.org/wiki/Programmation_GTK2_en_Pascal/GtkRadioToolButton*/
@@ -746,7 +750,7 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonFill), group);
   group = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonFill));
 
-  gtk_toggle_tool_button_set_active (GTK_TOOL_BUTTON(pRadioButtonLeft), TRUE);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(pRadioButtonLeft), TRUE);
 
  
   /* standard button */
@@ -759,10 +763,10 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   button_undo = gtk_tool_button_new (icon_undo,NULL);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_undo, -1);   
   gtk_widget_set_tooltip_text(GTK_WIDGET(button_undo), _("Undo last operation."));
-  gtk_widget_set_sensitive(button_undo, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(button_undo), FALSE);
 
   standardSeperator=gtk_separator_tool_item_new ();
-  gtk_separator_tool_item_set_draw(standardSeperator, TRUE);
+  gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(standardSeperator), TRUE);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), standardSeperator, -1);
 
   /* clipboard mode radiobuttons */
@@ -816,7 +820,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect));
 
-  gtk_toggle_tool_button_set_active (GTK_TOOL_BUTTON(pRadioButtonTextSelect), TRUE);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(pRadioButtonTextSelect), TRUE);
 
   pRadioButtonHiglightSelect=gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonHiglightSelect, -1);
@@ -826,7 +830,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect));
 
   pRadioButtonHiAnnotSelect=gtk_radio_tool_button_new(group_clip);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonHiAnnotSelect, -1);
+  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(pRadioButtonHiAnnotSelect), -1);
   gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonHiAnnotSelect), _("Set-up text annotation inside \nselected area on PDF or sketch document. \nPlease don't forget to save your PDF/sketch document to keep \nyour changes !"));
   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonHiAnnotSelect), icon_text_annot);
   gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect), group_clip);
@@ -841,21 +845,21 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   button_pencil= gtk_radio_tool_button_new(group_clip);
   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_pencil),icon_pencil); 
   gtk_widget_set_tooltip_text(GTK_WIDGET(button_pencil), _("Freehand drawing tool"));
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_pencil, -1);
+  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(button_pencil), -1);
   gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(button_pencil), group_clip);
   group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(button_pencil));
   
   /* color button */
   color_button_item = gtk_tool_item_new();
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), color_button_item, -1);
+  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(color_button_item), -1);
   gtk_widget_set_tooltip_text(GTK_WIDGET(color_button_item), _("Click here to choose color for :\n- highlighting of PDF areas.\n-annotation color for PDF and sketches documents.\n-pencil color for sketches."));
   color_button=gtk_color_button_new (); 
   gtk_container_add(GTK_CONTAINER(color_button_item), color_button);
   
   /* audio buttons */
   audioSeperator=gtk_separator_tool_item_new ();
-  gtk_separator_tool_item_set_draw(audioSeperator, TRUE);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), audioSeperator, -1); 
+  gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(audioSeperator), TRUE);
+  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audioSeperator), -1); 
  /* playing speed combobox */
   GtkToolItem *audioPlaySpeedContainer=gtk_tool_item_new();
   GtkWidget *audioPlaySpeed=gtk_combo_box_text_new();
@@ -868,7 +872,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.8"));
   gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.5"));
   gtk_combo_box_set_active (GTK_COMBO_BOX(audioPlaySpeed), 2);
-  gtk_widget_set_sensitive(audioPlaySpeed, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(audioPlaySpeed), FALSE);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), audioPlaySpeedContainer, -1);  
 
   iconButtonPlayAudio =gtk_image_new_from_icon_name ("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -881,7 +885,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonPlayPauseAudio, -1);  
   //gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonPlayPauseAudio),iconButtonPlayAudio);
   gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonPlayPauseAudio), _("Play or pause-rewind current audio file.\nRewind's length is defined in 'audio' settings."));
-  gtk_widget_set_sensitive(pRadioButtonPlayPauseAudio, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonPlayPauseAudio), FALSE);
   /* counter */
   GtkWidget *audio_position=gtk_tool_item_new();
   gtk_widget_set_tooltip_text(GTK_WIDGET(audio_position), _("Position within current audio file"));
@@ -889,7 +893,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_label_set_use_markup (GTK_LABEL (audio_position_label), TRUE);
   gtk_container_add(GTK_CONTAINER(audio_position), audio_position_label);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_position), -1);
-  gtk_widget_set_sensitive(audio_position, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(audio_position), FALSE);
   /* total audio file duration */
   GtkWidget *audio_total=gtk_tool_item_new();
   gtk_widget_set_tooltip_text(GTK_WIDGET(audio_total), _("Total duration of current audio file"));
@@ -897,29 +901,29 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_label_set_use_markup (GTK_LABEL (audio_total_label), TRUE);
   gtk_container_add(GTK_CONTAINER(audio_total), audio_total_label);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_total), -1);
-  gtk_widget_set_sensitive(audio_total, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(audio_total), FALSE);
   /* goto previous mark */
   pRadioButtonRewindAudio = gtk_tool_button_new (iconButtonHomeAudio,NULL);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonRewindAudio, -1);  
   gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonRewindAudio), _("Jump backward in current audio file.\nJump's length is defined in 'audio' settings."));
-  gtk_widget_set_sensitive(pRadioButtonRewindAudio, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonRewindAudio), FALSE);
   /* goto next mark */
   pRadioButtonGotoAudio = gtk_tool_button_new (iconButtonGotoAudio,NULL);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonGotoAudio, -1);  
   gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonGotoAudio), _("Jump forward in current audio file.\nJump's length is defined in 'audio' settings."));
-  gtk_widget_set_sensitive(pRadioButtonGotoAudio, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonGotoAudio), FALSE);
   /* jump to ... */
   pRadioButtonGoJumpAudio = gtk_tool_button_new (iconButtonGoJumpAudio,NULL);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonGoJumpAudio, -1);  
   gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonGoJumpAudio), _("Jump to a specifed position within current audio file."));
-  gtk_widget_set_sensitive(pRadioButtonGoJumpAudio, FALSE); 
+  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonGoJumpAudio), FALSE); 
   
 
   gtk_widget_show_all(toolbar);
   /* set cSS states */
-  toggle_css_value(button_bold, FALSE);
-  toggle_css_value(button_italic, FALSE);
-  toggle_css_value(button_underline, FALSE);
+  toggle_css_value(GTK_WIDGET(button_bold), FALSE);
+  toggle_css_value(GTK_WIDGET(button_italic), FALSE);
+  toggle_css_value(GTK_WIDGET(button_underline), FALSE);
   /* accelerators - it's complex for GtkToggleTool buttons - we must get a pointer on the child inside the toggle 
 
    see : https://stackoverflow.com/questions/19657017/handling-clicked-accelerator-on-a-gtktoggletoolbutton-gtkmm 
@@ -1061,14 +1065,12 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   return toolbar;
 }
 
-
 /****************************
   main window
 ****************************/
 GtkWidget *UI_main_window(void)
 {
   GtkWidget *win;
-  GdkPixbuf *window1_icon_pixbuf;
 
   win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);
@@ -1076,12 +1078,7 @@ GtkWidget *UI_main_window(void)
   gtk_window_set_resizable (GTK_WINDOW(win), TRUE);
   gtk_window_set_decorated (GTK_WINDOW(win), TRUE);
   gtk_window_set_title(GTK_WINDOW(win), "Redac !");
-  window1_icon_pixbuf = gdk_pixbuf_new_from_file ("/usr/share/pixmaps/redac.png",NULL);
-  if (window1_icon_pixbuf) {
-      gtk_window_set_icon (GTK_WINDOW (win), window1_icon_pixbuf);
-      g_object_unref (G_OBJECT (window1_icon_pixbuf));
-  }
-
+  gtk_window_set_icon_name (GTK_WINDOW (win), "redac");
   return win;
 }
 /********************************
@@ -1097,14 +1094,14 @@ void UI_headerBar(GtkWidget *window, GtkWidget *grid, APP_data *data)
 
 
   main_menu = gtk_button_new();
-  gtk_button_set_relief(main_menu, GTK_RELIEF_NONE);
+  gtk_button_set_relief(GTK_BUTTON(main_menu), GTK_RELIEF_NONE);
   main_menu_icon=gtk_image_new_from_icon_name ("view-list-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_button_set_image(GTK_BUTTON(main_menu),main_menu_icon);
   gtk_widget_set_tooltip_text(main_menu, _("Menu to access various file's operations"));
   gtk_grid_attach(GTK_GRID(grid), main_menu, 0, 0, 1, 1);
 
   button_prefs = gtk_button_new();
-  gtk_button_set_relief(button_prefs, GTK_RELIEF_NONE);
+  gtk_button_set_relief(GTK_BUTTON(button_prefs), GTK_RELIEF_NONE);
   icon_prefs=gtk_image_new_from_icon_name ("view-more-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_button_set_image(GTK_BUTTON(button_prefs),icon_prefs);
   gtk_widget_set_tooltip_text(button_prefs, _("Application settings."));
@@ -1184,22 +1181,22 @@ void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data)
   gtk_grid_attach(GTK_GRID(grid), labelHitsFrame,5,0,1,1);
 
   labelHitsGrid = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_set_homogeneous(labelHitsGrid, FALSE);
-  gtk_container_add( labelHitsFrame, labelHitsGrid);
+  gtk_box_set_homogeneous(GTK_BOX(labelHitsGrid), FALSE);
+  gtk_container_add( GTK_CONTAINER( labelHitsFrame), labelHitsGrid);
 
   search_entry = gtk_search_entry_new ();
   gtk_widget_set_name(search_entry, "search_entry" );
-  gtk_box_pack_start(labelHitsGrid, search_entry, TRUE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(labelHitsGrid), search_entry, TRUE, FALSE, 0);
   gtk_widget_set_tooltip_text(search_entry, _("Type here the expression to find."));
 
   labelHits = gtk_label_new(_("--hits"));
-  gtk_box_pack_start(labelHitsGrid, labelHits, TRUE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(labelHitsGrid), labelHits, TRUE, FALSE, 0);
 
-  gtk_box_pack_start(labelHitsGrid, buttonPrevOccurrence, TRUE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(labelHitsGrid), buttonPrevOccurrence, TRUE, FALSE, 0);
   g_object_set (buttonPrevOccurrence, "margin-left", 6, NULL);
   g_object_set (buttonPrevOccurrence, "margin-right", 2, NULL);
 
-  gtk_box_pack_start(labelHitsGrid, buttonNextOccurrence, TRUE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(labelHitsGrid), buttonNextOccurrence, TRUE, FALSE, 0);
   g_object_set (buttonNextOccurrence, "margin-left", 6, NULL);
   g_object_set (buttonNextOccurrence, "margin-right", 2, NULL);
 
@@ -1210,7 +1207,7 @@ void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data)
   g_object_set (buttonReplace, "margin-left", 6, NULL);
 
   replace_entry = gtk_entry_new ();
-  gtk_widget_set_tooltip_text(replace_entry, _("Type here the replacing expression."));
+  gtk_widget_set_tooltip_text(GTK_WIDGET(replace_entry), _("Type here the replacing expression."));
   gtk_grid_attach(GTK_GRID(grid), replace_entry, 9,0,1,1);
   gtk_widget_set_sensitive(GTK_WIDGET(replace_entry),FALSE);
 
@@ -1280,41 +1277,41 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   GtkWidget *page_label;
 
   page_frame=gtk_frame_new(NULL);
-  gtk_frame_set_shadow_type (page_frame, GTK_SHADOW_OUT);
+  gtk_frame_set_shadow_type (GTK_FRAME(page_frame), GTK_SHADOW_OUT);
   gtk_widget_set_name(page_frame, "page_frame" );
   g_object_set (page_frame, "margin-left", 6, NULL);
   g_object_set (page_frame, "margin-right", 6, NULL);
   gtk_widget_set_hexpand (page_frame, FALSE);
   gtk_grid_attach(GTK_GRID(grid), page_frame,2,0,1,1);
   page_grid=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_set_homogeneous(page_grid, FALSE);
-  gtk_container_add( page_frame, page_grid);
+  gtk_box_set_homogeneous(GTK_BOX(page_grid), FALSE);
+  gtk_container_add( GTK_CONTAINER(page_frame), page_grid);
 
   page_title=gtk_entry_new();
-  gtk_entry_set_text(page_title, _("Pg:"));
+  gtk_entry_set_text(GTK_ENTRY(page_title), _("Pg:"));
   gtk_widget_set_name(page_title, "page_title" );
   gtk_entry_set_max_length (GTK_ENTRY (page_title), 3);
   gtk_entry_set_width_chars (GTK_ENTRY (page_title), 3);
-  gtk_widget_set_sensitive(page_title, FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(page_title), FALSE);
   gtk_widget_set_hexpand (page_title, TRUE);
-  gtk_entry_set_has_frame(page_title, FALSE );
-  gtk_box_pack_start(page_grid, page_title, TRUE, FALSE, 0);
+  gtk_entry_set_has_frame(GTK_ENTRY(page_title), FALSE );
+  gtk_box_pack_start(GTK_BOX(page_grid), page_title, TRUE, FALSE, 0);
 
   page_entry = gtk_entry_new ();
-  gtk_entry_set_has_frame(page_entry, TRUE );
+  gtk_entry_set_has_frame(GTK_ENTRY(page_entry), TRUE );
   gtk_widget_set_name(page_entry, "page_entry" );
   gtk_entry_set_max_length (GTK_ENTRY (page_entry), 4);
   gtk_entry_set_width_chars (GTK_ENTRY (page_entry), 3);
   gtk_widget_set_hexpand (page_entry, TRUE);
-  gtk_box_pack_start(page_grid, page_entry, TRUE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(page_grid), page_entry, TRUE, FALSE, 0);
   gtk_widget_set_tooltip_text(page_entry, _("Type here the #of PDF page where you want to jump."));
 
   page_label=gtk_entry_new();
   gtk_entry_set_width_chars (GTK_ENTRY (page_label), 5);
-  gtk_entry_set_text(page_label, _("of--"));
-  gtk_widget_set_sensitive(page_label, FALSE);
+  gtk_entry_set_text(GTK_ENTRY(page_label), _("of--"));
+  gtk_widget_set_sensitive(GTK_WIDGET(page_label), FALSE);
   gtk_widget_set_hexpand (page_label, TRUE);
-  gtk_box_pack_start(page_grid, page_label, TRUE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(page_grid), page_label, TRUE, FALSE, 0);
   gtk_widget_set_name(page_label, "page_label");
   // gtk_editable_set_editable(GTK_EDITABLE(page_label), FALSE);
 
@@ -1338,7 +1335,9 @@ create_loadFileDialog (void)
   GtkWidget *dialog_vbox6;
   GtkWidget *dialog_action_area6;
   GtkWidget *button43;
+  GtkWidget *image43;
   GtkWidget *button44;
+  GtkWidget *image44;
 
   loadFileDialog = gtk_file_chooser_dialog_new (_("Open file..."), 
                               NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
@@ -1356,12 +1355,18 @@ create_loadFileDialog (void)
   gtk_widget_show (dialog_action_area6);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area6), GTK_BUTTONBOX_END);
 
-  button43 = gtk_button_new_from_stock ("gtk-cancel");
+  button43=  gtk_button_new_with_label (_("Cancel"));
+  image43 = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (button43), TRUE);
+  gtk_button_set_image (GTK_BUTTON (button43), image43);
   gtk_widget_show (button43);
   gtk_dialog_add_action_widget (GTK_DIALOG (loadFileDialog), button43, GTK_RESPONSE_CANCEL);
   gtk_widget_set_can_default (button43, TRUE);
 
-  button44 = gtk_button_new_from_stock ("gtk-open");
+  button44=  gtk_button_new_with_label (_("Open"));
+  image44 = gtk_image_new_from_icon_name ("gtk-open",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (button44), TRUE);
+  gtk_button_set_image (GTK_BUTTON (button44), image44);
   gtk_widget_show (button44);
   gtk_dialog_add_action_widget (GTK_DIALOG (loadFileDialog), button44, GTK_RESPONSE_OK);
   gtk_widget_set_can_default (button44, TRUE);
@@ -1387,7 +1392,9 @@ create_saveFileDialog (void)
   GtkWidget *dialog_vbox6;
   GtkWidget *dialog_action_area6;
   GtkWidget *button43;
+  GtkWidget *image43;
   GtkWidget *button44;
+  GtkWidget *image44;
 
   saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), NULL,               GTK_FILE_CHOOSER_ACTION_SAVE, NULL);
   g_object_set (saveFileDialog, "local-only", FALSE,  NULL);
@@ -1404,12 +1411,18 @@ create_saveFileDialog (void)
   gtk_widget_show (dialog_action_area6);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area6), GTK_BUTTONBOX_END);
 
-  button43 = gtk_button_new_from_stock ("gtk-cancel");
+  button43=  gtk_button_new_with_label (_("Cancel"));
+  image43 = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (button43), TRUE);
+  gtk_button_set_image (GTK_BUTTON (button43), image43);
   gtk_widget_show (button43);
   gtk_dialog_add_action_widget (GTK_DIALOG (saveFileDialog), button43, GTK_RESPONSE_CANCEL);
   gtk_widget_set_can_default (button43, TRUE);
 
-  button44 = gtk_button_new_from_stock ("gtk-save");
+  button44=  gtk_button_new_with_label (_("Save"));
+  image44 = gtk_image_new_from_icon_name ("gtk-save",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (button44), TRUE);
+  gtk_button_set_image (GTK_BUTTON (button44), image44);
   gtk_widget_show (button44);
   gtk_dialog_add_action_widget (GTK_DIALOG (saveFileDialog), button44, GTK_RESPONSE_OK);
   gtk_widget_set_can_default (button44, TRUE);
@@ -1439,7 +1452,7 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
   GtkWidget *labelAlignmentShortcuts;
   GtkWidget *dialog_action_area11;
   GtkWidget *okbutton6;
-
+  GtkWidget *imageOkButton6;
 
   helpDialog = gtk_dialog_new ();
   gtk_window_set_title (GTK_WINDOW (helpDialog), _("Help..."));
@@ -1767,7 +1780,11 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
   dialog_action_area11 = gtk_dialog_get_action_area (GTK_DIALOG (helpDialog));
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area11), GTK_BUTTONBOX_CENTER);
 
-  okbutton6 = gtk_button_new_from_stock ("gtk-ok");
+  okbutton6=  gtk_button_new_with_label (_("Ok"));
+  imageOkButton6 = gtk_image_new_from_icon_name ("gtk-ok",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (okbutton6), TRUE);
+  gtk_button_set_image (GTK_BUTTON (okbutton6), imageOkButton6);
+
   gtk_dialog_add_action_widget (GTK_DIALOG (helpDialog), okbutton6, GTK_RESPONSE_OK);
   gtk_widget_set_can_default (okbutton6, TRUE);
   gtk_widget_show_all(helpDialog);
@@ -1776,7 +1793,7 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
 
 /**************************************************************
   dialog to set up an annotation inside the PDF or Sketch 
-TODO : option to choose font
+  with option to choose font
 **************************************************************/
 gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *data)
 {
@@ -1787,7 +1804,9 @@ gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *
   GtkTextBuffer *buffer;
   GtkWidget *dialog_action_area11;
   GtkWidget *okbutton6;
+  GtkWidget *imageOkButton6;
   GtkWidget *cancelbutton;
+  GtkWidget *imagecancelbutton;
   GtkWidget *labelFont;
   GtkWidget *font_button;
   GtkWidget *separator;
@@ -1835,11 +1854,11 @@ gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *
   gtk_font_chooser_set_font (GTK_FONT_CHOOSER(font_button), 
                  g_key_file_get_string(keyString, "sketch", "font", NULL));
   if(data->currentStack==CURRENT_STACK_SKETCH) {
-    gtk_widget_set_sensitive(labelFont, TRUE);
-    gtk_widget_set_sensitive(font_button, TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(labelFont), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(font_button), TRUE);
   } else {
-    gtk_widget_set_sensitive(labelFont, FALSE);
-    gtk_widget_set_sensitive(font_button, FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(labelFont), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(font_button), FALSE);
   }
   /* action area */
   /* buttons */
@@ -1847,9 +1866,16 @@ gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *
   gtk_widget_show (dialog_action_area11);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area11), GTK_BUTTONBOX_CENTER);
 
-  okbutton6 = gtk_button_new_from_stock ("gtk-ok");
+  okbutton6=  gtk_button_new_with_label (_("Ok"));
+  imageOkButton6 = gtk_image_new_from_icon_name ("gtk-ok",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (okbutton6), TRUE);
+  gtk_button_set_image (GTK_BUTTON (okbutton6), imageOkButton6);
   gtk_widget_show (okbutton6);
-  cancelbutton= gtk_button_new_from_stock ("gtk-cancel");
+
+  cancelbutton= gtk_button_new_with_label (_("Cancel"));
+  imagecancelbutton = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (cancelbutton), TRUE);
+  gtk_button_set_image (GTK_BUTTON (cancelbutton), imagecancelbutton);
   gtk_widget_show (cancelbutton);
   gtk_dialog_add_action_widget (GTK_DIALOG (annotDialog), cancelbutton, GTK_RESPONSE_CANCEL);
   gtk_dialog_add_action_widget (GTK_DIALOG (annotDialog), okbutton6, GTK_RESPONSE_OK);
@@ -1864,7 +1890,7 @@ gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *
     tmpStr=gtk_text_buffer_get_text (buffer,&start, &end,FALSE);
     /* TODO : get current font for Sketches */
     /* get the fonts */
-    newFont = gtk_font_chooser_get_font(font_button);
+    newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_button));
     if(newFont!=NULL) {
        g_key_file_set_string(keyString, "sketch", "font",newFont);
        g_free(newFont);
@@ -1921,7 +1947,9 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   GtkWidget *vboxAudio;
   GtkWidget *dialog_action_area5;
   GtkWidget *cancelbutton2;
+  GtkWidget *imagecancelbutton2;
   GtkWidget *okbutton3;
+  GtkWidget *imageokbutton3;
 
   configDialog = gtk_dialog_new ();
   gtk_window_set_title (GTK_WINDOW (configDialog), _("Settings ..."));
@@ -1948,7 +1976,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   configAutoSave = gtk_check_button_new_with_mnemonic (_("Save current editor document every 5 minutes"));
   gtk_widget_show (configAutoSave);
   gtk_box_pack_start (GTK_BOX (vbox26), configAutoSave, FALSE, FALSE, 5);
-  gtk_widget_set_sensitive (configAutoSave, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET(configAutoSave), TRUE);
 
   configAutoReloadPDF = gtk_check_button_new_with_mnemonic (_("Reload last used PDF at program's start "));
   gtk_widget_show (configAutoReloadPDF);
@@ -2083,7 +2111,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_misc_set_alignment (GTK_MISC (label_pen_width), 0, 0.5);
  // gtk_misc_set_padding (GTK_MISC (label_pen_width), 5, 0);
 
-  GtkWidget *pen_width_adj = gtk_adjustment_new (1, 1, 20, 1, 10, 0);
+  GtkAdjustment *pen_width_adj = gtk_adjustment_new (1, 1, 20, 1, 10, 0);
   GtkWidget *pen_width_Spin = gtk_spin_button_new (GTK_ADJUSTMENT (pen_width_adj), 2, 1);
   gtk_widget_show (pen_width_Spin);
   gtk_grid_attach(GTK_GRID(vbox28),pen_width_Spin, 1, 2 , 1, 1);
@@ -2112,7 +2140,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (labelAudioRew);
   gtk_grid_attach(GTK_GRID(vboxAudio),labelAudioRew, 0, 0 , 1, 1);
   gtk_misc_set_alignment (GTK_MISC (labelAudioRew), 0, 0.5);
-  GtkWidget *rewGap_adj = gtk_adjustment_new (2, 1, 10, 1, 1, 0);
+  GtkAdjustment *rewGap_adj = gtk_adjustment_new (2, 1, 10, 1, 1, 0);
   GtkWidget *rewGapSpin = gtk_spin_button_new (GTK_ADJUSTMENT (rewGap_adj), 1, 0);
   gtk_widget_show (rewGapSpin);
   gtk_grid_attach(GTK_GRID(vboxAudio),rewGapSpin, 1, 0 , 1, 1);
@@ -2121,7 +2149,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (labelAudioStep);
   gtk_grid_attach(GTK_GRID(vboxAudio),labelAudioStep, 0, 2 , 1, 1);
   gtk_misc_set_alignment (GTK_MISC (labelAudioStep), 0, 0.5);
-  GtkWidget *jumpGap_adj = gtk_adjustment_new (10, 1, 600, 1, 10, 0);
+  GtkAdjustment *jumpGap_adj = gtk_adjustment_new (10, 1, 600, 1, 10, 0);
   GtkWidget *jumpGapSpin = gtk_spin_button_new (GTK_ADJUSTMENT (jumpGap_adj), 1, 0);
   gtk_widget_show (jumpGapSpin);
   gtk_grid_attach(GTK_GRID(vboxAudio),jumpGapSpin, 1, 2 , 1, 1);
@@ -2129,7 +2157,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   configAutoRewindPlayer= gtk_check_button_new_with_mnemonic (_("Auto rewind to start after playing completed."));
   gtk_widget_show (configAutoRewindPlayer);
   gtk_grid_attach(GTK_GRID(vboxAudio),configAutoRewindPlayer, 0, 3 , 1, 1);
-  gtk_widget_set_sensitive (configAutoRewindPlayer, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET(configAutoRewindPlayer), TRUE);
 
   labelAudio=gtk_label_new (_("Audio"));
   gtk_widget_show (labelAudio);
@@ -2149,12 +2177,18 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (dialog_action_area5);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area5), GTK_BUTTONBOX_END);
 
-  cancelbutton2 = gtk_button_new_from_stock ("gtk-cancel");
+  cancelbutton2=  gtk_button_new_with_label (_("Cancel"));
+  imagecancelbutton2 = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (cancelbutton2), TRUE);
+  gtk_button_set_image (GTK_BUTTON (cancelbutton2), imagecancelbutton2);
   gtk_widget_show (cancelbutton2);
   gtk_dialog_add_action_widget (GTK_DIALOG (configDialog), cancelbutton2, GTK_RESPONSE_CANCEL);
   gtk_widget_set_can_default (cancelbutton2, TRUE);
 
-  okbutton3 = gtk_button_new_from_stock ("gtk-ok");
+  okbutton3 = gtk_button_new_with_label (_("Ok"));
+  imageokbutton3=gtk_image_new_from_icon_name ("gtk-ok",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (okbutton3), TRUE);
+  gtk_button_set_image (GTK_BUTTON (okbutton3), imageokbutton3);
   gtk_widget_show (okbutton3);
   gtk_dialog_add_action_widget (GTK_DIALOG (configDialog), okbutton3, GTK_RESPONSE_OK);
   gtk_widget_set_can_default (okbutton3, TRUE);
@@ -2275,7 +2309,7 @@ create_annotationColourDialog (APP_data *data_app, gchar *msg)
   GtkWidget *help_button1;
   GtkWidget *color_selection1;
 
-  highlightColourDialog = gtk_color_chooser_dialog_new (msg,data_app->appWindow);
+  highlightColourDialog = gtk_color_chooser_dialog_new (msg,GTK_WINDOW(data_app->appWindow));
   gtk_container_set_border_width (GTK_CONTAINER (highlightColourDialog), 5);
   gtk_window_set_resizable (GTK_WINDOW (highlightColourDialog), FALSE);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (highlightColourDialog), TRUE);
@@ -2302,7 +2336,9 @@ GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
   GtkWidget *iconGoJumpDialog;
   GtkWidget *dialog_action_area11;
   GtkWidget *okbutton6;
+  GtkWidget *imageOkButton6;
   GtkWidget *cancelbutton;
+  GtkWidget *imagecancelbutton;
   GtkWidget *labelHour;
   GtkWidget *labelMinute;
   GtkWidget *labelSecond;
@@ -2394,17 +2430,17 @@ GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
   gtk_grid_attach(GTK_GRID (gridDialog), labelSecond, 2, 1, 1, 1); 
 
   /* adjustments */
-  GtkWidget *hour_adj = gtk_adjustment_new (0, 0, 23, 1, 10, 0);
+  GtkAdjustment *hour_adj = gtk_adjustment_new (0, 0, 23, 1, 10, 0);
   GtkWidget *hourSpin = gtk_spin_button_new (GTK_ADJUSTMENT (hour_adj), 1, 0);
   gtk_widget_show (hourSpin);
   gtk_grid_attach(GTK_GRID(gridDialog),hourSpin, 0, 2 , 1, 1);
 
-  GtkWidget *minute_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
+  GtkAdjustment *minute_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
   GtkWidget *minuteSpin = gtk_spin_button_new (GTK_ADJUSTMENT (minute_adj), 1, 0);
   gtk_widget_show (minuteSpin);
   gtk_grid_attach(GTK_GRID(gridDialog),minuteSpin, 1, 2 , 1, 1);
 
-  GtkWidget *second_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
+  GtkAdjustment *second_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
   GtkWidget *secondSpin = gtk_spin_button_new (GTK_ADJUSTMENT (second_adj), 1, 0);
   gtk_widget_show (secondSpin);
   gtk_grid_attach(GTK_GRID(gridDialog),secondSpin, 2, 2 , 1, 1);
@@ -2415,9 +2451,16 @@ GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
   gtk_widget_show (dialog_action_area11);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area11), GTK_BUTTONBOX_CENTER);
 
-  okbutton6 = gtk_button_new_from_stock ("gtk-ok");
+  okbutton6=  gtk_button_new_with_label (_("Ok"));
+  imageOkButton6 = gtk_image_new_from_icon_name ("gtk-ok",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (okbutton6), TRUE);
+  gtk_button_set_image (GTK_BUTTON (okbutton6), imageOkButton6);
   gtk_widget_show (okbutton6);
-  cancelbutton= gtk_button_new_from_stock ("gtk-cancel");
+
+  cancelbutton=  gtk_button_new_with_label (_("Cancel"));
+  imagecancelbutton = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_always_show_image (GTK_BUTTON (cancelbutton), TRUE);
+  gtk_button_set_image (GTK_BUTTON (cancelbutton), imagecancelbutton);
   gtk_widget_show (cancelbutton);
   gtk_dialog_add_action_widget (GTK_DIALOG (goJumpDialog), cancelbutton, GTK_RESPONSE_CANCEL);
   gtk_dialog_add_action_widget (GTK_DIALOG (goJumpDialog), okbutton6, GTK_RESPONSE_OK);
@@ -2431,7 +2474,6 @@ GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
   return goJumpDialog;
 }
 
-
 /*************************************
   About dialog
 
@@ -2441,7 +2483,7 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   GtkWidget *dialog;
   GdkPixbuf *aboutRedac_icon_pixbuf;
   const gchar *authors[] = {_("Project Manager:"),"Luc Amimer <amiluc_bis@yahoo.fr>", NULL };
-  const gchar *artists[] = {_("Artwork:"), "Luc Amimer <amiluc_bis@yahoo.fr>", _("Redac logos + main icon :"), "Luc Amimer <amiluc_bis@yahoo.fr>", NULL};
+  const gchar *artists[] = {"Luc Amimer <amiluc_bis@yahoo.fr>", _("Redac logos + main icon :"), "Luc Amimer <amiluc_bis@yahoo.fr>", NULL};
 
   dialog = gtk_about_dialog_new ();
   gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG(dialog),"");
@@ -2451,7 +2493,7 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
       g_object_unref(G_OBJECT(aboutRedac_icon_pixbuf ));
   }
   gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
-  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), "");
+  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"");
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 
      _("Note  utility written in GTK+ and licensed under GPL v.3"));
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
@@ -2470,3 +2512,4 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   gtk_widget_show_all( dialog );
   return dialog;
 }
+
