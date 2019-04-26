@@ -1,5 +1,8 @@
 AM_CFLAGS = $(REDAC_CFLAGS)
-AM_CPPFLAGS = -DLOCALEDIR=\""$(localedir)"\"
+AM_CPPFLAGS = \
+	-DLOCALEDIR=\""$(localedir)"\" \
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\"
+
 bin_PROGRAMS = redac
 redac_SOURCES = \
 	main.c \

@@ -67,6 +67,9 @@ int main(int argc, char *argv[]) {
   gtk_init(&argc, &argv);
   /* Initialize GStreamer */
   gst_init (&argc, &argv);
+  /* image directories */
+  add_pixmap_directory (PACKAGE_DATA_DIR "/pixmaps/" PACKAGE); /* New location for all pixmaps */
+  add_pixmap_directory (PACKAGE_DATA_DIR "/pixmaps"); /* Gnome users /usr/share/pixmaps folder */
   
   mainWindow = UI_main_window();
 

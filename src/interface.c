@@ -301,6 +301,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *AudioCloseFile;
   GtkWidget *recent1;
   GtkWidget *import1;
+  GtkWidget *about1;
   GtkWidget *insertWPFile;
   GtkWidget *insertRedacFile;
   GtkWidget *imageImport1;
@@ -308,6 +309,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *separator14;
   GtkWidget *separator1;
   GtkWidget *separator2;
+  GtkWidget *separator3;
   GtkWidget *recent[MAX_RECENT_FILES];
   gint i;
 
@@ -447,6 +449,15 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   else
      gtk_widget_set_sensitive(clearSketch, FALSE);
 
+  /* about */
+  separator3 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator3);
+  gtk_container_add (GTK_CONTAINER (menu1), separator3);
+  gtk_widget_set_sensitive (separator3, FALSE);
+
+  about1 = gtk_image_menu_item_new_with_mnemonic (_("_About ..."));
+  gtk_widget_show (about1);
+  gtk_container_add (GTK_CONTAINER (menu1), about1);
  
   g_signal_connect ((gpointer) new1, "activate",
                     G_CALLBACK (new_project),
@@ -489,7 +500,9 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   g_signal_connect ((gpointer) AudioCloseFile, "activate",
                     G_CALLBACK (on_AudioCloseFile_clicked),
                     data_app);
-
+  g_signal_connect ((gpointer) about1, "activate",
+                    G_CALLBACK (on_about1_activate),
+                    data_app);
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (menu1, menu1, "menu1");
   GLADE_HOOKUP_OBJECT (menu1, new1, "new1");
