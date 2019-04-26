@@ -3255,3 +3255,10 @@ on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
   gtk_widget_destroy(GTK_DIALOG (aboutDialog));
   return;
 }
+
+void
+on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data)
+{
+  on_help_clicked(data->appWindow);
+  return;
+}

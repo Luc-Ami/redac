@@ -281,6 +281,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *submenu3;
   GtkWidget *submenu4;
   GtkWidget *submenu5;
+  GtkWidget *submenu6;
   GtkWidget *new1;
   GtkWidget *image58;
   GtkWidget *save3;
@@ -301,7 +302,9 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *AudioCloseFile;
   GtkWidget *recent1;
   GtkWidget *import1;
+  GtkWidget *misc1;
   GtkWidget *about1;
+  GtkWidget *keyHelp1;
   GtkWidget *insertWPFile;
   GtkWidget *insertRedacFile;
   GtkWidget *imageImport1;
@@ -455,9 +458,18 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   gtk_container_add (GTK_CONTAINER (menu1), separator3);
   gtk_widget_set_sensitive (separator3, FALSE);
 
-  about1 = gtk_image_menu_item_new_with_mnemonic (_("_About ..."));
+  misc1 = gtk_image_menu_item_new_with_mnemonic (_("  ?   "));
+  gtk_widget_show (misc1);
+  gtk_container_add (GTK_CONTAINER (menu1), misc1);
+  /* submenu6 = misc-help */
+  submenu6 = gtk_menu_new ();
+  gtk_menu_item_set_submenu(GTK_MENU_ITEM(misc1), submenu6);
+  keyHelp1=gtk_menu_item_new_with_mnemonic (_("_Keyboard shortcuts ..."));
+  gtk_widget_show (keyHelp1);
+  gtk_container_add (GTK_CONTAINER (submenu6), keyHelp1);
+  about1=gtk_menu_item_new_with_mnemonic (_("_About Redac ..."));
   gtk_widget_show (about1);
-  gtk_container_add (GTK_CONTAINER (menu1), about1);
+  gtk_container_add (GTK_CONTAINER (submenu6), about1);
  
   g_signal_connect ((gpointer) new1, "activate",
                     G_CALLBACK (new_project),
@@ -493,7 +505,6 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
                     G_CALLBACK (on_saveSketch_clicked),
                     data_app);
 
-
   g_signal_connect ((gpointer) AudioLoad, "activate",
                     G_CALLBACK (on_loadAudio_clicked),
                     data_app);
@@ -502,6 +513,9 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
                     data_app);
   g_signal_connect ((gpointer) about1, "activate",
                     G_CALLBACK (on_about1_activate),
+                    data_app);
+  g_signal_connect ((gpointer) keyHelp1, "activate",
+                    G_CALLBACK (on_keyHelp1_activate),
                     data_app);
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (menu1, menu1, "menu1");
@@ -2426,14 +2440,14 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   const gchar *artists[] = {_("Artwork:"), "Luc Amimer <amiluc_bis@yahoo.fr>", _("Redac logos + main icon :"), "Luc Amimer <amiluc_bis@yahoo.fr>", NULL};
 
   dialog = gtk_about_dialog_new ();
-  gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG(dialog),"Redac");
+  gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG(dialog),"");
   aboutRedac_icon_pixbuf = create_pixbuf ("splash.png");
   if (aboutRedac_icon_pixbuf) {
       gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), aboutRedac_icon_pixbuf);
       g_object_unref(G_OBJECT(aboutRedac_icon_pixbuf ));
   }
-  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"0.1.0");
-  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), _("Copyright (c) 2018-2019 Luc Amimer"));
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
+  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), "");
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 
      _("Note  utility written in GTK+ and licensed under GPL v.3"));
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
