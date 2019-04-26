@@ -2399,3 +2399,43 @@ GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
 
   return goJumpDialog;
 }
+
+
+/*************************************
+  About dialog
+
+*************************************/
+GtkWidget *create_aboutRedac (APP_data *data_app)
+{
+  GtkWidget *dialog;
+  GdkPixbuf *aboutRedac_icon_pixbuf;
+  const gchar *authors[] = {_("Project Manager:"),"Luc Amimer <amiluc_bis@yahoo.fr>", NULL };
+  const gchar *artists[] = {_("Artwork:"), "Luc Amimer <amiluc_bis@yahoo.fr>", _("Redac logos + main icon :"), "Luc Amimer <amiluc_bis@yahoo.fr>", NULL};
+
+  dialog = gtk_about_dialog_new ();
+  gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG(dialog),"Redac");
+  aboutRedac_icon_pixbuf = create_pixbuf ("splash.png");
+  if (aboutRedac_icon_pixbuf) {
+      gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), aboutRedac_icon_pixbuf);
+      g_object_unref(G_OBJECT(aboutRedac_icon_pixbuf ));
+  }
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"0.1.0");
+  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), _("Copyright (c) 2018-2019 Luc Amimer"));
+  gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 
+     _("Note  utility written in GTK+ and licensed under GPL v.3"));
+  gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
+      "https://github.com/Luc-Ami/redac/wiki");
+  gtk_about_dialog_set_license_type (GTK_ABOUT_DIALOG(dialog), GTK_LICENSE_GPL_3_0);
+
+  gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG(dialog), authors);
+  gtk_about_dialog_set_artists (GTK_ABOUT_DIALOG(dialog), artists);
+  gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(dialog), _("Translators credits"));
+
+  gtk_window_set_transient_for (GTK_WINDOW (dialog),
+                               GTK_WINDOW(data_app->appWindow));                               
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+  gtk_widget_show_all( dialog );
+  return dialog;
+}

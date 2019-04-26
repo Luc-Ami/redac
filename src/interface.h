@@ -29,4 +29,5 @@ GtkWidget *create_menu_PDF(GtkWidget *win, APP_data *data_app);
 GtkWidget*
 create_annotationColourDialog (APP_data *data_app, gchar *msg);
 GtkWidget *misc_create_go_jump_dialog(APP_data *data_app);
+GtkWidget *create_aboutRedac (APP_data *data_app);
 #endif /* INTERFACE_H */

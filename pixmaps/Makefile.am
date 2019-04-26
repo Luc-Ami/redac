@@ -8,6 +8,11 @@ nobase_dist_icons_DATA = \
 	48x48/apps/redac.png \
 	96x96/apps/redac.png 
 
+imagesdir = $(datadir)/pixmaps/$(PACKAGE)
+
+dist_images_DATA = \
+	*.png
+
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(iconsdir)
 
 install-data-hook: update-icon-cache

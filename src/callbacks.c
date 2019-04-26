@@ -3246,4 +3246,12 @@ void on_audioPlaySpeed_changed(GtkComboBox *combobox, APP_data *data)
   }
 }
 
-
+void
+on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
+{
+  GtkWidget *aboutDialog = create_aboutRedac(data);
+  
+  gtk_dialog_run(GTK_DIALOG (aboutDialog));  
+  gtk_widget_destroy(GTK_DIALOG (aboutDialog));
+  return;
+}
