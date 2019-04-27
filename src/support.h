@@ -23,9 +23,8 @@
  */
 #define _(String) gettext (String)
 
-/* directories */
-#define PACKAGE "redac"
-#define LOCALEDIR "/usr/share/locale"
+/* directories : managed by config.h */
+
 
 #define KILOWRITER_CONFIG "config.ini" /* Configuration name for Kilowriter options - main()*/
 #define KW_ALIGNMENT_LEFT 0
