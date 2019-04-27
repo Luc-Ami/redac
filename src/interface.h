@@ -19,7 +19,7 @@ void UI_headerBar(GtkWidget *window, GtkWidget *grid, APP_data *data);
 void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data);
 void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data);
 GtkWidget *create_menu1 (GtkWidget *win,APP_data *data_app);
-GtkWidget *create_loadFileDialog (void);
+GtkWidget *create_loadFileDialog (APP_data *data);
 GtkWidget *create_saveFileDialog (void);
 GtkWidget *misc_create_help_dialog(GtkWidget *win);
 GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app);

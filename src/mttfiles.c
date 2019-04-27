@@ -638,7 +638,7 @@ on_open_clicked (GtkButton *button, APP_data *data_app)
   time ( &rawtime );
   strftime(buffer_date, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
 
-  GtkWidget *dialog = create_loadFileDialog();
+  GtkWidget *dialog = create_loadFileDialog(data_app);
   /* Set defaults, or get saved values*/
   /* we should replace home dir by the current path if it exists ! */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
@@ -943,7 +943,7 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
   gtk_file_filter_add_pattern (filter, "*.WMA");
   gtk_file_filter_add_pattern (filter, "*.wma");
   gtk_file_filter_set_name (filter, _("Audio files"));
-  GtkWidget *dialog = create_loadFileDialog();
+  GtkWidget *dialog = create_loadFileDialog(data);
   /* we should replace home dir by the current path if it exists ! */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
 
@@ -1079,7 +1079,7 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
   gtk_file_filter_add_pattern (filter, "*.pdf");
   gtk_file_filter_add_pattern (filter, "*.PDF");
   gtk_file_filter_set_name (filter, _("PDF files"));
-  GtkWidget *dialog = create_loadFileDialog();
+  GtkWidget *dialog = create_loadFileDialog(data);
   /* we should replace home dir by the current path if it exists ! */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
 

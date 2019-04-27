@@ -125,10 +125,6 @@ void get_theme_selection_color(GtkWidget *widget)
                        NULL);
 
   gtk_style_context_lookup_color (style_context, "focus_color", &color2);
-
-
-printf(" selection color par défaut red=%.2f green=%.2f blue=%.2f \n", color2.red, color2.blue, color2.green);
-
   
 }
 /*****************************
@@ -171,15 +167,15 @@ GtkWidget *create_menu_PDF(GtkWidget *win, APP_data *data_app)
 
   menu1PDF = gtk_menu_new (); 
 
-  menu1PDFEditAnnot = gtk_image_menu_item_new_with_mnemonic (_("_Edit annotation ... "));
+  menu1PDFEditAnnot = gtk_menu_item_new_with_mnemonic (_("_Edit annotation ... "));
   gtk_widget_show (menu1PDFEditAnnot);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menu1PDFEditAnnot);
 
-  menu1PDFColorAnnot= gtk_image_menu_item_new_with_mnemonic (_("Annotation _color ... "));
+  menu1PDFColorAnnot= gtk_menu_item_new_with_mnemonic (_("Annotation _color ... "));
   gtk_widget_show (menu1PDFColorAnnot);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menu1PDFColorAnnot);
 
-  menu1PDFRemoveAnnot= gtk_image_menu_item_new_with_mnemonic (_("_Remove annotation "));
+  menu1PDFRemoveAnnot= gtk_menu_item_new_with_mnemonic (_("_Remove annotation "));
   gtk_widget_show (menu1PDFRemoveAnnot);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menu1PDFRemoveAnnot);
 
@@ -238,11 +234,11 @@ GtkWidget *create_menu_sketch(GtkWidget *win, APP_data *data_app)
 
   menu1Sketch = gtk_menu_new (); 
 
-  menuPasteSketch = gtk_image_menu_item_new_with_mnemonic (_("_Paste image in place "));
+  menuPasteSketch = gtk_menu_item_new_with_mnemonic (_("_Paste image in place "));
   gtk_widget_show (menuPasteSketch);
   gtk_container_add (GTK_CONTAINER (menu1Sketch), menuPasteSketch);
 
-  menuCenteredPasteSketch= gtk_image_menu_item_new_with_mnemonic (_("Paste and _center image "));
+  menuCenteredPasteSketch= gtk_menu_item_new_with_mnemonic (_("Paste and _center image "));
   gtk_widget_show (menuCenteredPasteSketch);
   gtk_container_add (GTK_CONTAINER (menu1Sketch), menuCenteredPasteSketch);
 
@@ -284,29 +280,47 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *submenu5;
   GtkWidget *submenu6;
   GtkWidget *new1;
+  GtkWidget *boxnew1;
+  GtkWidget *lblnew1;
   GtkWidget *image58;
   GtkWidget *save3;
+  GtkWidget *boxsave3;
+  GtkWidget *lblsave3;
   GtkWidget *image59;
   GtkWidget *open2;
+  GtkWidget *lblopen2;
+  GtkWidget *boxopen2;
   GtkWidget *image60;
   GtkWidget *menuPDF;
+  GtkWidget *lblPDF;
+  GtkWidget *boxPDF;
   GtkWidget *imagePDF;
   GtkWidget *loadPDF;
   GtkWidget *savePDF;
   GtkWidget *imageSketch;
+  GtkWidget *lblSketch;
+  GtkWidget *boxSketch;
   GtkWidget *saveSketch;
   GtkWidget *clearSketch;
   GtkWidget *manageImage;
   GtkWidget *menuAudio;
+  GtkWidget *lblAudio;
+  GtkWidget *boxAudio;
   GtkWidget *imageMenuAudio;
   GtkWidget *AudioLoad;
   GtkWidget *AudioCloseFile;
   GtkWidget *recent1;
+  GtkWidget *lblrecent1;
+  GtkWidget *boxrecent1;
   GtkWidget *import1;
+  GtkWidget *lblimport1;
+  GtkWidget *boximport1;
   GtkWidget *misc1;
   GtkWidget *about1;
   GtkWidget *keyHelp1;
   GtkWidget *imageHelp;
+  GtkWidget *boxHelp;
+  GtkWidget *lblHelp;
   GtkWidget *insertWPFile;
   GtkWidget *insertRedacFile;
   GtkWidget *imageImport1;
@@ -323,64 +337,77 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   gboolean fActivMenu;
 
 
-  // keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config");
-
   keyString=data_app->keystring;
   if(keyString==NULL) {
      printf("* INTERNAL ERROR in module interface.c *\n");
      return NULL;
   }
-  menu1 = gtk_menu_new ();
+  menu1 = gtk_menu_new ();  
   gtk_widget_set_name(GTK_WIDGET(menu1),"menu1");/* for css */
-
-  new1 = gtk_image_menu_item_new_with_mnemonic (_("_New note "));
-  gtk_widget_show (new1);
-  gtk_container_add (GTK_CONTAINER (menu1), new1);
-
+  /* new complex Gtk 3.10+ way to set-up an image menu ;( */
+  lblnew1 = gtk_label_new  (_("New note "));
+  boxnew1=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   image58 = gtk_image_new_from_icon_name  ("gtk-new", GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (new1), image58);
-
-  save3 = gtk_image_menu_item_new_with_mnemonic (_("_Save the note as ...  "));
-  gtk_widget_show (save3);
-  gtk_container_add (GTK_CONTAINER (menu1), save3);
-
+  new1=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxnew1), image58);
+  gtk_container_add (GTK_CONTAINER (boxnew1), lblnew1);
+  gtk_container_add (GTK_CONTAINER (new1), boxnew1);
+  gtk_widget_show_all (new1);
+  gtk_container_add (GTK_CONTAINER (menu1), new1);
+  /* save as */
+  lblsave3 = gtk_label_new (_("Save the note as ...  "));
   image59 = gtk_image_new_from_icon_name  ("gtk-save-as", GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (save3), image59);
-
-  open2 = gtk_image_menu_item_new_with_mnemonic (_("_Open a previous note ..."));
-  gtk_widget_show (open2);
-  gtk_container_add (GTK_CONTAINER (menu1), open2);
-
+  boxsave3=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  save3=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxsave3), image59);
+  gtk_container_add (GTK_CONTAINER (boxsave3), lblsave3);
+  gtk_container_add (GTK_CONTAINER (save3), boxsave3);
+  gtk_widget_show_all (save3);
+  gtk_container_add (GTK_CONTAINER (menu1), save3);
+  /* open */
+  lblopen2 = gtk_label_new (_("Open a previous note ..."));
   image60 = gtk_image_new_from_icon_name ("gtk-open", GTK_ICON_SIZE_MENU);
-  //gtk_widget_show (image60);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (open2), image60);
-
+  boxopen2=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  open2=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxopen2), image60);
+  gtk_container_add (GTK_CONTAINER (boxopen2), lblopen2);
+  gtk_container_add (GTK_CONTAINER (open2), boxopen2);
+  gtk_widget_show_all (open2);
+  gtk_container_add (GTK_CONTAINER (menu1), open2);
+  /* separator */
   separator1 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator1);
   gtk_container_add (GTK_CONTAINER (menu1), separator1);
   gtk_widget_set_sensitive (separator1, FALSE);
-
-  recent1 = gtk_image_menu_item_new_with_mnemonic (_("_Recent notes ..."));
-  gtk_widget_show (recent1);
+  /* recent */
+  lblrecent1 = gtk_label_new (_("Recent notes ..."));
+  image61 = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_MENU);
+  boxrecent1=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  recent1=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxrecent1), image61);
+  gtk_container_add (GTK_CONTAINER (boxrecent1), lblrecent1);
+  gtk_container_add (GTK_CONTAINER (recent1), boxrecent1);
+  gtk_widget_show_all (recent1);
   gtk_container_add (GTK_CONTAINER (menu1), recent1);
  
   /* we update summary of current file */
   store_current_file_in_keyfile(keyString, g_key_file_get_string(keyString, "history","recent-file-0", NULL) , 
                                  misc_get_extract_from_document(data_app));
 
-  image61 = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (recent1), image61);
-
+  /* separator */
   separator2 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator2);
   gtk_container_add (GTK_CONTAINER (menu1), separator2);
   gtk_widget_set_sensitive (separator2, FALSE);
-
   /* import */
   imageImport1=gtk_image_new_from_icon_name ("insert-text", GTK_ICON_SIZE_MENU);
-  import1=gtk_image_menu_item_new_with_mnemonic (_("_Insert text from a file "));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (import1), imageImport1);
-  gtk_widget_show (import1);
+  lblimport1= gtk_label_new (_("Insert text from a file "));
+  boximport1=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  import1=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boximport1), imageImport1);
+  gtk_container_add (GTK_CONTAINER (boximport1), lblimport1);
+  gtk_container_add (GTK_CONTAINER (import1), boximport1);
+  gtk_widget_show_all (import1);
   gtk_container_add (GTK_CONTAINER (menu1), import1);
   /* insert/import submenu */
   submenu5 = gtk_menu_new ();
@@ -396,11 +423,15 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   separator14 = gtk_separator_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu1), separator14);
   gtk_widget_set_sensitive (separator14, FALSE);
-/* PDF */
+  /* PDF */
   imagePDF = gtk_image_new_from_icon_name ("application-pdf", GTK_ICON_SIZE_MENU);
-  menuPDF=gtk_image_menu_item_new_with_mnemonic (_("PDF "));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuPDF), imagePDF);
-  gtk_widget_show (menuPDF);
+  lblPDF=gtk_label_new ("PDF ");
+  boxPDF=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  menuPDF=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxPDF), imagePDF);
+  gtk_container_add (GTK_CONTAINER (boxPDF), lblPDF);
+  gtk_container_add (GTK_CONTAINER (menuPDF), boxPDF);
+  gtk_widget_show_all (menuPDF);
   gtk_container_add (GTK_CONTAINER (menu1), menuPDF);
 
  /*  submenu PDF >> submenu2 */
@@ -417,10 +448,13 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
 
   /* audio menu */
   imageMenuAudio = gtk_image_new_from_icon_name ("audio-input-microphone", GTK_ICON_SIZE_MENU);
-  //gtk_widget_show (imageMenuAudio);
-  menuAudio=gtk_image_menu_item_new_with_mnemonic (_("_Audio "));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuAudio), imageMenuAudio);
-  gtk_widget_show (menuAudio);
+  lblAudio=gtk_label_new ("Audio");
+  boxAudio=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  menuAudio=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxAudio), imageMenuAudio);
+  gtk_container_add (GTK_CONTAINER (boxAudio), lblAudio);
+  gtk_container_add (GTK_CONTAINER (menuAudio), boxAudio);
+  gtk_widget_show_all (menuAudio);
   gtk_container_add (GTK_CONTAINER (menu1), menuAudio);  
 
   /* submenu4 = submenu for Audio */
@@ -436,9 +470,13 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
 
   /* sketches - images */
   imageSketch=gtk_image_new_from_icon_name ("image-x-generic", GTK_ICON_SIZE_MENU);
-  manageImage=gtk_image_menu_item_new_with_mnemonic (_("Sketches"));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (manageImage), imageSketch);
-  gtk_widget_show (manageImage);
+  boxSketch=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  lblSketch=gtk_label_new ("Sketches");
+  manageImage=gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxSketch), imageSketch);
+  gtk_container_add (GTK_CONTAINER (boxSketch), lblSketch);
+  gtk_container_add (GTK_CONTAINER (manageImage), boxSketch);
+  gtk_widget_show_all (manageImage);
   gtk_container_add (GTK_CONTAINER (menu1), manageImage);
   /* submenu3 = sketches */
   submenu3 = gtk_menu_new ();
@@ -454,16 +492,20 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   else
      gtk_widget_set_sensitive(clearSketch, FALSE);
 
-  /* about */
+  /* separator */
   separator3 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator3);
   gtk_container_add (GTK_CONTAINER (menu1), separator3);
   gtk_widget_set_sensitive (separator3, FALSE);
-
+  /* help */
   imageHelp=gtk_image_new_from_icon_name ("help-contents", GTK_ICON_SIZE_MENU);
-  misc1 = gtk_image_menu_item_new_with_mnemonic (_("_Help"));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (misc1), imageHelp);
-  gtk_widget_show (misc1);
+  lblHelp=gtk_label_new ("Help");
+  boxHelp=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  misc1 = gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (boxHelp), imageHelp);
+  gtk_container_add (GTK_CONTAINER (boxHelp), lblHelp);
+  gtk_container_add (GTK_CONTAINER (misc1), boxHelp);
+  gtk_widget_show_all (misc1);
   gtk_container_add (GTK_CONTAINER (menu1), misc1);
   /* submenu6 = misc-help */
   submenu6 = gtk_menu_new ();
@@ -584,7 +626,7 @@ GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app)
   GtkWidget *icon_highlight_select;
   GtkWidget *icon_text_annot;
   GtkWidget *icon_pencil;
-  GtkWidget *button_pencil;
+  GtkToolItem *button_pencil;
   GtkToolItem *color_button_item;
   GtkWidget *color_button;
   GtkAccelGroup *accel_group;
@@ -887,7 +929,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonPlayPauseAudio), _("Play or pause-rewind current audio file.\nRewind's length is defined in 'audio' settings."));
   gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonPlayPauseAudio), FALSE);
   /* counter */
-  GtkWidget *audio_position=gtk_tool_item_new();
+  GtkToolItem *audio_position=gtk_tool_item_new();
   gtk_widget_set_tooltip_text(GTK_WIDGET(audio_position), _("Position within current audio file"));
   GtkWidget *audio_position_label = gtk_label_new("<tt><big>--:--:--</big></tt>");/* tt for Monospace font family */
   gtk_label_set_use_markup (GTK_LABEL (audio_position_label), TRUE);
@@ -895,7 +937,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_position), -1);
   gtk_widget_set_sensitive(GTK_WIDGET(audio_position), FALSE);
   /* total audio file duration */
-  GtkWidget *audio_total=gtk_tool_item_new();
+  GtkToolItem *audio_total=gtk_tool_item_new();
   gtk_widget_set_tooltip_text(GTK_WIDGET(audio_total), _("Total duration of current audio file"));
   GtkWidget *audio_total_label = gtk_label_new("<tt><small>/--:--:--</small></tt>");
   gtk_label_set_use_markup (GTK_LABEL (audio_total_label), TRUE);
@@ -1061,7 +1103,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   GLADE_HOOKUP_OBJECT (window, audioPlaySpeed, "audioPlaySpeed");
 
   GLADE_HOOKUP_OBJECT (window, button_undo, "button_undo");
-  data_app->pBtnUndo=button_undo;
+  data_app->pBtnUndo=GTK_WIDGET(button_undo);
   return toolbar;
 }
 
@@ -1329,7 +1371,7 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   load from file dialog 
 *********************************/
 GtkWidget*
-create_loadFileDialog (void)
+create_loadFileDialog (APP_data *data)
 {
   GtkWidget *loadFileDialog;
   GtkWidget *dialog_vbox6;
@@ -1340,7 +1382,7 @@ create_loadFileDialog (void)
   GtkWidget *image44;
 
   loadFileDialog = gtk_file_chooser_dialog_new (_("Open file..."), 
-                              NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+                              GTK_WINDOW(data->appWindow), GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
   g_object_set (loadFileDialog, "local-only", FALSE,  NULL);
   gtk_window_set_modal (GTK_WINDOW (loadFileDialog), TRUE);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (loadFileDialog), TRUE);
