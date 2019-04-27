@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
   /* image directories */
   add_pixmap_directory (PACKAGE_DATA_DIR "/pixmaps/" PACKAGE); /* New location for all pixmaps */
   add_pixmap_directory (PACKAGE_DATA_DIR "/pixmaps"); /* Gnome users /usr/share/pixmaps folder */
-  
+
   mainWindow = UI_main_window();
 
   GtkWidget *headBar=gtk_grid_new ();

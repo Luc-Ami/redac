@@ -208,7 +208,7 @@ GtkWidget *paving_new_button_block(gint rank, gchar *strFile, gchar *str )
   gtk_widget_set_margin_bottom(label_content, 4);
   gtk_widget_set_margin_left(label_content, 4);
   gtk_widget_set_margin_right(label_content, 4);
-
+  gtk_misc_set_padding (GTK_MISC (label_content), 5, 5);
   g_object_set (grid, "margin", 0, NULL);
 
   gtk_grid_attach(GTK_GRID(grid),label_title, 0, 0, 1, 1);
