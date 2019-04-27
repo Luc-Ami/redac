@@ -59,7 +59,8 @@ void set_up_view( GtkWidget *window1, APP_data *data_app )
 "  #page_title { font-weight:600; border: none; padding: 2px; }\n"
 "  #page_entry { border: none; padding: 2px; }\n"
 "  #page_label { font-weight:600; border: none; padding: 2px; }\n"
-
+"  #gridDisplay { background-image: none; background-color: #FFFFFF; }\n"
+"  #gridTitle {  background-image: none; background-color:#E9E9E6; color: black; }\n"
 "  #recentGrid {  border-style: none; border-width: 5px;  border-radius: 5px;}\n"
 "  #myButtonCancel{  font-family: DejaVu Sans;font-style: normal; border-radius: 3px; background-image: none;}\n"
 "  #myButtonCancel:hover { background-color: red; }\n"
@@ -1428,7 +1429,7 @@ create_loadFileDialog (APP_data *data)
   save to file dialog 
 *********************************/
 GtkWidget*
-create_saveFileDialog (void)
+create_saveFileDialog (APP_data *data)
 {
   GtkWidget *saveFileDialog;
   GtkWidget *dialog_vbox6;
@@ -1438,7 +1439,9 @@ create_saveFileDialog (void)
   GtkWidget *button44;
   GtkWidget *image44;
 
-  saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), NULL,               GTK_FILE_CHOOSER_ACTION_SAVE, NULL);
+    saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), 
+                                    GTK_WINDOW(data->appWindow),
+                                    GTK_FILE_CHOOSER_ACTION_SAVE, NULL);
   g_object_set (saveFileDialog, "local-only", FALSE,  NULL);
   gtk_window_set_modal (GTK_WINDOW (saveFileDialog), TRUE);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (saveFileDialog), TRUE);

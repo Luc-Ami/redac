@@ -20,7 +20,7 @@ void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data);
 void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data);
 GtkWidget *create_menu1 (GtkWidget *win,APP_data *data_app);
 GtkWidget *create_loadFileDialog (APP_data *data);
-GtkWidget *create_saveFileDialog (void);
+GtkWidget *create_saveFileDialog (APP_data *data);
 GtkWidget *misc_create_help_dialog(GtkWidget *win);
 GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app);
 gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *data);

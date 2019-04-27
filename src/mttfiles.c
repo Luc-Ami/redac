@@ -566,8 +566,8 @@ gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *windo
                                       GTK_BUTTONS_OK,
                                       _("The file :%s isn't a correct file\nor it's currupted. Operation cancelled !"),
                                       filename);
-     gint retrun= gtk_dialog_run(alertDlg);
-     gtk_widget_destroy (alertDlg);
+     gint retrun= gtk_dialog_run(GTK_WINDOW(alertDlg));
+     gtk_widget_destroy (GTK_WIDGET(alertDlg));
      return -1;
   }
   gtk_text_buffer_set_text(buffer, "", -1); /* Clear text! */
@@ -578,7 +578,7 @@ gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *windo
   //gtk_text_buffer_deserialize_set_can_create_tags(buffer,format,TRUE); //SURTOU pas car c rée tags incrémentaux !!!
   gboolean deserialized = gtk_text_buffer_deserialize(buffer, buffer, format, &start, txtbuffer, fileSize, NULL);/* NULL mandatory ? ! */
   g_free(txtbuffer);
-  gtk_label_set_markup (lookup_widget(GTK_WIDGET(window1), "labelMainTitle"),
+  gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
                              g_strdup_printf(_("<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"), filename));
 
  // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf(_("Loaded-%s"), filename));
@@ -647,7 +647,7 @@ on_open_clicked (GtkButton *button, APP_data *data_app)
   /* run dialog */
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    gtk_widget_destroy (dialog); 
+    gtk_widget_destroy (GTK_WIDGET(dialog)); 
     if(load_gtk_rich_text(filename, buffer, window1)!=0) {
         //misc_clear_text(buffer, "left");
     }
@@ -661,7 +661,7 @@ on_open_clicked (GtkButton *button, APP_data *data_app)
        /* we change the default values for gkeyfile + summary */
        store_current_file_in_keyfile(keyString, filename, misc_get_extract_from_document(data_app ));
        /* now we set-up a new default filename */
-       gtk_label_set_markup (lookup_widget(GTK_WIDGET(window1), "labelMainTitle"),
+       gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s</b></small>"), filename));
     //   gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
       //                       g_strdup_printf(_("%s"), filename));
@@ -671,7 +671,7 @@ on_open_clicked (GtkButton *button, APP_data *data_app)
     g_free(filename);
   }
   else
-     gtk_widget_destroy (dialog); 
+     gtk_widget_destroy (GTK_WIDGET(dialog)); 
 }
 
 /*********************************
@@ -695,7 +695,7 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
       dialog = gtk_message_dialog_new (window1, flags,
                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL,
                 _("Do you really want to quit this program ?\nTake it easy, your work\nwill be automatically saved."));
-      if(gtk_dialog_run(dialog)!=GTK_RESPONSE_OK)
+      if(gtk_dialog_run(GTK_DIALOG(dialog))!=GTK_RESPONSE_OK)
          flag=FALSE;
       gtk_widget_destroy(GTK_WIDGET(dialog));
   }
@@ -751,11 +751,11 @@ void quick_save (APP_data *data)
                                       GTK_BUTTONS_OK,
                                       _("Problem during quick save of :\n%s"),
                                       filename);
-      ret=gtk_dialog_run(alertDlg);
-      gtk_widget_destroy (alertDlg);
+      ret=gtk_dialog_run(GTK_DIALOG(alertDlg));
+      gtk_widget_destroy (GTK_WIDGET(alertDlg));
   }
   else {
-    gtk_label_set_markup (lookup_widget(GTK_WIDGET(window1), "labelMainTitle"),
+    gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), filename));
     //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
       //                       g_strdup_printf(_("%s-saved"), filename));
@@ -790,7 +790,7 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
   /* first, we get as default the current filename  */
   filename = g_key_file_get_string(keyString, "application", "current-file-basename", NULL);
 
-  GtkWidget *dialog = create_saveFileDialog();
+  GtkWidget *dialog = create_saveFileDialog(data);
   /* Set defaults and get path for current filename */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
                          g_path_get_dirname(g_key_file_get_string(keyString, "application", "current-file", NULL) ));
@@ -817,9 +817,9 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
                                       GTK_BUTTONS_OK_CANCEL,
                                       _("The file :%s exists !\nOverwrite existing file ?"),
                                       newFilename);
-           if(gtk_dialog_run(alertDlg)==GTK_RESPONSE_CANCEL) {
-                gtk_widget_destroy (alertDlg);
-                gtk_widget_destroy (dialog);
+           if(gtk_dialog_run(GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
+                gtk_widget_destroy (GTK_WIDGET(alertDlg));
+                gtk_widget_destroy (GTK_WIDGET(dialog));
                 g_free(newFilename);
                 return;
            }
@@ -828,7 +828,7 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
          /* we save also in standard Word processor format !!! */
          ret = save_RTF_rich_text(newFilename, buffer);
          /* we setup the window's title */
-         gtk_label_set_markup (lookup_widget(GTK_WIDGET(window1), "labelMainTitle"),
+         gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), newFilename));
          //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
            //                  g_strdup_printf(_("%s"), newFilename));
@@ -839,7 +839,7 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
          store_current_file_in_keyfile(keyString, newFilename, misc_get_extract_from_document(data));
          g_free(newFilename);
   }
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET(dialog));
   g_free(filename);
 }
 /**************************************
@@ -950,7 +950,7 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    gtk_widget_destroy (dialog); 
+    gtk_widget_destroy (GTK_WIDGET(dialog)); 
     /* we convert finename's path to URI path */
     uri_path = g_filename_to_uri(filename, NULL,NULL);
     if(data->pipeline) {
@@ -972,12 +972,12 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
     //g_key_file_set_string(keyString, "application", "current-PDF-file-basename", 
       //                g_filename_display_basename (filename));
     /*  we unlock widgets and set dispplays */
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_TOOL_ITEM(lookup_widget(GTK_WIDGET(window1), "audio_position")) , TRUE);
-    gtk_widget_set_sensitive(GTK_TOOL_ITEM(lookup_widget(GTK_WIDGET(window1), "audio_total")) , TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , TRUE);
@@ -987,7 +987,7 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
     data->fAudioLoaded=TRUE;
     data->fAudioPlaying=FALSE;
     /* TODO calculer duree et mettre à jour affichages mettre à jour donnees*/
-printf("duree avant=%d\n",data->audio_total_duration );
+// printf("duree avant=%d\n",data->audio_total_duration );
 
 //     gst_element_set_state (data->pipeline, GST_STATE_PAUSED);/* required - Playbin must be pre-rolled or playing */
  //    gboolean ret=FALSE;
@@ -997,12 +997,12 @@ printf("duree avant=%d\n",data->audio_total_duration );
 
     data->audio_current_position=0;
     audio_get_duration(data->pipeline, &data->audio_total_duration );
-printf("duree apres=%d\n", data->audio_total_duration );
-    printf("duree humaine:%s\n",audio_gst_time_to_str(data->audio_total_duration));
+//printf("duree apres=%d\n", data->audio_total_duration );
+//    printf("duree humaine:%s\n",audio_gst_time_to_str(data->audio_total_duration));
  //   gst_element_set_state (data->pipeline, GST_STATE_PLAYING);
-    gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>00:00:00</big></tt>");
-    gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), 
-                  g_strdup_printf("<tt><small>/%s</small></tt>", 
+    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>00:00:00</big></tt>");
+    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), 
+                  g_strdup_printf("<tt><small>/%s</small></tt>", (gchar*)
                      audio_gst_time_to_str(data->audio_total_duration)));
     // data->audio_total_duration ???
     // data->audio_current_position ???
@@ -1010,7 +1010,7 @@ printf("duree apres=%d\n", data->audio_total_duration );
 
   }
   else
-        gtk_widget_destroy (dialog); 
+        gtk_widget_destroy (GTK_WIDGET(dialog)); 
 }
 
 /************************************
@@ -1029,14 +1029,14 @@ on_AudioCloseFile_clicked  (GtkButton *button, APP_data *data)
   keyString = g_object_get_data(G_OBJECT(window1),"config");
 
   printf("demande libérer mémoire fichier audio ! \n");
-    gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>--:--:--</big></tt>");
-    gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), "<tt><small>/--:--:--</small></tt>");
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_TOOL_ITEM(lookup_widget(GTK_WIDGET(window1), "audio_position")) , FALSE);
-    gtk_widget_set_sensitive(GTK_TOOL_ITEM(lookup_widget(GTK_WIDGET(window1), "audio_total")) , FALSE);
+    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>--:--:--</big></tt>");
+    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), "<tt><small>/--:--:--</small></tt>");
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , FALSE);
     gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , FALSE);
     gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , FALSE);
     gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , FALSE);
@@ -1086,7 +1086,7 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-    gtk_widget_destroy (dialog); 
+    gtk_widget_destroy (GTK_WIDGET(dialog)); 
     /* we convert finename's path to URI path */
     uri_path = g_filename_to_uri(filename, NULL,NULL);
     /* we load PDF Poppler's doc */
@@ -1169,7 +1169,7 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
   gtk_file_filter_set_name (filter, _("PDF files"));
   filename = g_key_file_get_string(keyString, "application", "current-file-basename", NULL);
 
-  GtkWidget *dialog = create_saveFileDialog();
+  GtkWidget *dialog = create_saveFileDialog(data);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
                          g_path_get_dirname(g_key_file_get_string(keyString, "application", "current-file", NULL) ));
@@ -1196,9 +1196,9 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
                           GTK_BUTTONS_OK_CANCEL,
                           _("The file :\n%s already exists !\nDo you really want to Overwrite an existing PDF file ?"),
                           newFilename);
-           if(gtk_dialog_run(alertDlg)==GTK_RESPONSE_CANCEL) {
-              gtk_widget_destroy (alertDlg);
-              gtk_widget_destroy (dialog);
+           if(gtk_dialog_run(GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
+              gtk_widget_destroy (GTK_WIDGET(alertDlg));
+              gtk_widget_destroy (GTK_WIDGET(dialog));
               g_free(newFilename);
               return;
            }
@@ -1223,7 +1223,7 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
          PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
          update_PDF_state(data, PDF_NON_MODIF);
   }
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET(dialog));
   g_free(filename);
 }
 
@@ -1248,7 +1248,7 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
   gtk_file_filter_add_pattern (filter, "*.PNG");
   gtk_file_filter_set_name (filter, _("PNG Image files"));
 
-  GtkWidget *dialog = create_saveFileDialog();
+  GtkWidget *dialog = create_saveFileDialog(data_app);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
                          g_path_get_dirname(g_key_file_get_string(keyString, "application", "current-file", NULL) ));
@@ -1268,15 +1268,15 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
          /* we must check if a file with same name exists */
          if(g_file_test (newFilename, G_FILE_TEST_EXISTS) ) {
            /* dialog to avoid overwriting */
-           alertDlg =  gtk_message_dialog_new (dialog,
+           alertDlg =  gtk_message_dialog_new (GTK_WINDOW(dialog),
                                       flags,
                                       GTK_MESSAGE_ERROR,
                                       GTK_BUTTONS_OK_CANCEL,
                                       _("The file :%s exists !\nOverwrite existing file ?"),
                                       newFilename);
-           if(gtk_dialog_run(alertDlg)==GTK_RESPONSE_CANCEL) {
-                gtk_widget_destroy (alertDlg);
-                gtk_widget_destroy (dialog);
+           if(gtk_dialog_run(GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
+                gtk_widget_destroy (GTK_WIDGET(alertDlg));
+                gtk_widget_destroy (GTK_WIDGET(dialog));
                 g_free(newFilename);
                 return;
            }
@@ -1288,7 +1288,7 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
          g_object_unref(pPixDatas);
          g_free(newFilename);
   }
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET(dialog));
 }
 
 /**********************
@@ -1303,7 +1303,7 @@ on_help_clicked   (GtkWidget  *win)
 
   dlg = misc_create_help_dialog(win);
   gtk_dialog_run(GTK_DIALOG(dlg));
-  gtk_widget_destroy (dlg);
+  gtk_widget_destroy (GTK_WIDGET(dlg));
 }
 
 /**************************************
@@ -1339,7 +1339,7 @@ void new_project(GtkMenuItem *menuitem, APP_data  *user_data)
   strftime(buffer_date, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
   /* now we set-up a new default filename */
   path_to_file =  get_path_to_datas_file(buffer_date);
-  gtk_label_set_markup (lookup_widget(GTK_WIDGET(window1), "labelMainTitle"),
+  gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
 
  // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf(_("Redac:%s"), path_to_file));

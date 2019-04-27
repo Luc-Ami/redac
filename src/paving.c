@@ -7,6 +7,7 @@
 #include <locale.h>
 
 #include <stdlib.h>
+#include <string.h>
 #include <gtk/gtk.h>
 #include "support.h"
 #include "misc.h"
@@ -265,6 +266,7 @@ GtkWidget *paving_window(APP_data *user_data )
 
   /* display grid */
   gridDisplay = gtk_grid_new ();
+  gtk_widget_set_name(gridDisplay, "gridDisplay");
   gtk_grid_set_row_homogeneous(GTK_GRID(gridDisplay), FALSE);
   gtk_grid_set_column_homogeneous(GTK_GRID(gridDisplay), FALSE);
   gtk_container_set_border_width(GTK_CONTAINER (gridDisplay), 0);
@@ -274,6 +276,7 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_container_add (GTK_CONTAINER (dialog_vbox), gridDisplay);
   /* title section */
   gridTitle=gtk_grid_new ();
+  gtk_widget_set_name(gridTitle, "gridTitle");
   gtk_grid_set_row_homogeneous(GTK_GRID(gridTitle), FALSE);
   gtk_grid_set_column_homogeneous(GTK_GRID(gridTitle), FALSE);
   gtk_container_set_border_width(GTK_CONTAINER (gridTitle), 0);
