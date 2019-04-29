@@ -2650,6 +2650,7 @@ void clipboard_requestggg_image(GtkClipboard *clipboard, GdkPixbuf *pixbuf, gpoi
 
 /***********************************************
  CB : response to recent-files list of menitems
+ with 'paving' display
 *************************************************/
 void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
 {
@@ -2668,9 +2669,7 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
   ret = save_gtk_rich_text(path_to_file, buffer);
   g_free(path_to_file);
 
- /* now we display the blocks with files and summaries */
-// short file name : g_filename_display_basename (tmpStr2)
-
+  /* now we display the blocks with files and summaries */
  
   currentFileDialog=paving_window(user_data );
   ret=gtk_dialog_run(GTK_DIALOG(currentFileDialog));
@@ -2681,7 +2680,6 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
      /* we read the file path within le config.ini file */
      path_to_file=g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           g_strdup_printf("recent-file-%d",file_to_load), NULL));
-     printf("reposne =%d file to load %d\n  \nstring=%s\n", ret, file_to_load, path_to_file);
      /* we check if the file exists */
      if(g_file_test (path_to_file, G_FILE_TEST_EXISTS)) {
        /* now we clear the datas */

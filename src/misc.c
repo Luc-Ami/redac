@@ -523,7 +523,7 @@ void misc_clear_text(GtkTextBuffer *buffer, const gchar  *tag)
 {
   GtkTextIter start, end;
 
-  gtk_text_buffer_set_text(buffer, "", -1); /* Clear text! */
+  gtk_text_buffer_set_text(buffer, "", 0); /* Clear text! */
   gtk_text_buffer_get_start_iter(buffer, &start);
   gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_apply_tag_by_name (buffer,tag, &start, &end);
