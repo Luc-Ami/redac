@@ -219,7 +219,7 @@ GtkWidget *paving_new_button_block(gint rank, gchar *strFile, gchar *str )
   gtk_widget_set_name(label_title, g_strdup_printf("myButton_label_title_%d", rank));
   gtk_widget_set_name(label_content, g_strdup_printf("myButton_label_content_%d", rank));
 
-  gtk_widget_set_size_request(btn, 160, 130);
+  gtk_widget_set_size_request(btn, 140, 130);
   g_object_set (btn, "margin", 0, NULL);
   gtk_widget_set_can_focus (btn, TRUE);
  
@@ -248,7 +248,7 @@ GtkWidget *paving_window(APP_data *user_data )
   GKeyFile *keyString;
   gchar *recent_prev, *content_prev;
   gint i, count=0;
-
+  const gchar espaces[]="                              ";
 
   keyString=g_object_get_data(G_OBJECT(user_data->appWindow), "config");
 
@@ -258,7 +258,7 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_window_set_position (GTK_WINDOW (pavingDialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal (GTK_WINDOW (pavingDialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (pavingDialog), TRUE);
-  gtk_window_set_default_size(GTK_WINDOW(pavingDialog), 850, 600);
+  gtk_window_set_default_size(GTK_WINDOW(pavingDialog), 800, 600);
   gtk_window_set_resizable (GTK_WINDOW(pavingDialog), TRUE);
   gtk_window_set_type_hint (GTK_WINDOW (pavingDialog), GDK_WINDOW_TYPE_HINT_DIALOG);
   gtk_window_set_transient_for (GTK_WINDOW (pavingDialog),  GTK_WINDOW(window1)); 
@@ -272,7 +272,7 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_container_set_border_width(GTK_CONTAINER (gridDisplay), 0);
   gtk_grid_set_column_spacing(GTK_GRID(gridDisplay), 0);
   gtk_grid_set_row_spacing(GTK_GRID(gridDisplay), 0);
-  g_object_set (gridDisplay, "margin", 10, NULL);
+  g_object_set (gridDisplay, "margin", 2, NULL);
   gtk_container_add (GTK_CONTAINER (dialog_vbox), gridDisplay);
   /* title section */
   gridTitle=gtk_grid_new ();
@@ -282,12 +282,13 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_container_set_border_width(GTK_CONTAINER (gridTitle), 0);
   gtk_grid_set_column_spacing(GTK_GRID(gridTitle), 0);
   gtk_grid_set_row_spacing(GTK_GRID(gridTitle), 0);
-  g_object_set (gridTitle, "margin", 10, NULL);  
+  g_object_set (gridTitle, "margin", 0, NULL);  
   gtk_grid_attach(GTK_GRID(gridDisplay), gridTitle, 0,0,1,1);
   /* icon */
   iconTitle=gtk_image_new_from_icon_name ("document-open-recent",GTK_ICON_SIZE_DIALOG);
   gtk_misc_set_alignment (GTK_MISC (iconTitle), 0, 0.5);
   gtk_widget_set_hexpand(GTK_WIDGET(iconTitle), FALSE);
+  gtk_misc_set_padding (GTK_MISC (iconTitle), 5, 5);
   gtk_grid_attach(GTK_GRID(gridTitle), iconTitle, 0,0,1,1);
   /* title */
   labelTitle= gtk_label_new("");
@@ -295,7 +296,9 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_misc_set_alignment (GTK_MISC (labelTitle), 0, 0.5);
   gtk_widget_set_hexpand(GTK_WIDGET(labelTitle), FALSE);
   gtk_grid_attach(GTK_GRID(gridTitle), labelTitle, 1,0,1,1);
+  gtk_misc_set_padding (GTK_MISC (labelTitle), 5, 5);
   subTitle= gtk_label_new("");
+  gtk_misc_set_padding (GTK_MISC (subTitle), 5, 5);
   gtk_grid_attach(GTK_GRID(gridTitle), subTitle, 1,1,2,1);
 
   /* grid for files  */
@@ -306,7 +309,7 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_grid_set_column_spacing(GTK_GRID(gridFiles), 0);
   gtk_grid_set_row_spacing(GTK_GRID(gridFiles), 0);
   gtk_widget_set_name(gridFiles, "recentGrid");
-  g_object_set (gridFiles, "margin", 15, NULL);
+  g_object_set (gridFiles, "margin", 0, NULL);
   gtk_grid_attach(GTK_GRID(gridDisplay), gridFiles, 0,1,1,1);
 
   /* cancel button */
@@ -318,6 +321,7 @@ GtkWidget *paving_window(APP_data *user_data )
   gtk_button_set_image (GTK_BUTTON (buttonCancel), buttonCancelImage);
   gtk_widget_set_margin_left(buttonCancel, 32);
   gtk_widget_set_margin_right(buttonCancel, 32);
+  g_object_set (buttonCancel, "margin", 8, NULL);  
   gtk_grid_attach(GTK_GRID(gridTitle), buttonCancel, 3, 1, 1, 1);
 
 
@@ -338,6 +342,7 @@ GtkWidget *paving_window(APP_data *user_data )
                  }
                  g_free(recent_prev);
   }
+ 
 
   if(g_key_file_has_key(keyString, "history", "recent-file-1", NULL)) {
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
@@ -353,8 +358,14 @@ GtkWidget *paving_window(APP_data *user_data )
                    g_signal_connect(G_OBJECT(button2), "clicked", 
                               G_CALLBACK(on_recent2_clicked), user_data);
                  }
+                 else {/* dirty */
+                    GtkWidget *lblbtn2=gtk_label_new(&espaces);
+                    gtk_widget_show(lblbtn2);
+                    gtk_grid_attach(GTK_GRID(gridFiles), lblbtn2, 1, 0, 1, 1);
+                 }
                  g_free(recent_prev);
  }
+
 
  if(g_key_file_has_key(keyString, "history", "recent-file-2", NULL)) {
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
@@ -370,8 +381,15 @@ GtkWidget *paving_window(APP_data *user_data )
                    g_signal_connect(G_OBJECT(button3), "clicked", 
                               G_CALLBACK(on_recent3_clicked), user_data);
                  }
+                 else {/* dirty */
+                    GtkWidget *lblbtn3=gtk_label_new(&espaces);
+                    gtk_widget_show(lblbtn3);
+                    gtk_grid_attach(GTK_GRID(gridFiles), lblbtn3, 2, 0, 1, 1);
+                 }
                  g_free(recent_prev);
  }
+ 
+
  if(g_key_file_has_key(keyString, "history", "recent-file-3", NULL)) {
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           "recent-file-3", NULL));
@@ -382,9 +400,14 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-content-3", NULL));
                    button4=paving_new_button_block(4, recent_prev, content_prev );
                    g_free(content_prev);
-                   gtk_grid_attach(GTK_GRID(gridFiles), button4, 0, 1, 1, 1);
+                   gtk_grid_attach(GTK_GRID(gridFiles), button4, 3, 0, 1, 1);
                    g_signal_connect(G_OBJECT(button4), "clicked", 
                               G_CALLBACK(on_recent4_clicked), user_data);
+                 }
+                 else {/* dirty */
+                    GtkWidget *lblbtn4=gtk_label_new(&espaces);
+                    gtk_widget_show(lblbtn4);
+                    gtk_grid_attach(GTK_GRID(gridFiles), lblbtn4, 3, 0, 1, 1);
                  }
                  g_free(recent_prev);
  }
@@ -398,7 +421,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-content-4", NULL));
                    button5=paving_new_button_block(5, recent_prev, content_prev );
                    g_free(content_prev);
-                   gtk_grid_attach(GTK_GRID(gridFiles), button5, 1, 1, 1, 1);
+                   gtk_grid_attach(GTK_GRID(gridFiles), button5, 0, 1, 1, 1);
                    g_signal_connect(G_OBJECT(button5), "clicked", 
                               G_CALLBACK(on_recent5_clicked), user_data);
                  }
@@ -415,7 +438,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-content-5", NULL));
                    button6=paving_new_button_block(6, recent_prev, content_prev );
                    g_free(content_prev);
-                   gtk_grid_attach(GTK_GRID(gridFiles), button6, 2, 1, 1, 1);
+                   gtk_grid_attach(GTK_GRID(gridFiles), button6, 1, 1, 1, 1);
                    g_signal_connect(G_OBJECT(button6), "clicked", 
                               G_CALLBACK(on_recent6_clicked), user_data);
                  }
@@ -432,7 +455,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-content-6", NULL));
                    button7=paving_new_button_block(7, recent_prev, content_prev );
                    g_free(content_prev);
-                   gtk_grid_attach(GTK_GRID(gridFiles), button7, 0, 2, 1, 1);
+                   gtk_grid_attach(GTK_GRID(gridFiles), button7, 2, 1, 1, 1);
                    g_signal_connect(G_OBJECT(button7), "clicked", 
                               G_CALLBACK(on_recent7_clicked), user_data);
                  }
@@ -448,7 +471,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-content-7", NULL));
                    button8=paving_new_button_block(8, recent_prev, content_prev );
                    g_free(content_prev);
-                   gtk_grid_attach(GTK_GRID(gridFiles), button8, 1, 2, 1, 1);
+                   gtk_grid_attach(GTK_GRID(gridFiles), button8, 3, 1, 1, 1);
                    g_signal_connect(G_OBJECT(button8), "clicked", 
                               G_CALLBACK(on_recent8_clicked), user_data);
                  }
@@ -464,7 +487,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-content-8", NULL));
                    button9=paving_new_button_block(9, recent_prev, content_prev );
                    g_free(content_prev);
-                   gtk_grid_attach(GTK_GRID(gridFiles), button9, 2, 2, 1, 1);
+                   gtk_grid_attach(GTK_GRID(gridFiles), button9, 0, 2, 1, 1);
                    g_signal_connect(G_OBJECT(button9), "clicked", 
                               G_CALLBACK(on_recent9_clicked), user_data);
                  }
@@ -480,7 +503,7 @@ GtkWidget *paving_window(APP_data *user_data )
                                           "recent-content-9", NULL));
                    button10=paving_new_button_block(10, recent_prev, content_prev );
                    g_free(content_prev);
-                   gtk_grid_attach(GTK_GRID(gridFiles), button10, 0, 3, 1, 1);
+                   gtk_grid_attach(GTK_GRID(gridFiles), button10, 1, 2, 1, 1);
                    g_signal_connect(G_OBJECT(button10), "clicked", 
                               G_CALLBACK(on_recent10_clicked), user_data);
                  }
