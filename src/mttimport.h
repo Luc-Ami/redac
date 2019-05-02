@@ -50,6 +50,18 @@ from catdoc and me ;-)
 #define iCpW1252 2
 #define iCpIbm437 3
 #define iCpIso8859_1 4
+/* formatings */
+#define fmtBold 1
+#define fmtItalic 2
+#define fmtUnder 4
+#define fmtSuper 8
+#define fmtSub 16
+#define fmtStrike 32
+#define cmdPar 13
+#define cmdParD 14
+#define cmdHexChar 15
+#define cmdDecChar 17
+#define cmdAuthor 18
 
 void
 on_merge_clicked (GtkButton *button, APP_data *data_app);

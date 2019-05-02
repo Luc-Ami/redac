@@ -8,7 +8,7 @@
 /* translations */
 #include <libintl.h>
 #include <locale.h>
-
+#include <string.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
@@ -53,7 +53,7 @@ static gint get_file_type_by_signature(gchar *path_to_file)
   inputFile = fopen(path_to_file,"rb");
   if(inputFile==NULL) {
           printf("* ERROR : impossible to open file:%s to check signature *\n", path_to_file);
-          return NULL;
+          return -1;
   }
   /* we compute the size before dynamically allocate buffer */
    glong prev = ftell(inputFile);   
@@ -107,7 +107,7 @@ static gint get_file_type_by_signature(gchar *path_to_file)
 /*********************************************
   various functions to test command words
 *********************************************/
-gboolean is_font_family(gchar *buffer)
+static gboolean is_font_family(gchar *buffer)
 {
    if((g_ascii_strncasecmp (buffer,"fnil",4*sizeof(gchar))==0) ||
        (g_ascii_strncasecmp (buffer,"from",4*sizeof(gchar))==0)
@@ -126,6 +126,149 @@ gboolean is_font_family(gchar *buffer)
   test character formating
 *********************************************/
 
+/********************************************
+
+  converts a dec-coded char in UTF8
+for example : \u2824
+
+length of number ? YES, it's
+countdec-1 parameter
+*******************************************/
+static gchar *rtf_convert_dec_to_utf8(gchar *buffer, gint i, gint countdec)
+{
+  gchar buf_hexa[32];
+  gchar *str=NULL;
+  gint hexa_char, j;
+  glong bytes_written, bytes_read;
+  GError **error;
+
+  for(j=0;j<=31;j++)
+     buf_hexa[j]= 0;
+  for(j=0;j<countdec;j++) {
+      buf_hexa[j]= buffer[i+j+1];
+  }/* next */
+
+  sscanf(buf_hexa, "%d", &hexa_char);
+  if(hexa_char>255) {
+          buf_hexa[0]= hexa_char-(256*(hexa_char/256));
+          buf_hexa[1]= hexa_char/256;
+          buf_hexa[2]=0;
+          buf_hexa[3]=0;
+          buf_hexa[4]=0;
+          str=  g_convert_with_fallback ((gchar *)buf_hexa, 2, "UTF8", "UTF16",
+                                           NULL, &bytes_read, &bytes_written, &error);
+  }/* >255 */
+  else {
+         buf_hexa[0] = hexa_char;/* be careful for chars >255 !!! */
+         buf_hexa[1]=0;
+         str= g_convert_with_fallback ((gchar *)buf_hexa, 1, "UTF8", "WINDOWS-1252",
+                                           NULL, &bytes_read, &bytes_written, &error);
+        }/* <256 */
+  return str;
+}
+/********************************************
+
+  converts an hex-coded char in UTF8
+  for example : \'ea
+*******************************************/
+static gchar *rtf_convert_hex_to_utf8(gchar *buffer, gint i)
+{
+  gchar buf_hexa[32];
+  gchar *str=NULL;
+  gint hexa_char;
+  glong bytes_written, bytes_read;
+  GError **error;
+
+  buf_hexa[0] = buffer[i+1];
+  buf_hexa[1] = buffer[i+2];
+  buf_hexa[2]=0;
+  buf_hexa[3]=0;
+  sscanf(buf_hexa, "%x", &hexa_char);
+  buf_hexa[0] = hexa_char;
+  buf_hexa[1]=0;    
+  str= g_convert_with_fallback ((gchar *)buf_hexa, 1, "UTF8", "WINDOWS-1252",
+                                           NULL, &bytes_read, &bytes_written, error);  
+  return str;
+}
+/************************************************
+ function to 'skip' all datas in a 'destination' 
+ control sequence, i.e. a command \*
+ Input : buffer, current position, filesize
+ output : new position where to skip
+********************************************/
+static gint rtf_skip_destination_section(gchar *buffer, gint position, gint fileSize )
+{
+ gint j, openedBraces = 1;
+
+ j=position;
+
+ while((j<fileSize)&&(openedBraces>0)){  /* we skip all chars */
+    j++;
+    if(buffer[j]=='}')
+        openedBraces--;
+    if(buffer[j]=='{')
+        openedBraces++;
+ }/* wend */
+ return j;
+}
+/**********************************************
+  tokenize commands - only for useful commands
+  input : a gchar with the supposed command
+  output : a gint
+**********************************************/
+static gint rtf_tokenize_command(gchar *command)
+{
+  gint ret=0;
+  //printf("command =%s \n", command);
+  if(strlen(command)==1) {
+      if(command[0]=='i') {
+          return fmtItalic;
+      }
+      if(command[0]=='b') {
+          return fmtBold;
+      }
+  }
+  if(strlen(command)==2) {
+      if((command[0]=='u')&&(command[1]=='l')) {
+          return fmtUnder;
+      }  
+  }
+  if(strlen(command)>2) {
+      if((command[0]=='u')&&(command[1]>='0')&&(command[1]<='9')) {
+          return cmdDecChar;
+      }  
+  }
+  if(strlen(command)==3) {
+      if((command[0]=='s')&&(command[1]=='u')&&(command[2]=='b')) {
+          return fmtSub;
+      }  
+      if((command[0]=='p')&&(command[1]=='a')&&(command[2]=='r')) {
+          return cmdPar;
+      } 
+      if(command[0]=='\'') {
+          return cmdHexChar;/* tricky, no ? */
+      }
+  }
+  if(strlen(command)==4) { 
+      if((command[0]=='p')&&(command[1]=='a')&&(command[2]=='r')&&(command[3]=='d')) {
+          return cmdParD;
+      } 
+  }
+  if(strlen(command)==5) {
+      if((command[0]=='s')&&(command[1]=='u')&&(command[2]=='p')&&(command[3]=='e')&&(command[4]=='r')) {
+          return fmtSuper;
+      }  
+  }
+  if(strlen(command)==6) {
+      if((command[0]=='s')&&(command[1]=='t')&&(command[2]=='r')&&(command[3]=='i')&&(command[4]=='k')&&(command[5]=='e')) {
+          return fmtStrike;
+      }
+     if((command[0]=='a')&&(command[1]=='u')&&(command[2]=='t')&&(command[3]=='h')&&(command[4]=='o')&&(command[5]=='r')) {
+          return cmdAuthor;
+      }  
+  }
+  return ret;
+}
 /*********************************************
    ms-RTF parser
  from Searchmonkey search.c module
@@ -134,12 +277,12 @@ gboolean is_font_family(gchar *buffer)
 gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
 {
   FILE *inputFile;
-  gint  i, j, fileSize = 0, openedBraces = 0, stylebraces=0, fontbraces=0;
+  gint  ret, counthexa, countdec, i, j, posmem, fileSize = 0;
+  gboolean fHexa=FALSE, fDec=FALSE;
   gchar *buffer = NULL;
   GError **error;
   glong bytes_written, bytes_read;
-  gint hexa_char;
-  gchar buf_hexa[32];
+  gchar command[32];
   GString *str=g_string_new("");
 
   inputFile = fopen(path_to_file,"rb");
@@ -166,18 +309,13 @@ gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
      {
        case '\\':{
          i++;/* next char */        
-         switch(buffer[i])
-          {
-            case '*':{openedBraces = 1;/* destination control word */
-               while( (i<fileSize)&&(openedBraces>0)){
-                /* we skip all chars */
-                i++;
-                        if(buffer[i]=='}')
-                           openedBraces--;
-                        if(buffer[i]=='{')
-                           openedBraces++;
-               }
-              i--;
+         switch(buffer[i]) {
+            case '*':{/* destination control word */
+              i=rtf_skip_destination_section(buffer, i, fileSize );
+              //printf("sq * buffer %c%c%c\n", buffer[i-1], buffer[i], buffer[i+1]);
+              if(buffer[i+1]!=';')
+                  i--;
+                else i++;
               break;           
             }
             case '~':{
@@ -200,146 +338,83 @@ gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
               str= g_string_append (str, "-");
               break;
             }
-            case '\'':{/* char >127 in Hexa mode */
-                          buf_hexa[0] = buffer[i+1];
-                          buf_hexa[1] = buffer[i+2];
-                          buf_hexa[2]=0;
-                          buf_hexa[3]=0;
-                          sscanf(buf_hexa, "%x", &hexa_char);
-                          buf_hexa[0] = hexa_char;
-                          buf_hexa[1]=0;   
-                          str= g_string_append (str,  g_convert_with_fallback ((gchar *)buf_hexa, 1, "UTF8", "WINDOWS-1252",
-                                           NULL, &bytes_read, &bytes_written, &error));                    
-                          i=i+2;
-
-              break;
-            }
-            case 'u':{/* char >127 in decimal mode */
-                         i++;
-                         j=0;
-                         while((i<fileSize) && ( (buffer[i]>='0') && (buffer[i]<='9')))
-                           {
-                             buf_hexa[j]= buffer[i];
-                             i++;
-                             j++;
-                         }/* wend digits in U chars */
-                         if(j>0) {
-                           buf_hexa[j]=0;
-                           sscanf(buf_hexa, "%d", &hexa_char);
-                           if(hexa_char>255) {
-                               buf_hexa[0]= hexa_char-(256*(hexa_char/256));
-                               buf_hexa[1]= hexa_char/256;
-                               buf_hexa[2]=0;
-                               buf_hexa[3]=0;
-                               buf_hexa[4]=0;
-                               if(j>0) {
-                                  str= g_string_append (str, g_convert_with_fallback ((gchar *)buf_hexa, 2, "UTF8", "UTF16",
-                                           NULL, &bytes_read, &bytes_written, &error));
-                               }
-
-                           }/* >255 */
-                           else {
-                             buf_hexa[0] = hexa_char;/* be careful for chars >255 !!! */
-                             buf_hexa[1]=0;
-                             if(j>0) {
-                                str= g_string_append (str, g_convert_with_fallback ((gchar *)buf_hexa, 1, "UTF8", "WINDOWS-1252",
-                                           NULL, &bytes_read, &bytes_written, &error));
-                             }
-                           }/* <256 */
-                           /* we now check if there is an alternate coding */
-                           if(i<fileSize-2) {
-                             if((buffer[i]=='\\') && (buffer[i+1]=='\'')){
-                              i=i+4;/* warning works only for 8 bits Hex values  */
-                             }
-                           }
-                         }
-                         else {
-                            while( (i<fileSize)&&(buffer[i]!=' ')&&(buffer[i]!='\\')&&(buffer[i]!='}')&&(buffer[i]!='{')) {
-                               i++;
-                            }
-                         }      
-              i--;
-              break;
-            }
-            default:{/* ? a true control ? */
-              /* at least, we must check if it's a paragraph command 
-                  \pard resets any previous paragraph formatting, 
-                  \plain resets any previous character formatting*/
-              if( g_ascii_strncasecmp ((gchar*)&buffer[i],"pard",4*sizeof(gchar))==0) {
-                      i=i+4;
-                      /* we should reset properties of paraggraph */
-              }
-              else
-                if(g_ascii_strncasecmp ((gchar*)&buffer[i],"par",3*sizeof(gchar))==0) {
-                      i=i+3;
-                      str= g_string_append (str, "\n");
-                }
-                /* we must add the case of \pict controls ! */
-                else
-                  if(g_ascii_strncasecmp ((gchar*)&buffer[i],"pict",4*sizeof(gchar))==0){
-                     /* 2 cases ; simple picture, then no braces in other cases we have \* and braces */
-                     i=i+4;
-                     openedBraces = 1;
-                     while((i<fileSize)&&(openedBraces>0)) {
-                        /* we skip all picture's hexa codes */
-                        i++;
-                        if(buffer[i]=='}')
-                           openedBraces--;
-                        if(buffer[i]=='{')
-                           openedBraces++;
-                     }/* wend */
+            default:{posmem=i;/* printf("Mot clef à %d:", posmem);*/
+                counthexa=0;/* for special chars, like 'EA */
+                countdec=0; /* special chars in decimal mode */
+                fHexa=FALSE;
+                fDec=FALSE;
+                j=0;
+                while( (i<fileSize)&&(buffer[i]!=' ')&&(buffer[i]!='\\')&&(buffer[i]!='}')&&(buffer[i]!='{')&&(buffer[i]!='\n')) {
+                     if(buffer[i]=='\'')
+                        fHexa=TRUE;
+                     if((buffer[i]=='u')&&(buffer[i+1]>='0')&&(buffer[i+1]<='9'))
+                        fDec=TRUE;
+                     if(fHexa && counthexa>2)
+                          break;
+                     command[j]=buffer[i];
+                     j++;
+                     counthexa++;
+                     countdec++;
                      i++;
+                }/* wend */
+                command[j]=0;
+                ret=rtf_tokenize_command(&command[0]);
+                //printf(">%i<\n", ret);
+                /* here we have discovered the command word - it's between posmem and current i index */
+                if(buffer[i]=='\\')
+                   i--;
+                /* style ? font ? */
+                if(((buffer[posmem]=='s') || (buffer[posmem]=='f') )  &&(buffer[posmem+1]>='0')&&(buffer[posmem+1]<='9') ) {
+                   i=posmem;
+                   while( (i<fileSize)&&(buffer[i]!='}')&&(buffer[i]!='{')&&(buffer[i]!='\n')) {
+                      i++;
                    }
-                   else /* we must remove fonts definitions */
-                      if(is_font_family((gchar*)&buffer[i])){
-                        i=i+4;
-                        while((i<fileSize)&&(buffer[i]!='}')) {
-                          i++;
-                        }/* wend */
-                        i++;
+                }/* if style / font */
+                else {
+                    switch(ret) {
+                      case cmdHexChar:{
+                           str= g_string_append (str, rtf_convert_hex_to_utf8(buffer, posmem));
+                           i=posmem+2;
+                        break;
                       }
-                      else /* stylesheets */
-                        if(g_ascii_strncasecmp ((gchar*)&buffer[i],"stylesheet",10*sizeof(gchar))==0 ) {
-                          i=i+10;printf("bingo style sheet \n");
-                          stylebraces=1;
-                          while((i<fileSize)&&(stylebraces>0)) {
-                            if(buffer[i]=='}')
-                               stylebraces--;
-                            if(buffer[i]=='{')
-                               stylebraces++;
-                            i++;
-                          }/* wend */
-                          stylebraces=0;
-                          i++;
-                        }/* fonttbl = fontable */
-                        else
-                          if(g_ascii_strncasecmp ((gchar*)&buffer[i],"fonttbl",7*sizeof(gchar))==0) {
-                             i=i+7;printf("bingo font table \n");
-                             fontbraces=1;
-                             while((i<fileSize)&&(fontbraces>0)) {
-                               if(buffer[i]=='}')
-                                  fontbraces--;
-                               if(buffer[i]=='{')
-                                  fontbraces++;
-                               i++;
-                             }/* wend */
-                             fontbraces=0;
-                             i++;
-                          }
-                          else {/* others control words - TODO minus sign before digits */
-                            while((i<fileSize)&&(buffer[i]!=' ')&&(buffer[i]!='\\')&&(buffer[i]!='}')&&(buffer[i]!='{') &&(buffer[i]!='\n')) {
-                              /* we skip all chars */
-                              i++;
-                            }/* wend */
-                          }/* elseif */
-             i--;
-            }/* case default */
-          }/* end switch first char after control */
+                      case cmdDecChar:{
+                           str= g_string_append (str, rtf_convert_dec_to_utf8(buffer, posmem, countdec));
+                           i=posmem+countdec;
+                           /* jump alternate  Hex char ? */
+                           if((buffer[i]=='\\')&&(buffer[i+1]=='\''))
+                               i=i+3;
+                           /* jump alternate  unknown [?]  char ? */
+                           if(buffer[i-1]=='?')
+                               i--;
+                        break;
+                      }
+                      case cmdAuthor:{/* we skip all chars until found a closing brace */
+                        while( (i<fileSize)&&(buffer[i]!='}')) {
+                           i++;
+                        }
+                        break;
+                      }
+                      case cmdPar:{
+                        str= g_string_append_c (str, '\n');
+                        break;
+                      }
+                      default:{
+                        // printf("* RTF control/command not managed *\n");
+                      }
+                    }/* end switch posmem */
+                }/* elseif */
+                   
+            } /* case : default */        
+          }/* end switch command */
          break;
-       }
-       case '{': case '}': case '\n':{/* a Parser MUST ignore LF */
+       }/* case control */
+       case '{': case '}':{ 
          break;
        }      
+       case '\n':{/* a Parser MUST ignore LF */
+         //printf("LF inattendu etat buffer après=%c%c%c\n", buffer[i+1],buffer[i+2],buffer[i+3]);
+         break;
+       }
        default:{/* plain text */
             str= g_string_append_c (str, buffer[i]);
        }
