@@ -472,7 +472,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   /* sketches - images */
   imageSketch=gtk_image_new_from_icon_name ("image-x-generic", GTK_ICON_SIZE_MENU);
   boxSketch=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  lblSketch=gtk_label_new ("Sketches");
+  lblSketch=gtk_label_new (_("Sketches"));
   manageImage=gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (boxSketch), imageSketch);
   gtk_container_add (GTK_CONTAINER (boxSketch), lblSketch);
@@ -500,7 +500,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   gtk_widget_set_sensitive (separator3, FALSE);
   /* help */
   imageHelp=gtk_image_new_from_icon_name ("help-contents", GTK_ICON_SIZE_MENU);
-  lblHelp=gtk_label_new ("Help");
+  lblHelp=gtk_label_new (_("Help"));
   boxHelp=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   misc1 = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (boxHelp), imageHelp);
