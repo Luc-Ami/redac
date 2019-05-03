@@ -2061,6 +2061,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_box_pack_start (GTK_BOX (vbox29), table6, TRUE, TRUE, 4);
 
   label249 = gtk_label_new (_("Text font:"));
+  gtk_misc_set_alignment (GTK_MISC (label249), 1, 0.5);
   gtk_widget_show (label249);
   gtk_grid_attach(GTK_GRID(table6),label249, 0, 1 , 1, 1);
   gtk_misc_set_padding (GTK_MISC (label249), 5, 0);
@@ -2071,6 +2072,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
 
 
   label250 = gtk_label_new (_("Text background color:"));
+  gtk_misc_set_alignment (GTK_MISC (label250), 1, 0.5);
   gtk_widget_show (label250);
   gtk_grid_attach(GTK_GRID(table6),label250, 0, 2 , 1, 1);
   gtk_misc_set_padding (GTK_MISC (label250), 5, 0);
@@ -2080,6 +2082,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_grid_attach(GTK_GRID(table6),color_button_editor_bg, 1, 2 , 1, 1);
 
   label271 = gtk_label_new (_("Text foreground color:"));
+  gtk_misc_set_alignment (GTK_MISC (label271), 1, 0.5);
   gtk_widget_show (label271);
   gtk_grid_attach(GTK_GRID(table6),label271, 0, 3 , 1, 1);
   gtk_misc_set_padding (GTK_MISC (label271), 5, 0);
@@ -2106,6 +2109,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_container_add (GTK_CONTAINER (configNotebook), hbox27);
 
   label264 = gtk_label_new (_("Document paper color\n(Please reload PDF to complete operation):"));
+  gtk_misc_set_alignment (GTK_MISC (label264), 1, 0.5);
   gtk_widget_show (label264);
   gtk_grid_attach(GTK_GRID(hbox27),label264, 0, 0 , 1, 1);
   gtk_misc_set_padding (GTK_MISC (label264), 5, 0);
@@ -2135,7 +2139,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   label274 = gtk_label_new (_("Paper color \n(Will be unchanged until you clear sketch):"));
   gtk_widget_show (label274);
   gtk_grid_attach(GTK_GRID(vbox28),label274, 0, 0 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label274), 0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label274), 1, 0.5);
  
   color_button_sketch_bg=gtk_color_button_new (); 
   gtk_widget_show (color_button_sketch_bg);
@@ -2144,7 +2148,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   label992 = gtk_label_new (_("Annotation text font:"));
   gtk_widget_show (label992);
   gtk_grid_attach(GTK_GRID(vbox28),label992, 0, 1 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label992), 0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label992), 1, 0.5);
 
   font_button_sketch=gtk_font_button_new_with_font ("sans 14");
   gtk_widget_show(font_button_sketch);
@@ -2153,7 +2157,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   label_pen_width = gtk_label_new (_("Pen width in pixels :"));
   gtk_widget_show (label_pen_width);
   gtk_grid_attach(GTK_GRID(vbox28),label_pen_width, 0, 2 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label_pen_width), 0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label_pen_width), 1, 0.5);
  // gtk_misc_set_padding (GTK_MISC (label_pen_width), 5, 0);
 
   GtkAdjustment *pen_width_adj = gtk_adjustment_new (1, 1, 20, 1, 10, 0);
@@ -2181,6 +2185,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (vboxAudio);
   gtk_container_add (GTK_CONTAINER (configNotebook), vboxAudio);
   GtkWidget *labelAudioRew = gtk_label_new (_("<b>Play/pause rewind jump in seconds.</b>\n<i>Minimum : 1sec, maximum 10 secs.</i>"));
+  gtk_misc_set_alignment (GTK_MISC (labelAudioRew), 1, 0.5);
   gtk_label_set_use_markup (GTK_LABEL (labelAudioRew), TRUE);
   gtk_widget_show (labelAudioRew);
   gtk_grid_attach(GTK_GRID(vboxAudio),labelAudioRew, 0, 0 , 1, 1);
@@ -2190,6 +2195,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (rewGapSpin);
   gtk_grid_attach(GTK_GRID(vboxAudio),rewGapSpin, 1, 0 , 1, 1);
   GtkWidget *labelAudioStep = gtk_label_new (_("<b>Back or forward jump in seconds.</b>\n<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"));
+  gtk_misc_set_alignment (GTK_MISC (labelAudioStep), 1, 0.5);
   gtk_label_set_use_markup (GTK_LABEL (labelAudioStep), TRUE);
   gtk_widget_show (labelAudioStep);
   gtk_grid_attach(GTK_GRID(vboxAudio),labelAudioStep, 0, 2 , 1, 1);
