@@ -11,6 +11,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <string.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
 #include <gst/gst.h>
 #include "interface.h" /* glade requirement */
@@ -253,11 +254,11 @@ void createGKeyFile(GtkWidget *win)
   if (g_key_file_has_key(keyString, "application", "geometry.width", NULL)) {
     width = g_key_file_get_integer (keyString, "application", "geometry.width",  NULL);  
   }
-  else width =900;
+  else width =980;
   if (g_key_file_has_key(keyString, "application", "geometry.height", NULL)) {
     height = g_key_file_get_integer (keyString, "application", "geometry.height",  NULL);  
   }
-  else height =512;
+  else height =700;
   pos_x = 64;
   pos_y = 64;
   if (g_key_file_has_key(keyString, "application", "geometry.x", NULL)) {

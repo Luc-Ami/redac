@@ -57,11 +57,11 @@ int main(int argc, char *argv[]) {
   textdomain (PACKAGE);
 
   /* test system directories - NEVER free the array os gchars ! */
-  const gchar * const *dirs = g_get_system_data_dirs();
-  unsigned int i;
-  for ( i= 0; dirs[i] != NULL; ++i) {
-     printf("XDG system datas dirs =%s\n", dirs[i]);
-  }
+  // const gchar * const *dirs = g_get_system_data_dirs();
+ // unsigned int i;
+ // for ( i= 0; dirs[i] != NULL; ++i) {
+   //  printf("XDG system datas dirs =%s\n", dirs[i]);
+ // }
 
 
   gtk_init(&argc, &argv);
@@ -141,15 +141,21 @@ int main(int argc, char *argv[]) {
   gtk_container_add(GTK_CONTAINER(scrolledwindowCrobar), viewCrobar);
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindow1),GTK_SHADOW_NONE);
+  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindow1),GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindowPDF), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindowPDF),GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindowCrobar), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindowCrobar),GTK_SHADOW_ETCHED_IN);
+
 
   /* main Gtk text view */
   view = gtk_text_view_new();
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(view), GTK_WRAP_WORD);
   gtk_container_add (GTK_CONTAINER (scrolledwindow1), view);
   gtk_widget_set_name(view, "view");
+  gtk_text_view_set_left_margin (GTK_TEXT_VIEW(view), 8);
+  gtk_text_view_set_right_margin (GTK_TEXT_VIEW(view), 8);
+
   /* place stack */ 
   gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindow1), "Note", _("Notes"));
   gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowPDF), "Refe", _("Reference"));
@@ -207,13 +213,13 @@ int main(int argc, char *argv[]) {
   /* we get the configuration file */
 
   gConfigFile = g_build_filename(g_get_user_config_dir (), 
-                       "/kilowriter/", KILOWRITER_CONFIG, NULL); /* Create hidden directory to store Kilowriter data */
+                       "/redac/", KILOWRITER_CONFIG, NULL); /* Create hidden directory to store Kilowriter data */
 
   /* we check if the directory already exists */
   if(!g_file_test (gConfigFile, G_FILE_TEST_EXISTS)) {
      printf("* config.ini file absent or corrupted ! *\n");
      /* we create the directory */
-     gint i=g_mkdir (g_strdup_printf("%s/kilowriter/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
+     gint i=g_mkdir (g_strdup_printf("%s/redac/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
   }
   /* we parse datas from config file */
   createGKeyFile (mainWindow);
@@ -288,8 +294,7 @@ int main(int argc, char *argv[]) {
   else
      store_current_file_in_keyfile(keyString, s1, misc_get_extract_from_document(&app_data ));  
   g_free(s1);
-  /* get summary and store it */
-  printf("summary=%s\n",misc_get_extract_from_document(&app_data ));
+
   /*  reload last PDF file ? */
   gtk_widget_hide( lookup_widget(GTK_WIDGET(app_data.appWindow),"image_pdf_modif"));
   s1 = g_key_file_get_string(keyString, "application", "current-PDF-file", NULL);

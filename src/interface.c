@@ -1117,7 +1117,7 @@ GtkWidget *UI_main_window(void)
 
   win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);
-  gtk_window_set_default_size(GTK_WINDOW(win), 950, 700);
+  gtk_window_set_default_size(GTK_WINDOW(win), 980, 700);
   gtk_window_set_resizable (GTK_WINDOW(win), TRUE);
   gtk_window_set_decorated (GTK_WINDOW(win), TRUE);
   gtk_window_set_title(GTK_WINDOW(win), "Redac !");
