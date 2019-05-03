@@ -1003,12 +1003,20 @@ on_prefs_clicked  (GtkButton  *button,  APP_data *data_app)
         }
         g_free(newFont);
     }
-    /* same for colors, sorry, but css is a pain */
+    /* same for colors, with CSS */
     
     text_color_fg.alpha=1;
-    gtk_widget_override_color (GTK_WIDGET(data_app->view), GTK_STATE_FLAG_NORMAL, &text_color_fg);
     text_color_bg.alpha=1;
-    gtk_widget_override_background_color (GTK_WIDGET(data_app->view), GTK_STATE_FLAG_NORMAL,&text_color_bg);
+  
+    GtkCssProvider* css_provider = gtk_css_provider_new();
+    gchar *css;
+    css = g_strdup_printf("  #view  { color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+                 (gint)( text_color_fg.red*255),(gint)( text_color_fg.green*255), (gint)(text_color_fg.blue*255),
+                (gint)( text_color_bg.red*255),(gint)( text_color_bg.green*255), (gint)(text_color_bg.blue*255));
+    gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
+    GdkScreen* screen = gdk_screen_get_default();
+    gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_free(css);
   }
   gtk_widget_destroy(dialog);
 

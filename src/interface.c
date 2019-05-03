@@ -41,7 +41,7 @@
 /*********************************
   setup default values for display
 for paddings and removing inner border from entries, many thanks to them : https://github.com/jy2wong/luakit/commit/6dfffb296f562b26c1eb6020c94b1d3e0bde336b
-
+anf for a clean demo for gtktextview tuning : https://gist.github.com/mariocesar/f051ce1dda4ef0041aed
 ************************************/
 void set_up_view( GtkWidget *window1, APP_data *data_app )
 {
@@ -71,13 +71,13 @@ void set_up_view( GtkWidget *window1, APP_data *data_app )
 "  #myButton_1:hover, #myButton_2:hover, #myButton_3:hover, #myButton_4:hover, #myButton_5:hover, #myButton_6:hover, #myButton_7:hover, #myButton_8:hover, #myButton_9:hover, #myButton_10:hover{  border-color: green; border-style: solid; border-image: none; border-top: none; border-left: none; border-right: none; border-width: 4px;}\n"
 "  #myButton_1:focus, #myButton_2:focus, #myButton_3:focus, #myButton_4:focus, #myButton_5:focus, #myButton_6:focus, #myButton_7:focus, #myButton_8:focus, #myButton_9:focus, #myButton_10:focus{  border-style: solid; border-color:orange; border-image: none; border-top: none; border-left: none; border-right: none; border-width: 4px;}\n"
 "  GtkMenu .menuitem {   padding: 4px 0px; }\n"
-
+"  #view  { color: pink; background-color: #FFFFE0;}\n"
+"  #view:selected, #view:selected:focus { background-color: blue; color:red; }\n"
 "  .menuitem { background-color:  @dark_bg_color; color: @menu_fg_color;  font-weight:600; border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 0px; }\n"
 "  Label#PDF_modified_label { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 6px; }\n";
-  gtk_css_provider_load_from_data(css_provider,css,sizeof(css)-1,NULL);
+  gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
  /*----- css *****/
   GdkScreen* screen = gdk_screen_get_default();
-  GtkStyleContext* style_context = gtk_widget_get_style_context(window1);
   gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 

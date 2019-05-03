@@ -30,7 +30,7 @@ gchar *gConfigFile = NULL; /* created by main(), destroyed by destroyGKeyFile() 
 
 int main(int argc, char *argv[]) {
   APP_data app_data;
-  GdkRGBA color;
+  GdkRGBA color, b_color;
   GtkStack *stack;
   GtkStackSwitcher *switcher;
   GtkWidget *vGrid;
@@ -240,23 +240,34 @@ int main(int argc, char *argv[]) {
           pango_font_description_free(desc);
   }
 
+
   /* same for colors, sorry, but css is a pain */
+  /* change gtktextview colors compliant with Gtk 3.16+ pLease note : re-change seleted state is mandatory, even if defned in interface*/
   color.red=g_key_file_get_double(keyString, "editor", "text.color.red", NULL);
   color.green=g_key_file_get_double(keyString, "editor", "text.color.green", NULL);
   color.blue=g_key_file_get_double(keyString, "editor", "text.color.blue", NULL);
   color.alpha=1;
-  gtk_widget_override_color (GTK_WIDGET(app_data.view), GTK_STATE_FLAG_NORMAL, &color);
-  color.red=g_key_file_get_double(keyString, "editor", "paper.color.red", NULL);
-  color.green=g_key_file_get_double(keyString, "editor", "paper.color.green", NULL);
-  color.blue=g_key_file_get_double(keyString, "editor", "paper.color.blue", NULL);
-  color.alpha=1;
-  gtk_widget_override_background_color (GTK_WIDGET(app_data.view), GTK_STATE_FLAG_NORMAL, &color);
+  /* paper color */
+  b_color.red=g_key_file_get_double(keyString, "editor", "paper.color.red", NULL);
+  b_color.green=g_key_file_get_double(keyString, "editor", "paper.color.green", NULL);
+  b_color.blue=g_key_file_get_double(keyString, "editor", "paper.color.blue", NULL);
+  b_color.alpha=1;
+
+  GtkCssProvider* css_provider = gtk_css_provider_new();
+  gchar *css;
+  css = g_strdup_printf("  #view  { color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+                 (gint)( color.red*255),(gint)( color.green*255), (gint)(color.blue*255),
+                (gint)( b_color.red*255),(gint)( b_color.green*255), (gint)(b_color.blue*255));
+  gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
+  GdkScreen* screen = gdk_screen_get_default();
+  gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_free(css);
 
   /* we MUST overide selection colors ! */
   color.red=0.917;
   color.green=0.639;
   color.blue=0.07;
-  gtk_widget_override_background_color (GTK_WIDGET(app_data.view), GTK_STATE_FLAG_SELECTED, &color);/* orange for selection */
+ // gtk_widget_override_background_color (GTK_WIDGET(app_data.view), GTK_STATE_FLAG_SELECTED, &color);/* orange for selection */
 
   /* we paint sketch background now */
   cairo_t *cr;
