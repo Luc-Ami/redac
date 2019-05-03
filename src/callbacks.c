@@ -990,7 +990,9 @@ on_prefs_clicked  (GtkButton  *button,  APP_data *data_app)
        g_key_file_set_string(keyString, "sketch", "font",newFont);
        g_free(newFont);
     }
-    /* modify editor's textview default font, deprecated since Gtk 3.16 */
+    /* modify editor's textview default font */
+    gchar *fntFamily=NULL;
+    gint fntSize=12;
     PangoContext* context = gtk_widget_get_pango_context  (data_app->view);
     PangoFontDescription *desc = pango_context_get_font_description(context);    
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(lookup_widget(GTK_WIDGET(dialog), "font_button_editor") ));
@@ -998,21 +1000,26 @@ on_prefs_clicked  (GtkButton  *button,  APP_data *data_app)
     if (newFont != NULL) { 
         desc = pango_font_description_from_string (newFont);
         if (desc != NULL) {
-          gtk_widget_modify_font (GTK_WIDGET(data_app->view), desc);
-          pango_font_description_free(desc);
+          fntFamily= pango_font_description_get_family (desc);
+          fntSize=pango_font_description_get_size(desc)/1000;
         }
         g_free(newFont);
     }
     /* same for colors, with CSS */
     
-    text_color_fg.alpha=1;
+    text_color_fg.alpha=1;/* for future with alpha channel */
     text_color_bg.alpha=1;
   
     GtkCssProvider* css_provider = gtk_css_provider_new();
     gchar *css;
-    css = g_strdup_printf("  #view  { color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+    css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+                 fntFamily,
+                 fntSize,
                  (gint)( text_color_fg.red*255),(gint)( text_color_fg.green*255), (gint)(text_color_fg.blue*255),
                 (gint)( text_color_bg.red*255),(gint)( text_color_bg.green*255), (gint)(text_color_bg.blue*255));
+    if(desc)
+      pango_font_description_free(desc);
+
     gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
     GdkScreen* screen = gdk_screen_get_default();
     gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

@@ -230,18 +230,18 @@ int main(int argc, char *argv[]) {
   app_data.keystring = keyString;
   app_data.iAudioSmartRew=g_key_file_get_double(keyString, "application", "audio-file-rewind-step", NULL);
   app_data.iAudioSmartJump=g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
-  /* default font, sorry, outdated since Gtk 3.16 TODO */
 
+  /* set-up default value only with CSS */
+  gchar *fntFamily=NULL;
+  gint fntSize=12;
   PangoContext* context = gtk_widget_get_pango_context  (GTK_WIDGET(app_data.view));
   PangoFontDescription *desc = pango_context_get_font_description(context);   
   desc = pango_font_description_from_string (g_key_file_get_string(keyString, "editor", "font", NULL));
   if (desc != NULL) {
-          gtk_widget_modify_font (GTK_WIDGET(app_data.view), desc);
-          pango_font_description_free(desc);
+          fntFamily= pango_font_description_get_family (desc);
+          fntSize=pango_font_description_get_size(desc)/1000;
   }
-
-
-  /* same for colors, sorry, but css is a pain */
+  
   /* change gtktextview colors compliant with Gtk 3.16+ pLease note : re-change seleted state is mandatory, even if defned in interface*/
   color.red=g_key_file_get_double(keyString, "editor", "text.color.red", NULL);
   color.green=g_key_file_get_double(keyString, "editor", "text.color.green", NULL);
@@ -255,19 +255,20 @@ int main(int argc, char *argv[]) {
 
   GtkCssProvider* css_provider = gtk_css_provider_new();
   gchar *css;
-  css = g_strdup_printf("  #view  { color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+  css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+                 fntFamily,
+                 fntSize,
                  (gint)( color.red*255),(gint)( color.green*255), (gint)(color.blue*255),
                 (gint)( b_color.red*255),(gint)( b_color.green*255), (gint)(b_color.blue*255));
+
+  if(desc)
+      pango_font_description_free(desc);
+
   gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
   GdkScreen* screen = gdk_screen_get_default();
   gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_free(css);
 
-  /* we MUST overide selection colors ! */
-  color.red=0.917;
-  color.green=0.639;
-  color.blue=0.07;
- // gtk_widget_override_background_color (GTK_WIDGET(app_data.view), GTK_STATE_FLAG_SELECTED, &color);/* orange for selection */
 
   /* we paint sketch background now */
   cairo_t *cr;
