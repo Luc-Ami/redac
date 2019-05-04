@@ -82,6 +82,9 @@ int main(int argc, char *argv[]) {
   check_up_theme( mainWindow, &app_data );
   /* pseudo headerBar */
   UI_headerBar(mainWindow, headBar, &app_data);
+  g_object_set(headBar, "margin-top", 4, NULL);
+  g_object_set(headBar, "margin-bottom", 4, NULL);
+  g_object_set(headBar, "margin-left", 8, NULL);
   gtk_grid_attach(GTK_GRID(vGrid), headBar, 0, 0, 1, 1);
   /* gtkstack definitions and building */
   stack  = GTK_STACK(gtk_stack_new ());

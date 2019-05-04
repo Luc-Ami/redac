@@ -73,7 +73,7 @@ void set_up_view( GtkWidget *window1, APP_data *data_app )
 "  GtkMenu .menuitem {   padding: 4px 0px; }\n"
 "  #view  { color: pink; background-color: #FFFFE0;}\n"
 "  #view:selected, #view:selected:focus { background-color: blue; color:red; }\n"
-"  .menuitem { background-color:  @dark_bg_color; color: @menu_fg_color;  font-weight:600; border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 0px; }\n"
+
 "  Label#PDF_modified_label { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 6px; }\n";
   gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
  /*----- css *****/
@@ -2014,7 +2014,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (configNotebook);
   gtk_box_pack_start (GTK_BOX (dialog_vbox5), configNotebook, TRUE, TRUE, 4);
 
-  vbox26 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+  vbox26 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show (vbox26);
   gtk_container_add (GTK_CONTAINER (configNotebook), vbox26);
 
@@ -2042,7 +2042,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (label246);
 
 /* Display Icon in the tab - thanks to old developpers  here ;  http://vim.1045645.n5.nabble.com/Patch-Nicer-notebook-tabs-with-GTK2-td1206288.html */
-  GtkWidget   *tab_boxGlobalSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+  GtkWidget   *tab_boxGlobalSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show(tab_boxGlobalSettings);
   GtkWidget    *iconGlobalSettings = gtk_image_new_from_icon_name ("document-save", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconGlobalSettings);
@@ -2052,7 +2052,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_container_add(GTK_CONTAINER(tab_boxGlobalSettings), label246); 
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (configNotebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 0), tab_boxGlobalSettings);
 
-  vbox29 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+  vbox29 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show (vbox29);
   gtk_container_add (GTK_CONTAINER (configNotebook), vbox29);
 
@@ -2093,7 +2093,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
 
   label993 = gtk_label_new (_("Editor"));
   gtk_widget_show (label993);
-  GtkWidget   *tab_boxApplicationsSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+  GtkWidget   *tab_boxApplicationsSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show(tab_boxApplicationsSettings);
   GtkWidget    *iconApplicationsSettings = gtk_image_new_from_icon_name ("accessories-text-editor", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconApplicationsSettings);
@@ -2108,20 +2108,26 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (hbox27);
   gtk_container_add (GTK_CONTAINER (configNotebook), hbox27);
 
-  label264 = gtk_label_new (_("Document paper color\n(Please reload PDF to complete operation):"));
+  label264 = gtk_label_new (_("Document paper color : "));
   gtk_misc_set_alignment (GTK_MISC (label264), 1, 0.5);
   gtk_widget_show (label264);
   gtk_grid_attach(GTK_GRID(hbox27),label264, 0, 0 , 1, 1);
-  gtk_misc_set_padding (GTK_MISC (label264), 5, 0);
 
   color_button_PDF_bg=gtk_color_button_new (); 
   gtk_widget_show (color_button_PDF_bg);
-  gtk_grid_attach(GTK_GRID(hbox27),color_button_PDF_bg, 1, 0 , 1, 1);
+  gtk_grid_attach(GTK_GRID(hbox27),color_button_PDF_bg, 1, 0 , 1, 2);
+
+  GtkWidget *label2641 = gtk_label_new (_("<i>(Please reload PDF document to complete operation)</i>"));
+  gtk_label_set_use_markup (GTK_LABEL (label2641), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label2641), 1, 0.5);
+  gtk_widget_show (label2641);
+  gtk_grid_attach(GTK_GRID(hbox27),label2641, 0, 1 , 1, 1);
+
 
   label991 = gtk_label_new (_("PDF document"));
   gtk_widget_show (label991);
 
-  GtkWidget *tab_boxCSVSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+  GtkWidget *tab_boxCSVSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show(tab_boxCSVSettings);
   GtkWidget *iconCSVSettings = gtk_image_new_from_icon_name ("application-pdf", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconCSVSettings);
@@ -2136,39 +2142,45 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (vbox28);
   gtk_container_add (GTK_CONTAINER (configNotebook), vbox28);
 
-  label274 = gtk_label_new (_("Paper color \n(Will be unchanged until you clear sketch):"));
+  label274 = gtk_label_new (_("Paper color : "));
+  gtk_label_set_use_markup (GTK_LABEL (label274), TRUE);
   gtk_widget_show (label274);
   gtk_grid_attach(GTK_GRID(vbox28),label274, 0, 0 , 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label274), 1, 0.5);
  
+  GtkWidget *label2742 = gtk_label_new (_("<i>(Remain unchanged until you clear sketch)</i>"));
+  gtk_label_set_use_markup (GTK_LABEL (label2742), TRUE);
+  gtk_widget_show (label2742);
+  gtk_grid_attach(GTK_GRID(vbox28),label2742, 0, 1 , 1, 1);
+  gtk_misc_set_alignment (GTK_MISC (label2742), 1, 0.5);
+
   color_button_sketch_bg=gtk_color_button_new (); 
   gtk_widget_show (color_button_sketch_bg);
-  gtk_grid_attach(GTK_GRID(vbox28),color_button_sketch_bg, 1, 0 , 1, 1);
+  gtk_grid_attach(GTK_GRID(vbox28),color_button_sketch_bg, 1, 0 , 1, 2);
  
   label992 = gtk_label_new (_("Annotation text font:"));
   gtk_widget_show (label992);
-  gtk_grid_attach(GTK_GRID(vbox28),label992, 0, 1 , 1, 1);
+  gtk_grid_attach(GTK_GRID(vbox28),label992, 0, 2 , 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label992), 1, 0.5);
 
   font_button_sketch=gtk_font_button_new_with_font ("sans 14");
   gtk_widget_show(font_button_sketch);
-  gtk_grid_attach(GTK_GRID(vbox28),font_button_sketch, 1, 1 , 1, 1);
+  gtk_grid_attach(GTK_GRID(vbox28),font_button_sketch, 1, 2 , 1, 1);
 
   label_pen_width = gtk_label_new (_("Pen width in pixels :"));
   gtk_widget_show (label_pen_width);
-  gtk_grid_attach(GTK_GRID(vbox28),label_pen_width, 0, 2 , 1, 1);
+  gtk_grid_attach(GTK_GRID(vbox28),label_pen_width, 0, 3 , 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label_pen_width), 1, 0.5);
- // gtk_misc_set_padding (GTK_MISC (label_pen_width), 5, 0);
 
   GtkAdjustment *pen_width_adj = gtk_adjustment_new (1, 1, 20, 1, 10, 0);
   GtkWidget *pen_width_Spin = gtk_spin_button_new (GTK_ADJUSTMENT (pen_width_adj), 2, 1);
   gtk_widget_show (pen_width_Spin);
-  gtk_grid_attach(GTK_GRID(vbox28),pen_width_Spin, 1, 2 , 1, 1);
+  gtk_grid_attach(GTK_GRID(vbox28),pen_width_Spin, 1, 3 , 1, 1);
 
   label273 = gtk_label_new (_("Sketch"));
   gtk_widget_show (label273);
  
-  GtkWidget *tab_boxSystemSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+  GtkWidget *tab_boxSystemSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show(tab_boxSystemSettings);
   GtkWidget *iconSystemSettings = gtk_image_new_from_icon_name ("applications-graphics", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconSystemSettings);
@@ -2205,14 +2217,18 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (jumpGapSpin);
   gtk_grid_attach(GTK_GRID(vboxAudio),jumpGapSpin, 1, 2 , 1, 1);
 
+  GtkWidget *separator=gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+  gtk_widget_show(separator);
+  g_object_set(separator, "margin-top", 24, NULL);
+  gtk_grid_attach(GTK_GRID(vboxAudio),separator, 0, 3 , 2, 1);
   configAutoRewindPlayer= gtk_check_button_new_with_mnemonic (_("Auto rewind to start after playing completed."));
   gtk_widget_show (configAutoRewindPlayer);
-  gtk_grid_attach(GTK_GRID(vboxAudio),configAutoRewindPlayer, 0, 3 , 1, 1);
+  gtk_grid_attach(GTK_GRID(vboxAudio),configAutoRewindPlayer, 0, 4 , 1, 1);
   gtk_widget_set_sensitive (GTK_WIDGET(configAutoRewindPlayer), TRUE);
 
   labelAudio=gtk_label_new (_("Audio"));
   gtk_widget_show (labelAudio);
-  GtkWidget   *tab_boxAudioSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+  GtkWidget   *tab_boxAudioSettings = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show(tab_boxAudioSettings);
   GtkWidget    *iconAudioSettings = gtk_image_new_from_icon_name ("audio-x-generic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconAudioSettings);
@@ -2543,7 +2559,7 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
       gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), aboutRedac_icon_pixbuf);
       g_object_unref(G_OBJECT(aboutRedac_icon_pixbuf ));
   }
-  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
+  //gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
   gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"");
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 
      _("Note  utility written in GTK+ and licensed under GPL v.3"));
