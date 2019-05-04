@@ -397,6 +397,13 @@ int main(int argc, char *argv[]) {
   g_timeout_add_seconds(300, timeout_quick_save, &app_data);/* yes, it's an intelligent call, keep as it */
   /* timer for audio display */
   g_timeout_add_seconds(1, timeout_audio_display_position, &app_data);/* yes, it's an intelligent call, keep as it */
+  /* display auto-repeat indicator ? */
+  if(g_key_file_get_boolean(keyString, "application", "audio-auto-rewind",  NULL) ) {
+      gtk_widget_show( lookup_widget(GTK_WIDGET(app_data.appWindow),"image_audio_jump_to_start"));
+    }
+    else
+      gtk_widget_hide( lookup_widget(GTK_WIDGET(app_data.appWindow),"image_audio_jump_to_start"));
+
 /*
   GtkTextMark *end_at_start;
   GtkTextIter iter;

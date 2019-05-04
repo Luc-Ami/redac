@@ -982,6 +982,11 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
     g_key_file_set_double(keyString, "application", "audio-file-marks-step", jumpValue);
     g_key_file_set_boolean(keyString, "application","audio-auto-rewind",  
                  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (lookup_widget(GTK_WIDGET(dialog), "configAutoRewindPlayer"))));
+    if(g_key_file_get_boolean(keyString, "application", "audio-auto-rewind",  NULL) ) {
+      gtk_widget_show( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
+    }
+    else
+      gtk_widget_hide( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
     /* get the fonts */
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(lookup_widget(GTK_WIDGET(dialog), "font_button_sketch") ));
     if(newFont!=NULL) {

@@ -1188,6 +1188,7 @@ void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data)
   GtkWidget *replace_entry;
   GtkWidget *image_task_due;
   GtkWidget *image_pdf_modif;
+  GtkWidget *image_audio_jump_to_start;
   GdkPixbuf *ico;
 
   buttonPrevOccurrence = gtk_button_new_from_icon_name("go-up-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -1259,14 +1260,16 @@ void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data)
   g_object_set (buttonZoomFitBest, "margin-left",6, NULL);
   gtk_grid_attach(GTK_GRID(grid), buttonZoomIn, 12,0,1,1);
   g_object_set (buttonZoomIn, "margin-left",6, NULL);
-
-//  ico = gdk_pixbuf_new_from_xpm_data((const char **)scheduler_xpm);
- // image_task_due =gtk_image_new_from_pixbuf(ico);
-image_task_due =gtk_image_new_from_icon_name ("alarm-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-//  g_object_unref(ico);
+  /* indicator auto-save */
+  image_task_due =gtk_image_new_from_icon_name ("alarm-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
   gtk_widget_set_tooltip_text(image_task_due, _("Automatic background saving of your work (editor part)\nis activated."));
   gtk_grid_attach(GTK_GRID(grid), image_task_due, 13,0,1,1);
   g_object_set (image_task_due, "margin-left", 36, NULL);
+  /* audio auto repeat - jump to start icon */
+  image_audio_jump_to_start=gtk_image_new_from_icon_name ("media-playlist-repeat", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_widget_set_tooltip_text(image_audio_jump_to_start, _("Automatic rewind to start of media after playing\nis activated."));
+  gtk_grid_attach(GTK_GRID(grid), image_audio_jump_to_start, 15,0,1,1);
+  g_object_set (image_audio_jump_to_start, "margin-left", 12, NULL);
 
   ico = gdk_pixbuf_new_from_xpm_data((const char **)pdf_xpm);
   image_pdf_modif =gtk_image_new_from_pixbuf(ico);
@@ -1307,6 +1310,7 @@ image_task_due =gtk_image_new_from_icon_name ("alarm-symbolic", GTK_ICON_SIZE_SM
   GLADE_HOOKUP_OBJECT (window, buttonZoomFitBest, "buttonZoomFitBest");
   GLADE_HOOKUP_OBJECT (window, image_task_due, "image_task_due");
   GLADE_HOOKUP_OBJECT (window, image_pdf_modif, "image_pdf_modif");
+  GLADE_HOOKUP_OBJECT (window, image_audio_jump_to_start, "image_audio_jump_to_start");
 } 
 /**********************************
   add PDF page indicator
@@ -1933,7 +1937,6 @@ gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *
     gtk_text_buffer_get_start_iter (buffer,&start);
     gtk_text_buffer_get_end_iter (buffer,&end);
     tmpStr=gtk_text_buffer_get_text (buffer,&start, &end,FALSE);
-    /* TODO : get current font for Sketches */
     /* get the fonts */
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_button));
     if(newFont!=NULL) {
