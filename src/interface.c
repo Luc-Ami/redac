@@ -2057,6 +2057,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_container_add (GTK_CONTAINER (configNotebook), vbox29);
 
   table6 = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID(table6), 4);
   gtk_widget_show (table6);
   gtk_box_pack_start (GTK_BOX (vbox29), table6, TRUE, TRUE, 4);
 
@@ -2105,6 +2106,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
                               gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 1), tab_boxApplicationsSettings);
 
   GtkWidget *hbox27 = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID(hbox27), 4);
   gtk_widget_show (hbox27);
   gtk_container_add (GTK_CONTAINER (configNotebook), hbox27);
 
@@ -2115,13 +2117,13 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
 
   color_button_PDF_bg=gtk_color_button_new (); 
   gtk_widget_show (color_button_PDF_bg);
-  gtk_grid_attach(GTK_GRID(hbox27),color_button_PDF_bg, 1, 0 , 1, 2);
+  gtk_grid_attach(GTK_GRID(hbox27),color_button_PDF_bg, 1, 0 , 1, 1);
 
   GtkWidget *label2641 = gtk_label_new (_("<i>(Please reload PDF document to complete operation)</i>"));
   gtk_label_set_use_markup (GTK_LABEL (label2641), TRUE);
   gtk_misc_set_alignment (GTK_MISC (label2641), 1, 0.5);
   gtk_widget_show (label2641);
-  gtk_grid_attach(GTK_GRID(hbox27),label2641, 0, 1 , 1, 1);
+  gtk_grid_attach(GTK_GRID(hbox27),label2641, 0, 1 , 2, 1);
 
 
   label991 = gtk_label_new (_("PDF document"));
@@ -2139,6 +2141,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
                               gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 2),       tab_boxCSVSettings);
   /* sketch section */
   vbox28 = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID(vbox28), 4);
   gtk_widget_show (vbox28);
   gtk_container_add (GTK_CONTAINER (configNotebook), vbox28);
 
@@ -2151,12 +2154,12 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   GtkWidget *label2742 = gtk_label_new (_("<i>(Remain unchanged until you clear sketch)</i>"));
   gtk_label_set_use_markup (GTK_LABEL (label2742), TRUE);
   gtk_widget_show (label2742);
-  gtk_grid_attach(GTK_GRID(vbox28),label2742, 0, 1 , 1, 1);
+  gtk_grid_attach(GTK_GRID(vbox28),label2742, 0, 1 , 2, 1);
   gtk_misc_set_alignment (GTK_MISC (label2742), 1, 0.5);
 
   color_button_sketch_bg=gtk_color_button_new (); 
   gtk_widget_show (color_button_sketch_bg);
-  gtk_grid_attach(GTK_GRID(vbox28),color_button_sketch_bg, 1, 0 , 1, 2);
+  gtk_grid_attach(GTK_GRID(vbox28),color_button_sketch_bg, 1, 0 , 1, 1);
  
   label992 = gtk_label_new (_("Annotation text font:"));
   gtk_widget_show (label992);
@@ -2194,6 +2197,7 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
 
   /* audio settings section */
   vboxAudio = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID(vboxAudio), 4);
   gtk_widget_show (vboxAudio);
   gtk_container_add (GTK_CONTAINER (configNotebook), vboxAudio);
   GtkWidget *labelAudioRew = gtk_label_new (_("<b>Play/pause rewind jump in seconds.</b>\n<i>Minimum : 1sec, maximum 10 secs.</i>"));
