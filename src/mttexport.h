@@ -34,6 +34,6 @@
 #define STACK_TAG_QUOTATION 2048
 
 
-gint save_RTF_rich_text(gchar *filename, GtkTextBuffer *buffer);
+gint save_RTF_rich_text(gchar *filename, APP_data *data_app);
 
 #endif /* MTTEXPORT_H */

@@ -695,7 +695,7 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
      /* native Gtk dump */
      ret = save_gtk_rich_text(path_to_file, buffer);
      /* RTF compatible version */
-     ret = save_RTF_rich_text(path_to_file, buffer);
+     ret = save_RTF_rich_text(path_to_file, data_app);
      /* we change the default values for gkeyfile */
      store_current_file_in_keyfile(keyString, path_to_file, misc_get_extract_from_document(data_app));
      g_free(path_to_file);
@@ -733,7 +733,7 @@ void quick_save (APP_data *data)
 
   ret = save_gtk_rich_text(filename, buffer);
   /* we save also in standard Word processor format !!! */
-  ret = save_RTF_rich_text(tmpFileName, buffer);
+  ret = save_RTF_rich_text(tmpFileName, data);
   if(ret!=0) {
       GtkWidget *alertDlg;
       alertDlg =  gtk_message_dialog_new (GTK_WINDOW(window1),
@@ -818,7 +818,7 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
          }
          ret = save_gtk_rich_text(newFilename, buffer);
          /* we save also in standard Word processor format !!! */
-         ret = save_RTF_rich_text(newFilename, buffer);
+         ret = save_RTF_rich_text(newFilename, data);
          /* we setup the window's title */
          gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), newFilename));

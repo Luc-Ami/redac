@@ -234,8 +234,8 @@ int main(int argc, char *argv[]) {
   /* set-up default value only with CSS */
   gchar *fntFamily=NULL;
   gint fntSize=12;
-  PangoContext* context = gtk_widget_get_pango_context  (GTK_WIDGET(app_data.view));
-  PangoFontDescription *desc = pango_context_get_font_description(context);   
+ // PangoContext* context = gtk_widget_get_pango_context  (GTK_WIDGET(app_data.view));
+  PangoFontDescription *desc;// = pango_context_get_font_description(context);   
   desc = pango_font_description_from_string (g_key_file_get_string(keyString, "editor", "font", NULL));
   if (desc != NULL) {
           fntFamily= pango_font_description_get_family (desc);

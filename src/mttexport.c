@@ -385,31 +385,32 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
   save a file in standard rich
   text format (Ms RTF)
 *******************************/
-gint save_RTF_rich_text(gchar *filename, GtkTextBuffer *buffer)
+gint save_RTF_rich_text(gchar *filename, APP_data *data_app)
 {
-  GtkTextIter start, end; 
-  GtkTextTagTable *tagTable1;
-  gsize length;
-  gchar *text, *tmpFileName, *tmpstr;
+  gchar *tmpFileName;
+  gchar *fntFamily=NULL;
   const gchar *page_size_a4_portrait="\\paperh16834 \\paperw11909 \\margl1440 \\margr1900 \\margt1800 \\margb1800 \\portrait\n";
-  const gchar *fonts_header="{\\fonttbl{\\f0 Courier;}{\\f1 Times;}{\\f2\\fswiss\\fprq2\\fcharset222 Arial;}}\n";
+  gchar *fonts_header;
   const gchar *color_header="{\\colortbl;\\red255\\green0\\blue0;\\red0\\green0\\blue255;\\red243\\green242\\blue25;\\red241\\green241\\blue241;}\\widowctrl\\s0\\f1\\ql\\fs24\n\n";
   const gchar *styles_header="{\\stylesheet{\\s0\\f1\\ql kw-Normal;}{\\s7\\fi720\\li360\\ri360\\qj\\cb4\\f0 KW_Quotation;}}\n";
   const gchar *rtf_header = "{\\rtf1\\ansi\\ansicpg1252\\deff0\n";
-
-
-
-/* yellow hightlighting = color 3 */
   const gchar *rtf_trailer = "}}";
-  gint i, ret;
-  guint16 code;
+  gint i, ret, fntSize=12;
   FILE *outputFile;
-  GError **error;
+  GKeyFile *keyString;
+  GtkTextBuffer *buffer=data_app->buffer;
+  PangoFontDescription *desc;
+  /* get main font description */
 
-
+  keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config"); 
+  desc = pango_font_description_from_string (g_key_file_get_string(keyString, "editor", "font", NULL));
+  if (desc != NULL) {
+          fntFamily= pango_font_description_get_family (desc);
+          fntSize=pango_font_description_get_size(desc)/1000;
+  }
+  fonts_header=g_strdup_printf("{\\fonttbl{\\f0 Courier;}{\\f1 %s;}{\\f2\\fswiss\\fprq2\\fcharset222 Arial;}}\n", fntFamily );
   /* we check if filename has the .rtf extension */
   if( !g_str_has_suffix (filename, ".rtf" )) {
-    printf("extension RTF absente ! \n");
     /* we correct the filename */
     tmpFileName = g_strconcat(filename, ".rtf", NULL);
   }
@@ -431,6 +432,7 @@ gint save_RTF_rich_text(gchar *filename, GtkTextBuffer *buffer)
 
 
   fclose(outputFile);
+  g_free(fonts_header);
   g_free(tmpFileName);
   return ret;
 }

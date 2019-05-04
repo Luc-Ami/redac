@@ -917,13 +917,11 @@ gdouble val;
 /*************************************
 
 callback : button "prefs" clicked
-TODO : insure CSS coding mandatory
- since Gtk 3.16+
 
 **************************************/
 
 void
-on_prefs_clicked  (GtkButton  *button,  APP_data *data_app)
+on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
 {
   GtkWidget *dialog;
   GdkRGBA text_color_bg, text_color_fg, sketch_color_bg;   
@@ -993,8 +991,8 @@ on_prefs_clicked  (GtkButton  *button,  APP_data *data_app)
     /* modify editor's textview default font */
     gchar *fntFamily=NULL;
     gint fntSize=12;
-    PangoContext* context = gtk_widget_get_pango_context  (data_app->view);
-    PangoFontDescription *desc = pango_context_get_font_description(context);    
+   // PangoContext* context = gtk_widget_get_pango_context  (data_app->view);
+    PangoFontDescription *desc;// = pango_context_get_font_description(context);    
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(lookup_widget(GTK_WIDGET(dialog), "font_button_editor") ));
     g_key_file_set_string(keyString, "editor", "font",newFont);
     if (newFont != NULL) { 
