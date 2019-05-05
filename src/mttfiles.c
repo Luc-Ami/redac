@@ -8,7 +8,7 @@
 /* translations */
 #include <libintl.h>
 #include <locale.h>
-
+#include <string.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <string.h>
@@ -918,7 +918,9 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
   GKeyFile *keyString;
   GError* err = NULL;
   gchar *uri_path, *filename;
-
+  GtkWidget *alertDlg;
+  GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+  gint ret;
   GtkWidget *window1 = data->appWindow;
   keyString = g_object_get_data(G_OBJECT(window1),"config");
 
@@ -943,6 +945,25 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy (GTK_WIDGET(dialog)); 
+    /* we must play with something like a Gtk file chooser bug ;-) */
+    if((!g_str_has_suffix (filename, ".MP3" )) && ( !g_str_has_suffix (filename, ".mp3" ))
+      &&(!g_str_has_suffix (filename, ".wav" )) && (!g_str_has_suffix (filename, ".WAV"))
+      &&(!g_str_has_suffix (filename, ".ogg" )) && (!g_str_has_suffix (filename, ".OGG"))
+      &&(!g_str_has_suffix (filename, ".WMA" )) && (!g_str_has_suffix (filename, ".wma"))
+      &&(!g_str_has_suffix (filename, ".M4A" )) && (!g_str_has_suffix (filename, ".m4a"))
+       ) {
+           alertDlg = gtk_message_dialog_new (GTK_WINDOW(window1),
+                          flags,
+                          GTK_MESSAGE_ERROR,
+                          GTK_BUTTONS_OK,
+                          _("The file :\n%s \nins't a valid audio file !\nOperation canceled."),
+                          filename);
+           ret=gtk_dialog_run(GTK_DIALOG(alertDlg));
+           gtk_widget_destroy (GTK_WIDGET(alertDlg));
+           g_free(filename);
+           return;
+         }
+
     /* we convert finename's path to URI path */
     uri_path = g_filename_to_uri(filename, NULL,NULL);
     if(data->pipeline) {
