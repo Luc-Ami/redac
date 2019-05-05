@@ -8,7 +8,7 @@
 /* translations */
 #include <libintl.h>
 #include <locale.h>
-
+#include <string.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
@@ -153,7 +153,6 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
   GtkTextIter start, iter, infIter; 
   GtkTextTagTable *tagTable1;
   GtkTextTag *tag;
-  gint k;
   gchar *tmpStr =NULL;
   gboolean ok;
   gboolean fBold=FALSE, fItalic=FALSE, fUnderline =FALSE, fStrike = FALSE, fHighlight=FALSE;
@@ -163,7 +162,7 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
   gchar *pixBuffer;
   gsize pixSize;
   GError *pixError = NULL;
-  gint width, height;
+  gint k, width, height;
 
   /* we get the absolute bounds */
   gtk_text_buffer_get_start_iter(buffer, &start);
@@ -177,82 +176,129 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
   k=0;
   while(ok) {
      /* is there is a tag ? */
+     /* left alignment */
+     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "left"))) {
+       if(!fLeft) {
+         fLeft=TRUE;
+         fwrite("{\\ql ", sizeof(gchar), 5, outputFile);
+       }
+     }
+     else {
+       if(fLeft) {
+          fLeft =FALSE;
+       }
+     }
+     /* right alignment */
+     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "right"))) {
+       if(!fRight) {
+         fRight=TRUE;
+         fwrite("{\\qr ", sizeof(gchar), 5, outputFile);
+       }
+     }
+     else {
+       if(fRight) {
+          fRight =FALSE;
+       }
+     }
+    /* center alignment */
+     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "center"))) {
+       if(!fCenter) {
+         fCenter=TRUE;
+         fwrite("{\\qc ", sizeof(gchar), 5, outputFile);
+       }
+     }
+     else {
+       if(fCenter) {
+          fCenter =FALSE; 
+       }
+     }
+    /* fill alignment */
+     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "fill"))) {
+       if(!fFill) {
+         fFill=TRUE;
+         fwrite("{\\qj ", sizeof(gchar), 5, outputFile);
+       }
+     }
+     else {
+       if(fFill) {
+          fFill =FALSE;  
+       }
+     }
+
      if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "bold"))) {
        if(!fBold) {
          fBold=TRUE;
          /* we add the RTF bold tag on file : \b  */
-         fwrite("\\b ", sizeof(gchar), 3, outputFile);
+         fwrite("{\\b ", sizeof(gchar), 4, outputFile);
        }
      }
      else {/* if the Bold tag is already armed, then we change format ! so we must also output text */
        if(fBold) {
           fBold =FALSE;
-          fwrite("\\b0 ", sizeof(gchar), 4, outputFile);
+          fwrite("}", sizeof(gchar), 1, outputFile);
        }
      }     
      if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "italic"))) {
        if(!fItalic) {
          fItalic=TRUE;
-         fwrite("\\i ", sizeof(gchar), 3, outputFile);
+         fwrite("{\\i ", sizeof(gchar), 4, outputFile);
        }
      }
      else {/* if the Bold tag is already armed, then we change format ! so we must also output text */
        if(fItalic) {
           fItalic =FALSE;
-          fwrite("\\i0 ", sizeof(gchar), 4, outputFile);
+          fwrite("}", sizeof(gchar), 1, outputFile);
        }
      }  
      if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "underline"))) {
        if(!fUnderline) {
          fUnderline=TRUE;
-         fwrite("\\ul ", sizeof(gchar), 4, outputFile);
+         fwrite("{\\ul ", sizeof(gchar), 5, outputFile);
        }
      }
      else {
        if(fUnderline) {
           fUnderline =FALSE;
-          fwrite("\\ul0 ", sizeof(gchar), 5, outputFile);
+          fwrite("}", sizeof(gchar), 1, outputFile);
        }
      } 
      /* strikethrough */
      if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "strikethrough"))) {
        if(!fStrike) {
          fStrike=TRUE;
-         fwrite("\\strike ", sizeof(gchar), 8, outputFile);
+         fwrite("{\\strike ", sizeof(gchar), 9, outputFile);
        }
      }
      else {/* if the Bold tag is already armed, then we change format ! so we must also output text */
        if(fStrike) {
           fStrike =FALSE;
-          fwrite("\\strike0 ", sizeof(gchar), 9, outputFile);
+          fwrite("}", sizeof(gchar), 1, outputFile);
        }
      }
      /* superscript */
      if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "superscript"))) {
        if(!fSuper) {
          fSuper=TRUE;
-         fwrite("\\super ", sizeof(gchar), 7, outputFile);
+         fwrite("{\\super ", sizeof(gchar), 8, outputFile);
        }
      }
      else {
        if(fSuper) {
           fSuper =FALSE;
-          fwrite("\\super0 ", sizeof(gchar), 8, outputFile);/* for others WP */
-          fwrite("\\nosupersub ", sizeof(gchar), 12, outputFile);/* for LibreOffice */                 
+          fwrite("}", sizeof(gchar), 1, outputFile);/* for others WP */
        }
      }
      /* subscript */
      if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "subscript"))) {
        if(!fSub) {
          fSub=TRUE;
-         fwrite("\\sub ", sizeof(gchar), 5, outputFile);
+         fwrite("{\\sub ", sizeof(gchar), 6, outputFile);
        }
      }
      else {
        if(fSub) {
           fSub =FALSE;
-          fwrite("\\sub0 ", sizeof(gchar), 6, outputFile);/* for others WP */
-          fwrite("\\nosupersub ", sizeof(gchar), 12, outputFile);/* for LibreOffice */
+          fwrite("}", sizeof(gchar), 1, outputFile);/* for others WP */
        }
      }
      /* highlighting - don't work with Abiword */
@@ -310,54 +356,6 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
           fwrite("\\ri0 " , sizeof(gchar), 5, outputFile);/* block paragrph. right indent = 1/4 "*/
        }
      }
-     /* left alignment */
-     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "left"))) {
-       if(!fLeft) {
-         fLeft=TRUE;
-         fwrite("\\ql ", sizeof(gchar), 4, outputFile);
-       }
-     }
-     else {
-       if(fLeft) {
-          fLeft =FALSE;
-       }
-     }
-     /* right alignment */
-     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "right"))) {
-       if(!fRight) {
-         fRight=TRUE;
-         fwrite("\\qr ", sizeof(gchar), 4, outputFile);
-       }
-     }
-     else {
-       if(fRight) {
-          fRight =FALSE;
-       }
-     }
-    /* center alignment */
-     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "center"))) {
-       if(!fCenter) {
-         fCenter=TRUE;
-         fwrite("\\qc ", sizeof(gchar), 4, outputFile);
-       }
-     }
-     else {
-       if(fCenter) {
-          fCenter =FALSE; 
-       }
-     }
-    /* fill alignment */
-     if(gtk_text_iter_has_tag (&iter,gtk_text_tag_table_lookup(tagTable1, "fill"))) {
-       if(!fFill) {
-         fFill=TRUE;
-         fwrite("\\qj ", sizeof(gchar), 4, outputFile);
-       }
-     }
-     else {
-       if(fFill) {
-          fFill =FALSE;  
-       }
-     }
      /* next char - keep in mind that a picture is a char ! */
      ok = gtk_text_iter_forward_char (&iter);
      /* we must check if we are an image at the current infIter position */
@@ -391,8 +389,9 @@ gint save_RTF_rich_text(gchar *filename, APP_data *data_app)
   gchar *fntFamily=NULL;
   const gchar *page_size_a4_portrait="\\paperh16834 \\paperw11909 \\margl1440 \\margr1900 \\margt1800 \\margb1800 \\portrait\n";
   gchar *fonts_header;
-  const gchar *color_header="{\\colortbl;\\red255\\green0\\blue0;\\red0\\green0\\blue255;\\red243\\green242\\blue25;\\red241\\green241\\blue241;}\\widowctrl\\s0\\f1\\ql\\fs24\n\n";
+  const gchar *color_header="{\\colortbl;\\red255\\green0\\blue0;\\red0\\green0\\blue255;\\red243\\green242\\blue25;\\red241\\green241\\blue241;}\\widowctrl\\s0\\f1\\ql\\fs24\n";
   const gchar *styles_header="{\\stylesheet{\\s0\\f1\\ql kw-Normal;}{\\s7\\fi720\\li360\\ri360\\qj\\cb4\\f0 KW_Quotation;}}\n";
+  const gchar *init_paragr_header="\\pard\\plain\\ql\\s0\\f1 ";
   const gchar *rtf_header = "{\\rtf1\\ansi\\ansicpg1252\\deff0\n";
   const gchar *rtf_trailer = "}}";
   gint i, ret, fntSize=12;
@@ -426,6 +425,8 @@ gint save_RTF_rich_text(gchar *filename, APP_data *data_app)
   fwrite(color_header, sizeof(gchar), strlen(color_header), outputFile);
   fwrite(styles_header, sizeof(gchar), strlen(styles_header), outputFile);
   fwrite(page_size_a4_portrait, sizeof(gchar), strlen(page_size_a4_portrait), outputFile);
+  fwrite(init_paragr_header, sizeof(gchar), strlen(init_paragr_header), outputFile);
+
   decode_tags(buffer, outputFile);
 
   fwrite(rtf_trailer, sizeof(gchar), strlen(rtf_trailer), outputFile);
