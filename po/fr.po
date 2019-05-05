@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: redac 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-04 17:18+0200\n"
-"PO-Revision-Date: 2019-05-04 17:20+0100\n"
+"POT-Creation-Date: 2019-05-05 18:09+0200\n"
+"PO-Revision-Date: 2019-05-05 18:10+0100\n"
 "Last-Translator: luc <amiluc_bis@yahoo.fr>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -32,7 +32,7 @@ msgstr "Référence"
 msgid "Sketch"
 msgstr "Croquis"
 
-#: ../src/main.c:302 ../src/mttfiles.c:658 ../src/mttfiles.c:1313
+#: ../src/main.c:302 ../src/mttfiles.c:658 ../src/mttfiles.c:1334
 #, c-format
 msgid "<small><b>%s</b></small>"
 msgstr "<small><b>%s</b></small>"
@@ -287,7 +287,7 @@ msgstr ""
 msgid "<small><b>%s-<span foreground=\"green\">saved</span></b></small>"
 msgstr "<small><b>%s-<span foreground=\"green\">enregistré</span></b></small>"
 
-#: ../src/mttfiles.c:810 ../src/mttfiles.c:1245
+#: ../src/mttfiles.c:810 ../src/mttfiles.c:1266
 #, c-format
 msgid ""
 "The file :%s exists !\n"
@@ -296,15 +296,28 @@ msgstr ""
 "Le fichier :%s existe !\n"
 "Faut-il l'écraser avec le fichier actuel ?"
 
-#: ../src/mttfiles.c:937
+#: ../src/mttfiles.c:939
 msgid "Audio files"
 msgstr "Fichiers audio"
 
-#: ../src/mttfiles.c:1051 ../src/mttfiles.c:1139
+#: ../src/mttfiles.c:959
+#, c-format
+msgid ""
+"The file :\n"
+"%s \n"
+"ins't a valid audio file !\n"
+"Operation canceled."
+msgstr ""
+"Le fichier :\n"
+"%s\n"
+"n'est pas un fichier valide !\n"
+"Opération annulée."
+
+#: ../src/mttfiles.c:1072 ../src/mttfiles.c:1160
 msgid "PDF files"
 msgstr "Fichiers PDF"
 
-#: ../src/mttfiles.c:1167
+#: ../src/mttfiles.c:1188
 #, c-format
 msgid ""
 "The file :\n"
@@ -315,12 +328,12 @@ msgstr ""
 "%s existe déjà !\n"
 "Voulez-vous vraiment l'écraser avec le PDF en cours d'édition ?"
 
-#: ../src/mttfiles.c:1219
+#: ../src/mttfiles.c:1240
 msgid "PNG Image files"
 msgstr "Fichiers images PNG"
 
 #. we must extract a short filename
-#: ../src/mttfiles.c:1227 ../src/interface.c:1153
+#: ../src/mttfiles.c:1248 ../src/interface.c:1153
 msgid "noname"
 msgstr "sans_nom"
 
