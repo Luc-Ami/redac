@@ -161,6 +161,7 @@ gboolean timeout_audio_display_position( APP_data *data);
 void on_audioPlaySpeed_changed(GtkComboBox     *combobox, APP_data *data);
 void
 on_about1_activate (GtkMenuItem  *menuitem, APP_data *data);
+void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data);
 void
 on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data);
 #endif /* CALLBACKS_H */

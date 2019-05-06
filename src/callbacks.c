@@ -7,6 +7,7 @@
 #include <locale.h>
 
 #include <stdlib.h>
+#include <gio/gio.h>
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
@@ -3270,6 +3271,28 @@ on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
   gtk_dialog_run(GTK_DIALOG (aboutDialog));  
   gtk_widget_destroy(GTK_DIALOG (aboutDialog));
   return;
+}
+
+void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data)
+{
+ gboolean ret;
+ GError *error = NULL;
+ GtkWidget *alertDlg;
+ GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+ gint rep;
+
+ // g_type_init();
+
+  ret = g_app_info_launch_default_for_uri("https://github.com/Lucien-Ami/redac/wiki", NULL, &error);
+  if (!ret) {
+      alertDlg = gtk_message_dialog_new_with_markup (GTK_WINDOW(data->appWindow),
+                          flags,
+                          GTK_MESSAGE_ERROR,
+                          GTK_BUTTONS_OK,NULL,
+                          _("<big><b>Can't access to online wiki !</b></big>\nPlease, check your Internet connection\n and/or you desfault desktop file browser parameters."));
+      rep=gtk_dialog_run(GTK_DIALOG(alertDlg));
+      gtk_widget_destroy (GTK_WIDGET(alertDlg));
+  }
 }
 
 void

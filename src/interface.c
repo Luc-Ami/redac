@@ -319,6 +319,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   GtkWidget *misc1;
   GtkWidget *about1;
   GtkWidget *keyHelp1;
+  GtkWidget *wiki1;
   GtkWidget *imageHelp;
   GtkWidget *boxHelp;
   GtkWidget *lblHelp;
@@ -514,6 +515,9 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   keyHelp1=gtk_menu_item_new_with_mnemonic (_("_Keyboard shortcuts ..."));
   gtk_widget_show (keyHelp1);
   gtk_container_add (GTK_CONTAINER (submenu6), keyHelp1);
+  wiki1=gtk_menu_item_new_with_mnemonic (_("Online _Wiki ..."));
+  gtk_widget_show (wiki1);
+  gtk_container_add (GTK_CONTAINER (submenu6), wiki1);
   about1=gtk_menu_item_new_with_mnemonic (_("_About Redac ..."));
   gtk_widget_show (about1);
   gtk_container_add (GTK_CONTAINER (submenu6), about1);
@@ -566,6 +570,10 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
   g_signal_connect ((gpointer) keyHelp1, "activate",
                     G_CALLBACK (on_keyHelp1_activate),
                     data_app);
+  g_signal_connect ((gpointer) wiki1, "activate",
+                    G_CALLBACK (on_wiki1_activate),
+                    data_app);
+
 
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (menu1, menu1, "menu1");
