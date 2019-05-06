@@ -3283,7 +3283,7 @@ void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data)
 
  // g_type_init();
 
-  ret = g_app_info_launch_default_for_uri("https://github.com/Lucien-Ami/redac/wiki", NULL, &error);
+  ret = g_app_info_launch_default_for_uri("https://github.com/Luc-Ami/redac/wiki", NULL, &error);
   if (!ret) {
       alertDlg = gtk_message_dialog_new_with_markup (GTK_WINDOW(data->appWindow),
                           flags,
