@@ -952,11 +952,11 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
       &&(!g_str_has_suffix (filename, ".WMA" )) && (!g_str_has_suffix (filename, ".wma"))
       &&(!g_str_has_suffix (filename, ".M4A" )) && (!g_str_has_suffix (filename, ".m4a"))
        ) {
-           alertDlg = gtk_message_dialog_new (GTK_WINDOW(window1),
+           alertDlg = gtk_message_dialog_new_with_markup (GTK_WINDOW(window1),
                           flags,
                           GTK_MESSAGE_ERROR,
                           GTK_BUTTONS_OK,
-                          _("The file :\n%s \nins't a valid audio file !\nOperation canceled."),
+                          _("<b><big>Can't proceeed ! </big></b>\nThe file :<i>\n\n%s </i>\n\nisn't a valid audio file !"),
                           filename);
            ret=gtk_dialog_run(GTK_DIALOG(alertDlg));
            gtk_widget_destroy (GTK_WIDGET(alertDlg));
