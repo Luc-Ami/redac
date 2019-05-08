@@ -2034,7 +2034,7 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
         }
         gtk_widget_set_sensitive(GTK_WIDGET(bNext),sensitive);
         gtk_widget_set_sensitive(GTK_WIDGET(bPrev),sensitive);
-        if(i>1) {
+        if(i>0) {
           sensitive=TRUE;
         }
         if(data->currentStack==CURRENT_STACK_EDITOR) {
