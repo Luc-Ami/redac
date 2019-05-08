@@ -259,7 +259,7 @@ int main(int argc, char *argv[]) {
 
   GtkCssProvider* css_provider = gtk_css_provider_new();
   gchar *css;
-  css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+  css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: @selected_bg_color; color:@selected_fg_color; }\n",
                  fntFamily,
                  fntSize,
                  (gint)( color.red*255),(gint)( color.green*255), (gint)(color.blue*255),
@@ -325,8 +325,8 @@ int main(int argc, char *argv[]) {
   g_free(s1);
 
   /* we save an instant snapshot of our job to undo callbacks - useless now */
-  tmpFileName = GetTempFileName("redac");
-  gint ret = save_gtk_rich_text(tmpFileName, buffer);
+//  tmpFileName = GetTempFileName("redac");
+//  gint ret = save_gtk_rich_text(tmpFileName, buffer);
   update_statusbar(buffer, &app_data);
 
  /* we preset the cursor */
