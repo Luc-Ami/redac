@@ -174,6 +174,7 @@ int main(int argc, char *argv[]) {
   /* two statusbars arranged in a GtkGrid */
   gridStatusBar = gtk_grid_new();
   g_object_set (gridStatusBar, "margin-top", 4, NULL);
+  g_object_set (gridStatusBar, "margin-bottom", 6, NULL);
   gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(gridStatusBar), 0,3,1,1);
   /* statusbar */
   UI_statusbar(mainWindow, gridStatusBar, &app_data );  
