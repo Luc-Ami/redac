@@ -2564,8 +2564,8 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
 {
   GtkWidget *dialog;
   GdkPixbuf *aboutRedac_icon_pixbuf;
-  const gchar *authors[] = {_("Project Manager:"),"Luc Amimer <amiluc_bis@yahoo.fr>", NULL };
-  const gchar *artists[] = {"Luc Amimer <amiluc_bis@yahoo.fr>", _("Redac logos + main icon :"), "Luc Amimer <amiluc_bis@yahoo.fr>", NULL};
+  const gchar *authors[] = {_("Project Manager:"),"Luc A. <amiluc_bis@yahoo.fr>", NULL };
+  const gchar *artists[] = {"Luc A. <amiluc_bis@yahoo.fr>", _("Redac logos + main icon :"), "Luc A. <amiluc_bis@yahoo.fr>", NULL};
 
   dialog = gtk_about_dialog_new ();
   gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG(dialog),"");
@@ -2594,4 +2594,5 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   gtk_widget_show_all( dialog );
   return dialog;
 }
+
 
