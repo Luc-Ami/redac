@@ -2434,7 +2434,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
   keyString = g_object_get_data(G_OBJECT(data->appWindow), "config"); 
   pen_width=g_key_file_get_double(keyString, "sketch", "pen-width", NULL);
 
- printf("key=%s\n", gdk_keyval_name (event->keyval));
+// printf("key=%s\n", gdk_keyval_name (event->keyval));
   search_entry = lookup_widget(GTK_WIDGET(data->appWindow), "search_entry");
   replace_entry = lookup_widget(GTK_WIDGET(data->appWindow), "replace_entry");
   page_entry = lookup_widget(GTK_WIDGET(data->appWindow), "page_entry");
@@ -2523,10 +2523,10 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
          case GDK_KEY_f: { /* request to find a string */
            /* we check is there is already a selected area */
            search_entry = lookup_widget(GTK_WIDGET(data->appWindow), "search_entry");
-           gtk_widget_grab_focus(search_entry);
            if( gtk_text_buffer_get_selection_bounds (data->buffer, &start,&end)) {
               tmpStr=gtk_text_buffer_get_text(data->buffer,&start,&end,FALSE);
               gtk_entry_set_text(search_entry,tmpStr);
+              gtk_widget_grab_focus(search_entry);
               g_free(tmpStr);
            }                      
            break;
