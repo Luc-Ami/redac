@@ -273,7 +273,7 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
  /* we get current alignment - if different, we change the radiobuttons */
   gint al=misc_get_current_alignment(buffer);
   if(al!=kw_paragraph_alignment) {
-      set_alignment_button(al);
+      set_alignment_button(window1, al);
   }
   fUserClickedButton = TRUE;
 
@@ -1038,28 +1038,28 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
   set alignment button to
   a specific alignment
 ***************************/
-void set_alignment_button(gint alignment)
+void set_alignment_button(GtkWidget *win, gint alignment)
 {
   switch(alignment) {
     case KW_ALIGNMENT_LEFT: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(mainWindow), "pRadioButtonLeft")) , TRUE);
+      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonLeft")) , TRUE);
       break;
     }
     case KW_ALIGNMENT_CENTER: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(mainWindow), "pRadioButtonCenter")) , TRUE);
+      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonCenter")) , TRUE);
       break;
     }
     case KW_ALIGNMENT_RIGHT: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(mainWindow), "pRadioButtonRight")) , TRUE);
+      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonRight")) , TRUE);
       break;
     }
     case KW_ALIGNMENT_FILL: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(mainWindow), "pRadioButtonFill")) , TRUE);
+      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonFill")) , TRUE);
       break;
     }
    default:{
      printf("* error on setting alignment button - set to Left *\n");
-     gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(mainWindow), "pRadioButtonLeft")) , TRUE);
+     gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonLeft")) , TRUE);
    }  
   }/* end switch */
 }

@@ -86,17 +86,17 @@ gint storage_save( gchar *pathname, APP_data *data_app)
   GdkRGBA color;   
   GtkWidget *pBtnColor; 
 
-  keyString = g_object_get_data(G_OBJECT(mainWindow), "config"); 
+  keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config"); 
   /* we get the current RGBA color */
-  pBtnColor=lookup_widget(GTK_WIDGET(mainWindow), "color_button");
+  pBtnColor=lookup_widget(GTK_WIDGET(data_app->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
 
   gchar* tmpStr = g_strdup_printf(_(" %s settings auto-generated - Do not edit!"), "Redac 0.1");
   g_key_file_set_comment (keyString, NULL, NULL, tmpStr, NULL);
   g_key_file_set_string(keyString, "version-info", "version", CURRENT_VERSION);
   /* we store window geometry */
-  gtk_window_get_position (GTK_WINDOW(mainWindow), &pos_x, &pos_y); 
-  gtk_window_get_size (GTK_WINDOW(mainWindow), &width_height[0], &width_height[1]);
+  gtk_window_get_position (GTK_WINDOW(data_app->appWindow), &pos_x, &pos_y); 
+  gtk_window_get_size (GTK_WINDOW(data_app->appWindow), &width_height[0], &width_height[1]);
   g_key_file_set_integer (keyString, "application", "geometry.x", pos_x);
   g_key_file_set_integer (keyString, "application", "geometry.y", pos_y);
   g_key_file_set_integer (keyString, "application", "geometry.width", width_height[0]);
@@ -138,7 +138,7 @@ gint storage_save( gchar *pathname, APP_data *data_app)
 /*******************************
  Creates a new config file
  ******************************/
-void createNewKeyFile(GKeyFile *keyString)
+void createNewKeyFile(GtkWidget *win, GKeyFile *keyString)
 {
     gint width_height[2], i;
     gchar buffer[81];
@@ -152,7 +152,7 @@ void createNewKeyFile(GKeyFile *keyString)
     g_key_file_set_integer (keyString, "application", "geometry.x", 0);
     g_key_file_set_integer (keyString, "application", "geometry.y", 0);
     /* we get the current  window geometry */
-    gtk_window_get_size (GTK_WINDOW(mainWindow),
+    gtk_window_get_size (GTK_WINDOW(win),
                        &width_height[0], &width_height[1]);
     g_key_file_set_integer (keyString, "application", "geometry.width",  width_height[0]);
     g_key_file_set_integer (keyString, "application", "geometry.height", width_height[1]);
@@ -247,7 +247,7 @@ void createGKeyFile(GtkWidget *win)
   if(!g_key_file_load_from_file (keyString, gConfigFile,
                                   G_KEY_FILE_KEEP_COMMENTS,
                                   NULL)) {printf("pb =%s\n",gConfigFile );
-    createNewKeyFile(keyString);
+    createNewKeyFile(win, keyString);
   } 
   /* we read datas for config.ini file */
 
@@ -956,7 +956,7 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
                           flags,
                           GTK_MESSAGE_ERROR,
                           GTK_BUTTONS_OK,
-                          _("<b><big>Can't proceeed ! </big></b>\nThe file :<i>\n\n%s </i>\n\nisn't a valid audio file !"),
+                          _("<b><big>Can't proceeed !</big></b>\nThe file :<i>\n\n%s </i>\n\nisn't a valid audio file !"),
                           filename);
            ret=gtk_dialog_run(GTK_DIALOG(alertDlg));
            gtk_widget_destroy (GTK_WIDGET(alertDlg));

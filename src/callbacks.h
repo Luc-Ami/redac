@@ -69,7 +69,7 @@ void
 on_button_alignment_toggled   (GtkButton       *button,
                                         APP_data    *data);
 gint get_current_alignment(GtkTextBuffer *buffer);
-void set_alignment_button(gint alignment);
+void set_alignment_button(GtkWidget *win, gint alignment);
 
 void
 on_find_changed                (GtkSearchEntry *entry, APP_data    *data);

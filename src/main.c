@@ -19,8 +19,6 @@
 /************************
  global vars
 *************************/
-gchar *tmpFileName;
-GtkWidget *mainWindow;
 gchar *gConfigFile = NULL; /* created by main(), destroyed by destroyGKeyFile() */
 /**********************
 
@@ -33,6 +31,7 @@ int main(int argc, char *argv[]) {
   GdkRGBA color, b_color;
   GtkStack *stack;
   GtkStackSwitcher *switcher;
+  GtkWidget *mainWindow;
   GtkWidget *vGrid;
   GtkWidget *scrolledwindow1;
   GtkWidget *scrolledwindowPDF;
@@ -324,9 +323,6 @@ int main(int argc, char *argv[]) {
   }
   g_free(s1);
 
-  /* we save an instant snapshot of our job to undo callbacks - useless now */
-//  tmpFileName = GetTempFileName("redac");
-//  gint ret = save_gtk_rich_text(tmpFileName, buffer);
   update_statusbar(buffer, &app_data);
 
  /* we preset the cursor */
