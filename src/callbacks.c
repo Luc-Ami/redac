@@ -2013,15 +2013,7 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
                   PDF_display_page (window1,data->curPDFpage, data->doc, data);                        
                   search_draw_selection_current_page(data->curPDFpage, data, data->surface);                   
                   update_statusbarPDF(data);
-                  /* we check results */
-                 // GList *l=g_list_first(data->pdfSearch);
-                 /* printf("check Glist !\n");
-                  for(l;l!=NULL;l=l->next) {
-                     PDF_search_results *results;
-                     results=(PDF_search_results *)l->data;
-                     printf("page=%d nb hits par page=%d \n", 
-                            results->page, results->nb_hits_at_page);
-                  }*/                            
+                  gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
               }
               else 
                 printf("PDF doc empty \n");
