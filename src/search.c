@@ -6,7 +6,7 @@
 /* translations */
 #include <libintl.h>
 #include <locale.h>
-
+#include <string.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
@@ -73,7 +73,7 @@ gint search_goto_next_PDF_page(gint page, APP_data    *data)
   draw a translucent selection rectangle on PDF
 
 ***************************************************/
-void search_draw_selection_rectangle(cairo_t *cr, APP_data *data, PopplerRectangle *rectangle, gdouble scale)
+void search_draw_selection_rectangle(cairo_t *cr, APP_data *data, PopplerRectangle *rectangle, gdouble scale, GdkRGBA *color)
 {
   /* test */
   gdouble y, w,h;
@@ -82,7 +82,7 @@ void search_draw_selection_rectangle(cairo_t *cr, APP_data *data, PopplerRectang
   h=ABS(rectangle->y1-rectangle->y2);
   y=MIN(rectangle->y1,rectangle->y2);
   y=data->PDFHeight-y;
-  cairo_set_source_rgba(cr, 0.06, 1, 0, 0.3);
+  cairo_set_source_rgba(cr, color->red, color->green, color->blue, 0.5);
 // printf("x1=%.2f y1=%.2f x2=%.2f y2=%.2f \n", rectangle->x1, rectangle->y1, rectangle->x2, rectangle->y2);
   cairo_rectangle(cr, rectangle->x1*scale, y*scale-h*scale, w*scale, h*scale);
   cairo_fill(cr);
@@ -95,12 +95,18 @@ void search_draw_selection_rectangle(cairo_t *cr, APP_data *data, PopplerRectang
  if YES, draw selectino rectangles
 
 */
-void search_draw_selection_current_page(gint page, APP_data    *data, cairo_surface_t *surface)
+void search_draw_selection_current_page(gint page, APP_data *data, cairo_surface_t *surface)
 {
   GList *l=NULL, *lr=NULL;
   PDF_search_results *results;
   PopplerRectangle *rectangle;
   cairo_t *cr;
+  GtkStyleContext *context;
+  GdkRGBA *color;
+  /* get current theme' selection color.
+     see:  https://stackoverflow.com/questions/47371967/getting-objects-out-of-a-gvalue */
+  context=gtk_widget_get_style_context (GTK_WIDGET(data->appWindow));
+  gtk_style_context_get (context, GTK_STATE_FLAG_SELECTED, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &color, NULL);
 
   cr = cairo_create (surface);
   l=data->pdfSearch;
@@ -110,12 +116,13 @@ void search_draw_selection_current_page(gint page, APP_data    *data, cairo_surf
        lr=results->hits;
        for(lr;lr!=NULL;lr=lr->next) {
             rectangle=(PopplerRectangle *)lr->data;
-            search_draw_selection_rectangle(cr, data, rectangle, data->PDFratio);
+            search_draw_selection_rectangle(cr, data, rectangle, data->PDFratio, color);
             
        }
      }
   }
   cairo_destroy (cr);
+  gdk_rgba_free (color);
 }
 
 /*****************************
