@@ -486,7 +486,7 @@ gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event,
   if(!data->button_pressed || !data->doc)
      return TRUE;
 
-  gtk_widget_destroy (GTK_WINDOW(data->window));
+  gtk_widget_destroy (GTK_WIDGET(data->window));
  
   data->button_pressed=FALSE;
   /* get absolute screen coordinates */
@@ -532,7 +532,7 @@ gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event,
        PDF_set_text_annot_selection(data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
        update_PDF_state(data, PDF_MODIF);
-//PDF_set_free_text_annot_selection(data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
+//TODO in 2037 ? PDF_set_free_text_annot_selection(data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
   //                     data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
        break;
      }
@@ -909,9 +909,7 @@ on_clearSketch_clicked  (GtkButton  *button, APP_data *data_app)
 *****************************/
 gdouble on_rewGapSpin_value_changed_event (GtkSpinButton *a_spinner, gpointer user_data) {
 gdouble val;
-   val=gtk_spin_button_get_value (a_spinner);
-   printf("valeur %2f\n", val);
-   return val;
+   return gtk_spin_button_get_value (a_spinner);
 }
 
 
@@ -1113,7 +1111,7 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
 
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonLeft"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-       printf("bingo left\n");
+    //   printf("bingo left\n");
        on_left_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
        data->kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
@@ -1121,7 +1119,7 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
    }
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonCenter"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-       printf("bingo Center\n");
+     //  printf("bingo Center\n");
        on_center_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_CENTER;
        data->kw_paragraph_alignment = KW_ALIGNMENT_CENTER;
@@ -1129,7 +1127,7 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
    }
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonRight"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-       printf("bingo Right\n");
+      // printf("bingo Right\n");
        on_right_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_RIGHT;
        data->kw_paragraph_alignment = KW_ALIGNMENT_RIGHT;
@@ -1137,7 +1135,7 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
    }
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonFill"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-       printf("bingo Fill\n");
+      // printf("bingo Fill\n");
        on_fill_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_FILL;
        data->kw_paragraph_alignment = KW_ALIGNMENT_FILL;
@@ -1556,7 +1554,7 @@ void on_quotation_clicked   (GtkButton  *button,  APP_data *data)
   if(!gtk_text_buffer_get_has_selection (buffer)) {
      fQuotation=!fQuotation;
 
-     /* it's a demand to switch to insert/append mode with a specific format */
+     /* it's a request to switch to insert/append mode with a specific format */
 
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
      iRowMem = gtk_text_iter_get_line(&iter);
@@ -1614,14 +1612,14 @@ on_left_justify_clicked (APP_data *data)
   if(gtk_text_buffer_get_has_selection (buffer)) {
      fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &iter, &end);
      if(!fExistSelection) {
-        printf("NOT bounds I exit \n");     
+        printf("* Error : NO bounds I exit *\n");     
         return;
      }
      /* we rewind to the start of the first selected line */
      row = gtk_text_iter_get_line(&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
-  else {printf("I compute a default selection \n");
+  else {printf("* Warning : I compute a default selection *\n");
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
      row = gtk_text_iter_get_line(&iter);
      col = gtk_text_iter_get_line_offset(&iter);
@@ -1855,9 +1853,6 @@ void on_undo_clicked (GtkButton *button, APP_data *data)
   if(data->undoList!=NULL) {
     undo_pop(data->currentStack, data);
   }
- // save_standard_file("", buffer);
-//  load_gtk_rich_text(tmpFileName, buffer, window1);
- 
 }
 
 /**************************************************
@@ -2014,9 +2009,16 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
                   search_draw_selection_current_page(data->curPDFpage, data, data->surface);                   
                   update_statusbarPDF(data);
                   gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
-              }
-              else 
-                printf("PDF doc empty \n");
+                  /* we check results */
+                 // GList *l=g_list_first(data->pdfSearch);
+                 /* printf("check Glist !\n");
+                  for(l;l!=NULL;l=l->next) {
+                     PDF_search_results *results;
+                     results=(PDF_search_results *)l->data;
+                     printf("page=%d nb hits par page=%d \n", 
+                            results->page, results->nb_hits_at_page);
+                  }*/                            
+              }/* if doc */
              }/* if currentstack==PDF */
            }
         }/* strlen */
@@ -2561,10 +2563,10 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
        switch(event->keyval) {
          case GDK_KEY_Insert:{
            if(gtk_text_view_get_overwrite (data->view)) {
-              printf("I cancel overwrite mode \n");
+              printf("* I cancel overwrite mode *\n");
            }
            else
-              printf("OK, we are alreday in insert mode \n");
+              printf("* OK, we are already in insertion mode *\n");
            gtk_text_view_set_overwrite (data->view, FALSE);
            return TRUE;
            break;
@@ -2621,7 +2623,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
           on_help_clicked(widget);
           break;
          }
-         default:{/* supposed standard displayable chars , be careful backspace is treated as printable by X11 !!! */
+         default:{/* supposed standard printable chars , be careful backspace is treated as printable by X11 !!! */
             if(gdk_keyval_to_unicode (event->keyval)!=0) {
 // printf("key=%s\n", gdk_keyval_name (event->keyval));
                /* we push a single char to undo engine */
@@ -2641,23 +2643,6 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
     return FALSE;
 }
 
-/**********************
- TODO clipboard callbacks NON USED at July 2018, to remove !
-************************/
-void clipboard_requestggg_image(GtkClipboard *clipboard, GdkPixbuf *pixbuf, gpointer data)
-{
-  GtkTextBuffer *buffer;
-  GtkTextIter start, iter;
-  GtkWidget *window1 = data;
-
-  buffer = GTK_TEXT_BUFFER(lookup_widget(GTK_WIDGET(window1), "buffer"));
-  gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-
-  if(pixbuf) {
-     printf("Clipboard has image value is %8X\n", *(int*)data);
-     gtk_text_buffer_insert_pixbuf(buffer, &iter, pixbuf);
-  } 
-}
 
 /***********************************************
  CB : response to recent-files list of menitems
@@ -2813,19 +2798,9 @@ on_main_menu_clicked  (GtkButton  *button,  APP_data *data_app)
 void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu, APP_data *data_app)
 {
   GtkWidget *window1;
-	/* clear the old menu items */
-	//gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
-
-	//ui_menu_add_document_items(menu, edit_window.editor->document,
-	//	G_CALLBACK(on_doc_menu_item_clicked));
-//  window1 = data_app->appWindow;
-  //menu = create_menu1(window1, data_app);
- // gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET(button), undo_popup_menu);
-//  gtk_menu_popup(GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
 
   gtk_menu_popup(GTK_MENU (menu), NULL, NULL,  (GtkMenuPositionFunc) set_position, GTK_WIDGET(button),
-                 1, gtk_get_current_event_time());
-  // gtk_menu_popup_at_widget(GTK_MENU (menu), GTK_WIDGET(button), 
+                 1, gtk_get_current_event_time()); 
 }
 
 /******************************
@@ -2837,7 +2812,6 @@ void on_PDF_size_changed (GtkWidget *widget, GdkRectangle *allocation, APP_data 
      PDF_display_page(data_app->appWindow, data_app->curPDFpage, data_app->doc, data_app);
   }
 }
-
 
 
 /******************
@@ -2974,7 +2948,7 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
         poppler_color_free(current_color);
         undo_push(user_data->currentStack, OP_SET_ANNOT_COLOR, user_data);
   }
-  gtk_widget_destroy(dialog);
+  gtk_widget_destroy(GTK_WIDGET(dialog));
   PDF_display_page(user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
 }
 
@@ -3068,7 +3042,7 @@ on_play_pause_clicked (GtkButton *button, APP_data *data)
   audio_get_position(data->pipeline, &pos );
   data->audio_current_position=pos;
   /* we change the position display */
-  gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+  gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position))); 
 }
@@ -3091,7 +3065,7 @@ on_jump_prev_clicked (GtkButton *button, APP_data *data)
   audio_get_position(data->pipeline, &pos );
   data->audio_current_position=pos;
   /* we change the position display */
-  gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+  gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position)));
 } 
@@ -3113,7 +3087,7 @@ on_jump_next_clicked (GtkButton *button, APP_data *data)
   audio_get_position(data->pipeline, &pos );
   data->audio_current_position=pos;
   /* we change the position display */
-  gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+  gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position))); 
 
@@ -3143,7 +3117,7 @@ void on_go_jump_clicked(GtkButton *button, APP_data *data)
     audio_get_position(data->pipeline, &pos );
     data->audio_current_position=pos;
     /* we change the position display */
-    gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position)));    
   }
@@ -3177,7 +3151,7 @@ gboolean timeout_audio_display_position( APP_data *data)
     msg=gst_bus_timed_pop_filtered (bus, 0, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
     if(msg!=NULL) {
        error=TRUE; 
-         printf("* le bus envoie un message d'erreur !!! \n");
+         printf("* Gstreamer : Bus error message ! \n");
        gst_message_unref (msg);
     } 
     if(pos>=data->audio_total_duration || error) {
@@ -3194,14 +3168,14 @@ gboolean timeout_audio_display_position( APP_data *data)
            audio_get_position(data->pipeline, &pos );
            data->audio_current_position=pos;
            /* we change the position display */
-           gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+           gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position)));  
         }
     }
     gst_object_unref (bus);
     /* we change the position display */
-    gtk_label_set_markup ( GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position))); 
   }
@@ -3261,7 +3235,7 @@ on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
   GtkWidget *aboutDialog = create_aboutRedac(data);
   
   gtk_dialog_run(GTK_DIALOG (aboutDialog));  
-  gtk_widget_destroy(GTK_DIALOG (aboutDialog));
+  gtk_widget_destroy(GTK_WIDGET (aboutDialog));
   return;
 }
 

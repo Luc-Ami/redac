@@ -18,6 +18,18 @@
 #include "misc.h"
 #include "undo.h"
 
+static gint get_undo_current_op_code(APP_data *data)
+{
+  gint ret=OP_NONE;
+  undo_datas *tmp_undo_datas;
+
+  GList *l=g_list_last(data->undoList);
+  tmp_undo_datas=(undo_datas *)l->data;
+  ret=tmp_undo_datas->opCode;
+  return ret;
+}
+
+
 static void update_undo_tooltip( gint op, APP_data *data)
 {
  if(g_list_length ( data->undoList)>0) {
@@ -178,10 +190,10 @@ static void undo_free_first_data(APP_data *data)
    GList *l=g_list_first(data->undoList);
    undo_datas *tmp_undo_datas;
    tmp_undo_datas=(undo_datas *)l->data;
-printf("avant annot dans free first \n");
+// printf("avant annot dans free first \n");
    if(tmp_undo_datas->annotStr!=NULL)
          g_free(tmp_undo_datas->annotStr);
-printf("apres annot dans free first et avant serial\n");
+// printf("apres annot dans free first et avant serial\n");
    if(tmp_undo_datas->serialized_buffer!=NULL) {
      g_free(tmp_undo_datas->serialized_buffer);
      tmp_undo_datas->serialized_buffer=NULL;
@@ -189,7 +201,7 @@ printf("apres annot dans free first et avant serial\n");
    if(tmp_undo_datas->pix!=NULL)
          g_object_unref(tmp_undo_datas->pix);  
 
-printf("apres serial dans free first \n");
+// printf("apres serial dans free first \n");
    g_free(tmp_undo_datas);
    data->undoList=g_list_delete_link (data->undoList, l);  
 }
@@ -216,9 +228,9 @@ static void undo_push_editor( gint op, APP_data *data)
   data->undoList=g_list_append(data->undoList, tmp_undo_datas);
   update_undo_tooltip(op, data);
   /* vérifier longueur */
-  printf("list annul contient %d éléments j'ai pushé %d qui est traduit par %d \n", 
-                      g_list_length ( data->undoList), 
-                      data->undo.opCode, tmp_undo_datas->opCode);
+ // printf("list annul contient %d éléments j'ai pushé %d qui est traduit par %d \n", 
+   //                   g_list_length ( data->undoList), 
+     //                 data->undo.opCode, tmp_undo_datas->opCode);
 
 }
 
@@ -292,13 +304,13 @@ void undo_push(gint current_stack, gint op, APP_data *data)
       break;
     }
     default: {
-      printf("* something wrong with undo engine source *\n");
+      printf("* something wrong with UNDO engine source *\n");
     }
   }/* end switch */
   /* now we add last datas to undo GList */
 }
 
-static void undo_pop_editor( APP_data *data)
+static void undo_pop_editor(gint op, APP_data *data)
 {
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1; 
@@ -309,10 +321,11 @@ static void undo_pop_editor( APP_data *data)
 
   GList *l=g_list_last(data->undoList);
   tmp_undo_datas=(undo_datas *)l->data;
+
   tagTable1 = gtk_text_buffer_get_tag_table(data->buffer);
 
-  if(tmp_undo_datas->opCode>0 && tmp_undo_datas->opCode<50) {
-     switch(tmp_undo_datas->opCode) {
+  if(op>0 && op<50) {
+     switch(op) {
         case OP_SET_BOLD:{
           tag = gtk_text_tag_table_lookup(tagTable1, "bold");
           gtk_text_buffer_remove_tag(data->buffer, tag, &tmp_undo_datas->start_sel, &tmp_undo_datas->end_sel);
@@ -459,12 +472,12 @@ static void undo_pop_editor( APP_data *data)
           gtk_text_buffer_get_iter_at_mark (data->buffer,&iter,tmp_undo_datas->undoMark);
           flag = gtk_text_buffer_deserialize(data->buffer, data->buffer, format, &iter, 
                                                   tmp_undo_datas->serialized_buffer,tmp_undo_datas->buffer_length, NULL);
-printf("ava \n");
+//printf("ava \n");
           gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->undoMark);      
-printf("apr \n");
+//printf("apr \n");
           break;
         }
-        default:printf("* Unmanaged Undo operation request for editor *\n");
+        default:printf("* Unmanaged UNDO operation request for editor *\n");
      }/* end switch */
   }
 }
@@ -474,15 +487,15 @@ static PopplerAnnot *find_annot_at_coordinates(gint x1, gint y1, gint x2, gint y
   GList *l=NULL;
   PopplerAnnotMapping *current_annot_map;
   PopplerAnnot *current_annot=NULL;
-printf("----------------------------\n");
-printf("x1=%d y1=%d x2=%d y2=%d \n", x1, y1, x2, y2);
+
+// printf("x1=%d y1=%d x2=%d y2=%d \n", x1, y1, x2, y2);
   l=PDFmap;
   for(l;l!=NULL;l=l->next) {
     current_annot_map=(PopplerAnnotMapping *)l->data;
-printf("dans datas x1=%d y1=%d x2=%d y2=%d \n", (gint)current_annot_map->area.x1, (gint)current_annot_map->area.y1, (gint)current_annot_map->area.x2, (gint)current_annot_map->area.y2);
+// printf("dans datas x1=%d y1=%d x2=%d y2=%d \n", (gint)current_annot_map->area.x1, (gint)current_annot_map->area.y1, (gint)current_annot_map->area.x2, (gint)current_annot_map->area.y2);
     if(x1>=(gint)current_annot_map->area.x1 && y1>=(gint)current_annot_map->area.y1 
        && x2<=(gint)current_annot_map->area.x2 && y2<=(gint)current_annot_map->area.y2) {
-        printf("bingo ! coinc for annotype dans UNDO =%d \n", poppler_annot_get_annot_type (current_annot_map->annot));
+       // printf("bingo ! coinc for annotype dans UNDO =%d \n", poppler_annot_get_annot_type (current_annot_map->annot));
         current_annot=current_annot_map->annot;
     }
   }
@@ -538,7 +551,7 @@ static void undo_remove_text_annot(APP_data *data_user, undo_datas *data)
   poppler_color_free (my_color);
 }
 
-static void undo_pop_PDF( APP_data *data)
+static void undo_pop_PDF(gint op,  APP_data *data)
 {
   PopplerPage *pPage;
   undo_datas *tmp_undo_datas;
@@ -549,8 +562,8 @@ static void undo_pop_PDF( APP_data *data)
     return;
   GList *l=g_list_last(data->undoList);
   tmp_undo_datas=(undo_datas *)l->data;
-  if(tmp_undo_datas->opCode>49 && tmp_undo_datas->opCode<100) {
-     switch(tmp_undo_datas->opCode) {
+  if(op>49 && op<100) {
+     switch(op) {
         case OP_SET_TEXT_ANNOT:
         case OP_SET_HIGHLIGHT_ANNOT:{
           poppler_page_remove_annot (poppler_document_get_page (data->doc, tmp_undo_datas->PDFpage),
@@ -611,7 +624,7 @@ static void undo_pop_PDF( APP_data *data)
   PDF_display_page(data->PDFScrollable, data->curPDFpage, data->doc, data);
 }
 
-static void undo_pop_sketch( APP_data *data)
+static void undo_pop_sketch( gint op, APP_data *data)
 {
   cairo_t *cr;
   undo_datas *tmp_undo_datas;
@@ -621,7 +634,7 @@ static void undo_pop_sketch( APP_data *data)
   GList *l=g_list_last(data->undoList);
   tmp_undo_datas=(undo_datas *)l->data;
 
-  switch(tmp_undo_datas->opCode) {
+  switch(op) {
    case OP_SET_POINT: {
       gdk_cairo_set_source_pixbuf(cr, tmp_undo_datas->pix, tmp_undo_datas->x1, tmp_undo_datas->y1);
       break;
@@ -635,7 +648,7 @@ static void undo_pop_sketch( APP_data *data)
       break;
     }
     default:{
-      printf("* Something is wrong with Sketch undo engine *\n");
+      printf("* Something is wrong with Sketch UNDO engine *\n");
     }   
 
   }/* end switch */
@@ -651,10 +664,10 @@ static void undo_free_last_data(APP_data *data)
    GList *l=g_list_last(data->undoList);
    undo_datas *tmp_undo_datas;
    tmp_undo_datas=(undo_datas *)l->data;
-printf("avant annot dans free last \n");
+//printf("avant annot dans free last \n");
    if(tmp_undo_datas->annotStr!=NULL)
          g_free(tmp_undo_datas->annotStr);
-printf("apres annot dans free last et avant serial\n");
+//printf("apres annot dans free last et avant serial\n");
    if(tmp_undo_datas->serialized_buffer!=NULL) {
      g_free(tmp_undo_datas->serialized_buffer);
      tmp_undo_datas->serialized_buffer=NULL;
@@ -662,7 +675,7 @@ printf("apres annot dans free last et avant serial\n");
    if(tmp_undo_datas->pix!=NULL)
          g_object_unref(tmp_undo_datas->pix);  
 
-printf("apres serial dans free last \n");
+//printf("apres serial dans free last \n");
    g_free(tmp_undo_datas);
    data->undoList=g_list_delete_link (data->undoList, l);  
 }
@@ -672,34 +685,32 @@ printf("apres serial dans free last \n");
 ********************************/
 void undo_pop(gint current_stack, APP_data *data)
 {
+  gint op;
   if(g_list_length ( data->undoList)<1) {
-     printf("* can't do that *, undo list empty ! \n");
+     printf("* can't do that *, UNDO list empty ! \n");
      return;
   }
 
-  switch(current_stack) {
-    case CURRENT_STACK_EDITOR: {
-      undo_pop_editor( data);
-      break;
-    }
-    case CURRENT_STACK_PDF: {
-      undo_pop_PDF( data);
-      break;
-    }
-    case CURRENT_STACK_SKETCH: {
-      undo_pop_sketch( data);
-      break;
-    }
-    default: {
-      printf("* something wrong with undo engine target *\n");
-    }
-  }/* end switch */
+  op=get_undo_current_op_code(data);
+
+  if(op>0 && op<50) {     
+      undo_pop_editor(op, data);  
+     return; 
+  }
+  if(op>49 && op<100) {
+     undo_pop_PDF(op, data);
+     return;
+  }
+  if(op>99) {
+     undo_pop_sketch(op, data);
+     return;
+  }
   data->undo.opCode=OP_NONE;
   /* we must free last data on undo list */
   if(data->undoList!=NULL) {
-printf("lg avant=%d\n", g_list_length ( data->undoList ));
+//printf("lg avant=%d\n", g_list_length ( data->undoList ));
     undo_free_last_data(data);
-printf("lg apres=%d\n", g_list_length ( data->undoList ));
+//printf("lg apres=%d\n", g_list_length ( data->undoList ));
   }
   /* if #elements ==0 then lock button */
   if( g_list_length ( data->undoList)==0) {
