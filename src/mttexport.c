@@ -186,6 +186,7 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
      else {
        if(fLeft) {
           fLeft =FALSE;
+          fwrite("}", sizeof(gchar), 1, outputFile);/* for others WP */
        }
      }
      /* right alignment */
@@ -198,6 +199,7 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
      else {
        if(fRight) {
           fRight =FALSE;
+          fwrite("}", sizeof(gchar), 1, outputFile);/* for others WP */
        }
      }
     /* center alignment */
@@ -210,6 +212,7 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
      else {
        if(fCenter) {
           fCenter =FALSE; 
+          fwrite("}", sizeof(gchar), 1, outputFile);/* for others WP */
        }
      }
     /* fill alignment */
@@ -222,6 +225,7 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
      else {
        if(fFill) {
           fFill =FALSE;  
+          fwrite("}", sizeof(gchar), 1, outputFile);/* for others WP */
        }
      }
 
@@ -390,7 +394,7 @@ gint save_RTF_rich_text(gchar *filename, APP_data *data_app)
   const gchar *page_size_a4_portrait="\\paperh16834 \\paperw11909 \\margl1440 \\margr1900 \\margt1800 \\margb1800 \\portrait\n";
   gchar *fonts_header;
   const gchar *color_header="{\\colortbl;\\red255\\green0\\blue0;\\red0\\green0\\blue255;\\red243\\green242\\blue25;\\red241\\green241\\blue241;}\\widowctrl\\s0\\f1\\ql\\fs24\n";
-  const gchar *styles_header="{\\stylesheet{\\s0\\f1\\ql kw-Normal;}{\\s7\\fi720\\li360\\ri360\\qj\\cb4\\f0 KW_Quotation;}}\n";
+  const gchar *styles_header="{\\stylesheet{\\s0\\f1\\ql redac-Normal;}{\\s7\\fi720\\li360\\ri360\\qj\\cb4\\f0 redac-Quotation;}}\n";
   const gchar *init_paragr_header="\\pard\\plain\\ql\\s0\\f1 ";
   const gchar *rtf_header = "{\\rtf1\\ansi\\ansicpg1252\\deff0\n";
   const gchar *rtf_trailer = "}}";

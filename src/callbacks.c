@@ -126,7 +126,7 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
      }
   }
 
-  if(fSuperscript) {printf("coucou superscript \n");
+  if(fSuperscript) {
      tag = gtk_text_tag_table_lookup(tagTable1, "superscript");
      if((col<iColMem)||(row<iRowMem)) {
         fSuperscript=FALSE;
@@ -883,8 +883,8 @@ on_clearSketch_clicked  (GtkButton  *button, APP_data *data_app)
                     _("Do you really want to erase your sketch ?\nThis operation can't be cancelled once done ! ")
                      );
               
-  ret =  gtk_dialog_run(alertDlg);
-  gtk_widget_destroy (alertDlg);
+  ret =  gtk_dialog_run(GTK_DIALOG(alertDlg));
+  gtk_widget_destroy (GTK_WIDGET(alertDlg));
   if(ret==GTK_RESPONSE_OK) {
       keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config");
       color.red=g_key_file_get_double(keyString, "sketch", "paper.color.red", NULL);
@@ -1027,7 +1027,7 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
     gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_free(css);
   }
-  gtk_widget_destroy(dialog);
+  gtk_widget_destroy(GTK_WIDGET(dialog));
 
 }
 
@@ -1955,7 +1955,7 @@ on_page_entry_changed  (GtkEntry *entry, APP_data *data)
      return;
   }
   gint i=atoi(gtk_entry_get_text(entry));
-  printf("pdf page %d\n", i);
+//  printf("pdf page %d\n", i);
   if(i<1 || i>data->totalPDFpages) {
      gtk_entry_set_text(entry, g_strdup_printf("%d", data->curPDFpage+1));
      return;
@@ -2398,7 +2398,7 @@ gboolean timeout_quick_save( APP_data *data)
 
   keyString = g_object_get_data(G_OBJECT(data->appWindow), "config"); 
   count++;
-  printf("appel n°%d\n", count);
+
   /* busy mouse cursor */
   if(g_key_file_get_boolean(keyString, "application", "interval-save", NULL)) {
        alertDlg =  gtk_message_dialog_new (data->appWindow,
@@ -2408,7 +2408,7 @@ gboolean timeout_quick_save( APP_data *data)
                                       _("I save you work ... wait a moment, please. "),
                                       NULL);
        quick_save(data);
-       gtk_widget_destroy (alertDlg);
+       gtk_widget_destroy (GTK_WIDGET(alertDlg));
   }
   return TRUE;
 }
@@ -2434,7 +2434,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
   page_entry = lookup_widget(GTK_WIDGET(data->appWindow), "page_entry");
   if(gtk_widget_is_focus (search_entry) || gtk_widget_is_focus (replace_entry) || gtk_widget_is_focus (page_entry)) {
     fdont_care=FALSE;
-    printf("DEBUG : I shortcut for fdont_care \n");
+    printf("DEBUG : I shortcut for -fdont_care- variable \n");
     return FALSE;
   }
   
@@ -2669,7 +2669,7 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
  
   currentFileDialog=paving_window(user_data );
   ret=gtk_dialog_run(GTK_DIALOG(currentFileDialog));
-  gtk_widget_destroy (currentFileDialog);
+  gtk_widget_destroy (GTK_WIDGET(currentFileDialog));
 
   if(ret>=PAVING_BUTTON1 && ret<=PAVING_BUTTON10) {
      file_to_load=ret-PAVING_BUTTON1;
@@ -2695,7 +2695,7 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
          }
          /* we rearrange recent files & contents */
          for(i=ret-PAVING_BUTTON1;i>0;i--) {
-             printf("boucle paving i=%d \n", i);
+            // printf("boucle paving i=%d \n", i);
              if(g_key_file_has_key(keyString, "history", g_strdup_printf("recent-file-%d",i-1 ), NULL)) {
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           g_strdup_printf("recent-file-%d",i-1), NULL));
@@ -2990,7 +2990,7 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
                                       GTK_MESSAGE_QUESTION,
                                       GTK_BUTTONS_OK_CANCEL,
                                       _("Warning !\nI can't, for now, *undo* removing for\nthis kind of annotation !\nProceed aniway ?"));
-     if(gtk_dialog_run(dialog)==GTK_RESPONSE_CANCEL) 
+     if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_CANCEL) 
         ret=-1;
      gtk_widget_destroy(GTK_WIDGET(dialog));
   }
