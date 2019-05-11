@@ -716,4 +716,18 @@ gchar *misc_get_extract_from_document(APP_data *data )
   gtk_text_buffer_get_iter_at_offset (buffer,&end, 300); /* we get the first 300 chars */ 
   return gtk_text_buffer_get_text(buffer,&start,&end,FALSE);
 }
+/*************************************
+  jump at start to end of textview
+  and scroll the display
 
+*************************************/
+void misc_jump_to_end_view(GtkTextBuffer *buffer, GtkTextView *view)
+{
+  GtkTextMark *end_at_start;
+  GtkTextIter iter;
+
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  end_at_start = gtk_text_buffer_create_mark (buffer, "end_at_start",  &iter, FALSE);
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW(view), end_at_start);
+  gtk_text_buffer_delete_mark(buffer, end_at_start);
+}

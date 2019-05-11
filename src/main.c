@@ -401,14 +401,9 @@ int main(int argc, char *argv[]) {
     else
       gtk_widget_hide( lookup_widget(GTK_WIDGET(app_data.appWindow),"image_audio_jump_to_start"));
 
-/*
-  GtkTextMark *end_at_start;
-  GtkTextIter iter;
-
-  gtk_text_buffer_get_end_iter (buffer, &iter);
-  end_at_start = gtk_text_buffer_create_mark (buffer, "end_at_start",  &iter, FALSE);
-  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW(view), end_at_start);
- */
+  /* move to something like end of text */
+  misc_jump_to_end_view(buffer, view);
+  /* main loop */
   gtk_main();
 
   return 0;
