@@ -695,7 +695,6 @@ void undo_pop(gint current_stack, APP_data *data)
 
   if(op>0 && op<50) {     
       undo_pop_editor(op, data);  
-     return; 
   }
   if(op>49 && op<100) {
      undo_pop_PDF(op, data);
@@ -703,7 +702,6 @@ void undo_pop(gint current_stack, APP_data *data)
   }
   if(op>99) {
      undo_pop_sketch(op, data);
-     return;
   }
   data->undo.opCode=OP_NONE;
   /* we must free last data on undo list */
