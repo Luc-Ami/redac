@@ -119,7 +119,7 @@ void output_RTF_pure_text(gchar *text, FILE *outputFile)
                   tmpstr = g_strdup_printf("%s","\\par\\pard "); /* new paragraph = reset paragraph formatting with \pard */
                   fwrite(tmpstr, sizeof(gchar), strlen(tmpstr), outputFile);
                   g_free(tmpstr);
-                  fwrite("\\s0 ", sizeof(gchar), 3, outputFile);
+                  fwrite("\\s20 ", sizeof(gchar), 5, outputFile);
                   fwrite("\\f1 ", sizeof(gchar), 3, outputFile);
                   fwrite("\\ql ", sizeof(gchar), 3, outputFile);
                   fwrite("\\fi0 " , sizeof(gchar), 4, outputFile);/* first line indent = 1/2"*/
@@ -328,10 +328,9 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
          fQuote=TRUE;
          /* we add the RTF bold tag on file : \b  */
        //  fwrite("\\par ", sizeof(gchar), 5, outputFile);
-        // fwrite("\\pard ", sizeof(gchar), 6, outputFile);
-
          fwrite("{", sizeof(gchar), 1, outputFile);
-         fwrite("\\s7", sizeof(gchar), 3, outputFile);
+         fwrite("\\pard ", sizeof(gchar), 6, outputFile);/* mandatory */
+         fwrite("\\s21", sizeof(gchar), 4, outputFile);
          fwrite("\\fi720" , sizeof(gchar), 6, outputFile);/* first line indent = 1/2"*/
          fwrite("\\li360" , sizeof(gchar), 6, outputFile);/* block paargraph left indent = 1/4 " */
          fwrite("\\ri360" , sizeof(gchar), 6, outputFile);/* block paragrph. right indent = 1/4 "*/
@@ -339,25 +338,22 @@ void decode_tags(GtkTextBuffer *buffer, FILE *outputFile)
          fwrite("\\qj ", sizeof(gchar), 3, outputFile);/* justify */
          fwrite("\\cb4 ", sizeof(gchar), 4, outputFile);/* background color 4 = light grey - for Abiword*/
          fwrite("\\f0 ", sizeof(gchar), 4, outputFile);/* font 0 */
-
        }
      }
      else {/* if the Bold tag is already armed, then we change format ! so we must also output text */
        if(fQuote) {
           fQuote =FALSE;
-          fwrite("}", sizeof(gchar), 1, outputFile);
           //fwrite("\\par}\n", sizeof(gchar), 6, outputFile);
 //fwrite("\\cb0", sizeof(gchar), 4, outputFile);/* background color 4 = light grey - for Abiword*/
 //fwrite("\\highlight0 ", sizeof(gchar), 12,outputFile);
-//fwrite("\\par ", sizeof(gchar), 5, outputFile);
-//fwrite("\\pard ", sizeof(gchar), 6, outputFile);
-
-          fwrite("\\s0 ", sizeof(gchar), 4, outputFile);
-          fwrite("\\f1 ", sizeof(gchar), 4, outputFile);
-          fwrite("\\ql ", sizeof(gchar), 4, outputFile);
-          fwrite("\\fi0 " , sizeof(gchar), 5, outputFile);/* first line indent = 1/2"*/
-          fwrite("\\li0 " , sizeof(gchar), 5, outputFile);/* block paargraph left indent = 1/4 " */
-          fwrite("\\ri0 " , sizeof(gchar), 5, outputFile);/* block paragrph. right indent = 1/4 "*/
+       //   fwrite("\\par ", sizeof(gchar), 5, outputFile);/* mandatory */
+          fwrite("}", sizeof(gchar), 1, outputFile);
+      //    fwrite("\\s20", sizeof(gchar), 4, outputFile);
+       //   fwrite("\\f1 ", sizeof(gchar), 4, outputFile);
+        //  fwrite("\\ql ", sizeof(gchar), 4, outputFile);
+        //  fwrite("\\fi0 " , sizeof(gchar), 5, outputFile);/* first line indent = 1/2"*/
+        //  fwrite("\\li0 " , sizeof(gchar), 5, outputFile);/* block paargraph left indent = 1/4 " */
+         // fwrite("\\ri0 " , sizeof(gchar), 5, outputFile);/* block paragrph. right indent = 1/4 "*/
        }
      }
      /* next char - keep in mind that a picture is a char ! */
@@ -394,8 +390,8 @@ gint save_RTF_rich_text(gchar *filename, APP_data *data_app)
   const gchar *page_size_a4_portrait="\\paperh16834 \\paperw11909 \\margl1440 \\margr1900 \\margt1800 \\margb1800 \\portrait\n";
   gchar *fonts_header;
   const gchar *color_header="{\\colortbl;\\red255\\green0\\blue0;\\red0\\green0\\blue255;\\red243\\green242\\blue25;\\red241\\green241\\blue241;}\\widowctrl\\s0\\f1\\ql\\fs24\n";
-  const gchar *styles_header="{\\stylesheet{\\s0\\f1\\ql redac-Normal;}{\\s7\\fi720\\li360\\ri360\\qj\\cb4\\f0 redac-Quotation;}}\n";
-  const gchar *init_paragr_header="\\pard\\plain\\ql\\s0\\f1 ";
+  const gchar *styles_header="{\\stylesheet{\\s20\\f1\\ql redac-Normal;}{\\s21\\fi720\\li360\\ri360\\highlight4\\qj\\cb4\\f0 redac-Quotation;}}\n";
+  const gchar *init_paragr_header="\\pard\\s20\\f1\\ql ";
   const gchar *rtf_header = "{\\rtf1\\ansi\\ansicpg1252\\deff0\n";
   const gchar *rtf_trailer = "}}";
   gint i, ret, fntSize=12;
