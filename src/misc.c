@@ -5,7 +5,7 @@
 /* translations */
 #include <libintl.h>
 #include <locale.h>
-
+#include <string.h>
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
@@ -164,7 +164,7 @@ void misc_set_gui_in_PDF_mode(GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonReplace= lookup_widget(window1, "buttonReplace");
   GtkWidget *pReplaceEntry = lookup_widget(window1, "replace_entry");
   /* remove searchentry and remove all found and highlighted text */
-  gtk_entry_set_text(pSearchEntry,"");
+  gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
   gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
   gtk_widget_set_sensitive(pSearchEntry, TRUE);
@@ -242,7 +242,7 @@ void misc_set_gui_in_editor_mode(GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonReplace= lookup_widget(window1, "buttonReplace");
   GtkWidget *pReplaceEntry = lookup_widget(window1, "replace_entry");
   /* remove searchentry and remove all found and highlighted text */
-  gtk_entry_set_text(pSearchEntry,"");
+  gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
   gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
   gtk_widget_set_sensitive(pSearchEntry, TRUE);
@@ -318,7 +318,7 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonReplace= lookup_widget(window1, "buttonReplace");
   GtkWidget *pReplaceEntry = lookup_widget(window1, "replace_entry");
   /* remove searchentry and remove all found and highlighted text */
-  gtk_entry_set_text(pSearchEntry,"");
+  gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
   gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
   gtk_widget_set_sensitive(pSearchEntry, FALSE);
@@ -414,14 +414,14 @@ void update_statusbarPDF(APP_data *data)
      g_free(filename);
      filename=tmpStr;
   }
-  gtk_statusbar_pop(statusbar, 0); 
+  gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0); 
   if(data->doc) {
       msg = g_strdup_printf(_("PDF : %s"), filename);
       g_free(filename);
   }
   else
       msg=g_strdup_printf("%s",_("No PDF Document"));
-  gtk_statusbar_push(statusbar, 0, msg);
+  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, msg);
   g_free(msg);
 }
 
@@ -432,9 +432,9 @@ void update_statusbarSketch(APP_data *data)
   GKeyFile *keyString=data->keystring;
 
   statusbar = GTK_STATUSBAR(data->statusbar1);
-  gtk_statusbar_pop(statusbar, 0); 
+  gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0); 
   msg=g_strdup_printf(_("Pen width:  %.2f"),g_key_file_get_double(keyString, "sketch", "pen-width", NULL));
-  gtk_statusbar_push(statusbar, 0, msg);
+  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, msg);
   g_free(msg);
 }
 
@@ -479,6 +479,7 @@ void misc_setup_text_buffer_tags(GtkTextBuffer *buffer)
                               "indent", 30,
                               "left_margin", 40,
                               "right_margin", 40,
+                              "justification", GTK_JUSTIFY_FILL,
                                NULL);
   /* create tags : line formating */
 
