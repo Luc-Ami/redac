@@ -259,9 +259,11 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_quotation"));
   if((get_tag_in_selection("quotation", start)) || ((iPendingFormat>0)&&(fQuotation) ) ) {
           toggle_css_value(button, TRUE);
+          misc_set_sensitive_format_buttons(FALSE, data);
   }
   else {
           toggle_css_value(button, FALSE);
+          misc_set_sensitive_format_buttons(TRUE, data);
   } 
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_strikethrough"));
   if((get_tag_in_selection("strikethrough", start)) || ((iPendingFormat>0)&&(fStrikethrough) ) ) {
@@ -1014,7 +1016,7 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
   
     GtkCssProvider* css_provider = gtk_css_provider_new();
     gchar *css;
-    css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: blue; color:white; }\n",
+    css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: @selected_bg_color; color:@selected_fg_color; }\n",
                  fntFamily,
                  fntSize,
                  (gint)( text_color_fg.red*255),(gint)( text_color_fg.green*255), (gint)(text_color_fg.blue*255),

@@ -147,4 +147,5 @@ void misc_init_vars(APP_data *data );
 void misc_init_spell_checker(APP_data *data );
 gchar *misc_get_extract_from_document(APP_data *data );
 void misc_jump_to_end_view(GtkTextBuffer *buffer, GtkTextView *view);
+void misc_set_sensitive_format_buttons(gboolean state, APP_data *data);
 #endif /* MISC_H */

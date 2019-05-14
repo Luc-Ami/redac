@@ -82,6 +82,9 @@ gint misc_get_current_alignment(GtkTextBuffer *buffer)
      gtk_text_buffer_get_end_iter (buffer, &end);
   }
 
+
+  if( get_tag_in_selection("quotation", start))
+     return KW_ALIGNMENT_FILL;
   if( get_tag_in_selection("left", start))
      return KW_ALIGNMENT_LEFT;
   if( get_tag_in_selection("center", start))
@@ -374,7 +377,7 @@ void update_PDF_state(APP_data *data, gint state)
   GtkWidget *window1=data->appWindow;
   GtkWidget *pLabelPDFMod=lookup_widget(window1,"PDF_modified_label");
 
-  gtk_widget_hide( lookup_widget(GTK_WIDGET(data->appWindow),"image_pdf_modif"));
+  gtk_widget_hide( lookup_widget(GTK_WIDGET(window1),"image_pdf_modif"));
   switch(state) {
     case PDF_NON_MODIF:{
       gtk_label_set_markup (GTK_LABEL (pLabelPDFMod), "<span background=\"green\">   </span>");
@@ -382,7 +385,7 @@ void update_PDF_state(APP_data *data, gint state)
     }
     case PDF_MODIF:{
       gtk_label_set_markup (GTK_LABEL (pLabelPDFMod), "<span background=\"red\" foreground=\"white\"><b> ! </b></span>");
-      gtk_widget_show( lookup_widget(GTK_WIDGET(data->appWindow),"image_pdf_modif"));
+      gtk_widget_show( lookup_widget(GTK_WIDGET(window1),"image_pdf_modif"));
       break;
     }
     default:{
@@ -731,4 +734,38 @@ void misc_jump_to_end_view(GtkTextBuffer *buffer, GtkTextView *view)
   end_at_start = gtk_text_buffer_create_mark (buffer, "end_at_start",  &iter, FALSE);
   gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW(view), end_at_start);
   gtk_text_buffer_delete_mark(buffer, end_at_start);
+}
+/*************************************
+ convenience functino to set
+ (un)sensitive formatting buttons
+ according to current tag is, or not,
+ 'quotation'
+**************************************/
+void misc_set_sensitive_format_buttons(gboolean state, APP_data *data)
+{
+  GtkWidget *window1=NULL, *button;
+  window1 = data->appWindow;
+
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_bold"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_italic"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_underline"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_superscript"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_subscript"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_strikethrough"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_highlight"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight"));
+  gtk_widget_set_sensitive( button, state);
+  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill"));
+  gtk_widget_set_sensitive( button, state);
 }
