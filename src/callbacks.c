@@ -405,10 +405,9 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
      for( i = 0; sdata[i]; i++ ) {
       cairo_show_text(cr, sdata[i]);
       cairo_move_to (cr, (gdouble)xorg, (gdouble)data->y1-root_ys+(i+1)*extents.height*1.5);
-      cairo_stroke(cr);
     }
   }/* endif */
-
+  cairo_stroke(cr);
   cairo_destroy(cr);
   gtk_widget_queue_draw (data->SketchDrawable);
   g_strfreev(sdata);
