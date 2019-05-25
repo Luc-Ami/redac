@@ -769,7 +769,7 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
       data->button_pressed=FALSE;
       return TRUE;
     }
-    gtk_window_close (GTK_WINDOW(data->window));
+    gtk_widget_destroy (GTK_WIDGET(data->window));
     data->button_pressed=FALSE;
     /* annotation mode _ yes I reuse PDF flag to simplify code */
     if(data->clipboardMode==PDF_SEL_MODE_NOTE) {  
