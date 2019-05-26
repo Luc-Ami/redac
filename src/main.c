@@ -339,6 +339,9 @@ int main(int argc, char *argv[]) {
   g_signal_connect(view, "cut-clipboard", 
         G_CALLBACK(cut_to_clipboard), &app_data);
 
+  g_signal_connect(view, "copy-clipboard", 
+        G_CALLBACK(copy_to_clipboard), &app_data);
+
   g_signal_connect(view, "paste-clipboard", 
         G_CALLBACK(paste_clipboard), &app_data);
 

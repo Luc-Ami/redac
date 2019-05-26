@@ -10,7 +10,7 @@ void update_statusbar(GtkTextBuffer *buffer,
 
 void mark_set_callback(GtkTextBuffer *buffer, 
     const GtkTextIter *new_location, GtkTextMark *mark, APP_data    *data);
-
+void copy_to_clipboard(GtkTextView *view, APP_data *data);
 void paste_clipboard(GtkTextView *view, APP_data *data);
 void cut_to_clipboard(GtkTextView *view, APP_data *data);
 void backspace(GtkTextView *view, APP_data *data);

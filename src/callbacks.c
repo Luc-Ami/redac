@@ -2221,7 +2221,41 @@ void sketch_moveDown (GtkWidget *parentWindow, APP_data *data)
           gtk_adjustment_set_value (verticalAdjust,gtk_adjustment_get_value(verticalAdjust)+PDF_SCROLL_STEP);
   } 
 }
+/********************************
+ handling "copy to clipboard"
+ signal
+ If ther isn't ONE image in 
+ selection, propagates signal
+ to Gtk
+ see : https://stackoverflow.com/questions/3482570/how-to-have-gtk-controlc-to-be-handled-or-not
 
+*********************************/
+void copy_to_clipboard(GtkTextView *view, APP_data *data)
+{
+  GtkTextIter start, end;
+  GtkTextMark *mark;
+  gsize length;
+  gint offset;
+  gboolean fSel;
+  GdkPixbuf *pix=NULL;
+
+  /* we check if there is a selection */
+  if(gtk_text_buffer_get_has_selection (data->buffer)) {
+    fSel=gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end);
+     /* we compute length of selection in char offsets */
+     offset=gtk_text_iter_get_offset(&end)-gtk_text_iter_get_offset(&start);
+     /* if length==1 it can be an image */
+     pix=gtk_text_iter_get_pixbuf (&start);
+     if(pix && (offset==1)) {/* we musr check if it's ONLY an image, not a mix */
+       printf("* send pixbuf only to clipboard *\n");
+       GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+       gtk_clipboard_set_image (clipboard, pix);
+       /* we stop emission in order to sens only the pixbuf /image to the system(s clipboard */ 
+       g_signal_stop_emission_by_name (G_OBJECT (view), "copy-clipboard");
+     }
+     else printf("* Send Rich text to clipboard *\n");
+  }
+}
 /******************************
  CTRL+V  or SHIFT+INS
  - we use the PopUp menu inside the textview
