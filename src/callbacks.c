@@ -2140,7 +2140,7 @@ gint clipboard_paste_image(APP_data *data, gboolean center)
      data->undo.annotStr=NULL;
      data->undo.pix=NULL;
      data->undo.undoMark=mark2;
-     data->undo.beforeMark=mark2;
+     data->undo.beforeMark=mark1;
      undo_push(data->currentStack, OP_INS_IMG, data);
 
      gtk_text_buffer_insert_pixbuf(data->buffer, &iter, pixbuf2);
