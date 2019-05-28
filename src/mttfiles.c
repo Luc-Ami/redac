@@ -125,7 +125,7 @@ gint storage_save( gchar *pathname, APP_data *data_app)
 
   data = g_key_file_to_data(keyString, &length, &error);
 
-  if (!g_file_set_contents(gConfigFile, data, length, &error)) {
+  if (!g_file_set_contents(data_app->gConfigFile, data, length, &error)) {
 		printf("Failed to store information: %s", error->message);
 		g_error_free(error);
   }
@@ -138,7 +138,7 @@ gint storage_save( gchar *pathname, APP_data *data_app)
 /*******************************
  Creates a new config file
  ******************************/
-void createNewKeyFile(GtkWidget *win, GKeyFile *keyString)
+void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
 {
     gint width_height[2], i;
     gchar buffer[81];
@@ -222,7 +222,7 @@ void createNewKeyFile(GtkWidget *win, GKeyFile *keyString)
     g_key_file_set_double(keyString, "sketch", "pen-width", 2);
 
     gchar *context = g_key_file_to_data (keyString, NULL, &error);
-    g_file_set_contents (gConfigFile, context, -1, NULL);
+    g_file_set_contents (data_app->gConfigFile, context, -1, NULL);
     g_free(tmpStr);
     g_free(context);
     return;
@@ -232,7 +232,7 @@ void createNewKeyFile(GtkWidget *win, GKeyFile *keyString)
  * Attempts to load the searchmonkey config.ini file.
  * If invalid, or non-existant, creates new config file.
  */
-void createGKeyFile(GtkWidget *win)
+void createGKeyFile(APP_data *data_app, GtkWidget *win)
 {
   GKeyFile *keyString;
   gint i, width, height, pos_x, pos_y;
@@ -244,10 +244,10 @@ void createGKeyFile(GtkWidget *win)
 
   keyString = g_key_file_new ();
 
-  if(!g_key_file_load_from_file (keyString, gConfigFile,
+  if(!g_key_file_load_from_file (keyString, data_app->gConfigFile,
                                   G_KEY_FILE_KEEP_COMMENTS,
-                                  NULL)) {printf("pb =%s\n",gConfigFile );
-    createNewKeyFile(win, keyString);
+                                  NULL)) {printf("pb =%s\n",data_app->gConfigFile );
+    createNewKeyFile(data_app, win, keyString);
   } 
   /* we read datas for config.ini file */
 
@@ -429,7 +429,7 @@ void createGKeyFile(GtkWidget *win)
  * Saves config file (config.ini) to disk, and frees associated memory.
  * Automatically called when save data is destroyed (i.e. user closed searchmonkey).
  */
-void destroyGKeyFile(GtkWidget *win)
+void destroyGKeyFile(APP_data *data_app, GtkWidget *win)
 {
   GKeyFile *keyString = g_object_get_data(G_OBJECT(win),"config");
   printf("* GKeyfile destroyed successfully *\n");
@@ -437,12 +437,12 @@ void destroyGKeyFile(GtkWidget *win)
   //  storeGKeyFile(keyString);
 
   g_key_file_free(keyString);
-  if (gConfigFile != NULL) {
-    g_free(gConfigFile);
+  if (data_app->gConfigFile != NULL) {
+    g_free(data_app->gConfigFile);
   }
 }
 
-void storeGKeyFile(GKeyFile *keyString)
+void storeGKeyFile(APP_data *data_app, GKeyFile *keyString)
 {
   gsize length;
   gchar **outText;
@@ -452,15 +452,15 @@ void storeGKeyFile(GKeyFile *keyString)
   
      
   /* Write the configuration file to disk */
-  folderName = g_path_get_dirname(gConfigFile);
+  folderName = g_path_get_dirname(data_app->gConfigFile);
   outText = g_key_file_to_data (keyString, &length, &error);
 
-  if (!g_file_get_contents (gConfigFile, outText, &length, &error)) {
+  if (!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) {
     /* Unable to immediately write to file, so attempt to recreate folders */
     mkFullDir(folderName, S_IRWXU);
 
-    if (!g_file_get_contents (gConfigFile, outText, &length, &error)) { 
-      g_print(_("Error saving %s: %s\n"), gConfigFile, error->message);
+    if (!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) { 
+      g_print(_("Error saving %s: %s\n"), data_app->gConfigFile, error->message);
       g_error_free(error);
       error = NULL;
     }
@@ -699,8 +699,8 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
      /* we change the default values for gkeyfile */
      store_current_file_in_keyfile(keyString, path_to_file, misc_get_extract_from_document(data_app));
      g_free(path_to_file);
-     storage_save( gConfigFile, data_app);
-     destroyGKeyFile(window1);
+     storage_save( data_app->gConfigFile, data_app);
+     destroyGKeyFile(data_app, window1);
      undo_free_all(data_app);
      printf("* Freed successfully All undo datas *\n");
      //g_object_unref(data_app->spell);

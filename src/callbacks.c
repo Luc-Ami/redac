@@ -28,8 +28,6 @@
   global vars 
 *******************/
 
-extern gchar *gConfigFile;
-
 static gboolean fdont_care=FALSE;
 static gboolean show_toolbar=TRUE;
 static gboolean fBold = FALSE;

@@ -36,9 +36,9 @@ typedef struct
 extern gchar *gConfigFile;
 extern GtkWidget *mainWindow;
 gint storage_save( gchar *pathname, APP_data *data_app);
-void createGKeyFile(GtkWidget *win);
-void destroyGKeyFile(GtkWidget *win);
-void storeGKeyFile(GKeyFile *keyString);
+void createGKeyFile(APP_data *data_app, GtkWidget *win);
+void destroyGKeyFile(APP_data *data_app, GtkWidget *win);
+void storeGKeyFile(APP_data *data_app, GKeyFile *keyString);
 void store_current_file_in_keyfile(GKeyFile *keyString, gchar *filename, gchar *summary);
 void rearrange_recent_file_list(GKeyFile *keyString);
 gchar *GetTempFileName(gchar *fileSchema);

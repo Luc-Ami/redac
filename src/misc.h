@@ -90,6 +90,7 @@ typedef struct {
   gint kw_paragraph_alignment;
   GtkWidget *statusbar1;
   GtkWidget *statusbar2;
+  gchar *gConfigFile;
   GKeyFile *keystring;
   GtkTextView *view;
   GtkTextBuffer *buffer;

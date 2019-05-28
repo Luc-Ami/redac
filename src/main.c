@@ -16,10 +16,6 @@
 #include "undo.h"
 
 
-/************************
- global vars
-*************************/
-gchar *gConfigFile = NULL; /* created by main(), destroyed by destroyGKeyFile() */
 /**********************
 
   MAIN
@@ -214,18 +210,16 @@ int main(int argc, char *argv[]) {
   GLADE_HOOKUP_OBJECT (mainWindow, buffer, "buffer");
 
   /* we get the configuration file */
-
-  gConfigFile = g_build_filename(g_get_user_config_dir (), 
+  app_data.gConfigFile=g_build_filename(g_get_user_config_dir (), 
                        "/redac/", KILOWRITER_CONFIG, NULL); /* Create hidden directory to store Kilowriter data */
-
   /* we check if the directory already exists */
-  if(!g_file_test (gConfigFile, G_FILE_TEST_EXISTS)) {
+  if(!g_file_test (app_data.gConfigFile, G_FILE_TEST_EXISTS)) {
      printf("* config.ini file absent or corrupted ! *\n");
      /* we create the directory */
      gint i=g_mkdir (g_strdup_printf("%s/redac/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
   }
   /* we parse datas from config file */
-  createGKeyFile (mainWindow);
+  createGKeyFile (&app_data, mainWindow);
   /* we get the saved window geometry see : https://gist.github.com/zdxerr/709169  */
 
   keyString = g_object_get_data(G_OBJECT(mainWindow), "config");
