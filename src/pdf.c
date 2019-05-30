@@ -543,3 +543,27 @@ void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data)
      g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
   }
 }
+
+/*********************************
+  prepare PDF drawable
+
+*********************************/
+GtkWidget *PDF_prepare_drawable()
+{
+  GtkWidget *crPDF;
+
+  crPDF= gtk_drawing_area_new();
+  gtk_widget_show ( crPDF);
+
+  gtk_widget_set_size_request (crPDF, PDF_VIEW_MAX_WIDTH, PDF_VIEW_MAX_HEIGHT);
+  gtk_widget_set_hexpand(crPDF, TRUE);
+  gtk_widget_set_vexpand(crPDF, TRUE);
+  /* mandatoty : add new events management to gtk_drawing_area ! */
+      gtk_widget_set_events (crPDF, gtk_widget_get_events (crPDF)
+      | GDK_BUTTON_PRESS_MASK
+      | GDK_BUTTON_RELEASE_MASK
+      | GDK_POINTER_MOTION_MASK
+      | GDK_POINTER_MOTION_HINT_MASK);
+  return crPDF;
+}
+

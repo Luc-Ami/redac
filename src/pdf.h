@@ -27,4 +27,5 @@ void PDF_set_free_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf
 void undo_free_all_PDF_ops(APP_data *data);
 void on_PDF_zoom_in_clicked  (GtkButton *button, APP_data *data);
 void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data);
+GtkWidget *PDF_prepare_drawable();
 #endif /* PDF_H */

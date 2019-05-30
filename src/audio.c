@@ -27,13 +27,13 @@ converts an HH:MM:SS humain readable time to GST_time
 gint64 audio_time_to_gst_time(gint64 hours, gint64 minutes, gint64 seconds)
 {
   gint64 vals, val=0; /* security value */
-printf("h=%u m=%u s=%u \n", hours, minutes, seconds);
+
   if(hours<0 || hours>23 || minutes<0 || minutes>59 || seconds<0 || seconds>59)
     return val;
 
   vals=hours*3600+minutes*60+seconds;
   val = vals*GST_SECOND;
-g_printf("valeur calculée time to gst time pour %dh:%dm:%us soi temps humain=%d =%u\n", hours, minutes, seconds, vals, val);
+
   return vals;
 }
 
@@ -57,7 +57,7 @@ void audio_seek_backward(GstElement *pipeline,
     if (!gst_element_seek (pipeline, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH,
                          GST_SEEK_TYPE_SET, newPos,
                          GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)) {
-      g_print ("Seek failed!\n");
+      g_print ("* Audio Seek failed! *\n");
     } 
   }
 }
@@ -83,7 +83,7 @@ void audio_seek_forward(GstElement *pipeline,
     if (!gst_element_seek (pipeline, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH,
                          GST_SEEK_TYPE_SET, newPos,
                          GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)) {
-      g_print ("Seek failed!\n");
+      g_print ("* Audio Seek failed! *\n");
     } 
   }
 }
@@ -112,7 +112,6 @@ audio_seek_to_time (GstElement *pipeline,
   val1=curPos/GST_SECOND; /* human seconds */
   endPos=endPos/GST_SECOND; /* human seconds */
   shift = seconds-val1;
-  printf("ecart par rapport position courante =%d en secs =%d  fin bande=%d \n", curPos, shift, endPos);
 
   if((val1+shift) >= endPos) {
     printf("******* çà va planter !!!! \n");
@@ -127,7 +126,7 @@ audio_seek_to_time (GstElement *pipeline,
   if (!gst_element_seek (pipeline, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH,
                          GST_SEEK_TYPE_SET, newPos,
                          GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)) {
-    g_print ("* Error ! Seek failed ! *\n");
+   g_print ("* Audio Seek failed! *\n");
   }
 }
 /******************************
@@ -196,14 +195,9 @@ gchar *audio_gst_time_to_str(gint64 time_value)
    gchar *tmpStr=NULL;
 
    total=time_value/GST_SECOND; /* total duration in human seconds */
-     //g_printf("duree totale %d en secondes humaines dans convert=%d\n", time_value,  total);
    hour=total/3600;
-     //g_printf("duree en heure dans convert=%u\n", hour);
    min=(total-(hour*3600))/60;
-     //g_printf("duree en minutes dans convert=%u\n", min);
    sec=total-(hour*3600)-(min*60);
-     //g_printf("duree en secs dans convert=%u\n", sec);
    tmpStr=g_strdup_printf("%02u:%02u:%02u", hour, min, sec);
-printf("str=%s\n", tmpStr);
    return tmpStr;
 }

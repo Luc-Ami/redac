@@ -706,7 +706,7 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
      //g_object_unref(data_app->spell);
      gst_element_set_state (data_app->pipeline, GST_STATE_NULL);
      gst_object_unref (data_app->pipeline);
-     gtk_main_quit();
+     g_application_quit (data_app->app);
   }
  return TRUE;
 }

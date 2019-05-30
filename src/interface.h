@@ -14,7 +14,7 @@ void check_up_theme( GtkWidget *window1, APP_data *data_app );
 void get_theme_selection_color(GtkWidget *widget);
 void set_up_view( GtkWidget *window1, APP_data *data_app);
 GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app);
-GtkWidget *UI_main_window(void);
+GtkWidget *UI_main_window(GApplication *app);
 void UI_headerBar(GtkWidget *window, GtkWidget *grid, APP_data *data);
 void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data);
 void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data);
@@ -30,4 +30,5 @@ GtkWidget*
 create_annotationColourDialog (APP_data *data_app, gchar *msg);
 GtkWidget *misc_create_go_jump_dialog(APP_data *data_app);
 GtkWidget *create_aboutRedac (APP_data *data_app);
+void redac_prepare_GUI (GApplication *app, APP_data *data);
 #endif /* INTERFACE_H */

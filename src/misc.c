@@ -15,6 +15,7 @@
 #include "support.h"
 #include "misc.h"
 #include "undo.h"
+#include "callbacks.h"
 /*
 
   functions from Poppler glib demo
@@ -769,3 +770,78 @@ void misc_set_sensitive_format_buttons(gboolean state, APP_data *data)
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill"));
   gtk_widget_set_sensitive( button, state);
 }
+
+/**********************************
+  prepare timeouts
+
+**********************************/
+void misc_prepare_timeouts(APP_data *data )
+{
+  if(g_key_file_get_boolean(data->keystring, "application", "interval-save",  NULL) ) {
+      gtk_widget_show( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
+    }
+    else
+      gtk_widget_hide( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
+  g_timeout_add_seconds(300, timeout_quick_save, data);/* yes, it's an intelligent call, keep as it */
+  /* timer for audio display */
+  g_timeout_add_seconds(1, timeout_audio_display_position, data);/* yes, it's an intelligent call, keep as it */
+  /* display auto-repeat indicator ? */
+  if(g_key_file_get_boolean(data->keystring, "application", "audio-auto-rewind",  NULL) ) {
+      gtk_widget_show( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
+    }
+    else
+      gtk_widget_hide( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
+}
+
+/**********************************
+  function to load fonts and
+  color settings
+
+**********************************/
+void misc_set_font_color_settings(APP_data *data )
+{
+  GKeyFile *keyString;
+  GdkRGBA color, b_color;
+
+  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
+
+  /* set-up default value only with CSS */
+  gchar *fntFamily=NULL;
+  gint fntSize=12;
+ // PangoContext* context = gtk_widget_get_pango_context  (GTK_WIDGET(app_data.view));
+  PangoFontDescription *desc;// = pango_context_get_font_description(context);   
+  desc = pango_font_description_from_string (g_key_file_get_string(keyString, "editor", "font", NULL));
+  if (desc != NULL) {
+          fntFamily= pango_font_description_get_family (desc);
+          fntSize=pango_font_description_get_size(desc)/1000;
+  }
+  
+  /* change gtktextview colors compliant with Gtk 3.16+ pLease note : re-change seleted state is mandatory, even if defned in interface*/
+  color.red=g_key_file_get_double(keyString, "editor", "text.color.red", NULL);
+  color.green=g_key_file_get_double(keyString, "editor", "text.color.green", NULL);
+  color.blue=g_key_file_get_double(keyString, "editor", "text.color.blue", NULL);
+  color.alpha=1;
+  /* paper color */
+  b_color.red=g_key_file_get_double(keyString, "editor", "paper.color.red", NULL);
+  b_color.green=g_key_file_get_double(keyString, "editor", "paper.color.green", NULL);
+  b_color.blue=g_key_file_get_double(keyString, "editor", "paper.color.blue", NULL);
+  b_color.alpha=1;
+
+  GtkCssProvider* css_provider = gtk_css_provider_new();
+  gchar *css;
+  css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: @selected_bg_color; color:@selected_fg_color; }\n",
+                 fntFamily,
+                 fntSize,
+                 (gint)( color.red*255),(gint)( color.green*255), (gint)(color.blue*255),
+                (gint)( b_color.red*255),(gint)( b_color.green*255), (gint)(b_color.blue*255));
+
+  if(desc)
+      pango_font_description_free(desc);
+
+  gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
+  GdkScreen* screen = gdk_screen_get_default();
+  gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_free(css);
+
+}
+

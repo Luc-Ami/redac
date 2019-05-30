@@ -76,7 +76,7 @@ typedef struct {
   gboolean fPdfLoaded;
   gboolean fAudioLoaded;
   gboolean fAudioPlaying;
-
+  GtkApplication *app;
   GtkWidget    *window;
   GtkWidget    *appWindow;
   GtkWidget    *PDFdrawable;
@@ -149,4 +149,6 @@ void misc_init_spell_checker(APP_data *data );
 gchar *misc_get_extract_from_document(APP_data *data );
 void misc_jump_to_end_view(GtkTextBuffer *buffer, GtkTextView *view);
 void misc_set_sensitive_format_buttons(gboolean state, APP_data *data);
+void misc_prepare_timeouts(APP_data *data );
+void misc_set_font_color_settings(APP_data *data );
 #endif /* MISC_H */

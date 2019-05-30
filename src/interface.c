@@ -3,11 +3,14 @@
 #endif
 
 #include <stdlib.h>
-
 /* translations */
 #include <libintl.h>
 #include <locale.h>
 
+#include <unistd.h>
+#include <stdio.h>
+#include <glib.h>
+#include <glib/gstdio.h> /* g_fopen, etc */
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
@@ -20,6 +23,7 @@
 #include "mttfiles.h"
 #include "mttimport.h"
 #include "audio.h"
+
 /* pixmaps */
 #include "./icons/superscript.xpm"
 #include "./icons/superscript_light.xpm"
@@ -1119,11 +1123,13 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
 /****************************
   main window
 ****************************/
-GtkWidget *UI_main_window(void)
+GtkWidget *UI_main_window(GApplication *app)
 {
   GtkWidget *win;
 
-  win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+ // win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  win=gtk_application_window_new (GTK_APPLICATION (app));
+  gtk_widget_show (win);
   gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);
   gtk_window_set_default_size(GTK_WINDOW(win), 980, 700);
   gtk_window_set_resizable (GTK_WINDOW(win), TRUE);
@@ -2595,4 +2601,276 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   return dialog;
 }
 
+/*********************************
+  Redac preparation for a standard
+  g_application
 
+**********************************/
+void redac_prepare_GUI (GApplication *app, APP_data *data)
+{
+  GdkRGBA color;
+  GtkStack *stack;
+  GtkStackSwitcher *switcher;
+  GtkWidget *mainWindow;
+  GtkWidget *vGrid;
+  GtkWidget *scrolledwindow1;
+  GtkWidget *scrolledwindowPDF;
+  GtkWidget *viewportPDF;
+  GtkWidget *crPDF;
+  GtkWidget *scrolledwindowCrobar;
+  GtkWidget *toolbar;
+  GtkWidget *view;
+  GtkWidget *viewPDF;
+  GtkWidget *viewCrobar;
+  GtkWidget *crCrobar;
+  GtkWidget *gridStatusBar;
+  GKeyFile *keyString;
+  GtkTextBuffer *buffer;
+  time_t rawtime;
+  gchar *path_to_file, buffer_date[81];
+
+  mainWindow =  UI_main_window(app);
+  GtkWidget *headBar=gtk_grid_new ();
+  /* main vbox packing widget */
+  vGrid=gtk_grid_new();
+  gtk_grid_set_row_homogeneous (GTK_GRID(vGrid),FALSE);
+  gtk_container_add(GTK_CONTAINER(mainWindow), vGrid);
+  /* guess the style for current theme */
+  check_up_theme( mainWindow, data );
+  /* pseudo headerBar */
+  UI_headerBar(mainWindow, headBar, data);
+  gtk_grid_attach(GTK_GRID(vGrid), headBar, 0, 0, 1, 1);
+  /* gtkstack definitions and building */
+  stack  = GTK_STACK(gtk_stack_new ());
+  gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);// or GTK_STACK_TRANSITION_TYPE_CROSSFADE
+  /* in order to breath some extra space from window's edges */
+  g_object_set (stack, "margin-left", 12, NULL);
+  g_object_set (stack, "margin-right", 12, NULL);
+
+  switcher = GTK_STACK_SWITCHER(gtk_stack_switcher_new ());
+  gtk_stack_switcher_set_stack (switcher, stack);
+  gtk_grid_attach(GTK_GRID(headBar),GTK_WIDGET(switcher), 2, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(stack), 0,2,1,1);
+  gtk_widget_set_halign (GTK_WIDGET(switcher), GTK_ALIGN_CENTER);
+
+  /* toolbar */
+  toolbar = main_wp_toolbar(mainWindow,  data);
+  gtk_grid_attach(GTK_GRID(vGrid), toolbar, 0,1,1,1);
+  /* and a scrolling window ! */
+  scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (scrolledwindow1);
+
+  /* and a PDF scrolling window ! */
+  scrolledwindowPDF = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (scrolledwindowPDF);
+  viewportPDF = gtk_viewport_new (NULL,NULL);
+  crPDF = PDF_prepare_drawable();
+  gtk_container_add(GTK_CONTAINER(viewportPDF), crPDF);  
+  gtk_container_add(GTK_CONTAINER(scrolledwindowPDF), viewportPDF);
+
+  /* and a paint/draw/hand notes scrolling window ! */
+  scrolledwindowCrobar = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (scrolledwindowCrobar);
+  viewCrobar = gtk_viewport_new (NULL,NULL);
+  crCrobar = sketch_prepare_drawable();
+  gtk_container_add(GTK_CONTAINER(viewCrobar), crCrobar);  
+  gtk_container_add(GTK_CONTAINER(scrolledwindowCrobar), viewCrobar);
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindow1),GTK_SHADOW_ETCHED_IN);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindowPDF), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindowPDF),GTK_SHADOW_ETCHED_IN);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindowCrobar), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindowCrobar),GTK_SHADOW_ETCHED_IN);
+
+  /* main Gtk text view */
+  view = prepare_view();
+  gtk_container_add (GTK_CONTAINER (scrolledwindow1), view);
+
+  /* place stack */ 
+  gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindow1), "Note", _("Notes"));
+  gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowPDF), "Refe", _("Reference"));
+  gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowCrobar), "Sket", _("Sketch"));
+  /* set-up default font for text view */
+  set_up_view(mainWindow, data);
+  buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
+
+  misc_setup_text_buffer_tags(buffer);
+
+  /* two statusbars arranged in a GtkGrid */
+  gridStatusBar = gtk_grid_new();
+  g_object_set (gridStatusBar, "margin-top", 4, NULL);
+  g_object_set (gridStatusBar, "margin-bottom", 6, NULL);
+  gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(gridStatusBar), 0,3,1,1);
+  /* statusbar */
+  UI_statusbar(mainWindow, gridStatusBar, data );  
+  /* mimic nice page jumper of Evince */
+  UI_pdf_page_widget (mainWindow, gridStatusBar, data);
+
+  gtk_widget_show_all(mainWindow);
+
+  /* quasi global vars  */
+  misc_init_vars(data );
+  data->stack=stack;
+  data->appWindow=mainWindow;
+  data->PDFdrawable = crPDF;
+  data->SketchDrawable= crCrobar;
+  data->PDFScrollable = scrolledwindowPDF;
+  data->SketchScrollable= scrolledwindowCrobar;
+  data->buffer = buffer;
+  data->view=view;
+  data->pipeline = gst_element_factory_make ("playbin", "redac");
+  /* spell checker !! after vars init for view value */
+  misc_init_spell_checker(data );
+
+  cairo_surface_destroy (data->Sketchsurface);
+  data->Sketchsurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
+
+  /* Store pointers to all widgets, for use by lookup_widget(). */
+  GLADE_HOOKUP_OBJECT_NO_REF (mainWindow, mainWindow, "mainWindow");
+  GLADE_HOOKUP_OBJECT (mainWindow, headBar, "headBar");
+  GLADE_HOOKUP_OBJECT (mainWindow, vGrid, "vGrid");
+  GLADE_HOOKUP_OBJECT (mainWindow, scrolledwindow1, "scrolledwindow1");
+  GLADE_HOOKUP_OBJECT (mainWindow, scrolledwindowPDF, "scrolledwindowPDF");
+  GLADE_HOOKUP_OBJECT (mainWindow, scrolledwindowCrobar, "scrolledwindowCrobar");
+  GLADE_HOOKUP_OBJECT (mainWindow, crPDF, "crPDF");
+  GLADE_HOOKUP_OBJECT (mainWindow, crCrobar, "crCrobar");
+  GLADE_HOOKUP_OBJECT (mainWindow, toolbar, "toolbar");
+  GLADE_HOOKUP_OBJECT (mainWindow, gridStatusBar, "gridStatusBar");
+  GLADE_HOOKUP_OBJECT (mainWindow, view, "view");
+  GLADE_HOOKUP_OBJECT (mainWindow, buffer, "buffer");
+
+
+  /* we parse datas from config file */
+
+  /* we get the configuration file */
+  data->gConfigFile=g_build_filename(g_get_user_config_dir (), 
+                       "/redac/", KILOWRITER_CONFIG, NULL); /* Create hidden directory to store Kilowriter data */
+  /* we check if the directory already exists */
+  if(!g_file_test (data->gConfigFile, G_FILE_TEST_EXISTS)) {
+     printf("* config.ini file absent or corrupted ! *\n");
+     /* we create the directory */
+     gint i=g_mkdir (g_strdup_printf("%s/redac/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
+  }
+
+  createGKeyFile (data, mainWindow);
+  /* we get the saved window geometry see : https://gist.github.com/zdxerr/709169  */
+
+  keyString = g_object_get_data(G_OBJECT(mainWindow), "config");
+  /* same for application */
+  data->keystring = keyString;
+  data->iAudioSmartRew=g_key_file_get_double(keyString, "application", "audio-file-rewind-step", NULL);
+  data->iAudioSmartJump=g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
+
+  misc_set_font_color_settings(data );
+
+  /* we paint sketch background now */
+  sketch_prepare(data);
+
+  /* reload last document */
+  gchar *s1 = g_key_file_get_string(keyString, "application", "current-file", NULL);
+  if(load_gtk_rich_text(s1, buffer, mainWindow)!=0) {
+     misc_clear_text(buffer, "left");
+     printf("* can't reload last work or it's the first start of this software ! *\n");
+     /* the default filename is built inside gKeyfile if it isn"t already exists ! */
+     /* then we must add a default file name for default path ; in other case, we'll get a segfault */
+     /* we get the current date */
+     time ( &rawtime );
+     strftime(buffer_date, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
+     /* now we set-up a new default filename */
+     path_to_file =  get_path_to_datas_file(buffer_date);
+     gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(mainWindow), "labelMainTitle")),
+                             g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
+     
+     /* rearrange list of recent files */
+     rearrange_recent_file_list(keyString);
+     /* we change the default values for gkeyfile */
+     store_current_file_in_keyfile(keyString, path_to_file, "[...]");
+  }
+  else
+     store_current_file_in_keyfile(keyString, s1, misc_get_extract_from_document(data ));  
+  g_free(s1);
+
+  /*  reload last PDF file ? */
+  gtk_widget_hide( lookup_widget(GTK_WIDGET(data->appWindow),"image_pdf_modif"));
+  s1 = g_key_file_get_string(keyString, "application", "current-PDF-file", NULL);
+  if(g_key_file_get_boolean(keyString, "application", "autoreload-PDF",NULL )) {
+     if(g_file_test (s1, G_FILE_TEST_EXISTS) ){
+        /* reset default PDF zoom ratio */
+        data->PDFratio=g_key_file_get_double(keyString, "reference-document", "zoom", NULL);
+        data->curPDFpage=g_key_file_get_integer(keyString, "reference-document", "page", NULL);
+        quick_load_PDF(s1, data);
+     }
+  }
+  g_free(s1);
+
+  update_statusbar(buffer, data);
+
+ /* we preset the cursor */
+  gtk_widget_grab_focus(GTK_WIDGET(view));
+
+ /* callbacks */
+ 
+  g_signal_connect(buffer, "changed",
+        G_CALLBACK(update_statusbar), data);
+
+  g_signal_connect(buffer, "mark_set", 
+        G_CALLBACK(mark_set_callback), data);
+
+  g_signal_connect(view, "cut-clipboard", 
+        G_CALLBACK(cut_to_clipboard), data);
+
+  g_signal_connect(view, "copy-clipboard", 
+        G_CALLBACK(copy_to_clipboard), data);
+
+  g_signal_connect(view, "paste-clipboard", 
+        G_CALLBACK(paste_clipboard), data);
+
+  g_signal_connect(view, "backspace", 
+        G_CALLBACK(backspace), data);
+
+  g_signal_connect(view, "delete-from-cursor", 
+        G_CALLBACK(delete), data);
+
+  g_signal_connect(G_OBJECT(mainWindow), "delete_event",
+        G_CALLBACK(on_quit_clicked), data);
+  /* keypress event in order to catch shortcuts WITHOUT widgets */
+  g_signal_connect(G_OBJECT(mainWindow), "key-press-event", 
+                   G_CALLBACK(key_event), data);
+
+  g_signal_connect (G_OBJECT(scrolledwindowPDF), "size-allocate",
+                  G_CALLBACK (on_PDF_size_changed),
+                  data);
+
+  g_signal_connect (G_OBJECT(scrolledwindowPDF), "scroll-event",
+                  G_CALLBACK (on_PDF_scroll_event),
+                  data);
+  
+  g_signal_connect (G_OBJECT(stack), "notify::visible-child",
+                  G_CALLBACK (on_stack_changed),
+                  data);
+  g_signal_connect(G_OBJECT(crPDF), "draw",
+					 G_CALLBACK(draw_callback), data); 
+ /* events to build selection rectangles on the PDF renderer */
+  g_signal_connect(G_OBJECT(crPDF), "button-press-event",
+					 G_CALLBACK(on_PDF_draw_button_press_callback), data);
+  g_signal_connect(G_OBJECT(crPDF), "button-release-event",
+					 G_CALLBACK(on_PDF_draw_button_release_callback), data);
+  g_signal_connect(G_OBJECT(crPDF), "motion-notify-event",
+					 G_CALLBACK(on_PDF_draw_motion_event_callback), data);
+  /* events for sketch area */
+  g_signal_connect(G_OBJECT(crCrobar), "draw",
+					 G_CALLBACK(sketch_draw_callback), data); 
+  g_signal_connect(G_OBJECT(crCrobar), "button-press-event",
+					 G_CALLBACK(on_sketch_draw_button_press_callback), data);
+  g_signal_connect(G_OBJECT(crCrobar), "button-release-event",
+					 G_CALLBACK(on_sketch_draw_button_release_callback), data);
+  g_signal_connect(G_OBJECT(crCrobar), "motion-notify-event",
+					 G_CALLBACK(on_sketch_draw_motion_event_callback), data);
+
+  misc_set_gui_in_editor_mode(data->appWindow, CURRENT_STACK_EDITOR); 
+  /* add timeout for 5 minutes, 300 secs - should be improved in a next release */
+  misc_prepare_timeouts(data);
+  /* move to something like end of text */
+  misc_jump_to_end_view(buffer, view);
+}
