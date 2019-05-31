@@ -3,9 +3,9 @@
 
 AC_INIT([redac], [0.1], [amiluc_bis@yahoo.fr])
 AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE([-Wall foreign])
+AM_INIT_AUTOMAKE([-W foreign])
 AM_SILENT_RULES([no])
-
+AC_CONFIG_HEADERS([config.h])  # rune ./autogeb.sh then ./configure to obtain a config.h file
 ### SHOPPING LIST ##############################################################
 # In this section we notify autoconf of what tools we will be using.
 
@@ -32,7 +32,7 @@ PKG_CHECK_MODULES([REDAC], [
 # Needed by intltool
 GETTEXT_PACKAGE=${PACKAGE_TARNAME}
 AC_SUBST([GETTEXT_PACKAGE])
-
+AC_SUBST(ALL_LINGUAS) # veriy !
 ### OUTPUT #####################################################################
 # After checking all this stuff, we must output our results to the rest of the
 # build system. That is what this section does.
@@ -42,5 +42,6 @@ AC_CONFIG_FILES([
 	src/Makefile
 	pixmaps/Makefile
 	po/Makefile.in
+	src/icons/Makefile
 ])
 AC_OUTPUT
