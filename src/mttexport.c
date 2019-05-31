@@ -387,7 +387,7 @@ gint save_RTF_rich_text(gchar *filename, APP_data *data_app)
 {
   gchar *tmpFileName;
   gchar *fntFamily=NULL;
-  const gchar *page_size_a4_portrait="\\paperh16834 \\paperw11909 \\margl1440 \\margr1900 \\margt1800 \\margb1800 \\portrait\n";
+  const gchar *page_size_a4_portrait="\\paperh16834 \\paperw11909 \\margl1440 \\margr1440 \\margt1800 \\margb1800 \\portrait\n";
   gchar *fonts_header;
   const gchar *color_header="{\\colortbl;\\red255\\green0\\blue0;\\red0\\green0\\blue255;\\red243\\green242\\blue25;\\red241\\green241\\blue241;}\\widowctrl\\s0\\f1\\ql\\fs24\n";
   const gchar *styles_header="{\\stylesheet{\\s20\\f1\\ql redac-Normal;}{\\s21\\fi720\\li360\\ri360\\highlight4\\qj\\cb4\\f0 redac-Quotation;}}\n";
