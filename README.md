@@ -61,4 +61,6 @@ Open a terminal and type :
 
 >sudo apt-get update
 
+>sudo apt-get install redac
+
 _please note_ : for now, binaries are _only_ for Xenial (= Ubuntu 16.04 LTS)
