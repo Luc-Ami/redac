@@ -53,10 +53,12 @@ Clean directories :
 **make clean**
 
 
-**Binaries packages for Ubuntu**
+## Binaries packages for Ubuntu
+
 Open a terminal and type :
 
-sudo add-apt-repository ppa:amiluc-bis/redac
-sudo apt-get update
+>sudo add-apt-repository ppa:amiluc-bis/redac
 
-_please note_ : for now, bianries are only Xenial (= Ubuntu 16.04 LTS)
+>sudo apt-get update
+
+_please note_ : for now, binaries are _only_ for Xenial (= Ubuntu 16.04 LTS)
