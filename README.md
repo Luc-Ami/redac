@@ -63,4 +63,4 @@ Open a terminal and type :
 
 >sudo apt-get install redac
 
-_please note_ : for now, binaries are _only_ for Xenial (= Ubuntu 16.04 LTS)
+_please note_ : for now, binaries are _only_ for Xenial (= Ubuntu 16.04 LTS), Bionic (=Ubuntu 18.04 LTS) and Disco (=Ubuntu 19.04)
