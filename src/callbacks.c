@@ -2007,7 +2007,7 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
                   PDF_display_page (window1,data->curPDFpage, data->doc, data);                        
                   search_draw_selection_current_page(data->curPDFpage, data, data->surface);                   
                   update_statusbarPDF(data);
-                  gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
+                  // gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
                   /* we check results */
                  // GList *l=g_list_first(data->pdfSearch);
                  /* printf("check Glist !\n");

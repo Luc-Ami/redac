@@ -171,7 +171,9 @@ gint search_hits_inside_PDF_document(APP_data *data, const gchar *tmpStr)
         results->nb_hits_at_page=ret;
         results->hits=hits;
         data->pdfSearch=g_list_append(data->pdfSearch, results);
-        printf("total string found %d times in PDF page %d \n", ret, j);
+        // printf("total string found %d times in PDF page %d \n", ret, j);
+        /* we must change current page to jump to first occurrence */
+        data->curPDFpage=j;
     }
                    
   }/* next j*/
