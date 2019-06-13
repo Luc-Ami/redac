@@ -157,7 +157,7 @@ GList *search_hits_inside_PDF_page(PopplerPage *Page, const gchar *text)
 
 gint search_hits_inside_PDF_document(APP_data *data, const gchar *tmpStr)
 {
-  gint j, ret=0, count=0;
+  gint j, ret=0, count=0, first_page=-1;
   GList *hits=NULL;
 
   for(j=0;j<data->totalPDFpages;j++) {    
@@ -171,13 +171,14 @@ gint search_hits_inside_PDF_document(APP_data *data, const gchar *tmpStr)
         results->nb_hits_at_page=ret;
         results->hits=hits;
         data->pdfSearch=g_list_append(data->pdfSearch, results);
-        // printf("total string found %d times in PDF page %d \n", ret, j);
+        printf("total string found %d times in PDF page %d \n", ret, j);
         /* we must change current page to jump to first occurrence */
-        data->curPDFpage=j;
-    }
-                   
+        if(first_page<0){
+           data->curPDFpage=j;
+           first_page=j;
+        } 
+    }                   
   }/* next j*/
-;
   return count;
 }
 /*
