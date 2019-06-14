@@ -619,7 +619,8 @@ gboolean on_PDF_draw_button_press_callback(GtkWidget *widget, GdkEvent *event, A
 {  
   if(!data->doc)
     return TRUE;
-
+  /* grab focus */
+  gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
   if (gdk_event_get_event_type(event) == GDK_BUTTON_PRESS)  {
    if(event->button.button==3) {
        data->button_pressed=FALSE;/* yes, to avoid mistakes on drawings */
@@ -665,6 +666,8 @@ gboolean on_PDF_draw_button_press_callback(GtkWidget *widget, GdkEvent *event, A
 gboolean on_PDF_draw_motion_event_callback(GtkWidget *widget, GdkEvent  *event, APP_data *data)
 {
   GtkWidget *window=data->window;
+  /* grab focus */
+  gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
   if(!data->button_pressed || !data->doc)
     return TRUE;
 
