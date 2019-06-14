@@ -57,9 +57,9 @@ void set_up_view( GtkWidget *window1, APP_data *data_app )
   minor=gtk_get_minor_version ();
 
   const char css[] = 
-"  #labelHitsFrame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 2px; padding: 0px; }\n"
+"  #labelHitsFrame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 1px; padding: 0px; }\n"
 "  #search_entry { border: none; padding: 4px; }\n"
-"  #page_frame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 2px; padding: 2px; }\n"
+"  #page_frame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 1px; padding: 2px; }\n"
 "  #page_title { font-weight:600; border: none; padding: 2px; }\n"
 "  #page_entry { border: none; padding: 2px; }\n"
 "  #page_label { font-weight:600; border: none; padding: 2px; }\n"
