@@ -1051,7 +1051,7 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
   GError* err = NULL;
-  gchar *uri_path, *filename;
+  gchar *uri_path, *filename, *tmpStr;
   cairo_t *cr;
   gint w, h; 
   gdouble width, height, ratio;
@@ -1072,7 +1072,13 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
   gtk_file_filter_set_name (filter, _("PDF files"));
   GtkWidget *dialog = create_loadFileDialog(data);
   /* we should replace home dir by the current path if it exists ! */
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
+  tmpStr=g_key_file_get_string(keyString, "application", "current-PDF-file", NULL);
+  if(strlen(tmpStr)>0) {
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_path_get_dirname(tmpStr));
+    g_free(tmpStr);
+  }
+  else
+     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
 
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
