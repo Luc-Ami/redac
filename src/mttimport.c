@@ -455,7 +455,7 @@ on_merge_clicked (GtkButton *button, APP_data *data_app)
 
   GdkAtom format = gtk_text_buffer_register_deserialize_tagset(buffer, "application/x-gtk-text-buffer-rich-text");
 
-  GtkWidget *dialog = create_loadFileDialog(data_app);
+  GtkWidget *dialog = create_loadFileDialog(data_app, _("Open Redac file ..."));
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   /* run dialog */
@@ -520,7 +520,7 @@ on_import_clicked (GtkButton *button, APP_data *data_app)
   keyString = g_object_get_data(G_OBJECT(window1), "config");
 
 
-  GtkWidget *dialog = create_loadFileDialog(data_app);
+ GtkWidget *dialog = create_loadFileDialog(data_app, _("Open Rich Text Format file ..."));
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   /* run dialog */

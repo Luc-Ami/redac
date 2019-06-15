@@ -1390,7 +1390,7 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   load from file dialog 
 *********************************/
 GtkWidget*
-create_loadFileDialog (APP_data *data)
+create_loadFileDialog (APP_data *data, gchar *sFileType)
 {
   GtkWidget *loadFileDialog;
   GtkWidget *dialog_vbox6;
@@ -1400,7 +1400,7 @@ create_loadFileDialog (APP_data *data)
   GtkWidget *button44;
   GtkWidget *image44;
 
-  loadFileDialog = gtk_file_chooser_dialog_new (_("Open file..."), 
+  loadFileDialog = gtk_file_chooser_dialog_new (sFileType, 
                               GTK_WINDOW(data->appWindow), GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
   g_object_set (loadFileDialog, "local-only", FALSE,  NULL);
   gtk_window_set_modal (GTK_WINDOW (loadFileDialog), TRUE);

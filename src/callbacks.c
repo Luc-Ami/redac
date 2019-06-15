@@ -40,7 +40,7 @@ static gboolean fStrikethrough = FALSE;
 static gboolean fQuotation = FALSE;
 static gboolean fUserClickedButton = FALSE;
 static gint iPendingFormat = 0; /* a flag to report a formatting to the next call */
-static gint iPendingCol =-1, iPendingRow = -1;
+static gint iPendingCol =-1, iPendingOffset=0, iCurrentOffset=0;
 static gint iColMem =-1, iRowMem= -1; /* in order to check if the user gone backward */
 static gint kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: redac 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-06 09:55+0200\n"
-"PO-Revision-Date: 2019-05-06 09:56+0100\n"
+"POT-Creation-Date: 2019-06-15 20:27+0200\n"
+"PO-Revision-Date: 2019-06-15 20:29+0100\n"
 "Last-Translator: luc <amiluc_bis@yahoo.fr>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -19,93 +19,75 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#. place stack
-#: ../src/main.c:163
-msgid "Notes"
-msgstr "Notes"
-
-#: ../src/main.c:164
-msgid "Reference"
-msgstr "Référence"
-
-#: ../src/main.c:165 ../src/interface.c:2194
-msgid "Sketch"
-msgstr "Croquis"
-
-#: ../src/main.c:302 ../src/mttfiles.c:658 ../src/mttfiles.c:1334
-#, c-format
-msgid "<small><b>%s</b></small>"
-msgstr "<small><b>%s</b></small>"
-
-#: ../src/undo.c:27
+#: ../src/undo.c:39
 msgid "Undo set text to bold"
 msgstr "Annuler le passage en gras du texte"
 
-#: ../src/undo.c:31
+#: ../src/undo.c:43
 msgid "Redo set text to bold"
 msgstr "Refaire passer texte en gras"
 
-#: ../src/undo.c:35
+#: ../src/undo.c:47
 msgid "Undo set text to underline"
 msgstr "Annuler le passage en souligné du texte"
 
-#: ../src/undo.c:39
+#: ../src/undo.c:51
 msgid "Redo set text to underline"
 msgstr "Refaire passer texte en souligné"
 
-#: ../src/undo.c:43
+#: ../src/undo.c:55
 msgid "Undo set text to italic"
 msgstr "Annuler le passage en italique du texte"
 
-#: ../src/undo.c:47
+#: ../src/undo.c:59
 msgid "Redo set text to italic"
 msgstr "Refaire passer texte en italique"
 
-#: ../src/undo.c:51
+#: ../src/undo.c:63
 msgid "Undo set text to superscript"
 msgstr "Annuler le passage en exposant du texte"
 
-#: ../src/undo.c:55
+#: ../src/undo.c:67
 msgid "Redo set text to superscript"
 msgstr "Refaire passer texte en exposant"
 
-#: ../src/undo.c:59
+#: ../src/undo.c:71
 msgid "Undo set text to subscript"
 msgstr "Annuler le passage en indice du texte"
 
-#: ../src/undo.c:63
+#: ../src/undo.c:75
 msgid "Redo set text to subscript"
 msgstr "Refaire passer texte en indice"
 
-#: ../src/undo.c:67
+#: ../src/undo.c:79
 msgid "Undo set text to highlight"
 msgstr "Annuler le passage en surligné du texte"
 
-#: ../src/undo.c:71
+#: ../src/undo.c:83
 msgid "Redo set text to highlight"
 msgstr "Refaire passer texte en surligné"
 
-#: ../src/undo.c:75
+#: ../src/undo.c:87
 msgid "Undo set text to strikethrought"
 msgstr "Annuler le passage en barré du texte"
 
-#: ../src/undo.c:79
+#: ../src/undo.c:91
 msgid "Redo set text to strikethrought"
 msgstr "Refaire passer texte en barré"
 
-#: ../src/undo.c:83
+#: ../src/undo.c:95
 msgid "Undo set paragraph to quotation style"
 msgstr "Annuler la mise en forme du paragraphe avec le style citation"
 
-#: ../src/undo.c:87
+#: ../src/undo.c:99
 msgid "Undo replace text"
 msgstr "Annuler le remplacement de texte"
 
-#: ../src/undo.c:91
+#: ../src/undo.c:103
 msgid "Redo set paragraph to quotation style"
 msgstr "Refaire mettre le paragraphe en style citation"
 
-#: ../src/undo.c:95
+#: ../src/undo.c:107
 msgid ""
 "Undo set paragraph to left alignment, and \n"
 "go back to previous alignment."
@@ -113,7 +95,7 @@ msgstr ""
 "Annuler l'alignement du paragraphe à gauche, et\n"
 "revenir au précédent alignement."
 
-#: ../src/undo.c:99
+#: ../src/undo.c:111
 msgid ""
 "Undo set paragraph to center alignment, and \n"
 "go back to previous alignment"
@@ -121,7 +103,7 @@ msgstr ""
 "Annuler l'alignement du paragraphe au centre, et\n"
 "revenir au précédent alignement."
 
-#: ../src/undo.c:103
+#: ../src/undo.c:115
 msgid ""
 "Undo set paragraph to right alignment, and \n"
 "go back to previous alignment"
@@ -129,7 +111,7 @@ msgstr ""
 "Annuler l'alignement du paragraphe à droite, et\n"
 "revenir au précédent alignement."
 
-#: ../src/undo.c:107
+#: ../src/undo.c:119
 msgid ""
 "Undo set paragraph to fill alignment, and \n"
 "go back to previous alignment"
@@ -137,94 +119,94 @@ msgstr ""
 "Annuler la justification du paragraphe, et\n"
 "revenir au précédent alignement."
 
-#: ../src/undo.c:111
+#: ../src/undo.c:123
 msgid "Undo insert char"
 msgstr "Annuler insertion caractère"
 
-#: ../src/undo.c:115
+#: ../src/undo.c:127
 msgid "Undo delete char"
 msgstr "Annuler suppression caractère"
 
-#: ../src/undo.c:119
+#: ../src/undo.c:131
 msgid "Undo insert block of text"
 msgstr "Annuler insertion bloc de texte"
 
-#: ../src/undo.c:123
+#: ../src/undo.c:135
 msgid "Undo delete block of text"
 msgstr "Annuler suppression bloc de texte"
 
-#: ../src/undo.c:127
+#: ../src/undo.c:139
 msgid "Undo insert image"
 msgstr "Annuler l'insertion de l'image"
 
-#: ../src/undo.c:131
+#: ../src/undo.c:143
 msgid "Undo delete image"
 msgstr "Annuler suppression image"
 
-#: ../src/undo.c:135
+#: ../src/undo.c:147
 msgid "Undo new PDF text annot"
 msgstr "Annuler la création de l'annotation dans le PDF"
 
-#: ../src/undo.c:139
+#: ../src/undo.c:151
 msgid "Undo set highlighting inside PDF"
 msgstr "Annuler le surlignage dans le PDF"
 
-#: ../src/undo.c:143
+#: ../src/undo.c:155
 msgid "Undo set color of current annotation inside PDF"
 msgstr "Annuler modification de la couleur de l'annotation dans le PDF"
 
-#: ../src/undo.c:147
+#: ../src/undo.c:159
 msgid "Undo set current annotation text content inside PDF"
 msgstr "Annuler l'édition du texte de l'annotation dans le PDF"
 
-#: ../src/undo.c:151
+#: ../src/undo.c:163
 msgid "Undo remove annotation inside PDF"
 msgstr "Annuler la suppression de l'annotation du PDF"
 
-#: ../src/undo.c:155
+#: ../src/undo.c:167
 msgid "Undo last drawing inside sketch"
 msgstr "Annuler le dernier tracé effectué sur le croquis"
 
-#: ../src/undo.c:159
+#: ../src/undo.c:171
 msgid "Undo last image pasting inside sketch"
 msgstr "Annuler le dernier collage d'image dans le croquis"
 
-#: ../src/undo.c:163
+#: ../src/undo.c:175
 msgid "undo last text annot paste inside sketch - TODO"
 msgstr ""
 
-#: ../src/undo.c:172
+#: ../src/undo.c:184
 msgid "Nothing to undo"
 msgstr "Rien à annuler "
 
-#: ../src/undo.c:707
+#: ../src/undo.c:716
 msgid "There is nothing to undo."
 msgstr "Il n'y a aucune opération à annuler"
 
-#: ../src/misc.c:168 ../src/misc.c:246 ../src/misc.c:322
+#: ../src/misc.c:172 ../src/misc.c:250 ../src/misc.c:326
 msgid "0 hits"
 msgstr "0 fois"
 
-#: ../src/misc.c:407
+#: ../src/misc.c:411
 #, c-format
 msgid "of %d"
 msgstr "de %d"
 
-#: ../src/misc.c:419
+#: ../src/misc.c:423
 #, c-format
 msgid "PDF : %s"
 msgstr "PDF : %s"
 
-#: ../src/misc.c:423
+#: ../src/misc.c:427
 msgid "No PDF Document"
 msgstr "Pas de document PDF"
 
-#: ../src/misc.c:436
+#: ../src/misc.c:440
 #, c-format
 msgid "Pen width:  %.2f"
 msgstr "Largeur crayon : %.2f"
 
-#: ../src/misc.c:637
+#: ../src/misc.c:642
 #, c-format
 msgid ""
 " <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></"
@@ -263,6 +245,15 @@ msgstr "<small><b><span foreground=\"green\">Chargé</span>-%s</b></small>"
 msgid "Redac files"
 msgstr "Fichiers Redac"
 
+#: ../src/mttfiles.c:637 ../src/mttimport.c:458
+msgid "Open Redac file ..."
+msgstr "Ouvrir Note Redac ... "
+
+#: ../src/mttfiles.c:658 ../src/mttfiles.c:1340 ../src/interface.c:2783
+#, c-format
+msgid "<small><b>%s</b></small>"
+msgstr "<small><b>%s</b></small>"
+
 #: ../src/mttfiles.c:686
 msgid ""
 "Do you really want to quit this program ?\n"
@@ -287,7 +278,7 @@ msgstr ""
 msgid "<small><b>%s-<span foreground=\"green\">saved</span></b></small>"
 msgstr "<small><b>%s-<span foreground=\"green\">enregistré</span></b></small>"
 
-#: ../src/mttfiles.c:810 ../src/mttfiles.c:1266
+#: ../src/mttfiles.c:810 ../src/mttfiles.c:1272
 #, c-format
 msgid ""
 "The file :%s exists !\n"
@@ -300,10 +291,14 @@ msgstr ""
 msgid "Audio files"
 msgstr "Fichiers audio"
 
+#: ../src/mttfiles.c:940
+msgid "Open audio file ..."
+msgstr "Ouvrir fichier audio ... "
+
 #: ../src/mttfiles.c:959
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<b><big>Can't proceeed ! </big></b>\n"
+"<b><big>Can't proceeed !</big></b>\n"
 "The file :<i>\n"
 "\n"
 "%s </i>\n"
@@ -317,11 +312,15 @@ msgstr ""
 "\n"
 "n'est pas un fichier audio valide  !"
 
-#: ../src/mttfiles.c:1072 ../src/mttfiles.c:1160
+#: ../src/mttfiles.c:1072 ../src/mttfiles.c:1166
 msgid "PDF files"
 msgstr "Fichiers PDF"
 
-#: ../src/mttfiles.c:1188
+#: ../src/mttfiles.c:1073
+msgid "Open PDF file ..."
+msgstr "Ouvrir fichier PDF ... "
+
+#: ../src/mttfiles.c:1194
 #, c-format
 msgid ""
 "The file :\n"
@@ -332,12 +331,12 @@ msgstr ""
 "%s existe déjà !\n"
 "Voulez-vous vraiment l'écraser avec le PDF en cours d'édition ?"
 
-#: ../src/mttfiles.c:1240
+#: ../src/mttfiles.c:1246
 msgid "PNG Image files"
 msgstr "Fichiers images PNG"
 
 #. we must extract a short filename
-#: ../src/mttfiles.c:1248 ../src/interface.c:1161
+#: ../src/mttfiles.c:1254 ../src/interface.c:1167
 msgid "noname"
 msgstr "sans_nom"
 
@@ -349,108 +348,112 @@ msgstr "Notes Redac"
 msgid "Word processor files"
 msgstr "Fichiers trait. texte."
 
-#: ../src/interface.c:171
+#: ../src/mttimport.c:523
+msgid "Open Rich Text Format file ..."
+msgstr "Ouvrir fichier Rich Text Format ..."
+
+#: ../src/interface.c:175
 msgid "_Edit annotation ... "
 msgstr "_Editer l'annotation ..."
 
-#: ../src/interface.c:175
+#: ../src/interface.c:179
 msgid "Annotation _color ... "
 msgstr "_Couleur de l'annotation ..."
 
-#: ../src/interface.c:179
+#: ../src/interface.c:183
 msgid "_Remove annotation "
 msgstr "Supp_rimer l'annotation"
 
-#: ../src/interface.c:188 ../src/interface.c:251
+#: ../src/interface.c:192 ../src/interface.c:255
 msgid "C_ancel"
 msgstr "_Annuler"
 
-#: ../src/interface.c:238
+#: ../src/interface.c:242
 msgid "_Paste image in place "
 msgstr "Coller l'image en _place"
 
-#: ../src/interface.c:242
+#: ../src/interface.c:246
 msgid "Paste and _center image "
 msgstr "_Coller et centrer l'image"
 
 #. for css
 #. new complex Gtk 3.10+ way to set-up an image menu ;(
-#: ../src/interface.c:350
+#: ../src/interface.c:354
 msgid "New note "
 msgstr "Nouvelle note"
 
 #. save as
-#: ../src/interface.c:360
+#: ../src/interface.c:364
 msgid "Save the note as ...  "
 msgstr "Enregistrer la note sous ..."
 
 #. open
-#: ../src/interface.c:370
+#: ../src/interface.c:374
 msgid "Open a previous note ..."
 msgstr "Recharger une note ..."
 
 #. recent
-#: ../src/interface.c:385 ../src/paving.c:256
+#: ../src/interface.c:389 ../src/paving.c:256
 msgid "Recent notes ..."
 msgstr "Dernières notes  ... "
 
-#: ../src/interface.c:406
+#: ../src/interface.c:410
 msgid "Insert text from a file "
 msgstr "Insérer depuis un fichier "
 
-#: ../src/interface.c:417
+#: ../src/interface.c:421
 msgid "from a RTF file ..."
 msgstr "Depuis un fichier RTF ..."
 
-#: ../src/interface.c:421
+#: ../src/interface.c:425
 msgid "Merge with a _note ..."
 msgstr "Fusionner avec une _note ..."
 
-#: ../src/interface.c:442
+#: ../src/interface.c:446
 msgid "Load _PDF file ..."
 msgstr "Charger fichier _PDF ..."
 
-#: ../src/interface.c:446
+#: ../src/interface.c:450
 msgid "Save _modifyed PDF file ..."
 msgstr "Enregi_strer le fichier PDF modifié ..."
 
-#: ../src/interface.c:465
+#: ../src/interface.c:469
 msgid "Load A_udio file ..."
 msgstr "Ch_arger fichier audio ..."
 
-#: ../src/interface.c:468
+#: ../src/interface.c:472
 msgid "_Close current Audio file"
 msgstr "Fer_mer le fichier audio actuel"
 
-#: ../src/interface.c:476
+#: ../src/interface.c:480
 msgid "Sketches"
 msgstr "Croquis"
 
-#: ../src/interface.c:486
+#: ../src/interface.c:490
 msgid "Save current s_ketch ..."
 msgstr "Enre_gistrer le croquis actuel ..."
 
-#: ../src/interface.c:489
+#: ../src/interface.c:493
 msgid "Clear current sketch"
 msgstr "Effacer le croquis actuel"
 
-#: ../src/interface.c:504
+#: ../src/interface.c:508
 msgid "Help"
 msgstr "Aide"
 
-#: ../src/interface.c:515
+#: ../src/interface.c:519
 msgid "_Keyboard shortcuts ..."
 msgstr "Raccourcis clavier ... "
 
-#: ../src/interface.c:518
+#: ../src/interface.c:522
 msgid "Online _Wiki ..."
 msgstr "Online _Wiki ..."
 
-#: ../src/interface.c:521
+#: ../src/interface.c:525
 msgid "_About Redac ..."
 msgstr "_A propos de Redac ... "
 
-#: ../src/interface.c:729
+#: ../src/interface.c:733
 msgid ""
 "Toggle to/from bold either \n"
 "for current selection\n"
@@ -460,7 +463,7 @@ msgstr ""
 "pour le texte sélectionné ou le texte\n"
 "tapé à partir de maintenant."
 
-#: ../src/interface.c:735
+#: ../src/interface.c:739
 msgid ""
 "Toggle to/from italic either \n"
 "for current selection\n"
@@ -470,7 +473,7 @@ msgstr ""
 "pour le texte sélectionné ou le texte\n"
 "tapé à partir de maintenant."
 
-#: ../src/interface.c:740
+#: ../src/interface.c:744
 msgid ""
 "Toggle to/from underline either \n"
 "for current selection\n"
@@ -480,7 +483,7 @@ msgstr ""
 "pour le texte sélectionné ou le texte\n"
 "tapé à partir de maintenant."
 
-#: ../src/interface.c:745
+#: ../src/interface.c:749
 msgid ""
 "Toggle to/from superscript either \n"
 "for current selection\n"
@@ -490,7 +493,7 @@ msgstr ""
 "pour le texte sélectionné ou le texte\n"
 "tapé à partir de maintenant."
 
-#: ../src/interface.c:749
+#: ../src/interface.c:753
 msgid ""
 "Toggle to/from subscript either \n"
 "for current selection\n"
@@ -500,7 +503,7 @@ msgstr ""
 "pour le texte sélectionné ou le texte\n"
 "tapé à partir de maintenant."
 
-#: ../src/interface.c:753
+#: ../src/interface.c:757
 msgid ""
 "Toggle to/from strikethrough \n"
 "for current selection\n"
@@ -510,7 +513,7 @@ msgstr ""
 "pour le texte sélectionné ou le texte\n"
 "tapé à partir de maintenant."
 
-#: ../src/interface.c:757
+#: ../src/interface.c:761
 msgid ""
 "Apply highlighting \n"
 "for current selection\n"
@@ -520,7 +523,7 @@ msgstr ""
 "pour le texte sélectionné\n"
 "ou les prochaines frappes."
 
-#: ../src/interface.c:761
+#: ../src/interface.c:765
 msgid ""
 "Toggle to/from quotation style either \n"
 "for current selection\n"
@@ -530,25 +533,25 @@ msgstr ""
 "pour le texte sélectionné ou le texte\n"
 "tapé à partir de maintenant."
 
-#: ../src/interface.c:779
+#: ../src/interface.c:783
 msgid ""
 "Align to left \n"
 "the whole current paragraph."
 msgstr "Aligner à gauche  l'intégralité du paragraphe actuel"
 
-#: ../src/interface.c:785
+#: ../src/interface.c:789
 msgid ""
 "Align to center \n"
 "the whole current paragraph."
 msgstr "Centrer l'intégralité du paragraphe actuel"
 
-#: ../src/interface.c:792
+#: ../src/interface.c:796
 msgid ""
 "Align to right \n"
 "the whole current paragraph."
 msgstr "Aligner à droite  l'intégralité du paragraphe actuel"
 
-#: ../src/interface.c:799
+#: ../src/interface.c:803
 msgid ""
 "Justify left AND right \n"
 "the whole current paragraph."
@@ -556,7 +559,7 @@ msgstr ""
 "Justifie le paragraphe courant\n"
 "à gauche et à droite."
 
-#: ../src/interface.c:811
+#: ../src/interface.c:815
 msgid ""
 "Remove all character \n"
 "formattings from current selection."
@@ -564,11 +567,11 @@ msgstr ""
 "Supprimer tous les formatages de caractère\n"
 "dans le texte sélectionné."
 
-#: ../src/interface.c:816
+#: ../src/interface.c:820
 msgid "Undo last operation."
 msgstr "Annuler la dernière opération"
 
-#: ../src/interface.c:863
+#: ../src/interface.c:867
 msgid ""
 "Copy selected area inside PDF files\n"
 "to clipboard as pure text."
@@ -576,7 +579,7 @@ msgstr ""
 "Copie la zone sélectionnée dans le document PDF\n"
 "dans le presse-papier sous la forme de texte."
 
-#: ../src/interface.c:869
+#: ../src/interface.c:873
 msgid ""
 "Copy selected area inside PDF files or sketches \n"
 "to clipboard as pure image."
@@ -585,7 +588,7 @@ msgstr ""
 "dans le PDF ou le croquis,\n"
 "comme pure image"
 
-#: ../src/interface.c:878
+#: ../src/interface.c:882
 msgid ""
 "Highlight selected area inside PDF document. \n"
 "Please don't forget to save your PDF document !"
@@ -593,7 +596,7 @@ msgstr ""
 "Surligne la zone sélectionnée dans le PDF.\n"
 "SVP n'oubliez pas de sauvegarder le PDF."
 
-#: ../src/interface.c:885
+#: ../src/interface.c:889
 msgid ""
 "Set-up text annotation inside \n"
 "selected area on PDF or sketch document. \n"
@@ -605,11 +608,11 @@ msgstr ""
 "N'oubliez pas d'enregistrer le PDF ou le croquis\n"
 "pour conserver ces annotations."
 
-#: ../src/interface.c:898
+#: ../src/interface.c:902
 msgid "Freehand drawing tool"
 msgstr "Outil de dessin à main levée"
 
-#: ../src/interface.c:906
+#: ../src/interface.c:910
 msgid ""
 "Click here to choose color for :\n"
 "- highlighting of PDF areas.\n"
@@ -621,7 +624,7 @@ msgstr ""
 "- des annotations dans les PDF et les croquis.\n"
 "- la couleur de crayon dans les croquis."
 
-#: ../src/interface.c:917
+#: ../src/interface.c:921
 msgid ""
 "Choose here the playing speed. 1 for a normal speed,\n"
 "over 1 for a faster speed,\n"
@@ -631,28 +634,28 @@ msgstr ""
 "au-dessus de 1 pour une vitesse plus rapide,\n"
 "au-dessous de 1 pour une vitesse plus lente."
 
-#: ../src/interface.c:920
+#: ../src/interface.c:924
 msgid "×1.5"
 msgstr "×1,5"
 
-#: ../src/interface.c:921
+#: ../src/interface.c:925
 msgid "×1.2"
 msgstr "×1,2"
 
-#: ../src/interface.c:922
+#: ../src/interface.c:926
 msgid "×1.0"
 msgstr "×1,0"
 
-#: ../src/interface.c:923
+#: ../src/interface.c:927
 msgid "×0.8"
 msgstr "×0.,8"
 
-#: ../src/interface.c:924
+#: ../src/interface.c:928
 msgid "×0.5"
 msgstr "×0,5"
 
 #. gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonPlayPauseAudio),iconButtonPlayAudio);
-#: ../src/interface.c:938
+#: ../src/interface.c:942
 msgid ""
 "Play or pause-rewind current audio file.\n"
 "Rewind's length is defined in 'audio' settings."
@@ -661,15 +664,15 @@ msgstr ""
 "La longueur du retour est définie dans les\n"
 "préférences audio."
 
-#: ../src/interface.c:942
+#: ../src/interface.c:946
 msgid "Position within current audio file"
 msgstr "Position dans le fichier audio actuel"
 
-#: ../src/interface.c:950
+#: ../src/interface.c:954
 msgid "Total duration of current audio file"
 msgstr "Durée totale du fichier audio actuel"
 
-#: ../src/interface.c:959
+#: ../src/interface.c:963
 msgid ""
 "Jump backward in current audio file.\n"
 "Jump's length is defined in 'audio' settings."
@@ -677,7 +680,7 @@ msgstr ""
 "Saut arrière dans le fichier audio courant.\n"
 "La longueur du saut est définie dans les préférences  'audio'."
 
-#: ../src/interface.c:964
+#: ../src/interface.c:968
 msgid ""
 "Jump forward in current audio file.\n"
 "Jump's length is defined in 'audio' settings."
@@ -685,23 +688,23 @@ msgstr ""
 "Saut avant dans le fichier audio courant.\n"
 "La longueur du saut est définie dans les préférences  'audio'."
 
-#: ../src/interface.c:969
+#: ../src/interface.c:973
 msgid "Jump to a specifed position within current audio file."
 msgstr "Sauter à une position précise dans le fichier audio courant."
 
-#: ../src/interface.c:1151
+#: ../src/interface.c:1157
 msgid "Menu to access various file's operations"
 msgstr "Menu pour accéder à différentes opérations sur les fichiers"
 
-#: ../src/interface.c:1158
+#: ../src/interface.c:1164
 msgid "Application settings."
 msgstr "Configuration du programme"
 
-#: ../src/interface.c:1162
+#: ../src/interface.c:1168
 msgid "<small><b>noname</b></small>"
 msgstr "<small><b>sans_nom</b></small>"
 
-#: ../src/interface.c:1203
+#: ../src/interface.c:1209
 msgid ""
 "Click here to to go to the previous hit.\n"
 "With PDF documents we jump to previous PAGE with hits"
@@ -710,7 +713,7 @@ msgstr ""
 "Dans les PDF, on saute à la plus proche page précédente contenant des "
 "occurrences."
 
-#: ../src/interface.c:1206
+#: ../src/interface.c:1212
 msgid ""
 "Click here to go to the next hit.\n"
 "With PDF documents we jump to next PAGE with hits"
@@ -719,7 +722,7 @@ msgstr ""
 "Dans les PDF, on saute à la plus proche page suivante contenant des "
 "occurrences."
 
-#: ../src/interface.c:1209
+#: ../src/interface.c:1215
 msgid ""
 "Click here to replace text.\n"
 "You can't change text inside PDF documents."
@@ -728,31 +731,31 @@ msgstr ""
 "Attention, cette opération est impossible\n"
 "dans les PDF."
 
-#: ../src/interface.c:1213
+#: ../src/interface.c:1219
 msgid "Click to Zoom in the PDF document."
 msgstr "Cliquer pour zoomer dans le document PDF"
 
-#: ../src/interface.c:1216
+#: ../src/interface.c:1222
 msgid "Click to Zoom out the PDF document."
 msgstr "Cliquer pour dé-zoomer dans le document PDF"
 
-#: ../src/interface.c:1219
+#: ../src/interface.c:1225
 msgid "Click to display the PDF document at its best size."
 msgstr "Cliquer pour afficher le document PDF à la taille optimale"
 
-#: ../src/interface.c:1242
+#: ../src/interface.c:1248
 msgid "Type here the expression to find."
 msgstr "Tapez ici l'expression à rechercher."
 
-#: ../src/interface.c:1244
+#: ../src/interface.c:1250
 msgid "--hits"
 msgstr "--fois"
 
-#: ../src/interface.c:1262
+#: ../src/interface.c:1268
 msgid "Type here the replacing expression."
 msgstr "Taper ici l'expression de remplacement."
 
-#: ../src/interface.c:1273
+#: ../src/interface.c:1279
 msgid ""
 "Automatic background saving of your work (editor part)\n"
 "is activated."
@@ -760,7 +763,7 @@ msgstr ""
 "La sauvegarde automatique de vos notes, en arrière-plan,\n"
 "est activée."
 
-#: ../src/interface.c:1278
+#: ../src/interface.c:1284
 msgid ""
 "Automatic rewind to start of media after playing\n"
 "is activated."
@@ -768,7 +771,7 @@ msgstr ""
 "Retour automatique au début dès la fin de la lecture\n"
 "activé."
 
-#: ../src/interface.c:1285
+#: ../src/interface.c:1291
 msgid ""
 "Please, notice that that the current PDF is modifyed\n"
 "and should be saved."
@@ -776,49 +779,45 @@ msgstr ""
 "Veuillez noter que le fichier PDF actuel a été modifié\n"
 "et devrait être sauvegardé."
 
-#: ../src/interface.c:1346
+#: ../src/interface.c:1352
 msgid "Pg:"
 msgstr "Pg:"
 
-#: ../src/interface.c:1362
+#: ../src/interface.c:1368
 msgid "Type here the #of PDF page where you want to jump."
 msgstr "Tapez ici le n° de la page dans le PDF où vous voulez aller."
 
-#: ../src/interface.c:1366
+#: ../src/interface.c:1372
 msgid "of--"
 msgstr "de--"
 
-#: ../src/interface.c:1397
-msgid "Open file..."
-msgstr "Ouvrir fichier ... "
-
 #. cancel button
 #. gtk3 stuff for a button with text+image !
-#: ../src/interface.c:1413 ../src/interface.c:1471 ../src/interface.c:1932
-#: ../src/interface.c:2262 ../src/interface.c:2542 ../src/paving.c:317
+#: ../src/interface.c:1419 ../src/interface.c:1477 ../src/interface.c:1938
+#: ../src/interface.c:2268 ../src/interface.c:2548 ../src/paving.c:317
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../src/interface.c:1421
+#: ../src/interface.c:1427
 msgid "Open"
 msgstr "Ouvrir"
 
-#: ../src/interface.c:1454
+#: ../src/interface.c:1460
 msgid "Save your work and export to standard Word processor file..."
 msgstr ""
 "Enregistre votre note et l'exporte en plus au format standard de traitement "
 "de texte ... "
 
-#: ../src/interface.c:1479
+#: ../src/interface.c:1485
 msgid "Save"
 msgstr "Enregistrer"
 
-#: ../src/interface.c:1515
+#: ../src/interface.c:1521
 msgid "Help..."
 msgstr "Aide ... "
 
 #. labels
-#: ../src/interface.c:1527
+#: ../src/interface.c:1533
 msgid ""
 "<b><big>Format shortcuts:\n"
 "</big></b>"
@@ -826,7 +825,7 @@ msgstr ""
 "<b><big>Raccourcis de formatage : \n"
 "</big></b>"
 
-#: ../src/interface.c:1533
+#: ../src/interface.c:1539
 msgid ""
 "<b><big>Alignment shortcuts:\n"
 "</big></b>"
@@ -834,7 +833,7 @@ msgstr ""
 "<b><big>Raccourcis d'alignement : \n"
 "</big></b>"
 
-#: ../src/interface.c:1539
+#: ../src/interface.c:1545
 msgid ""
 "<b><big>PDF, Sketch shortcuts:\n"
 "</big></b>"
@@ -842,7 +841,7 @@ msgstr ""
 "<b><big>Raccourcis PDF, Croquis:\n"
 "</big></b>"
 
-#: ../src/interface.c:1545
+#: ../src/interface.c:1551
 msgid ""
 "<b><big>Application shortcuts:\n"
 "</big></b>"
@@ -850,173 +849,173 @@ msgstr ""
 "<b><big>Raccourcis du programme : \n"
 "</big></b>"
 
-#: ../src/interface.c:1551
+#: ../src/interface.c:1557
 msgid "<b>Bold</b>"
 msgstr "<b>Gras</b>"
 
-#: ../src/interface.c:1556
+#: ../src/interface.c:1562
 msgid "<b>Italic</b>"
 msgstr "<b>Italique</b>"
 
-#: ../src/interface.c:1561
+#: ../src/interface.c:1567
 msgid "<b>Underline</b>"
 msgstr "<b>Soulignement</b>"
 
-#: ../src/interface.c:1566
+#: ../src/interface.c:1572
 msgid "<b>Superscript</b>"
 msgstr "<b>Exposant</b>"
 
-#: ../src/interface.c:1571
+#: ../src/interface.c:1577
 msgid "<b>Subscript</b>"
 msgstr "<b>Indice</b>"
 
-#: ../src/interface.c:1577
+#: ../src/interface.c:1583
 msgid "<b>Strikethrough</b>"
 msgstr "<b>Barré</b>"
 
-#: ../src/interface.c:1583
+#: ../src/interface.c:1589
 msgid "<b>Highlight</b>"
 msgstr "<b>Surligné</b>"
 
-#: ../src/interface.c:1588
+#: ../src/interface.c:1594
 msgid "<b>Quotation</b>"
 msgstr "<b>Citation</b>"
 
 #. aligments
-#: ../src/interface.c:1627
+#: ../src/interface.c:1633
 msgid "<b>Left</b>"
 msgstr "<b>Gauche</b>"
 
-#: ../src/interface.c:1631
+#: ../src/interface.c:1637
 msgid "<b>Center</b>"
 msgstr "<b>Centre</b>"
 
-#: ../src/interface.c:1635
+#: ../src/interface.c:1641
 msgid "<b>Right</b>"
 msgstr "<b>à droite</b>"
 
-#: ../src/interface.c:1639
+#: ../src/interface.c:1645
 msgid "<b>Fill</b>"
 msgstr "<b>Remplir</b>"
 
 #. PDF & sketch
-#: ../src/interface.c:1660
+#: ../src/interface.c:1666
 msgid "<b>PDF : go next page</b>"
 msgstr "<b>PDF: page suivante</b>"
 
-#: ../src/interface.c:1664
+#: ../src/interface.c:1670
 msgid "PgDown"
 msgstr "PgSuiv"
 
-#: ../src/interface.c:1668
+#: ../src/interface.c:1674
 msgid "<b>PDF : go previous page</b>"
 msgstr "<b>PDF : page précédente </b>"
 
-#: ../src/interface.c:1673
+#: ../src/interface.c:1679
 msgid "PgUp"
 msgstr "PgPrec"
 
-#: ../src/interface.c:1677
+#: ../src/interface.c:1683
 msgid "<b>PDF : go first page</b>"
 msgstr "<b>PDF: aller 1ère page</b>"
 
-#: ../src/interface.c:1685
+#: ../src/interface.c:1691
 msgid "<b>PDF : go last page</b>"
 msgstr "<b>PDF : aller dernière page</b>"
 
-#: ../src/interface.c:1693
+#: ../src/interface.c:1699
 msgid "<b>PDF : search</b>"
 msgstr "<b>PDF: chercher</b>"
 
-#: ../src/interface.c:1702
+#: ../src/interface.c:1708
 msgid "<b>PDF : zoom in</b>"
 msgstr "<b>PDF : zoom + </b>"
 
-#: ../src/interface.c:1711
+#: ../src/interface.c:1717
 msgid "<b>PDF : zoom out</b>"
 msgstr "<b>PDF : zoom - </b>"
 
 #. sketch
-#: ../src/interface.c:1719
+#: ../src/interface.c:1725
 msgid "<b>Sketch : larger pen</b>"
 msgstr "<b>Croquis : crayon + large</b>"
 
-#: ../src/interface.c:1727
+#: ../src/interface.c:1733
 msgid "<b>Sketch : leaner pen</b>"
 msgstr "<b>Croquis : crayon - large</b>"
 
 #. application
-#: ../src/interface.c:1735
+#: ../src/interface.c:1741
 msgid "<b>Help</b>"
 msgstr "<b>Aide</b>"
 
-#: ../src/interface.c:1743
+#: ../src/interface.c:1749
 msgid "<b>Paste image</b>"
 msgstr "<b>Coller une image</b>"
 
-#: ../src/interface.c:1752
+#: ../src/interface.c:1758
 msgid "<b>Call main menu</b>"
 msgstr "<b>Appeler le menu principal</b>"
 
-#: ../src/interface.c:1761
+#: ../src/interface.c:1767
 msgid "<b>Quick save</b>"
 msgstr "<b>Sauvegarde rapide</b>"
 
-#: ../src/interface.c:1769
+#: ../src/interface.c:1775
 msgid "<b>Load PDF file </b>"
 msgstr "<b>Charger fichier PDF</b>"
 
-#: ../src/interface.c:1778
+#: ../src/interface.c:1784
 msgid "<b>Find for selected text</b>"
 msgstr "<b>Chercher le texte sélectionné</b>"
 
-#: ../src/interface.c:1787
+#: ../src/interface.c:1793
 msgid "<b>Hide/show main toolbar</b>"
 msgstr "<b>Cacher/montrer la barre d'outils principale</b>"
 
-#: ../src/interface.c:1796
+#: ../src/interface.c:1802
 msgid "<b>Switch to editor pane</b>"
 msgstr "<b>Basculer vers l'onglet éditeur</b>"
 
-#: ../src/interface.c:1804
+#: ../src/interface.c:1810
 msgid "<b>Switch to PDF pane</b>"
 msgstr "<b>Basculer vers l'onglet PDF</b>"
 
-#: ../src/interface.c:1813
+#: ../src/interface.c:1819
 msgid "<b>Switch to sketch pane</b>"
 msgstr "<b>Basculer vers l'onglet croquis</b>"
 
-#: ../src/interface.c:1823
+#: ../src/interface.c:1829
 msgid "<b>Quit application</b>"
 msgstr "<b>Quitter le programme</b>"
 
-#: ../src/interface.c:1840 ../src/interface.c:1926 ../src/interface.c:2270
-#: ../src/interface.c:2536
+#: ../src/interface.c:1846 ../src/interface.c:1932 ../src/interface.c:2276
+#: ../src/interface.c:2542
 msgid "Ok"
 msgstr "Valider"
 
-#: ../src/interface.c:1878
+#: ../src/interface.c:1884
 msgid "New Annotation ..."
 msgstr "Nouvelle annotation ..."
 
 #. font - only for Sketch
-#: ../src/interface.c:1905
+#: ../src/interface.c:1911
 msgid "Current font : "
 msgstr "Police actuelle : "
 
-#: ../src/interface.c:2011
+#: ../src/interface.c:2017
 msgid "Settings ..."
 msgstr "Préférences ... "
 
-#: ../src/interface.c:2032
+#: ../src/interface.c:2038
 msgid "Save current editor document every 5 minutes"
 msgstr "Enregistrer la note actuelle toutes les 5 minutes"
 
-#: ../src/interface.c:2037
+#: ../src/interface.c:2043
 msgid "Reload last used PDF at program's start "
 msgstr "Recharger le dernier fichier PDF utilisé au redémarrage du programme"
 
-#: ../src/interface.c:2040
+#: ../src/interface.c:2046
 msgid ""
 "If available in your system, the last PDF document used will be "
 "automatically\n"
@@ -1026,11 +1025,11 @@ msgstr ""
 "automatiquement\n"
 "rechargé au redémarrage du programme."
 
-#: ../src/interface.c:2042
+#: ../src/interface.c:2048
 msgid "Ask before quit program"
 msgstr "Demander confirmation avant de quitter le programme"
 
-#: ../src/interface.c:2045
+#: ../src/interface.c:2051
 msgid ""
 "Force a prompt before quit program. Take it easy, your work will be "
 "automatically saved\n"
@@ -1041,63 +1040,67 @@ msgstr ""
 "automatiquement enregistré, même si cette option\n"
 "n'est pas cochée."
 
-#: ../src/interface.c:2047
+#: ../src/interface.c:2053
 msgid "Ask before overwriting files"
 msgstr "Demander confirmation avant d'écraser un fichier"
 
-#: ../src/interface.c:2050
+#: ../src/interface.c:2056
 msgid "Force a prompt before any files are overwrote"
 msgstr "Demande confirmation avant d'écraser un fichier existant"
 
-#: ../src/interface.c:2052
+#: ../src/interface.c:2058
 msgid "File management"
 msgstr "Gestion des fichiers"
 
-#: ../src/interface.c:2075
+#: ../src/interface.c:2081
 msgid "Text font:"
 msgstr "Police du texte : "
 
-#: ../src/interface.c:2086
+#: ../src/interface.c:2092
 msgid "Text background color:"
 msgstr "Couleur d'arrière-plan du texte : "
 
-#: ../src/interface.c:2096
+#: ../src/interface.c:2102
 msgid "Text foreground color:"
 msgstr "Couleur d'écriture du texte : "
 
-#: ../src/interface.c:2106
+#: ../src/interface.c:2112
 msgid "Editor"
 msgstr "Éditeur de notes"
 
-#: ../src/interface.c:2124
+#: ../src/interface.c:2130
 msgid "Document paper color : "
 msgstr "Couleur papier du document : "
 
-#: ../src/interface.c:2133
+#: ../src/interface.c:2139
 msgid "<i>(Please reload PDF document to complete operation)</i>"
 msgstr "<i>(SVP rechargez le PDF pour prendre en compte le changement)</i>"
 
-#: ../src/interface.c:2140
+#: ../src/interface.c:2146
 msgid "PDF document"
 msgstr "Document PDF"
 
-#: ../src/interface.c:2159
+#: ../src/interface.c:2165
 msgid "Paper color : "
 msgstr "Couleur papier : "
 
-#: ../src/interface.c:2165
+#: ../src/interface.c:2171
 msgid "<i>(Remain unchanged until you clear sketch)</i>"
 msgstr "<i>(Restera inchangée jusqu'à ce que vous effaciez le croquis)</i>"
 
-#: ../src/interface.c:2175
+#: ../src/interface.c:2181
 msgid "Annotation text font:"
 msgstr "Police du texte de l'annotation"
 
-#: ../src/interface.c:2184
+#: ../src/interface.c:2190
 msgid "Pen width in pixels :"
 msgstr "Largeur du crayon en pixels : "
 
-#: ../src/interface.c:2214
+#: ../src/interface.c:2200 ../src/interface.c:2693
+msgid "Sketch"
+msgstr "Croquis"
+
+#: ../src/interface.c:2220
 msgid ""
 "<b>Play/pause rewind jump in seconds.</b>\n"
 "<i>Minimum : 1sec, maximum 10 secs.</i>"
@@ -1105,7 +1108,7 @@ msgstr ""
 "<b>Saut arrière du bouton Lecture/pause en secondes.</b>\n"
 "<i>Minimum : 1sec, maximum 10 secs.</i>"
 
-#: ../src/interface.c:2224
+#: ../src/interface.c:2230
 msgid ""
 "<b>Back or forward jump in seconds.</b>\n"
 "<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"
@@ -1113,20 +1116,20 @@ msgstr ""
 "<b>Saut avant ou arrière en secondes.</b>\n"
 "<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"
 
-#: ../src/interface.c:2239
+#: ../src/interface.c:2245
 msgid "Auto rewind to start after playing completed."
 msgstr "Retour automatique au début dès la fin de la lecture"
 
-#: ../src/interface.c:2244
+#: ../src/interface.c:2250
 msgid "Audio"
 msgstr "Audio"
 
-#: ../src/interface.c:2435
+#: ../src/interface.c:2441
 msgid "Jump to..."
 msgstr "Sauter à ..."
 
 #. labels
-#: ../src/interface.c:2464
+#: ../src/interface.c:2470
 msgid ""
 "<b><big>Select a new time position : \n"
 "</big></b><i>Please choose a time location within the audio file.\n"
@@ -1137,16 +1140,16 @@ msgstr ""
 "dans le fichier audio</i>"
 
 #. various infos
-#: ../src/interface.c:2472
+#: ../src/interface.c:2478
 msgid "<b>Current position :</b>"
 msgstr "<b>Position courante :</b>"
 
-#: ../src/interface.c:2479
+#: ../src/interface.c:2485
 #, c-format
 msgid "<i> %s of %s</i>"
 msgstr "<i> %s de %s</i>"
 
-#: ../src/interface.c:2488
+#: ../src/interface.c:2494
 msgid ""
 "<i><b>\n"
 "New position : </b></i>"
@@ -1154,51 +1157,60 @@ msgstr ""
 "<i><b>\n"
 "Nouvelle position : </b></i>"
 
-#: ../src/interface.c:2496
+#: ../src/interface.c:2502
 msgid "Hour :"
 msgstr "Heure : "
 
-#: ../src/interface.c:2502
+#: ../src/interface.c:2508
 msgid "Minute :"
 msgstr "Minute :"
 
-#: ../src/interface.c:2508
+#: ../src/interface.c:2514
 msgid "Second :"
 msgstr "Seconde :"
 
-#: ../src/interface.c:2567
+#: ../src/interface.c:2573
 msgid "Project Manager:"
 msgstr "Direction du projet : "
 
-#: ../src/interface.c:2568
+#: ../src/interface.c:2574
 msgid "Redac logos + main icon :"
 msgstr "Logos de Redac et icône principale : "
 
-#: ../src/interface.c:2580
+#: ../src/interface.c:2586
 msgid "Note  utility written in GTK+ and licensed under GPL v.3"
 msgstr "Utilitaire de prise de notes écrit en Gtk+ et sous licence GPL v.3"
 
-#: ../src/interface.c:2587
+#: ../src/interface.c:2593
 msgid "Translators credits"
 msgstr "Crédits traducteurs"
 
-#: ../src/callbacks.c:76
+#. place stack
+#: ../src/interface.c:2691
+msgid "Notes"
+msgstr "Notes"
+
+#: ../src/interface.c:2692
+msgid "Reference"
+msgstr "Référence"
+
+#: ../src/callbacks.c:74
 #, c-format
 msgid "Paragraph: %d/%d  %d Chars  %d Words"
 msgstr "Paragraphe: %d/%d  %d Car.  %d Mots"
 
 #. now we set-up a new default filename
-#: ../src/callbacks.c:207 ../src/callbacks.c:2707
+#: ../src/callbacks.c:205 ../src/callbacks.c:2720
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../src/callbacks.c:209
+#: ../src/callbacks.c:207
 #, c-format
 msgid "<small><b>%s-<span foreground=\"red\">modified</span></b></small>"
 msgstr "<small><b>%s-<span foreground=\"red\">modifié</span></b></small>"
 
-#: ../src/callbacks.c:883
+#: ../src/callbacks.c:885
 msgid ""
 "Do you really want to erase your sketch ?\n"
 "This operation can't be cancelled once done ! "
@@ -1206,20 +1218,20 @@ msgstr ""
 "Êtes-vous sur(e) de vouloir effacer votre croquis ?\n"
 "Cette opération ne pourra être annulée !"
 
-#: ../src/callbacks.c:2044 ../src/callbacks.c:2111
+#: ../src/callbacks.c:2040 ../src/callbacks.c:2107
 #, c-format
 msgid "%d hits"
 msgstr "%d fois"
 
-#: ../src/callbacks.c:2414
+#: ../src/callbacks.c:2444
 msgid "I save you work ... wait a moment, please. "
 msgstr "J'enregistre votre travail ... un petit moment SVP."
 
-#: ../src/callbacks.c:2972
+#: ../src/callbacks.c:2974
 msgid "Choose annotation color ..."
 msgstr "Choisir la couleur pour l'annotation ..."
 
-#: ../src/callbacks.c:3026
+#: ../src/callbacks.c:3028
 msgid ""
 "Warning !\n"
 "I can't, for now, *undo* removing for\n"
@@ -1231,7 +1243,7 @@ msgstr ""
 "pour ce type d'opération !\n"
 "Dois-je quand même faire la suppression demandée ?"
 
-#: ../src/callbacks.c:3292
+#: ../src/callbacks.c:3294
 msgid ""
 "<big><b>Can't access to online wiki !</b></big>\n"
 "Please, check your Internet connection\n"
