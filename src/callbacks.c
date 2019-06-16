@@ -40,8 +40,7 @@ static gboolean fStrikethrough = FALSE;
 static gboolean fQuotation = FALSE;
 static gboolean fUserClickedButton = FALSE;
 static gint iPendingFormat = 0; /* a flag to report a formatting to the next call */
-static gint iPendingCol =-1, iPendingOffset=0, iCurrentOffset=0;
-static gint iColMem =-1, iRowMem= -1; /* in order to check if the user gone backward */
+static gint iPendingOffset=0, iCurrentOffset=0;
 static gint kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
 
 /****************************************
@@ -50,15 +49,16 @@ static gint kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
 void update_statusbar(GtkTextBuffer *buffer, APP_data *data) 
 {
   gchar *msg;
-  gint row, col, total_chars, total_words;
+  gint total_chars, total_words;
   GtkTextIter iter, start, end;
   GtkWidget *window1=NULL, *button;
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;
-  gboolean ok;
   GKeyFile *keyString;
   GtkTextView *view;
   GtkStatusbar  *statusbar=data->statusbar1;
+static gint countchange=0;
+countchange++;
 
   window1 = data->appWindow;
   view=data->view;
@@ -66,12 +66,11 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
   fUserClickedButton = TRUE;
   gtk_statusbar_pop(statusbar, 0); 
   gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-  
-  row = gtk_text_iter_get_line(&iter);
-  col = gtk_text_iter_get_line_offset(&iter);
+  /* we compute current char offset */
+  iCurrentOffset=gtk_text_iter_get_offset(&iter);
   total_chars = gtk_text_buffer_get_char_count(buffer);
   total_words = countWords(buffer);
-  msg = g_strdup_printf(_("Paragraph: %d/%d  %d Chars  %d Words"),row+1,  
+  msg = g_strdup_printf(_("Paragraph: %d/%d  %d Chars  %d Words"),gtk_text_iter_get_line(&iter)+1,  
                            gtk_text_buffer_get_line_count(buffer), total_chars, total_words);/* page=(row+1)/66+1 */
   /* section to apply marking on last char */
 
@@ -82,28 +81,28 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
   tagTable1 = gtk_text_buffer_get_tag_table(buffer);
   if(fBold) {
      tag = gtk_text_tag_table_lookup(tagTable1, "bold");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fBold=FALSE;
         iPendingFormat = -1;
      }
      else {
          if(iPendingFormat>1) {
            start = end;      
-           gtk_text_iter_set_line_offset (&start,iPendingCol);
+           gtk_text_iter_set_offset  (&start,iPendingOffset);
            gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
          } 
      }
   }
   if(fItalic) {
      tag = gtk_text_tag_table_lookup(tagTable1, "italic");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fItalic=FALSE;
         iPendingFormat = -1;
      }
      else {
        if(iPendingFormat>1) {
          start = end;      
-         gtk_text_iter_set_line_offset (&start,iPendingCol);
+         gtk_text_iter_set_offset  (&start,iPendingOffset);
          gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
        }
      }
@@ -111,14 +110,14 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
   if(fUnderline) {
      //iPendingFormat++;
      tag = gtk_text_tag_table_lookup(tagTable1, "underline");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fUnderline=FALSE;
         iPendingFormat = -1;
      }
      else {
        if(iPendingFormat>1) {
          start = end;     
-         gtk_text_iter_set_line_offset (&start,iPendingCol);
+         gtk_text_iter_set_offset  (&start,iPendingOffset);
          gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
        }
      }
@@ -126,14 +125,14 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
 
   if(fSuperscript) {
      tag = gtk_text_tag_table_lookup(tagTable1, "superscript");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fSuperscript=FALSE;
         iPendingFormat = -1;
      }
      else {
-       if((iPendingFormat>1) && (iPendingCol>=0)) {
+       if(iPendingFormat>1) {
          start = end;     
-         gtk_text_iter_set_line_offset (&start,iPendingCol);
+         gtk_text_iter_set_offset  (&start,iPendingOffset);
          gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
        }
      }
@@ -141,56 +140,56 @@ void update_statusbar(GtkTextBuffer *buffer, APP_data *data)
 
   if(fSubscript) {
      tag = gtk_text_tag_table_lookup(tagTable1, "subscript");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fSubscript=FALSE;
         iPendingFormat = -1;
      }
      else {
-       if((iPendingFormat>1) && (iPendingCol>=0)) {
+       if(iPendingFormat>1) {
          start = end;     
-         gtk_text_iter_set_line_offset (&start,iPendingCol);
+         gtk_text_iter_set_offset  (&start,iPendingOffset);
          gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
        }
      }
   }
   if(fHighlight) {
      tag = gtk_text_tag_table_lookup(tagTable1, "highlight");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fHighlight=FALSE;
         iPendingFormat = -1;
      }
      else {
-       if((iPendingFormat>1) && (iPendingCol>=0)) {
+       if(iPendingFormat>1) {
          start = end;     
-         gtk_text_iter_set_line_offset (&start,iPendingCol);
+         gtk_text_iter_set_offset  (&start,iPendingOffset);
          gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
        }
      }
   }  
   if(fStrikethrough) {
      tag = gtk_text_tag_table_lookup(tagTable1, "strikethrough");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fStrikethrough=FALSE;
         iPendingFormat = -1;
      }
      else {
-       if((iPendingFormat>1) && (iPendingCol>=0)) {
+       if(iPendingFormat>1) {
          start = end;     
-         gtk_text_iter_set_line_offset (&start,iPendingCol);
+         gtk_text_iter_set_offset  (&start,iPendingOffset);
          gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
        }
      }
   }  
   if(fQuotation) {
      tag = gtk_text_tag_table_lookup(tagTable1, "quotation");
-     if((col<iColMem)||(row<iRowMem)) {
+     if(iCurrentOffset<iPendingOffset) {
         fQuotation=FALSE;
         iPendingFormat = -1;
      }
      else {
-       if((iPendingFormat>1) && (iPendingCol>=0)) {
+       if(iPendingFormat>1) {
          start = end;     
-         gtk_text_iter_set_line_offset (&start,iPendingCol);
+         gtk_text_iter_set_offset  (&start,iPendingOffset);
          gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
        }
      }
@@ -777,6 +776,7 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
       pBtnColor=lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
       /* we get the current RGBA color */
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
+
       tmpStr=dialog_add_text_annotation(data->appWindow, "", data);
       if(tmpStr!=NULL) {
         draw_text (event->button.x, event->button.y, data, tmpStr );
@@ -1113,7 +1113,6 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
 
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonLeft"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-    //   printf("bingo left\n");
        on_left_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
        data->kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
@@ -1121,7 +1120,6 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
    }
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonCenter"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-     //  printf("bingo Center\n");
        on_center_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_CENTER;
        data->kw_paragraph_alignment = KW_ALIGNMENT_CENTER;
@@ -1129,7 +1127,6 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
    }
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonRight"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-      // printf("bingo Right\n");
        on_right_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_RIGHT;
        data->kw_paragraph_alignment = KW_ALIGNMENT_RIGHT;
@@ -1137,7 +1134,6 @@ on_button_alignment_toggled (GtkButton *button, APP_data *data)
    }
   tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonFill"));
   if (gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(tmpButton)))  {
-      // printf("bingo Fill\n");
        on_fill_justify_clicked(data);
        kw_paragraph_alignment = KW_ALIGNMENT_FILL;
        data->kw_paragraph_alignment = KW_ALIGNMENT_FILL;
@@ -1156,7 +1152,6 @@ on_bold_clicked  (GtkButton  *button, APP_data *data)
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;  
 
-
   if(!fUserClickedButton)
      return;
   fIsBold = gtk_toggle_tool_button_get_active (GTK_TOOL_BUTTON(button));
@@ -1166,11 +1161,10 @@ on_bold_clicked  (GtkButton  *button, APP_data *data)
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
      fBold=!fBold;
-     fUserClickedButton = FALSE;
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer,
@@ -1199,7 +1193,7 @@ on_bold_clicked  (GtkButton  *button, APP_data *data)
 
 */
 void
-on_italic_clicked     (GtkButton  *button, APP_data *data)
+on_italic_clicked  (GtkButton  *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1217,11 +1211,10 @@ on_italic_clicked     (GtkButton  *button, APP_data *data)
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
      fItalic=!fItalic;
-     fUserClickedButton = FALSE;
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer,
@@ -1270,10 +1263,9 @@ on_underline_clicked  (GtkButton *button, APP_data *data)
      /* it's a demand to switch to insert/append mode with a specific format */
      fUnderline=!fUnderline;
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
-     fUserClickedButton = FALSE;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
@@ -1322,10 +1314,9 @@ on_superscript_clicked     (GtkButton  *button, APP_data  *data)
      /* it's a demand to switch to insert/append mode with a specific format */
      fSuperscript=!fSuperscript;
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
-     fUserClickedButton = FALSE;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
@@ -1381,10 +1372,9 @@ on_subscript_clicked (GtkButton *button, APP_data *data)
      /* it's a demand to switch to insert/append mode with a specific format */
 
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
-     fUserClickedButton = FALSE;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
@@ -1438,10 +1428,9 @@ on_highlight_clicked (GtkButton *button, APP_data *data)
      /* it's a demand to switch to insert/append mode with a specific format */
 
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
-     fUserClickedButton = FALSE;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
@@ -1500,10 +1489,9 @@ on_strikethrough_clicked (GtkButton *button, APP_data *data)
      /* it's a demand to switch to insert/append mode with a specific format */
 
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
-     fUserClickedButton = FALSE;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
@@ -1559,10 +1547,9 @@ void on_quotation_clicked   (GtkButton  *button,  APP_data *data)
      /* it's a request to switch to insert/append mode with a specific format */
 
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     iRowMem = gtk_text_iter_get_line(&iter);
-     iPendingCol  = gtk_text_iter_get_line_offset(&iter);
-     iColMem = iPendingCol;
-     fUserClickedButton = FALSE;
+     /* we compute current char offset */
+     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer,
@@ -2010,7 +1997,7 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
                   PDF_display_page (window1,data->curPDFpage, data->doc, data);                        
                   search_draw_selection_current_page(data->curPDFpage, data, data->surface);                   
                   update_statusbarPDF(data);
-                  // gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
+                  //gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
                   /* we check results */
                  // GList *l=g_list_first(data->pdfSearch);
                  /* printf("check Glist !\n");
@@ -2222,6 +2209,7 @@ void sketch_moveDown (GtkWidget *parentWindow, APP_data *data)
           gtk_adjustment_set_value (verticalAdjust,gtk_adjustment_get_value(verticalAdjust)+PDF_SCROLL_STEP);
   } 
 }
+
 /********************************
  handling "copy to clipboard"
  signal
@@ -2539,6 +2527,31 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
           on_help_clicked(widget);
           break;
          }
+         case GDK_KEY_F3:{
+            /* check if we are a selection - exit if none */
+            if( gtk_text_buffer_get_selection_bounds (data->buffer, &start,&end)) {
+              tmpStr=gtk_text_buffer_get_text(data->buffer,&start,&end,FALSE);
+              /* we push current (over)writemode */
+              gboolean fOver=gtk_text_view_get_overwrite (data->view);
+              /* we check the first char of selection in order to know if it's in lower or uppercase */
+              gunichar first_char=g_utf8_get_char (tmpStr);
+              gboolean islower=g_unichar_islower (first_char);
+              /* if the first char is in lower case, we convert to uppercase - conversely if first char is in uppercase */
+              gchar *newStr;
+              if(islower)
+                  newStr=g_utf8_strup (tmpStr, -1 );
+              else 
+                  newStr=g_utf8_strdown (tmpStr, -1 );
+              /* we overwrite previous string at current position */
+              gtk_text_buffer_delete( data->buffer, &start, &end);
+              gtk_text_buffer_insert (data->buffer, &start, newStr, -1 );
+              /* we go back to previous mode */
+              g_free(newStr);
+              g_free(tmpStr);
+            }
+            return TRUE;
+            break;
+         }/* CTRL+F3 */
          case GDK_KEY_q: {
            /* request to quit application */
            on_quit_clicked(widget , NULL, data);
@@ -2661,7 +2674,6 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
          }
          default:{/* supposed standard printable chars , be careful backspace is treated as printable by X11 !!! */
             if(gdk_keyval_to_unicode (event->keyval)!=0) {
-// printf("key=%s\n", gdk_keyval_name (event->keyval));
                /* we push a single char to undo engine */
                gtk_text_buffer_get_iter_at_mark(data->buffer, &iter, gtk_text_buffer_get_insert(data->buffer));
                mark2=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
@@ -2731,7 +2743,6 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
          }
          /* we rearrange recent files & contents */
          for(i=ret-PAVING_BUTTON1;i>0;i--) {
-            // printf("boucle paving i=%d \n", i);
              if(g_key_file_has_key(keyString, "history", g_strdup_printf("recent-file-%d",i-1 ), NULL)) {
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           g_strdup_printf("recent-file-%d",i-1), NULL));
