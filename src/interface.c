@@ -1596,6 +1596,11 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
   gtk_label_set_use_markup (GTK_LABEL (labelFormatQuotationTitle), TRUE);
   gtk_grid_attach(GTK_GRID (gridDialog), labelFormatQuotationTitle, 0, 8, 1, 1);
 
+  GtkWidget *labelUpLowCaseTitle = gtk_label_new(_("<b>Toggle up/lower case</b>"));
+  g_object_set (labelUpLowCaseTitle, "margin", 4, NULL);
+  gtk_label_set_use_markup (GTK_LABEL (labelUpLowCaseTitle), TRUE);
+  gtk_grid_attach(GTK_GRID (gridDialog), labelUpLowCaseTitle, 0, 9, 1, 1);
+
   GtkWidget *labelBoldShortcut = gtk_label_new(misc_get_pango_string("b", 1));
   gtk_widget_show(labelBoldShortcut);
   gtk_label_set_use_markup (GTK_LABEL (labelBoldShortcut), TRUE);
@@ -1629,6 +1634,12 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
   GtkWidget *labelQuotationShortcut = gtk_label_new(misc_get_pango_string("\"", 1));
   gtk_label_set_use_markup (GTK_LABEL (labelQuotationShortcut), TRUE);
   gtk_grid_attach(GTK_GRID (gridDialog), labelQuotationShortcut, 1, 8, 1, 1);
+
+  GtkWidget *labelUpLowCaseShortcut = gtk_label_new(misc_get_pango_string("F3", 1));
+  gtk_label_set_use_markup (GTK_LABEL (labelUpLowCaseShortcut), TRUE);
+  gtk_grid_attach(GTK_GRID (gridDialog), labelUpLowCaseShortcut, 1, 9, 1, 1);
+
+
 /* aligments */
   GtkWidget *labelAlignmentLeftShortcuts = gtk_label_new(_("<b>Left</b>"));
   gtk_label_set_use_markup (GTK_LABEL (labelAlignmentLeftShortcuts), TRUE);
@@ -1853,6 +1864,7 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
   gtk_widget_show_all(helpDialog);
   return helpDialog;
 }
+
 
 /**************************************************************
   dialog to set up an annotation inside the PDF or Sketch 
