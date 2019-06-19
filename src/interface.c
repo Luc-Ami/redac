@@ -1507,6 +1507,10 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
 {
   GtkWidget *helpDialog;
   GtkWidget *dialog_vbox11;
+  GtkWidget *gridDialogHeader;
+  GtkWidget *iconTitle;
+  GtkWidget *labelTitle;
+  GtkWidget *subTitle;
   GtkWidget *gridDialog;
   GtkWidget *labelAlignment;
   GtkWidget *labelFormat;
@@ -1526,7 +1530,32 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
   gtk_window_set_transient_for (GTK_WINDOW (helpDialog),  GTK_WINDOW(win)); 
   dialog_vbox11 = gtk_dialog_get_content_area (GTK_DIALOG (helpDialog));
   gtk_widget_show (dialog_vbox11);
+  gridDialogHeader= gtk_grid_new();
+  gtk_widget_set_name(gridDialogHeader, "gridDialogHeader");
+  gtk_widget_show (gridDialogHeader);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialogHeader, TRUE, TRUE, 4);
+
+  /* icon */
+  iconTitle=gtk_image_new_from_icon_name ("preferences-desktop-keyboard-shortcuts",GTK_ICON_SIZE_DIALOG);
+  gtk_misc_set_alignment (GTK_MISC (iconTitle), 0, 0.5);
+  gtk_widget_set_hexpand(GTK_WIDGET(iconTitle), FALSE);
+  gtk_misc_set_padding (GTK_MISC (iconTitle), 5, 5);
+  gtk_grid_attach(GTK_GRID(gridDialogHeader), iconTitle, 0,0,1,1);
+  /* title */
+  labelTitle= gtk_label_new("");
+  gtk_label_set_markup (GTK_LABEL (labelTitle),_("<big><b>Keyboard shortcuts :</b></big>"));
+  gtk_misc_set_alignment (GTK_MISC (labelTitle), 0, 0.5);
+  gtk_widget_set_hexpand(GTK_WIDGET(labelTitle), FALSE);
+  gtk_grid_attach(GTK_GRID(gridDialogHeader), labelTitle, 1,0,1,1);
+  gtk_misc_set_padding (GTK_MISC (labelTitle), 5, 5);
+  subTitle=gtk_label_new("");
+  gtk_label_set_markup(GTK_LABEL(subTitle), _("<i>Here is the various keys to set-up formatings and so on.\nWhen 2 keys are displayed, please keep in mind that\nyou must press the 2 keys in the same time.</i>"));
+  gtk_misc_set_padding (GTK_MISC (subTitle), 5, 5);
+  gtk_grid_attach(GTK_GRID(gridDialogHeader), subTitle, 1,1,2,1);
+
+
   gridDialog = gtk_grid_new();
+  gtk_widget_set_name(gridDialog, "gridDialog");
   gtk_widget_show (gridDialog);
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialog, TRUE, TRUE, 4);
   /* labels */

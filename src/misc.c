@@ -631,15 +631,15 @@ gchar *misc_get_pango_string(const gchar *key, const gint modifier)
 {
   switch(modifier) {
     case 0:{
-     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"orange\"><b> %s </b></span>", key);
+     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>", key);
      break;
     }
     case 1:{
-     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"#352EDA\"><b>CTRL</b></span> + <span font=\"11\" foreground=\"white\" background=\"orange\"><b> %s </b></span>", key);
+     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"#6F7DC8\"><b>CTRL</b></span> + <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>", key);
      break;
     }
    case 2:{
-     return g_strdup_printf(_(" <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></span> + <span font=\"11\" foreground=\"white\" background=\"orange\"><b> %s </b></span>"), key);
+     return g_strdup_printf(_(" <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></span> + <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>"), key);
      break;
     }
    default:;
