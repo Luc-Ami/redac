@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-18 20:30+0200\n"
+"POT-Creation-Date: 2019-06-19 11:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,94 +82,98 @@ msgid "Undo replace text"
 msgstr ""
 
 #: ../src/undo.c:103
-msgid "Redo set paragraph to quotation style"
+msgid "Undo set selection to upper or lower case"
 msgstr ""
 
 #: ../src/undo.c:107
+msgid "Redo set paragraph to quotation style"
+msgstr ""
+
+#: ../src/undo.c:111
 msgid ""
 "Undo set paragraph to left alignment, and \n"
 "go back to previous alignment."
 msgstr ""
 
-#: ../src/undo.c:111
+#: ../src/undo.c:115
 msgid ""
 "Undo set paragraph to center alignment, and \n"
 "go back to previous alignment"
 msgstr ""
 
-#: ../src/undo.c:115
+#: ../src/undo.c:119
 msgid ""
 "Undo set paragraph to right alignment, and \n"
 "go back to previous alignment"
 msgstr ""
 
-#: ../src/undo.c:119
+#: ../src/undo.c:123
 msgid ""
 "Undo set paragraph to fill alignment, and \n"
 "go back to previous alignment"
 msgstr ""
 
-#: ../src/undo.c:123
+#: ../src/undo.c:127
 msgid "Undo insert char"
 msgstr ""
 
-#: ../src/undo.c:127
+#: ../src/undo.c:131
 msgid "Undo delete char"
 msgstr ""
 
-#: ../src/undo.c:131
+#: ../src/undo.c:135
 msgid "Undo insert block of text"
 msgstr ""
 
-#: ../src/undo.c:135
+#: ../src/undo.c:139
 msgid "Undo delete block of text"
 msgstr ""
 
-#: ../src/undo.c:139
+#: ../src/undo.c:143
 msgid "Undo insert image"
 msgstr ""
 
-#: ../src/undo.c:143
+#: ../src/undo.c:147
 msgid "Undo delete image"
 msgstr ""
 
-#: ../src/undo.c:147
+#: ../src/undo.c:151
 msgid "Undo new PDF text annot"
 msgstr ""
 
-#: ../src/undo.c:151
+#: ../src/undo.c:155
 msgid "Undo set highlighting inside PDF"
 msgstr ""
 
-#: ../src/undo.c:155
+#: ../src/undo.c:159
 msgid "Undo set color of current annotation inside PDF"
 msgstr ""
 
-#: ../src/undo.c:159
+#: ../src/undo.c:163
 msgid "Undo set current annotation text content inside PDF"
 msgstr ""
 
-#: ../src/undo.c:163
+#: ../src/undo.c:167
 msgid "Undo remove annotation inside PDF"
 msgstr ""
 
-#: ../src/undo.c:167
+#: ../src/undo.c:171
 msgid "Undo last drawing inside sketch"
 msgstr ""
 
-#: ../src/undo.c:171
+#: ../src/undo.c:175
 msgid "Undo last image pasting inside sketch"
 msgstr ""
 
-#: ../src/undo.c:175
+#: ../src/undo.c:179
 msgid "undo last text annot paste inside sketch - TODO"
 msgstr ""
 
-#: ../src/undo.c:184
+#: ../src/undo.c:188
 msgid "Nothing to undo"
 msgstr ""
 
-#: ../src/undo.c:716
+#: ../src/undo.c:736
 msgid "There is nothing to undo."
 msgstr ""
 
@@ -1079,7 +1083,7 @@ msgid "Paragraph: %d/%d  %d Chars  %d Words"
 msgstr ""
 
 #. now we set-up a new default filename
-#: ../src/callbacks.c:204 ../src/callbacks.c:2729
+#: ../src/callbacks.c:204 ../src/callbacks.c:2743
 #, c-format
 msgid "%s"
 msgstr ""
@@ -1104,11 +1108,11 @@ msgstr ""
 msgid "I save you work ... wait a moment, please. "
 msgstr ""
 
-#: ../src/callbacks.c:2981
+#: ../src/callbacks.c:2995
 msgid "Choose annotation color ..."
 msgstr ""
 
-#: ../src/callbacks.c:3035
+#: ../src/callbacks.c:3049
 msgid ""
 "Warning !\n"
 "I can't, for now, *undo* removing for\n"
@@ -1116,7 +1120,7 @@ msgid ""
 "Proceed aniway ?"
 msgstr ""
 
-#: ../src/callbacks.c:3301
+#: ../src/callbacks.c:3315
 msgid ""
 "<big><b>Can't access to online wiki !</b></big>\n"
 "Please, check your Internet connection\n"

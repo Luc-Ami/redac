@@ -99,6 +99,10 @@ static void update_undo_tooltip( gint op, APP_data *data)
      gtk_widget_set_tooltip_text(data->pBtnUndo, _("Undo replace text"));
      break;
     }
+    case OP_TOGGLE_CASE:{
+     gtk_widget_set_tooltip_text(data->pBtnUndo, _("Undo set selection to upper or lower case"));
+     break;
+    }
     case OP_UNSET_QUOTE:{
      gtk_widget_set_tooltip_text(data->pBtnUndo, _("Redo set paragraph to quotation style"));
      break;
