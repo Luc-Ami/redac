@@ -422,6 +422,22 @@ static void undo_pop_editor(gint op, APP_data *data)
           gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->beforeMark); 
           break;
         }
+        case OP_TOGGLE_CASE:{
+          /* remove text inside marked area */
+          gtk_text_buffer_get_iter_at_mark (data->buffer,&start,tmp_undo_datas->beforeMark);
+          gtk_text_buffer_get_iter_at_mark (data->buffer,&end,tmp_undo_datas->undoMark);
+          flag=gtk_text_iter_backward_chars (&start, tmp_undo_datas->str_len);
+          gtk_text_buffer_delete (data->buffer, &start,&end);
+          /* paste previous rich text */
+          GdkAtom format = gtk_text_buffer_register_deserialize_tagset(data->buffer, "application/x-gtk-text-buffer-rich-text");
+          gtk_text_buffer_get_iter_at_mark (data->buffer,&start,tmp_undo_datas->beforeMark);
+          flag = gtk_text_buffer_deserialize(data->buffer, data->buffer, format, &start, 
+                                                  tmp_undo_datas->serialized_buffer,tmp_undo_datas->buffer_length, NULL);
+          /* clear some datas */
+          gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->undoMark); 
+          gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->beforeMark); 
+          break;
+        }
         case OP_ALIGN_LEFT:
         case OP_ALIGN_CENTER:
         case OP_ALIGN_RIGHT:

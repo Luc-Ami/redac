@@ -1608,7 +1608,7 @@ on_left_justify_clicked (APP_data *data)
      row = gtk_text_iter_get_line(&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
-  else {printf("* Warning : I compute a default selection *\n");
+  else {
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
      row = gtk_text_iter_get_line(&iter);
      col = gtk_text_iter_get_line_offset(&iter);
@@ -1665,7 +1665,7 @@ on_center_justify_clicked (APP_data *data)
      row = gtk_text_iter_get_line(&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
-  else {printf("I compute a default selection \n");
+  else {
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
      row = gtk_text_iter_get_line(&iter);
      col = gtk_text_iter_get_line_offset(&iter);
@@ -1723,7 +1723,7 @@ on_right_justify_clicked (APP_data *data)
      row = gtk_text_iter_get_line(&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
-  else {printf("I compute a default selection \n");
+  else {
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
      row = gtk_text_iter_get_line(&iter);
      col = gtk_text_iter_get_line_offset(&iter);
@@ -1778,7 +1778,7 @@ on_fill_justify_clicked (APP_data *data)
      row = gtk_text_iter_get_line(&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
-  else {printf("I compute a default selection \n");
+  else {
      gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
      row = gtk_text_iter_get_line(&iter);
      col = gtk_text_iter_get_line_offset(&iter);
@@ -1819,7 +1819,6 @@ on_clear_format_clicked (GtkButton *button, APP_data *data)
   tagTable1 = gtk_text_buffer_get_tag_table(buffer);
   
   if(!gtk_text_buffer_get_has_selection (buffer)) {
-     printf("no selection \n");
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
@@ -2357,7 +2356,6 @@ TODO check this function, add undo for word deletion with backspc
 */
 void delete(GtkTextView *view, GtkDeleteType type, gint count, APP_data *data)
 {
- printf("delete signal type=%d units =%d \n", type, count);
   GtkTextIter start, end, iter;
   GtkTextMark *mark;
   gsize length;
@@ -2447,12 +2445,12 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
   GtkTextIter start, end, iter;
   GtkTextMark *mark1, *mark2;
   gdouble pen_width;
+  gsize length;
   GKeyFile *keyString;
 
   keyString = g_object_get_data(G_OBJECT(data->appWindow), "config"); 
   pen_width=g_key_file_get_double(keyString, "sketch", "pen-width", NULL);
 
-// printf("key=%s\n", gdk_keyval_name (event->keyval));
   search_entry = lookup_widget(GTK_WIDGET(data->appWindow), "search_entry");
   replace_entry = lookup_widget(GTK_WIDGET(data->appWindow), "replace_entry");
   page_entry = lookup_widget(GTK_WIDGET(data->appWindow), "page_entry");
@@ -2542,9 +2540,22 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
                   newStr=g_utf8_strup (tmpStr, -1 );
               else 
                   newStr=g_utf8_strdown (tmpStr, -1 );
+              /* now we must preserve the richtext content and push it on undo engine */  
+              data->undo.annotStr=NULL;
+              data->undo.pix=NULL;
+              mark1=gtk_text_buffer_create_mark (data->buffer, NULL,&start,FALSE); 
+              GdkAtom format = gtk_text_buffer_register_serialize_tagset(data->buffer, "application/x-gtk-text-buffer-rich-text");
+              data->undo.serialized_buffer=gtk_text_buffer_serialize(data->buffer, data->buffer, format, &start, &end, &length);
+              data->undo.buffer_length=length;
+              data->undo.str_len=strlen(tmpStr);
               /* we overwrite previous string at current position */
               gtk_text_buffer_delete( data->buffer, &start, &end);
               gtk_text_buffer_insert (data->buffer, &start, newStr, -1 );
+              gtk_text_buffer_get_iter_at_mark(data->buffer, &iter, gtk_text_buffer_get_insert(data->buffer));
+              mark2=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
+              data->undo.beforeMark=mark1;
+              data->undo.undoMark=mark2;
+              undo_push(data->currentStack, OP_TOGGLE_CASE, data);
               /* we go back to previous mode */
               g_free(newStr);
               g_free(tmpStr);
@@ -2802,7 +2813,6 @@ on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
   if(prevStack== CURRENT_STACK_PDF) {
      /* unselect in PDF page */
      if(user_data->pdfSearch) {
-       printf("I shall remove PDF marks of search \n");
        search_free_PDF_search_datas(user_data);
      }
   }
