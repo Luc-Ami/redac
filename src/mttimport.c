@@ -267,6 +267,14 @@ static gint rtf_tokenize_command(gchar *command)
           return cmdAuthor;
       }  
   }
+  if(strlen(command)>6) {
+      if((command[0]=='f')&&(command[1]=='o')&&(command[2]=='n')&&(command[3]=='t')&&(command[4]=='t')&&(command[5]=='b')) {
+          return cmdFontTable;
+      }
+     if((command[0]=='s')&&(command[1]=='t')&&(command[2]=='y')&&(command[3]=='l')&&(command[4]=='e')&&(command[5]=='s')&&(command[6]=='h')) {
+          return cmdStyleSheet;
+      }
+  }
   return ret;
 }
 /*********************************************
@@ -312,7 +320,6 @@ gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
          switch(buffer[i]) {
             case '*':{/* destination control word */
               i=rtf_skip_destination_section(buffer, i, fileSize );
-              //printf("sq * buffer %c%c%c\n", buffer[i-1], buffer[i], buffer[i+1]);
               if(buffer[i+1]!=';')
                   i--;
                 else i++;
@@ -358,15 +365,14 @@ gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
                      i++;
                 }/* wend */
                 command[j]=0;
-                ret=rtf_tokenize_command(&command[0]);
-                //printf(">%i<\n", ret);
+                ret=rtf_tokenize_command(&command[0]);/* please note : after tokenization, i points on FIRST char AFTER command word*/
                 /* here we have discovered the command word - it's between posmem and current i index */
                 if(buffer[i]=='\\')
                    i--;
                 /* style ? font ? */
                 if(((buffer[posmem]=='s') || (buffer[posmem]=='f') )  &&(buffer[posmem+1]>='0')&&(buffer[posmem+1]<='9') ) {
                    i=posmem;
-                   while( (i<fileSize)&&(buffer[i]!='}')&&(buffer[i]!='{')&&(buffer[i]!='\n')) {
+                   while( (i<fileSize)&&(buffer[i]!=' ')&&(buffer[i]!='}')&&(buffer[i]!='{')&&(buffer[i]!='\n')) {
                       i++;
                    }
                 }/* if style / font */
@@ -398,6 +404,12 @@ gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
                         str= g_string_append_c (str, '\n');
                         break;
                       }
+                      case cmdFontTable:case cmdStyleSheet:{
+                        i--;
+                        i=rtf_skip_destination_section(buffer, i, fileSize );
+                        i++;
+                        break;
+                      }
                       default:{
                         // printf("* RTF control/command not managed *\n");
                       }
@@ -412,7 +424,6 @@ gint RTFCheckFile(gchar *path_to_file, GtkTextBuffer *textBuffer)
          break;
        }      
        case '\n':{/* a Parser MUST ignore LF */
-         //printf("LF inattendu etat buffer après=%c%c%c\n", buffer[i+1],buffer[i+2],buffer[i+3]);
          break;
        }
        default:{/* plain text */

@@ -62,6 +62,8 @@ from catdoc and me ;-)
 #define cmdHexChar 15
 #define cmdDecChar 17
 #define cmdAuthor 18
+#define cmdFontTable 19
+#define cmdStyleSheet 20
 
 void
 on_merge_clicked (GtkButton *button, APP_data *data_app);
