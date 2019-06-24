@@ -57,6 +57,10 @@ void set_up_view( GtkWidget *window1, APP_data *data_app )
   minor=gtk_get_minor_version ();
 
   const char css[] = 
+"  #labelOther { color:black; background-image: none; background-color: #FFFFFF; }\n"
+"  #labelPdfSketch  { color:black; background-image: none; background-color: #CBCBD0; }\n"
+"  #labelFormat  { color:black; background-image: none; background-color: #CBCBD0; }\n"
+"  #labelAlignment { color:black; background-image: none; background-color: #FFFFFF; }\n"
 "  #labelHitsFrame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 1px; padding: 0px; }\n"
 "  #search_entry { border: none; padding: 4px; }\n"
 "  #page_frame { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 1px; padding: 2px; }\n"
@@ -1557,36 +1561,45 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
 
   gridDialog = gtk_grid_new();
   gtk_widget_set_name(gridDialog, "gridDialog");
+ // gtk_grid_set_column_homogeneous (GTK_GRID(gridDialog), TRUE);
   g_object_set(gridDialog, "margin-left", 10, NULL);
   g_object_set(gridDialog, "margin-right", 10, NULL);
   gtk_widget_show (gridDialog);
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialog, TRUE, TRUE, 4);
   /* labels */
-  labelFormat = gtk_label_new(_("<b><big>Format shortcuts:\n</big></b>"));
+  labelFormat = gtk_label_new(_("<b><big>Format</big></b>"));
+  gtk_widget_set_name(GTK_WIDGET(labelFormat), "labelFormat");
   g_object_set(labelFormat, "margin-left", 4, NULL);
   g_object_set(labelFormat, "margin-right", 4, NULL);
-  gtk_widget_set_halign (GTK_WIDGET(labelFormat), GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand(GTK_WIDGET(labelFormat), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET(labelFormat), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelFormat), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormat, 0, 0, 2, 1);
+  gtk_grid_attach(GTK_GRID (gridDialog), labelFormat, 0, 0, 3, 1);
 
-  labelAlignment = gtk_label_new(_("<b><big>Alignment shortcuts:\n</big></b>"));
+  labelAlignment = gtk_label_new(_("<b><big>Alignment</big></b>"));
+  gtk_widget_set_name(GTK_WIDGET(labelAlignment), "labelAlignment");
   g_object_set(labelAlignment, "margin-left", 4, NULL);
   g_object_set(labelAlignment, "margin-right", 4, NULL);
-  gtk_widget_set_halign (GTK_WIDGET(labelAlignment), GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand(GTK_WIDGET(labelAlignment), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET(labelAlignment), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelAlignment), TRUE);
   gtk_grid_attach (GTK_GRID (gridDialog), labelAlignment, 3, 0, 2, 1);
 
-  GtkWidget *labelPdfSketch = gtk_label_new(_("<b><big>PDF, Sketch shortcuts:\n</big></b>"));
+  GtkWidget *labelPdfSketch = gtk_label_new(_("<b><big>PDF-Sketch</big></b>"));
+  gtk_widget_set_name(GTK_WIDGET(labelPdfSketch), "labelPdfSketch");
   g_object_set(labelPdfSketch, "margin-left", 4, NULL);
   g_object_set(labelPdfSketch, "margin-right", 4, NULL);
-  gtk_widget_set_halign (GTK_WIDGET(labelPdfSketch), GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand(GTK_WIDGET(labelPdfSketch), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET(labelPdfSketch), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfSketch), TRUE);
   gtk_grid_attach (GTK_GRID (gridDialog), labelPdfSketch, 5, 0, 2, 1);
 
-  GtkWidget *labelOther = gtk_label_new(_("<b><big>Application shortcuts:\n</big></b>"));
+  GtkWidget *labelOther = gtk_label_new(_("<b><big>Application</big></b>"));
+  gtk_widget_set_name(GTK_WIDGET(labelOther), "labelOther");
   g_object_set(labelOther, "margin-left", 4, NULL);
   g_object_set(labelOther, "margin-right", 4, NULL);
-  gtk_widget_set_halign (GTK_WIDGET(labelOther), GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand(GTK_WIDGET(labelOther), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET(labelOther), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelOther), TRUE);
   gtk_grid_attach (GTK_GRID (gridDialog), labelOther, 7, 0, 2, 1);
 
