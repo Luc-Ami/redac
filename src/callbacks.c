@@ -2754,6 +2754,7 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
          }
          /* we rearrange recent files & contents */
          for(i=ret-PAVING_BUTTON1;i>0;i--) {
+            // printf("boucle paving i=%d \n", i);
              if(g_key_file_has_key(keyString, "history", g_strdup_printf("recent-file-%d",i-1 ), NULL)) {
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           g_strdup_printf("recent-file-%d",i-1), NULL));
@@ -2769,6 +2770,9 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
        }/* endif */
        /* we change the default values for gkeyfile */
        store_current_file_in_keyfile(keyString, path_to_file, misc_get_extract_from_document(user_data));/* on the top, new doc loaded */
+     }/* enfi exist */
+     else {
+       file_alert_dialog (path_to_file, window1);
      }
      g_free(path_to_file);       
   }/* endif Buttons */

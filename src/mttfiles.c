@@ -486,6 +486,25 @@ void store_current_file_in_keyfile(GKeyFile *keyString, gchar *filename, gchar *
 }
 
 /***********************************
+  general file alert dialog
+***********************************/
+
+void file_alert_dialog (gchar *filename, GtkWidget *window1 )
+{
+  GtkWidget *alertDlg;
+  GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+
+  alertDlg =  gtk_message_dialog_new (GTK_WINDOW(window1),
+                                      flags,
+                                      GTK_MESSAGE_ERROR,
+                                      GTK_BUTTONS_OK,
+                                      _("The file :%s isn't a correct file\nor it's currupted. Operation cancelled !"),
+                                      filename);
+  gint retrun= gtk_dialog_run(GTK_DIALOG(alertDlg));
+  gtk_widget_destroy (GTK_WIDGET(alertDlg));
+}
+
+/***********************************
  rearrange files' order in recent
   file list ; do the same for
   extracts
@@ -537,9 +556,6 @@ gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *windo
   GError **error;
   glong fileSize;
   gchar rich_text_sign[]={0x47, 0x54, 0x4B, 0x54, 0x45, 0x58, 0x54,0x00};
-  GtkWidget *alertDlg;
-  GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
-
   GdkAtom format = gtk_text_buffer_register_deserialize_tagset(buffer, "application/x-gtk-text-buffer-rich-text");
 
   /* we open the file */
@@ -562,14 +578,7 @@ gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *windo
   /* now we check if it's a TRUE Gtk Rich text file */
   if (strncmp(txtbuffer,&rich_text_sign,7)!=0) {/* sign GTKTEXT string */
       g_free(txtbuffer);
-      alertDlg =  gtk_message_dialog_new (GTK_WINDOW(window1),
-                                      flags,
-                                      GTK_MESSAGE_ERROR,
-                                      GTK_BUTTONS_OK,
-                                      _("The file :%s isn't a correct file\nor it's currupted. Operation cancelled !"),
-                                      filename);
-     gint retrun= gtk_dialog_run(GTK_DIALOG(alertDlg));
-     gtk_widget_destroy (GTK_WIDGET(alertDlg));
+      file_alert_dialog (filename, window1);
      return -1;
   }
   misc_clear_text(buffer, "left");

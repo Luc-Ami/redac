@@ -66,5 +66,5 @@ void
 on_help_clicked                 (GtkWidget        *win);
 void new_project(GtkMenuItem *menuitem,
                APP_data    *user_data);
-
+void file_alert_dialog (gchar *filename, GtkWidget *window1 );
 #endif /* MTTFILES_H */
