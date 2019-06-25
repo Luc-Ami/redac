@@ -374,6 +374,7 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
  
   /* we compute total size for undo engine */
   for( i = 0; sdata[i]; i++ ) {
+    /* warning : if lign empty then extents==0 ! */
     cairo_text_extents(cr, sdata[i], &extents);
     if(extents.width>w)
       w=(gint)extents.width;
@@ -401,7 +402,7 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
      cairo_move_to (cr, (gdouble)xorg, (gdouble)data->y1-root_ys);
      for( i = 0; sdata[i]; i++ ) {
       cairo_show_text(cr, sdata[i]);
-      cairo_move_to (cr, (gdouble)xorg, (gdouble)data->y1-root_ys+(i+1)*extents.height*1.5);
+      cairo_move_to (cr, (gdouble)xorg, (gdouble)data->y1-root_ys+(i+1)*h*1.5);
     }
   }/* endif */
   cairo_stroke(cr);
