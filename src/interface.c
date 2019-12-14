@@ -2856,7 +2856,8 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   /* keypress event in order to catch shortcuts WITHOUT widgets */
   g_signal_connect(G_OBJECT(mainWindow), "key-press-event", 
                    G_CALLBACK(key_event), data);
-
+  
+  g_signal_connect (scrolledwindow1, "size-allocate", G_CALLBACK (ScrollToEnd), data);
   g_signal_connect (G_OBJECT(scrolledwindowPDF), "size-allocate",
                   G_CALLBACK (on_PDF_size_changed),
                   data);

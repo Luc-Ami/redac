@@ -3329,3 +3329,22 @@ on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data)
   on_help_clicked(data->appWindow);
   return;
 }
+
+/*****************************************************************************
+ AUtoscrolling function : so many thanks to N.L.M. de Jonge, here :
+ https://stackoverflow.com/questions/2681483/gtk-how-to-scroll-at-bottom-of-viewport-list
+*****************************************************************************/
+void ScrollToEnd (GtkWidget *widget, GdkRectangle *allocation, APP_data *data)
+
+{
+  GtkAdjustment *adj;
+  GtkWidget *scrolledwindow1;
+
+  if (widget != NULL) { }
+  if (allocation != NULL) { }
+
+  scrolledwindow1 = lookup_widget (GTK_WIDGET(data->appWindow), "scrolledwindow1");
+  adj = gtk_scrolled_window_get_vadjustment
+        (GTK_SCROLLED_WINDOW (scrolledwindow1));
+  gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
+}

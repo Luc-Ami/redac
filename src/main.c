@@ -117,7 +117,7 @@ redac_activate (GApplication *app, APP_data *data)
       gtk_widget_show (data->view);
       /* move to something like end of text */
       scrolledwindow1 = lookup_widget (GTK_WIDGET(data->appWindow), "scrolledwindow1");
-      misc_jump_to_end_view (scrolledwindow1, data->buffer, data->view);
+      // misc_jump_to_end_view (scrolledwindow1, data->buffer, data->view);
     }
 }
 

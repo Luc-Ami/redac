@@ -731,13 +731,13 @@ void misc_jump_to_end_view (GtkWidget *sw, GtkTextBuffer *buffer, GtkTextView *v
   GtkTextMark *end_at_start;
   GtkTextIter iter;
 
-  gtk_text_buffer_get_end_iter (buffer, &iter);
-  end_at_start = gtk_text_buffer_create_mark (buffer, "end_at_start",  &iter, FALSE);
-  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (view), end_at_start);
-  gtk_text_buffer_delete_mark (buffer, end_at_start);
+//  gtk_text_buffer_get_end_iter (buffer, &iter);
+//  end_at_start = gtk_text_buffer_create_mark (buffer, "end_at_start",  &iter, FALSE);
+//  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (view), end_at_start);
+//  gtk_text_buffer_delete_mark (buffer, end_at_start);
   /* visual scrolling */
   GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
-  gtk_adjustment_set_value (GTK_ADJUSTMENT (adj), gtk_adjustment_get_page_size (GTK_ADJUSTMENT(adj))*0.95);
+  gtk_adjustment_set_value (GTK_ADJUSTMENT (adj), gtk_adjustment_get_upper (adj));
 }
 /*************************************
  convenience functino to set
