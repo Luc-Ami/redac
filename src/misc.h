@@ -147,7 +147,7 @@ GtkTextTag *misc_get_tag_from_code(GtkTextBuffer *buffer, gint code);
 void misc_init_vars(APP_data *data );
 void misc_init_spell_checker(APP_data *data );
 gchar *misc_get_extract_from_document(APP_data *data );
-void misc_jump_to_end_view(GtkTextBuffer *buffer, GtkTextView *view);
+void misc_jump_to_end_view (GtkWidget *sw, GtkTextBuffer *buffer, GtkTextView *view);
 void misc_set_sensitive_format_buttons(gboolean state, APP_data *data);
 void misc_prepare_timeouts(APP_data *data );
 void misc_set_font_color_settings(APP_data *data );

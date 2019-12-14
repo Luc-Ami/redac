@@ -47,7 +47,7 @@
 for paddings and removing inner border from entries, many thanks to them : https://github.com/jy2wong/luakit/commit/6dfffb296f562b26c1eb6020c94b1d3e0bde336b
 anf for a clean demo for gtktextview tuning : https://gist.github.com/mariocesar/f051ce1dda4ef0041aed
 ************************************/
-void set_up_view( GtkWidget *window1, APP_data *data_app )
+void set_up_view (GtkWidget *window1, APP_data *data_app)
 {
   guint major, minor;
   GtkCssProvider* css_provider = gtk_css_provider_new();
@@ -93,7 +93,7 @@ void set_up_view( GtkWidget *window1, APP_data *data_app )
   check if we have a dark or 
   light theme
 *********************************/
-void check_up_theme( GtkWidget *window1, APP_data *data_app )
+void check_up_theme (GtkWidget *window1, APP_data *data_app)
 {
   GdkRGBA fg, bg;
   gdouble textAvg, bgAvg;
@@ -122,7 +122,7 @@ https://lzone.de/blog/Detecting%20a%20Dark%20Theme%20in%20GTK
  retrieve theme's selection
  color
 ****************************/
-void get_theme_selection_color(GtkWidget *widget)
+void get_theme_selection_color (GtkWidget *widget)
 {
   GdkRGBA  color1, color2;
 
@@ -140,7 +140,7 @@ void get_theme_selection_color(GtkWidget *widget)
  test Css configuration for
  a widget
 ******************************/
-static gboolean widget_is_dark(GtkWidget *widget) 
+static gboolean widget_is_dark (GtkWidget *widget) 
 {
   GdkRGBA fg, bg;
   gdouble textAvg;
@@ -165,7 +165,7 @@ static gboolean widget_is_dark(GtkWidget *widget)
   Pop-Up menu
 ********************************/
 
-GtkWidget *create_menu_PDF(GtkWidget *win, APP_data *data_app)
+GtkWidget *create_menu_PDF (GtkWidget *win, APP_data *data_app)
 {
   GtkWidget *menu1PDF; 
   GtkWidget *menu1PDFEditAnnot;
@@ -233,7 +233,7 @@ GtkWidget *create_menu_PDF(GtkWidget *win, APP_data *data_app)
   Pop-Up menu
 ********************************/
 
-GtkWidget *create_menu_sketch(GtkWidget *win, APP_data *data_app)
+GtkWidget *create_menu_sketch (GtkWidget *win, APP_data *data_app)
 {
   GtkWidget *menu1Sketch; 
   GtkWidget *menuPasteSketch;
@@ -281,10 +281,8 @@ GtkWidget *create_menu_sketch(GtkWidget *win, APP_data *data_app)
 GtkWidget*
 create_menu1 (GtkWidget *win, APP_data *data_app)
 {
-  GtkWidget *menu1;
-  GtkWidget *submenu1;
-  GtkWidget *submenu2;
-  GtkWidget *submenu3;
+  GtkWidget *menu1, *submenu1;
+  GtkWidget *submenu2, *submenu3;
   GtkWidget *submenu4;
   GtkWidget *submenu5;
   GtkWidget *submenu6;
@@ -597,7 +595,7 @@ create_menu1 (GtkWidget *win, APP_data *data_app)
 /**********************************
    set up the toolbar
 ***********************************/
-GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app)
+GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
 {
   GdkPixbuf *ico;
   GtkWidget *toolbar;
@@ -613,16 +611,12 @@ GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app)
   GtkToolItem *button_strikethrough;
   GtkToolItem *button_highlight;
   GtkToolItem *button_quotation;
-  GtkWidget *icon_superscript;
-  GtkWidget *icon_subscript;
-  GtkWidget *icon_strike;
-  GtkWidget *icon_highlight;
+  GtkWidget *icon_superscript, *icon_subscript;
+  GtkWidget *icon_strike, *icon_highlight;
   GtkWidget *icon_quotation;
   /* alignment tools */
-  GtkWidget *icon_left_format;
-  GtkWidget *icon_center_format;
-  GtkWidget *icon_right_format;
-  GtkWidget *icon_fill_format;
+  GtkWidget *icon_left_format, *icon_center_format;
+  GtkWidget *icon_right_format, *icon_fill_format;
   GtkToolItem *pRadioButtonLeft;
   GtkToolItem *pRadioButtonCenter;
   GtkToolItem *pRadioButtonRight;
@@ -638,10 +632,8 @@ GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app)
   GtkToolItem *pRadioButtonPictureSelect;
   GtkToolItem *pRadioButtonHiglightSelect;
   GtkToolItem *pRadioButtonHiAnnotSelect;
-  GtkWidget *icon_text_select;
-  GtkWidget *icon_picture_select;
-  GtkWidget *icon_highlight_select;
-  GtkWidget *icon_text_annot;
+  GtkWidget *icon_text_select, *icon_picture_select;
+  GtkWidget *icon_highlight_select, *icon_text_annot;
   GtkWidget *icon_pencil;
   GtkToolItem *button_pencil;
   GtkToolItem *color_button_item;
@@ -654,15 +646,12 @@ GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app)
   GtkToolItem *pRadioButtonRewindAudio;
   GtkToolItem *pRadioButtonGotoAudio;
   GtkToolItem *pRadioButtonGoJumpAudio;
-  GtkWidget *AudioDisplayCounter;
-  GtkWidget *iconButtonPlayAudio;
-  GtkWidget *iconButtonPauseAudio;
-  GtkWidget *iconButtonHomeAudio;
-  GtkWidget *iconButtonGotoAudio;
-  GtkWidget *iconButtonGoJumpAudio;
+  GtkWidget *AudioDisplayCounter, *iconButtonPlayAudio;
+  GtkWidget *iconButtonPauseAudio, *iconButtonHomeAudio;
+  GtkWidget *iconButtonGotoAudio, *iconButtonGoJumpAudio;
 
-  toolbar = gtk_toolbar_new();
-  gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
+  toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
   gtk_widget_set_margin_top(toolbar, 8);
   gtk_widget_set_margin_bottom(toolbar, 8);
   gtk_widget_set_margin_left(toolbar, 8);
@@ -1132,29 +1121,26 @@ GtkWidget *UI_main_window(GApplication *app)
   GtkWidget *win;
 
  // win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  win=gtk_application_window_new (GTK_APPLICATION (app));
+  win = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_widget_show (win);
-  gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);
-  gtk_window_set_default_size(GTK_WINDOW(win), 980, 700);
+  gtk_window_set_position (GTK_WINDOW(win), GTK_WIN_POS_CENTER);
+  gtk_window_set_default_size (GTK_WINDOW(win), 980, 700);
   gtk_window_set_resizable (GTK_WINDOW(win), TRUE);
   gtk_window_set_decorated (GTK_WINDOW(win), TRUE);
-  gtk_window_set_title(GTK_WINDOW(win), "Redac !");
+  gtk_window_set_title (GTK_WINDOW(win), "Redac !");
   gtk_window_set_icon_name (GTK_WINDOW (win), "redac");
   return win;
 }
 /********************************
  build pseudo Gtk3 headerbar
 *******************************/
-void UI_headerBar(GtkWidget *window, GtkWidget *grid, APP_data *data)
+void UI_headerBar (GtkWidget *window, GtkWidget *grid, APP_data *data)
 {
-  GtkWidget *main_menu;
-  GtkWidget *main_menu_icon;
-  GtkWidget *button_prefs;
-  GtkWidget *icon_prefs;
-  GtkWidget *labelMainTitle;
+  GtkWidget *main_menu, *main_menu_icon;
+  GtkWidget *button_prefs, *icon_prefs, *labelMainTitle;
 
 
-  main_menu = gtk_button_new();
+  main_menu = gtk_button_new ();
   gtk_button_set_relief(GTK_BUTTON(main_menu), GTK_RELIEF_NONE);
   main_menu_icon=gtk_image_new_from_icon_name ("view-list-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_button_set_image(GTK_BUTTON(main_menu),main_menu_icon);
@@ -1189,27 +1175,19 @@ void UI_headerBar(GtkWidget *window, GtkWidget *grid, APP_data *data)
 /****************************
   set up main statusbar
 ****************************/
-void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data)
+void UI_statusbar (GtkWidget *window, GtkWidget *grid, APP_data *data)
 {
-  GtkWidget *statusbar;
-  GtkWidget *PDF_modified_label;
-  GtkWidget *search_entry;
-  GtkWidget *buttonPrevOccurrence;
-  GtkWidget *buttonNextOccurrence;
-  GtkWidget *labelHitsFrame;
-  GtkWidget *labelHitsGrid;
-  GtkWidget *labelHits;
-  GtkWidget *buttonReplace;
-  GtkWidget *buttonZoomIn;
-  GtkWidget *buttonZoomOut;
-  GtkWidget *buttonZoomFitBest;
-  GtkWidget *replace_entry;
-  GtkWidget *image_task_due;
-  GtkWidget *image_pdf_modif;
-  GtkWidget *image_audio_jump_to_start;
+  GtkWidget *statusbar, *PDF_modified_label;
+  GtkWidget *search_entry, *buttonPrevOccurrence;
+  GtkWidget *buttonNextOccurrence, *labelHitsFrame;
+  GtkWidget *labelHitsGrid, *labelHits;
+  GtkWidget *buttonReplace, *buttonZoomIn;
+  GtkWidget *buttonZoomOut, *buttonZoomFitBest;
+  GtkWidget *replace_entry, *image_task_due;
+  GtkWidget *image_pdf_modif, *image_audio_jump_to_start;
   GdkPixbuf *ico;
 
-  buttonPrevOccurrence = gtk_button_new_from_icon_name("go-up-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  buttonPrevOccurrence = gtk_button_new_from_icon_name ("go-up-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
   gtk_widget_set_tooltip_text(buttonPrevOccurrence, _("Click here to to go to the previous hit.\nWith PDF documents we jump to previous PAGE with hits"));
 
   buttonNextOccurrence = gtk_button_new_from_icon_name("go-down-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -1335,13 +1313,11 @@ void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data)
 **********************************/
 void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
 {
-  GtkWidget *page_frame;
-  GtkWidget *page_grid;
-  GtkWidget *page_title;
-  GtkWidget *page_entry;
+  GtkWidget *page_frame, *page_grid;
+  GtkWidget *page_title, *page_entry;
   GtkWidget *page_label;
 
-  page_frame=gtk_frame_new(NULL);
+  page_frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME(page_frame), GTK_SHADOW_OUT);
   gtk_widget_set_name(page_frame, "page_frame" );
   g_object_set (page_frame, "margin-left", 6, NULL);
@@ -1388,7 +1364,6 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   GLADE_HOOKUP_OBJECT (window, page_label, "page_label");
   GLADE_HOOKUP_OBJECT (window, page_frame, "page_frame");
 }
-
 
 /*********************************
   load from file dialog 
@@ -1446,22 +1421,16 @@ create_loadFileDialog (APP_data *data, gchar *sFileType)
   return loadFileDialog;
 }
 
-
 /*********************************
   save to file dialog 
 *********************************/
 GtkWidget*
 create_saveFileDialog (APP_data *data)
 {
-  GtkWidget *saveFileDialog;
-  GtkWidget *dialog_vbox6;
-  GtkWidget *dialog_action_area6;
-  GtkWidget *button43;
-  GtkWidget *image43;
-  GtkWidget *button44;
-  GtkWidget *image44;
+  GtkWidget *saveFileDialog, *dialog_vbox6, *dialog_action_area6;
+  GtkWidget *button43, *image43, *button44, *image44;
 
-    saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), 
+  saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), 
                                     GTK_WINDOW(data->appWindow),
                                     GTK_FILE_CHOOSER_ACTION_SAVE, NULL);
   g_object_set (saveFileDialog, "local-only", FALSE,  NULL);
@@ -1935,28 +1904,19 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
   return helpDialog;
 }
 
-
 /**************************************************************
   dialog to set up an annotation inside the PDF or Sketch 
   with option to choose font
 **************************************************************/
-gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *data)
+gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data *data)
 {
-  GtkWidget *annotDialog;
-  GtkWidget *gridDialog;
-  GtkWidget *dialog_vbox11;
-  GtkWidget *entry;
+  GtkWidget *annotDialog, *gridDialog;
+  GtkWidget *dialog_vbox11, *entry;
   GtkTextBuffer *buffer;
-  GtkWidget *dialog_action_area11;
-  GtkWidget *okbutton6;
-  GtkWidget *imageOkButton6;
-  GtkWidget *cancelbutton;
-  GtkWidget *imagecancelbutton;
-  GtkWidget *labelFont;
-  GtkWidget *font_button;
-  GtkWidget *separator;
-  gchar *newFont;
-  gchar *tmpStr=NULL;
+  GtkWidget *dialog_action_area11, *okbutton6;
+  GtkWidget *imageOkButton6, *cancelbutton, *imagecancelbutton, *labelFont;
+  GtkWidget *font_button, *separator;
+  gchar *newFont, *tmpStr=NULL;
   gint ret;
   GKeyFile *keyString;
 
@@ -2044,7 +2004,6 @@ gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *
   return tmpStr;
 }
 
-
 /******************
 preferences dialog
 
@@ -2056,15 +2015,10 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gchar *newFont;
   gdouble rewGap, jumpGap, pen_width;
 
-  GtkWidget *configDialog;
-  GtkWidget *dialog_vbox5;
-  GtkWidget *configNotebook;
-  GtkWidget *vbox26;
-  GtkWidget *configAutoSave;
-  GtkWidget *configAutoReloadPDF;
-  GtkWidget *configPromptQuit;
-  GtkWidget *configPromptOverwrite;
-  GtkWidget *configAutoRewindPlayer;
+  GtkWidget *configDialog, *dialog_vbox5;
+  GtkWidget *configNotebook, *vbox26;
+  GtkWidget *configAutoSave, *configAutoReloadPDF;
+  GtkWidget *configPromptQuit, *configPromptOverwrite, *configAutoRewindPlayer;
 
   GtkWidget *font_button_editor;
   GtkWidget *font_button_sketch;
@@ -2466,10 +2420,8 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
 }
 
 /********************************
-
   choose color for Annotations
 ********************************/
-
 GtkWidget*
 create_annotationColourDialog (APP_data *data_app, gchar *msg)
 {
@@ -2499,22 +2451,14 @@ create_annotationColourDialog (APP_data *data_app, gchar *msg)
 **********************************/
 GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
 {
-  GtkWidget *goJumpDialog;
-  GtkWidget *dialog_vbox11;
+  GtkWidget *goJumpDialog, *dialog_vbox11;
   GtkWidget *gridDialog, *gridHeader;
-  GtkWidget *labelgoJumpDialog;
-  GtkWidget *iconGoJumpDialog;
-  GtkWidget *dialog_action_area11;
-  GtkWidget *okbutton6;
-  GtkWidget *imageOkButton6;
-  GtkWidget *cancelbutton;
-  GtkWidget *imagecancelbutton;
-  GtkWidget *labelHour;
-  GtkWidget *labelMinute;
-  GtkWidget *labelSecond;
-  GtkWidget *labelCurpos;
-  GtkWidget *labelTitleCurpos;
-  GtkWidget *labelNewPosition;
+  GtkWidget *labelgoJumpDialog, *iconGoJumpDialog;
+  GtkWidget *dialog_action_area11, *okbutton6;
+  GtkWidget *imageOkButton6, *cancelbutton;
+  GtkWidget *imagecancelbutton, *labelHour;
+  GtkWidget *labelMinute, *labelSecond;
+  GtkWidget *labelCurpos, *labelTitleCurpos, *labelNewPosition;
   gdouble hour, min, sec;
 
   /* we read and convert to human form the media duration */
@@ -2693,25 +2637,19 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   GdkRGBA color;
   GtkStack *stack;
   GtkStackSwitcher *switcher;
-  GtkWidget *mainWindow;
-  GtkWidget *vGrid;
-  GtkWidget *scrolledwindow1;
-  GtkWidget *scrolledwindowPDF;
-  GtkWidget *viewportPDF;
-  GtkWidget *crPDF;
-  GtkWidget *scrolledwindowCrobar;
-  GtkWidget *toolbar;
-  GtkWidget *view;
-  GtkWidget *viewPDF;
-  GtkWidget *viewCrobar;
-  GtkWidget *crCrobar;
+  GtkWidget *mainWindow, *vGrid;
+  GtkWidget *scrolledwindow1, *scrolledwindowPDF;
+  GtkWidget *viewportPDF, *crPDF;
+  GtkWidget *scrolledwindowCrobar, *toolbar;
+  GtkWidget *view, *viewPDF;
+  GtkWidget *viewCrobar, *crCrobar;
   GtkWidget *gridStatusBar;
   GKeyFile *keyString;
   GtkTextBuffer *buffer;
   time_t rawtime;
   gchar *path_to_file, buffer_date[81];
 
-  mainWindow =  UI_main_window(app);
+  mainWindow =  UI_main_window (app);
   GtkWidget *headBar=gtk_grid_new ();
   /* main vbox packing widget */
   vGrid=gtk_grid_new();
@@ -2738,7 +2676,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   /* toolbar */
   toolbar = main_wp_toolbar(mainWindow,  data);
   gtk_grid_attach(GTK_GRID(vGrid), toolbar, 0,1,1,1);
-  /* and a scrolling window ! */
+  /* and a scrolling window for Text view ! */
   scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindow1);
 
@@ -2774,10 +2712,10 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowPDF), "Refe", _("Reference"));
   gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowCrobar), "Sket", _("Sketch"));
   /* set-up default font for text view */
-  set_up_view(mainWindow, data);
+  set_up_view (mainWindow, data);
   buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
 
-  misc_setup_text_buffer_tags(buffer);
+  misc_setup_text_buffer_tags (buffer);
 
   /* two statusbars arranged in a GtkGrid */
   gridStatusBar = gtk_grid_new();
@@ -2785,14 +2723,14 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   g_object_set (gridStatusBar, "margin-bottom", 6, NULL);
   gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(gridStatusBar), 0,3,1,1);
   /* statusbar */
-  UI_statusbar(mainWindow, gridStatusBar, data );  
+  UI_statusbar (mainWindow, gridStatusBar, data );  
   /* mimic nice page jumper of Evince */
   UI_pdf_page_widget (mainWindow, gridStatusBar, data);
 
   gtk_widget_show_all(mainWindow);
 
   /* quasi global vars  */
-  misc_init_vars(data );
+  misc_init_vars (data);
   data->stack=stack;
   data->appWindow=mainWindow;
   data->PDFdrawable = crPDF;
@@ -2803,7 +2741,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   data->view=view;
   data->pipeline = gst_element_factory_make ("playbin", "redac");
   /* spell checker !! after vars init for view value */
-  misc_init_spell_checker(data );
+  misc_init_spell_checker (data);
 
   cairo_surface_destroy (data->Sketchsurface);
   data->Sketchsurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
@@ -2822,7 +2760,6 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   GLADE_HOOKUP_OBJECT (mainWindow, view, "view");
   GLADE_HOOKUP_OBJECT (mainWindow, buffer, "buffer");
 
-
   /* we parse datas from config file */
 
   /* we get the configuration file */
@@ -2838,16 +2775,16 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   createGKeyFile (data, mainWindow);
   /* we get the saved window geometry see : https://gist.github.com/zdxerr/709169  */
 
-  keyString = g_object_get_data(G_OBJECT(mainWindow), "config");
+  keyString = g_object_get_data (G_OBJECT(mainWindow), "config");
   /* same for application */
   data->keystring = keyString;
-  data->iAudioSmartRew=g_key_file_get_double(keyString, "application", "audio-file-rewind-step", NULL);
-  data->iAudioSmartJump=g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
+  data->iAudioSmartRew=g_key_file_get_double (keyString, "application", "audio-file-rewind-step", NULL);
+  data->iAudioSmartJump=g_key_file_get_double (keyString, "application", "audio-file-marks-step", NULL);
 
   misc_set_font_color_settings(data );
 
   /* we paint sketch background now */
-  sketch_prepare(data);
+  sketch_prepare (data);
 
   /* reload last document */
   gchar *s1 = g_key_file_get_string(keyString, "application", "current-file", NULL);
@@ -2857,39 +2794,39 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
      /* the default filename is built inside gKeyfile if it isn"t already exists ! */
      /* then we must add a default file name for default path ; in other case, we'll get a segfault */
      /* we get the current date */
-     time ( &rawtime );
-     strftime(buffer_date, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
+     time (&rawtime);
+     strftime(buffer_date, 80, "%c", localtime (&rawtime));/* don't change parameter %x */
      /* now we set-up a new default filename */
-     path_to_file =  get_path_to_datas_file(buffer_date);
+     path_to_file =  get_path_to_datas_file (buffer_date);
      gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(mainWindow), "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
      
      /* rearrange list of recent files */
-     rearrange_recent_file_list(keyString);
+     rearrange_recent_file_list (keyString);
      /* we change the default values for gkeyfile */
-     store_current_file_in_keyfile(keyString, path_to_file, "[...]");
+     store_current_file_in_keyfile (keyString, path_to_file, "[...]");
   }
   else
      store_current_file_in_keyfile(keyString, s1, misc_get_extract_from_document(data ));  
   g_free(s1);
 
   /*  reload last PDF file ? */
-  gtk_widget_hide( lookup_widget(GTK_WIDGET(data->appWindow),"image_pdf_modif"));
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(data->appWindow),"image_pdf_modif"));
   s1 = g_key_file_get_string(keyString, "application", "current-PDF-file", NULL);
   if(g_key_file_get_boolean(keyString, "application", "autoreload-PDF",NULL )) {
      if(g_file_test (s1, G_FILE_TEST_EXISTS) ){
         /* reset default PDF zoom ratio */
-        data->PDFratio=g_key_file_get_double(keyString, "reference-document", "zoom", NULL);
-        data->curPDFpage=g_key_file_get_integer(keyString, "reference-document", "page", NULL);
-        quick_load_PDF(s1, data);
+        data->PDFratio = g_key_file_get_double (keyString, "reference-document", "zoom", NULL);
+        data->curPDFpage = g_key_file_get_integer (keyString, "reference-document", "page", NULL);
+        quick_load_PDF (s1, data);
      }
   }
   g_free(s1);
 
-  update_statusbar(buffer, data);
+  update_statusbar (buffer, data);
 
  /* we preset the cursor */
-  gtk_widget_grab_focus(GTK_WIDGET(view));
+  gtk_widget_grab_focus (GTK_WIDGET(view));
 
  /* callbacks */
  
@@ -2950,9 +2887,8 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   g_signal_connect(G_OBJECT(crCrobar), "motion-notify-event",
 					 G_CALLBACK(on_sketch_draw_motion_event_callback), data);
 
-  misc_set_gui_in_editor_mode(data->appWindow, CURRENT_STACK_EDITOR); 
+  misc_set_gui_in_editor_mode (data->appWindow, CURRENT_STACK_EDITOR); 
   /* add timeout for 5 minutes, 300 secs - should be improved in a next release */
-  misc_prepare_timeouts(data);
-  /* move to something like end of text */
-  misc_jump_to_end_view(buffer, view);
+  misc_prepare_timeouts (data);
+
 }
