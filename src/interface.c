@@ -650,13 +650,14 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   GtkWidget *iconButtonPauseAudio, *iconButtonHomeAudio;
   GtkWidget *iconButtonGotoAudio, *iconButtonGoJumpAudio;
 
+  fIsDark = data_app->fDarkTheme;
   toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
   gtk_widget_set_margin_top(toolbar, 8);
   gtk_widget_set_margin_bottom(toolbar, 8);
   gtk_widget_set_margin_left(toolbar, 8);
   gtk_widget_set_margin_right(toolbar, 8);
-  fIsDark= widget_is_dark(toolbar);
+
   /* toolbar toggle buttons bold */
   icon_bold = gtk_image_new_from_icon_name("format-text-bold-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
   icon_italic = gtk_image_new_from_icon_name("format-text-italic-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -2656,7 +2657,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gtk_grid_set_row_homogeneous (GTK_GRID(vGrid),FALSE);
   gtk_container_add(GTK_CONTAINER(mainWindow), vGrid);
   /* guess the style for current theme */
-  check_up_theme( mainWindow, data );
+  check_up_theme (mainWindow, data);
   /* pseudo headerBar */
   UI_headerBar(mainWindow, headBar, data);
   gtk_grid_attach(GTK_GRID(vGrid), headBar, 0, 0, 1, 1);
@@ -2674,7 +2675,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gtk_widget_set_halign (GTK_WIDGET(switcher), GTK_ALIGN_CENTER);
 
   /* toolbar */
-  toolbar = main_wp_toolbar(mainWindow,  data);
+  toolbar = main_wp_toolbar (mainWindow, data);
   gtk_grid_attach(GTK_GRID(vGrid), toolbar, 0,1,1,1);
   /* and a scrolling window for Text view ! */
   scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
