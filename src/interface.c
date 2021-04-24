@@ -6,7 +6,6 @@
 /* translations */
 #include <libintl.h>
 #include <locale.h>
-
 #include <unistd.h>
 #include <stdio.h>
 #include <glib.h>
@@ -16,6 +15,9 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include <poppler.h>
+
+/* from redac */
+
 #include "support.h"
 #include "misc.h"
 #include "interface.h"
@@ -23,6 +25,7 @@
 #include "mttfiles.h"
 #include "mttimport.h"
 #include "audio.h"
+#include "pdf.h"
 
 /* pixmaps */
 #include "./icons/superscript.xpm"
@@ -53,8 +56,8 @@ void set_up_view (GtkWidget *window1, APP_data *data_app)
   GtkCssProvider* css_provider = gtk_css_provider_new();
 
   /* check Gtk 3.x version */
-  major=gtk_get_major_version ();
-  minor=gtk_get_minor_version ();
+  major = gtk_get_major_version ();
+  minor = gtk_get_minor_version ();
 
   const char css[] = 
 "  #labelOther { color:black; background-image: none; background-color: #FFFFFF; }\n"
@@ -99,22 +102,27 @@ void check_up_theme (GtkWidget *window1, APP_data *data_app)
   gdouble textAvg, bgAvg;
  
   GdkScreen* screen = gdk_screen_get_default();
-  GtkStyleContext* style_context = gtk_widget_get_style_context(window1);
+  GtkStyleContext* style_context = gtk_widget_get_style_context (window1);
 
  /* check if we have a drak or light theme idea from : 
 https://lzone.de/blog/Detecting%20a%20Dark%20Theme%20in%20GTK  
 */
   gtk_style_context_get_color (style_context, GTK_STATE_FLAG_NORMAL, &fg);
-  gtk_style_context_get_background_color (style_context, GTK_STATE_FLAG_NORMAL, &bg);
-
+ // gtk_style_context_get_background_color (style_context, GTK_STATE_FLAG_NORMAL, &bg); // deprecated
+  gtk_style_context_lookup_color (style_context, "focus_color", &bg);
+  
   textAvg = fg.red+fg.green+fg.blue;
   bgAvg = bg.red+bg.green+bg.blue;
 
+printf ("test couleurs avant =%.2f arrière =%.2f \n", textAvg, bgAvg);
+
   if (textAvg > bgAvg)  {
      data_app->fDarkTheme=TRUE;
+     printf ("thème sombre \n");
   }
   else {
      data_app->fDarkTheme=FALSE;
+     printf ("thème clair \n");
   }
 }
 
@@ -158,6 +166,51 @@ static gboolean widget_is_dark (GtkWidget *widget)
   else 
      return FALSE;
 }
+
+/**********************************
+  prepare sketch background
+
+**********************************/
+void sketch_prepare (APP_data *data )
+{
+  cairo_t *cr;
+  GdkRGBA color;
+
+  cr = cairo_create (data->Sketchsurface);
+  color.red=g_key_file_get_double (data->keystring, "sketch", "paper.color.red", NULL);
+  color.green=g_key_file_get_double (data->keystring, "sketch", "paper.color.green", NULL);
+  color.blue=g_key_file_get_double (data->keystring, "sketch", "paper.color.blue", NULL);
+  color.alpha=1;
+  cairo_set_source_rgb (cr, color.red, color.green, color.blue);
+  cairo_rectangle (cr, 0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
+  cairo_fill (cr);
+  cairo_destroy (cr);
+  gtk_widget_queue_draw (data->SketchDrawable);
+}
+
+/*********************************
+  prepare sketch drawable
+
+*********************************/
+GtkWidget *sketch_prepare_drawable ()
+{
+  GtkWidget *crCrobar;
+
+  crCrobar=gtk_drawing_area_new ();
+  gtk_widget_set_app_paintable (crCrobar, TRUE);
+  gtk_widget_show (crCrobar);
+  gtk_widget_set_size_request (crCrobar, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
+  gtk_widget_set_hexpand (crCrobar, TRUE);
+  gtk_widget_set_vexpand (crCrobar, TRUE);
+  /* mandatoty : add new events management to gtk_drawing_area ! */
+      gtk_widget_set_events (crCrobar, gtk_widget_get_events (crCrobar)
+      | GDK_BUTTON_PRESS_MASK
+      | GDK_BUTTON_RELEASE_MASK
+      | GDK_POINTER_MOTION_MASK
+      | GDK_POINTER_MOTION_HINT_MASK);
+  return crCrobar;
+}
+
 
 /*******************************
 
@@ -655,7 +708,7 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
   gtk_widget_set_margin_top(toolbar, 8);
   gtk_widget_set_margin_bottom(toolbar, 8);
-  gtk_widget_set_margin_start (toolbar, 8);
+	  gtk_widget_set_margin_start (toolbar, 8);
   gtk_widget_set_margin_end (toolbar, 8);
 
   /* toolbar toggle buttons bold */

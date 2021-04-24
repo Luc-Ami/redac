@@ -16,49 +16,6 @@
 #include "undo.h"
 
 
-/**********************************
-  prepare sketch background
-
-**********************************/
-void sketch_prepare (APP_data *data )
-{
-  cairo_t *cr;
-  GdkRGBA color;
-
-  cr = cairo_create (data->Sketchsurface);
-  color.red=g_key_file_get_double (data->keystring, "sketch", "paper.color.red", NULL);
-  color.green=g_key_file_get_double (data->keystring, "sketch", "paper.color.green", NULL);
-  color.blue=g_key_file_get_double (data->keystring, "sketch", "paper.color.blue", NULL);
-  color.alpha=1;
-  cairo_set_source_rgb (cr, color.red, color.green, color.blue);
-  cairo_rectangle (cr, 0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
-  cairo_fill (cr);
-  cairo_destroy (cr);
-  gtk_widget_queue_draw (data->SketchDrawable);
-}
-
-/*********************************
-  prepare sketch drawable
-
-*********************************/
-GtkWidget *sketch_prepare_drawable ()
-{
-  GtkWidget *crCrobar;
-
-  crCrobar=gtk_drawing_area_new ();
-  gtk_widget_set_app_paintable (crCrobar, TRUE);
-  gtk_widget_show (crCrobar);
-  gtk_widget_set_size_request (crCrobar, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
-  gtk_widget_set_hexpand (crCrobar, TRUE);
-  gtk_widget_set_vexpand (crCrobar, TRUE);
-  /* mandatoty : add new events management to gtk_drawing_area ! */
-      gtk_widget_set_events (crCrobar, gtk_widget_get_events (crCrobar)
-      | GDK_BUTTON_PRESS_MASK
-      | GDK_BUTTON_RELEASE_MASK
-      | GDK_POINTER_MOTION_MASK
-      | GDK_POINTER_MOTION_HINT_MASK);
-  return crCrobar;
-}
 
 /*********************************
 
