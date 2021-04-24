@@ -655,8 +655,8 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
   gtk_widget_set_margin_top(toolbar, 8);
   gtk_widget_set_margin_bottom(toolbar, 8);
-  gtk_widget_set_margin_left(toolbar, 8);
-  gtk_widget_set_margin_right(toolbar, 8);
+  gtk_widget_set_margin_start (toolbar, 8);
+  gtk_widget_set_margin_end (toolbar, 8);
 
   /* toolbar toggle buttons bold */
   icon_bold = gtk_image_new_from_icon_name("format-text-bold-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -1513,20 +1513,41 @@ GtkWidget *misc_create_help_dialog(GtkWidget *win)
 
   /* icon */
   iconTitle=gtk_image_new_from_icon_name ("preferences-desktop-keyboard-shortcuts",GTK_ICON_SIZE_DIALOG);
-  gtk_misc_set_alignment (GTK_MISC (iconTitle), 0, 0.5);
-  gtk_widget_set_hexpand(GTK_WIDGET(iconTitle), FALSE);
-  gtk_misc_set_padding (GTK_MISC (iconTitle), 5, 5);
-  gtk_grid_attach(GTK_GRID(gridDialogHeader), iconTitle, 0,0,1,1);
+ // gtk_misc_set_alignment (GTK_MISC (iconTitle), 0, 0.5);
+ 
+  gtk_widget_set_halign (GTK_WIDGET (iconTitle), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (iconTitle), GTK_ALIGN_CENTER);
+ 
+  gtk_widget_set_hexpand (GTK_WIDGET(iconTitle), FALSE);
+//  gtk_misc_set_padding (GTK_MISC (iconTitle), 5, 5);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(iconTitle), 5);
+  gtk_widget_set_margin_top (GTK_WIDGET(iconTitle), 5);  
+  
+  gtk_grid_attach (GTK_GRID(gridDialogHeader), iconTitle, 0,0,1,1);
   /* title */
-  labelTitle= gtk_label_new("");
+  labelTitle = gtk_label_new("");
   gtk_label_set_markup (GTK_LABEL (labelTitle),_("<big><b>Keyboard shortcuts :</b></big>"));
-  gtk_misc_set_alignment (GTK_MISC (labelTitle), 0, 0.5);
+  //gtk_misc_set_alignment (GTK_MISC (labelTitle), 0, 0.5);
+  
+  gtk_widget_set_halign (GTK_WIDGET (labelTitle), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (labelTitle), GTK_ALIGN_CENTER);
+  
   gtk_widget_set_hexpand(GTK_WIDGET(labelTitle), FALSE);
   gtk_grid_attach(GTK_GRID(gridDialogHeader), labelTitle, 1,0,1,1);
-  gtk_misc_set_padding (GTK_MISC (labelTitle), 5, 5);
-  subTitle=gtk_label_new("");
+//  gtk_misc_set_padding (GTK_MISC (labelTitle), 5, 5);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(labelTitle), 5);
+  gtk_widget_set_margin_top (GTK_WIDGET(labelTitle), 5);  
+  
+  
+  subTitle = gtk_label_new ("");
   gtk_label_set_markup(GTK_LABEL(subTitle), _("<i>Here is the various keys to set-up formatings and so on.\nWhen 2 keys are displayed, please keep in mind that\nyou must press the 2 keys in the same time.</i>"));
-  gtk_misc_set_padding (GTK_MISC (subTitle), 5, 5);
+//  gtk_misc_set_padding (GTK_MISC (subTitle), 5, 5);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(subTitle), 5);
+  gtk_widget_set_margin_top (GTK_WIDGET(subTitle), 5);   
+  
   gtk_grid_attach(GTK_GRID(gridDialogHeader), subTitle, 1,1,2,1);
 
   gridDialog = gtk_grid_new();
@@ -2100,9 +2121,19 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show(tab_boxGlobalSettings);
   GtkWidget    *iconGlobalSettings = gtk_image_new_from_icon_name ("document-save", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconGlobalSettings);
-  gtk_misc_set_padding(GTK_MISC(iconGlobalSettings), 0, 2);
+//  gtk_misc_set_padding(GTK_MISC(iconGlobalSettings), 0, 2);
+   
+  
+  
   gtk_box_pack_start(GTK_BOX(tab_boxGlobalSettings), iconGlobalSettings, FALSE, FALSE, 2);
-  gtk_misc_set_padding(GTK_MISC(label246), 2, 2);
+//  gtk_misc_set_padding(GTK_MISC(label246), 2, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(label246), 2);
+  gtk_widget_set_margin_top (GTK_WIDGET(label246), 2);   
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(iconGlobalSettings), 2);
+  gtk_widget_set_margin_top (GTK_WIDGET(iconGlobalSettings), 2);   
+  
   gtk_container_add(GTK_CONTAINER(tab_boxGlobalSettings), label246); 
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (configNotebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 0), tab_boxGlobalSettings);
 
@@ -2116,31 +2147,53 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_box_pack_start (GTK_BOX (vbox29), table6, TRUE, TRUE, 4);
 
   label249 = gtk_label_new (_("Text font:"));
-  gtk_misc_set_alignment (GTK_MISC (label249), 1, 0.5);
+  //gtk_misc_set_alignment (GTK_MISC (label249), 1, 0.5);
+  
+  gtk_widget_set_halign (GTK_WIDGET (label249), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label249), GTK_ALIGN_CENTER);
+  
   gtk_widget_show (label249);
   gtk_grid_attach(GTK_GRID(table6),label249, 0, 1 , 1, 1);
-  gtk_misc_set_padding (GTK_MISC (label249), 5, 0);
+//  gtk_misc_set_padding (GTK_MISC (label249), 5, 0);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(label249), 5);
+  gtk_widget_set_margin_top (GTK_WIDGET(label249), 0);    
 
-  font_button_editor=gtk_font_button_new_with_font ("sans 12");
+  font_button_editor = gtk_font_button_new_with_font ("sans 12");
   gtk_widget_show(font_button_editor);
   gtk_grid_attach(GTK_GRID(table6),font_button_editor, 1, 1 , 1, 1);
 
 
   label250 = gtk_label_new (_("Text background color:"));
-  gtk_misc_set_alignment (GTK_MISC (label250), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (label250), 1, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label250), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label250), GTK_ALIGN_CENTER);
+
+
   gtk_widget_show (label250);
   gtk_grid_attach(GTK_GRID(table6),label250, 0, 2 , 1, 1);
-  gtk_misc_set_padding (GTK_MISC (label250), 5, 0);
+//  gtk_misc_set_padding (GTK_MISC (label250), 5, 0);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(label250), 5);
+  gtk_widget_set_margin_top (GTK_WIDGET(label250), 0);    
 
-  color_button_editor_bg=gtk_color_button_new (); 
+  color_button_editor_bg = gtk_color_button_new (); 
   gtk_widget_show (color_button_editor_bg);
   gtk_grid_attach(GTK_GRID(table6),color_button_editor_bg, 1, 2 , 1, 1);
 
   label271 = gtk_label_new (_("Text foreground color:"));
-  gtk_misc_set_alignment (GTK_MISC (label271), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (label271), 1, 0.5);
+  
+  gtk_widget_set_halign (GTK_WIDGET (label271), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label271), GTK_ALIGN_CENTER);  
+  
+  
   gtk_widget_show (label271);
   gtk_grid_attach(GTK_GRID(table6),label271, 0, 3 , 1, 1);
-  gtk_misc_set_padding (GTK_MISC (label271), 5, 0);
+//  gtk_misc_set_padding (GTK_MISC (label271), 5, 0);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(label271), 5);
+  gtk_widget_set_margin_top (GTK_WIDGET(label271), 0);    
 
   color_button_editor_fg=gtk_color_button_new (); 
   gtk_widget_show (color_button_editor_fg);
@@ -2152,9 +2205,18 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show(tab_boxApplicationsSettings);
   GtkWidget    *iconApplicationsSettings = gtk_image_new_from_icon_name ("accessories-text-editor", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconApplicationsSettings);
-  gtk_misc_set_padding(GTK_MISC(iconApplicationsSettings), 0, 2);
+//  gtk_misc_set_padding(GTK_MISC(iconApplicationsSettings), 0, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(iconApplicationsSettings), 0);
+  gtk_widget_set_margin_top (GTK_WIDGET(iconApplicationsSettings), 2);    
+  
+  
   gtk_box_pack_start(GTK_BOX(tab_boxApplicationsSettings), iconApplicationsSettings, FALSE, FALSE, 2);
-  gtk_misc_set_padding(GTK_MISC(label993), 2, 2);
+//  gtk_misc_set_padding(GTK_MISC(label993), 2, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(label993), 2);
+  gtk_widget_set_margin_top (GTK_WIDGET(label993), 2);   
+  
   gtk_container_add(GTK_CONTAINER(tab_boxApplicationsSettings), label993); 
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (configNotebook), 
                               gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 1), tab_boxApplicationsSettings);
@@ -2165,9 +2227,11 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_container_add (GTK_CONTAINER (configNotebook), hbox27);
 
   label264 = gtk_label_new (_("Document paper color : "));
-  gtk_misc_set_alignment (GTK_MISC (label264), 1, 0.5);
+  //gtk_misc_set_alignment (GTK_MISC (label264), 1, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label264), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label264), GTK_ALIGN_CENTER);  
   gtk_widget_show (label264);
-  gtk_grid_attach(GTK_GRID(hbox27),label264, 0, 0 , 1, 1);
+  gtk_grid_attach (GTK_GRID(hbox27),label264, 0, 0 , 1, 1);
 
   color_button_PDF_bg=gtk_color_button_new (); 
   gtk_widget_show (color_button_PDF_bg);
@@ -2175,7 +2239,11 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
 
   GtkWidget *label2641 = gtk_label_new (_("<i>(Please reload PDF document to complete operation)</i>"));
   gtk_label_set_use_markup (GTK_LABEL (label2641), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label2641), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (label2641), 1, 0.5);
+  
+  gtk_widget_set_halign (GTK_WIDGET (label2641), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label2641), GTK_ALIGN_CENTER);
+    
   gtk_widget_show (label2641);
   gtk_grid_attach(GTK_GRID(hbox27),label2641, 0, 1 , 2, 1);
 
@@ -2187,9 +2255,17 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show(tab_boxCSVSettings);
   GtkWidget *iconCSVSettings = gtk_image_new_from_icon_name ("application-pdf", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconCSVSettings);
-  gtk_misc_set_padding(GTK_MISC(iconCSVSettings), 0, 2);
+//  gtk_misc_set_padding(GTK_MISC(iconCSVSettings), 0, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(iconCSVSettings), 0);
+  gtk_widget_set_margin_top (GTK_WIDGET(iconCSVSettings), 2);   
+  
   gtk_box_pack_start(GTK_BOX(tab_boxCSVSettings), iconCSVSettings, FALSE, FALSE, 2);
-  gtk_misc_set_padding(GTK_MISC(label991), 2, 2);
+//  gtk_misc_set_padding(GTK_MISC(label991), 2, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(label991), 2);
+  gtk_widget_set_margin_top (GTK_WIDGET(label991), 2);     
+  
   gtk_container_add(GTK_CONTAINER(tab_boxCSVSettings), label991); 
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (configNotebook), 
                               gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 2),       tab_boxCSVSettings);
@@ -2203,13 +2279,21 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_label_set_use_markup (GTK_LABEL (label274), TRUE);
   gtk_widget_show (label274);
   gtk_grid_attach(GTK_GRID(vbox28),label274, 0, 0 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label274), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (label274), 1, 0.5);
+  
+  
+  gtk_widget_set_halign (GTK_WIDGET (label274), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label274), GTK_ALIGN_CENTER); 
  
   GtkWidget *label2742 = gtk_label_new (_("<i>(Remain unchanged until you clear sketch)</i>"));
   gtk_label_set_use_markup (GTK_LABEL (label2742), TRUE);
   gtk_widget_show (label2742);
   gtk_grid_attach(GTK_GRID(vbox28),label2742, 0, 1 , 2, 1);
-  gtk_misc_set_alignment (GTK_MISC (label2742), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (label2742), 1, 0.5);
+  
+  
+  gtk_widget_set_halign (GTK_WIDGET (label2742), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label2742), GTK_ALIGN_CENTER);  
 
   color_button_sketch_bg=gtk_color_button_new (); 
   gtk_widget_show (color_button_sketch_bg);
@@ -2218,16 +2302,23 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   label992 = gtk_label_new (_("Annotation text font:"));
   gtk_widget_show (label992);
   gtk_grid_attach(GTK_GRID(vbox28),label992, 0, 2 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label992), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (label992), 1, 0.5);
+  
+  gtk_widget_set_halign (GTK_WIDGET (label992), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label992), GTK_ALIGN_CENTER);  
 
-  font_button_sketch=gtk_font_button_new_with_font ("sans 14");
+  font_button_sketch = gtk_font_button_new_with_font ("sans 14");
   gtk_widget_show(font_button_sketch);
   gtk_grid_attach(GTK_GRID(vbox28),font_button_sketch, 1, 2 , 1, 1);
 
   label_pen_width = gtk_label_new (_("Pen width in pixels :"));
   gtk_widget_show (label_pen_width);
   gtk_grid_attach(GTK_GRID(vbox28),label_pen_width, 0, 3 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label_pen_width), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (label_pen_width), 1, 0.5);
+  
+  
+  gtk_widget_set_halign (GTK_WIDGET (label_pen_width), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label_pen_width), GTK_ALIGN_CENTER);   
 
   GtkAdjustment *pen_width_adj = gtk_adjustment_new (1, 1, 20, 1, 10, 0);
   GtkWidget *pen_width_Spin = gtk_spin_button_new (GTK_ADJUSTMENT (pen_width_adj), 2, 1);
@@ -2241,9 +2332,17 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show(tab_boxSystemSettings);
   GtkWidget *iconSystemSettings = gtk_image_new_from_icon_name ("applications-graphics", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconSystemSettings);
-  gtk_misc_set_padding(GTK_MISC(iconSystemSettings), 0, 2);
+//  gtk_misc_set_padding(GTK_MISC(iconSystemSettings), 0, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(iconSystemSettings), 0);
+  gtk_widget_set_margin_top (GTK_WIDGET(iconSystemSettings), 2);  
+  
   gtk_box_pack_start(GTK_BOX(tab_boxSystemSettings), iconSystemSettings, FALSE, FALSE, 2);
-  gtk_misc_set_padding(GTK_MISC(label273), 2, 2);
+//  gtk_misc_set_padding(GTK_MISC(label273), 2, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(label273), 2);
+  gtk_widget_set_margin_top (GTK_WIDGET(label273), 2);    
+  
   gtk_container_add(GTK_CONTAINER(tab_boxSystemSettings), label273); 
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (configNotebook), 
                              gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 3),       
@@ -2255,21 +2354,31 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show (vboxAudio);
   gtk_container_add (GTK_CONTAINER (configNotebook), vboxAudio);
   GtkWidget *labelAudioRew = gtk_label_new (_("<b>Play/pause rewind jump in seconds.</b>\n<i>Minimum : 1sec, maximum 10 secs.</i>"));
-  gtk_misc_set_alignment (GTK_MISC (labelAudioRew), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (labelAudioRew), 1, 0.5);
+   
+  
   gtk_label_set_use_markup (GTK_LABEL (labelAudioRew), TRUE);
   gtk_widget_show (labelAudioRew);
   gtk_grid_attach(GTK_GRID(vboxAudio),labelAudioRew, 0, 0 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (labelAudioRew), 0, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (labelAudioRew), 0, 0.5);
+  
+  gtk_widget_set_halign (GTK_WIDGET (labelAudioRew), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (labelAudioRew), GTK_ALIGN_CENTER);   
+  
   GtkAdjustment *rewGap_adj = gtk_adjustment_new (2, 1, 10, 1, 1, 0);
   GtkWidget *rewGapSpin = gtk_spin_button_new (GTK_ADJUSTMENT (rewGap_adj), 1, 0);
   gtk_widget_show (rewGapSpin);
   gtk_grid_attach(GTK_GRID(vboxAudio),rewGapSpin, 1, 0 , 1, 1);
   GtkWidget *labelAudioStep = gtk_label_new (_("<b>Back or forward jump in seconds.</b>\n<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"));
-  gtk_misc_set_alignment (GTK_MISC (labelAudioStep), 1, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (labelAudioStep), 1, 0.5);
   gtk_label_set_use_markup (GTK_LABEL (labelAudioStep), TRUE);
   gtk_widget_show (labelAudioStep);
   gtk_grid_attach(GTK_GRID(vboxAudio),labelAudioStep, 0, 2 , 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (labelAudioStep), 0, 0.5);
+//  gtk_misc_set_alignment (GTK_MISC (labelAudioStep), 0, 0.5);
+  
+  gtk_widget_set_halign (GTK_WIDGET (labelAudioStep), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (labelAudioStep), GTK_ALIGN_CENTER);   
+  
   GtkAdjustment *jumpGap_adj = gtk_adjustment_new (10, 1, 600, 1, 10, 0);
   GtkWidget *jumpGapSpin = gtk_spin_button_new (GTK_ADJUSTMENT (jumpGap_adj), 1, 0);
   gtk_widget_show (jumpGapSpin);
@@ -2290,9 +2399,17 @@ GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app)
   gtk_widget_show(tab_boxAudioSettings);
   GtkWidget    *iconAudioSettings = gtk_image_new_from_icon_name ("audio-x-generic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconAudioSettings);
-  gtk_misc_set_padding(GTK_MISC(iconAudioSettings), 0, 2);
+//  gtk_misc_set_padding(GTK_MISC(iconAudioSettings), 0, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(iconAudioSettings), 0);
+  gtk_widget_set_margin_top (GTK_WIDGET(iconAudioSettings), 2);   
+  
   gtk_box_pack_start(GTK_BOX(tab_boxAudioSettings), iconAudioSettings, FALSE, FALSE, 2);
-  gtk_misc_set_padding(GTK_MISC(labelAudio), 2, 2);
+//  gtk_misc_set_padding(GTK_MISC(labelAudio), 2, 2);
+  
+  gtk_widget_set_margin_start (GTK_WIDGET(labelAudio), 2);
+  gtk_widget_set_margin_top (GTK_WIDGET(labelAudio), 2);   
+  
   gtk_container_add(GTK_CONTAINER(tab_boxAudioSettings), labelAudio); 
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (configNotebook), 
                              gtk_notebook_get_nth_page (GTK_NOTEBOOK (configNotebook), 4),       
