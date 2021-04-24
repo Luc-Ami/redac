@@ -167,6 +167,24 @@ static gboolean widget_is_dark (GtkWidget *widget)
      return FALSE;
 }
 
+
+/*********************************
+
+  prepare textview
+
+*********************************/
+GtkWidget *prepare_view ()
+{
+  GtkWidget *view;
+
+  view = gtk_text_view_new ();
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(view), GTK_WRAP_WORD);
+  gtk_widget_set_name (view, "view");
+  gtk_text_view_set_left_margin (GTK_TEXT_VIEW(view), 8);
+  gtk_text_view_set_right_margin (GTK_TEXT_VIEW(view), 8);
+  return view;
+}
+
 /**********************************
   prepare sketch background
 
@@ -2875,7 +2893,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindowCrobar),GTK_SHADOW_ETCHED_IN);
 
   /* main Gtk text view */
-  view = prepare_view();
+  view = prepare_view ();
   gtk_container_add (GTK_CONTAINER (scrolledwindow1), view);
 
   /* place stack */ 
@@ -2902,14 +2920,14 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 
   /* quasi global vars  */
   misc_init_vars (data);
-  data->stack=stack;
-  data->appWindow=mainWindow;
+  data->stack = stack;
+  data->appWindow = mainWindow;
   data->PDFdrawable = crPDF;
-  data->SketchDrawable= crCrobar;
+  data->SketchDrawable = crCrobar;
   data->PDFScrollable = scrolledwindowPDF;
-  data->SketchScrollable= scrolledwindowCrobar;
+  data->SketchScrollable = scrolledwindowCrobar;
   data->buffer = buffer;
-  data->view=view;
+  data->view = GTK_TEXT_VIEW(view);
   data->pipeline = gst_element_factory_make ("playbin", "redac");
   /* spell checker !! after vars init for view value */
   misc_init_spell_checker (data);
