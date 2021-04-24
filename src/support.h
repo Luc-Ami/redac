@@ -72,4 +72,8 @@ gboolean get_tag_in_selection(gchar *tag_name, GtkTextIter start);
 void toggle_css_value(GtkWidget *button, gboolean toggle_state);
 unsigned  countWords(GtkTextBuffer *buffer);
 
+void add_ui_directory  (const gchar  *directory);
+gchar *find_ui_file  (const gchar  *filename);
+gchar *find_pixmap_file (const gchar *filename);
+
 #endif /* SUPPORT_H */
