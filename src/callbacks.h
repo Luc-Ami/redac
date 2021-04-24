@@ -85,23 +85,20 @@ void
 on_replace_clicked     (GtkButton       *button,
                                         APP_data    *data);
 void
-on_prefs_clicked                 (GtkButton  *button,  APP_data *data_app);
-gboolean key_event(GtkWidget *widget,
-          GdkEventKey *event, APP_data    *data);
-void clipboard_request_image(GtkClipboard *clipboard,
-                           GdkPixbuf *pixbuf,
-                           gpointer data);
+on_prefs_clicked  (GtkButton  *button,  APP_data *data_app);
+gboolean key_event(GtkWidget *widget, GdkEventKey *event, APP_data    *data);
+void clipboard_request_image(GtkClipboard *clipboard, GdkPixbuf *pixbuf, gpointer data);
 void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu,APP_data *data_app);
 void
-on_main_menu_clicked                 (GtkButton       *button,
+on_main_menu_clicked  (GtkButton       *button,
                                         APP_data *data_app);
-void menuitem_response(GtkMenuItem *menuitem, APP_data    *user_data);
+void menuitem_response (GtkMenuItem *menuitem, APP_data *user_data);
 void new_project(GtkMenuItem *menuitem,
-               APP_data    *user_data);
-void
-on_stack_changed (GObject    *gobject,
-                 GParamSpec *pspec,
                  APP_data    *user_data);
+void on_stack_changed (GObject    *gobject,
+                       GParamSpec *pspec,
+                       APP_data    *user_data);
+                       
 gboolean draw_callback(GtkWidget *widget, cairo_t *cr, APP_data    *data);
 
 gboolean on_PDF_draw_button_press_callback(GtkWidget *widget,
@@ -114,7 +111,7 @@ gboolean on_PDF_draw_motion_event_callback(GtkWidget *widget,
 gboolean on_PDF_draw_button_release_callback(GtkWidget *widget,
                GdkEvent  *event,
                APP_data *data);
-void on_button_clip_mode_toggled (GtkButton       *button,
+void on_button_clip_mode_toggled (GtkButton  *button,
                                         APP_data *user_data);
 void on_PDF_size_changed (GtkWidget    *widget,
                GdkRectangle *allocation,
@@ -162,6 +159,7 @@ void on_audioPlaySpeed_changed(GtkComboBox     *combobox, APP_data *data);
 void
 on_about1_activate (GtkMenuItem  *menuitem, APP_data *data);
 void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data);
-void
-on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data);
+
+void on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data);
+void ScrollToEnd (GtkWidget *widget, GdkRectangle *allocation, APP_data *data);
 #endif /* CALLBACKS_H */
