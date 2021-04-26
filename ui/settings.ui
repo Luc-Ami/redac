@@ -56,10 +56,18 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="rewGap_adj">
+    <property name="lower">2</property>
+    <property name="upper">10</property>
+    <property name="value">2</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkDialog" id="dialogSettings">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">PlanLibre Settings</property>
+    <property name="title" translatable="yes">Redac!  Settings</property>
     <property name="modal">True</property>
+    <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <property name="gravity">center</property>
     <child internal-child="vbox">
@@ -77,11 +85,14 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button1">
-                <property name="label">gtk-cancel</property>
+                <property name="label">gtk-undo</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="halign">center</property>
                 <property name="use_stock">True</property>
+                <property name="xalign">0.52999997138977051</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -94,9 +105,9 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <property name="xalign">0.51999998092651367</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -263,6 +274,8 @@ whatever you check or not this option.</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Force a prompt before any files are overwrote</property>
+                    <property name="margin_left">4</property>
+                    <property name="margin_right">4</property>
                     <property name="margin_top">2</property>
                     <property name="margin_bottom">2</property>
                     <property name="xalign">0</property>
@@ -356,7 +369,7 @@ whatever you check or not this option.</property>
                     <property name="tooltip_text" translatable="yes">Click here yo choose a color</property>
                     <property name="margin_top">2</property>
                     <property name="margin_bottom">2</property>
-                    <property name="rgba"/>
+                    <property name="rgba">rgb(0,0,0)</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -894,12 +907,5 @@ whatever you check or not this option.</property>
       <action-widget response="0">button1</action-widget>
       <action-widget response="1">button2</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkAdjustment" id="rewGap_adj">
-    <property name="lower">2</property>
-    <property name="upper">10</property>
-    <property name="value">2</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>

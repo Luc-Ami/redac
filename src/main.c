@@ -18,22 +18,6 @@
 
 
 /*********************************
-
-  prepare textview
-
-*********************************/
-GtkWidget *prepare_view ()
-{
-  GtkWidget *view;
-
-  view = gtk_text_view_new ();
-  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(view), GTK_WRAP_WORD);
-  gtk_widget_set_name (view, "view");
-  gtk_text_view_set_left_margin (GTK_TEXT_VIEW(view), 8);
-  gtk_text_view_set_right_margin (GTK_TEXT_VIEW(view), 8);
-  return view;
-}
-/*********************************
   startup for a standard
   g_application
 
@@ -47,6 +31,7 @@ static void redac_startup (APP_data *data)
   textdomain (PACKAGE);
   add_pixmap_directory (PACKAGE_DATA_DIR "/pixmaps/" PACKAGE); /* New location for all pixmaps */
   add_pixmap_directory (PACKAGE_DATA_DIR "/pixmaps"); /* Gnome users /usr/share/pixmaps folder */  
+  add_ui_directory (PACKAGE_DATA_DIR "/redac/ui" ); /* New location for all glade xml files */
 
 }
 

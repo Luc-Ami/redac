@@ -10,6 +10,7 @@ redac_SOURCES = \
 	misc.c misc.h \
 	pdf.c pdf.h \
 	search.c search.h \
+	settings.c settings.h \
 	mttfiles.c mttfiles.h \
 	mttexport.c mttexport.h \
 	mttimport.c mttimport.h \

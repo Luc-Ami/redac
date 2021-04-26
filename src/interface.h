@@ -22,7 +22,7 @@ GtkWidget *create_menu1 (GtkWidget *win,APP_data *data_app);
 GtkWidget *create_loadFileDialog (APP_data *data, gchar *sFileType);
 GtkWidget *create_saveFileDialog (APP_data *data);
 GtkWidget *misc_create_help_dialog(GtkWidget *win);
-GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app);
+// GtkWidget *create_prefs_dialog(GtkWidget *win, APP_data *data_app);
 gchar *dialog_add_text_annotation(GtkWidget *win, gchar *current_str, APP_data *data);
 GtkWidget *create_menu_sketch(GtkWidget *win, APP_data *data_app);
 GtkWidget *create_menu_PDF(GtkWidget *win, APP_data *data_app);

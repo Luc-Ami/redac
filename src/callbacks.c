@@ -23,6 +23,7 @@
 #include "pdf.h"
 #include "undo.h"
 #include "paving.h"
+#include "settings.h"
 
 /********************
   global vars 
@@ -931,28 +932,51 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
   GKeyFile *keyString;
   gchar *newFont;
   gdouble rewValue, jumpValue, pen_width;
+  gint ret;
 
-  dialog= create_prefs_dialog(data_app->appWindow, data_app);
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
+  dialog = create_prefs_dialog (data_app->appWindow, data_app);
+  ret = gtk_dialog_run (GTK_DIALOG (dialog));
+printf ("tet vaut =%d \n", ret);
+
+  if(ret == 1) {
+printf ("entrée ds OK \n");
     /* we get the current RGBA color */
-    pBtnColor=lookup_widget(GTK_WIDGET(dialog), "color_button_editor_fg");
+    pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_fg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &text_color_fg);
-    pBtnColor=lookup_widget(GTK_WIDGET(dialog), "color_button_editor_bg");
+
+    pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_bg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &text_color_bg);
-    pBtnColor=lookup_widget(GTK_WIDGET(dialog), "color_button_sketch_bg");
+
+    pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_sketch_bg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &sketch_color_bg);
     /* we setup config file */
     keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config"); 
 
     /* global prefs */
     g_key_file_set_boolean(keyString, "application", "interval-save",  
-                 gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (lookup_widget(GTK_WIDGET(dialog), "configAutoSave"))));
+                 gtk_toggle_button_get_active (
+                 GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
+                    data_app->tmpBuilder, "configAutoSave"))))
+                );
+
     g_key_file_set_boolean(keyString, "application", "autoreload-PDF",  
-                 gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (lookup_widget(GTK_WIDGET(dialog), "configAutoReloadPDF"))));
+                 gtk_toggle_button_get_active (
+                 GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
+                    data_app->tmpBuilder, "configAutoReloadPDF"))))
+                  );
+
     g_key_file_set_boolean(keyString, "application", "prompt-before-quit",  
-                 gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (lookup_widget(GTK_WIDGET(dialog), "configPromptQuit"))));
+                 gtk_toggle_button_get_active (
+                 GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
+                    data_app->tmpBuilder, "configPromptQuit"))))
+    );
+
     g_key_file_set_boolean(keyString, "application", "prompt-before-overwrite",  
-                 gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (lookup_widget(GTK_WIDGET(dialog), "configPromptOverwrite"))));
+                 gtk_toggle_button_get_active (
+                 GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
+                    data_app->tmpBuilder, "configPromptOverwrite"))))
+    );
+
 
     if(g_key_file_get_boolean(keyString, "application", "interval-save",  NULL) ) {
       gtk_widget_show( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_task_due"));
@@ -960,77 +984,107 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
     else
       gtk_widget_hide( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_task_due"));
 
-    g_key_file_set_double(keyString, "editor", "text.color.red", text_color_fg.red);
-    g_key_file_set_double(keyString, "editor", "text.color.green", text_color_fg.green);
-    g_key_file_set_double(keyString, "editor", "text.color.blue", text_color_fg.blue);
+    g_key_file_set_double (keyString, "editor", "text.color.red", text_color_fg.red);
+    g_key_file_set_double (keyString, "editor", "text.color.green", text_color_fg.green);
+    g_key_file_set_double (keyString, "editor", "text.color.blue", text_color_fg.blue);
 
-    g_key_file_set_double(keyString, "editor", "paper.color.red", text_color_bg.red);
-    g_key_file_set_double(keyString, "editor", "paper.color.green", text_color_bg.green);
-    g_key_file_set_double(keyString, "editor", "paper.color.blue", text_color_bg.blue);
+    g_key_file_set_double (keyString, "editor", "paper.color.red", text_color_bg.red);
+    g_key_file_set_double (keyString, "editor", "paper.color.green", text_color_bg.green);
+    g_key_file_set_double (keyString, "editor", "paper.color.blue", text_color_bg.blue);
 
-    g_key_file_set_double(keyString, "reference-document", "paper.color.red", text_color_bg.red);
-    g_key_file_set_double(keyString, "reference-document", "paper.color.green", text_color_bg.green);
-    g_key_file_set_double(keyString, "reference-document", "paper.color.blue", text_color_bg.blue);
+    g_key_file_set_double (keyString, "reference-document", "paper.color.red", text_color_bg.red);
+    g_key_file_set_double (keyString, "reference-document", "paper.color.green", text_color_bg.green);
+    g_key_file_set_double (keyString, "reference-document", "paper.color.blue", text_color_bg.blue);
 
-    g_key_file_set_double(keyString, "sketch", "paper.color.red", sketch_color_bg.red);
-    g_key_file_set_double(keyString, "sketch", "paper.color.green", sketch_color_bg.green);
-    g_key_file_set_double(keyString, "sketch", "paper.color.blue", sketch_color_bg.blue);
-    pen_width=gtk_spin_button_get_value(GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "pen_width_Spin")));
-    g_key_file_set_double(keyString, "sketch", "pen-width", pen_width);
+    g_key_file_set_double (keyString, "sketch", "paper.color.red", sketch_color_bg.red);
+    g_key_file_set_double (keyString, "sketch", "paper.color.green", sketch_color_bg.green);
+    g_key_file_set_double (keyString, "sketch", "paper.color.blue", sketch_color_bg.blue);
+
+
+    pen_width = 
+         gtk_spin_button_get_value (
+              GTK_SPIN_BUTTON(GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "pen_width_Spin"))));
+
+    g_key_file_set_double (keyString, "sketch", "pen-width", pen_width);
     
-    rewValue=gtk_spin_button_get_value(GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "rewGapSpin")));
-    g_key_file_set_double(keyString, "application", "audio-file-rewind-step", rewValue);
-    jumpValue=gtk_spin_button_get_value(GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "jumpGapSpin")));
-    g_key_file_set_double(keyString, "application", "audio-file-marks-step", jumpValue);
-    g_key_file_set_boolean(keyString, "application","audio-auto-rewind",  
-                 gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (lookup_widget(GTK_WIDGET(dialog), "configAutoRewindPlayer"))));
+    rewValue = 
+         gtk_spin_button_get_value (
+              GTK_SPIN_BUTTON(GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "rewGapSpin"))));
+
+    g_key_file_set_double (keyString, "application", "audio-file-rewind-step", rewValue);
+
+    jumpValue = gtk_spin_button_get_value (
+              GTK_SPIN_BUTTON(GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "jumpGapSpin"))));
+    g_key_file_set_double (keyString, "application", "audio-file-marks-step", jumpValue);
+
+    g_key_file_set_boolean (keyString, "application","audio-auto-rewind",  
+                 gtk_toggle_button_get_active (
+                     GTK_TOGGLE_BUTTON(
+                       GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "configAutoRewindPlayer")))));
+
     if(g_key_file_get_boolean(keyString, "application", "audio-auto-rewind",  NULL) ) {
-      gtk_widget_show( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
+       gtk_widget_show( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
     }
     else
-      gtk_widget_hide( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
+       gtk_widget_hide( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
     /* get the fonts */
-    newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(lookup_widget(GTK_WIDGET(dialog), "font_button_sketch") ));
+    newFont = gtk_font_chooser_get_font (
+                GTK_FONT_CHOOSER(
+                   GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "font_button_sketch"))
+                )
+              );
+
+
+
+// font_button_sketch
+
     if(newFont!=NULL) {
-       g_key_file_set_string(keyString, "sketch", "font",newFont);
-       g_free(newFont);
+       g_key_file_set_string (keyString, "sketch", "font",newFont);
+       g_free (newFont);
     }
     /* modify editor's textview default font */
-    gchar *fntFamily=NULL;
-    gint fntSize=12;
+    gchar *fntFamily = NULL;
+    gint fntSize = 12;
    // PangoContext* context = gtk_widget_get_pango_context  (data_app->view);
     PangoFontDescription *desc;// = pango_context_get_font_description(context);    
-    newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(lookup_widget(GTK_WIDGET(dialog), "font_button_editor") ));
-    g_key_file_set_string(keyString, "editor", "font",newFont);
+    newFont = gtk_font_chooser_get_font (GTK_FONT_CHOOSER( 
+                  GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "font_button_editor"))
+              ));
+
+
+    g_key_file_set_string (keyString, "editor", "font",newFont);
     if (newFont != NULL) { 
         desc = pango_font_description_from_string (newFont);
         if (desc != NULL) {
-          fntFamily= pango_font_description_get_family (desc);
-          fntSize=pango_font_description_get_size(desc)/1000;
+          fntFamily = pango_font_description_get_family (desc);
+          fntSize = pango_font_description_get_size(desc)/1000;
         }
-        g_free(newFont);
+        g_free (newFont);
     }
     /* same for colors, with CSS */
     
-    text_color_fg.alpha=1;/* for future with alpha channel */
-    text_color_bg.alpha=1;
+    text_color_fg.alpha = 1;/* for future with alpha channel */
+    text_color_bg.alpha = 1;
   
-    GtkCssProvider* css_provider = gtk_css_provider_new();
+    GtkCssProvider* css_provider = gtk_css_provider_new ();
     gchar *css;
-    css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: @selected_bg_color; color:@selected_fg_color; }\n",
+    css = g_strdup_printf ("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: @selected_bg_color; color:@selected_fg_color; }\n",
                  fntFamily,
                  fntSize,
-                 (gint)( text_color_fg.red*255),(gint)( text_color_fg.green*255), (gint)(text_color_fg.blue*255),
-                (gint)( text_color_bg.red*255),(gint)( text_color_bg.green*255), (gint)(text_color_bg.blue*255));
+                 (gint) (text_color_fg.red*255),(gint)( text_color_fg.green*255), (gint)(text_color_fg.blue*255),
+                 (gint) (text_color_bg.red*255),(gint)( text_color_bg.green*255), (gint)(text_color_bg.blue*255));
     if(desc)
-      pango_font_description_free(desc);
+      pango_font_description_free (desc);
 
-    gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
-    GdkScreen* screen = gdk_screen_get_default();
+    gtk_css_provider_load_from_data (css_provider,css,-1,NULL);
+    GdkScreen* screen = gdk_screen_get_default ();
     gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    g_free(css);
+    g_free (css);
   }
-  gtk_widget_destroy(GTK_WIDGET(dialog));
+
+  /* cleaning */
+  g_object_unref (data_app->tmpBuilder);
+  gtk_widget_destroy (GTK_WIDGET(dialog));  /* please note : with a Builder, you can only use destroy in case of the properties 'destroy with parent' isn't activated for the dualog */
 
 }
 
@@ -2595,7 +2649,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
                  pen_width=pen_width+1;
                  if(pen_width>20)
                     pen_width=20;
-                 g_key_file_set_double(keyString, "sketch", "pen-width", pen_width);
+                 g_key_file_set_double (keyString, "sketch", "pen-width", pen_width);
                  update_statusbarSketch(data);
            return TRUE;
            }
@@ -2610,7 +2664,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
                  pen_width=pen_width-1;
                  if(pen_width<1)
                     pen_width=1;
-                 g_key_file_set_double(keyString, "sketch", "pen-width", pen_width);
+                 g_key_file_set_double (keyString, "sketch", "pen-width", pen_width);
                  update_statusbarSketch(data);
            return TRUE;
            }
@@ -2888,7 +2942,7 @@ void on_PDF_zoom_fit_best_clicked  (GtkButton *button, APP_data *data)
   if(data->doc) {
      data->PDFratio=misc_get_PDF_ratio(data->PDFWidth,  gtk_widget_get_allocated_width (data->appWindow));
      PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
-     g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
+     g_key_file_set_double (keyString, "reference-document", "zoom", data->PDFratio);
   }
 }
 
