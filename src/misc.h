@@ -69,13 +69,14 @@ typedef struct  {
 
 typedef struct {
   gint x1, y1, x2, y2, w, h, x1_event_root, y1_event_root;
-
-  gboolean button_pressed;
-  gboolean fPencilTool;
-  gboolean fDarkTheme;
-  gboolean fPdfLoaded;
-  gboolean fAudioLoaded;
-  gboolean fAudioPlaying;
+  GtkBuilder  *builder;
+  GtkBuilder  *tmpBuilder;
+  gboolean    button_pressed;
+  gboolean    fPencilTool;
+  gboolean    fDarkTheme;
+  gboolean    fPdfLoaded;
+  gboolean    fAudioLoaded;
+  gboolean    fAudioPlaying;
   GtkApplication *app;
   GtkWidget    *window;
   GtkWidget    *appWindow;
@@ -87,34 +88,34 @@ typedef struct {
   gint         clipboardMode;  /* 0= text 1=picture */
   gdouble      iAudioSmartRew; /* Audio : rewing jump in secs when user clicks Play/pause button */
   gdouble      iAudioSmartJump; /* Audio : rewing jump in secs when user clicks forward/backward buttons */
-  gint kw_paragraph_alignment;
-  GtkWidget *statusbar1;
-  GtkWidget *statusbar2;
-  gchar *gConfigFile;
-  GKeyFile *keystring;
-  GtkTextView *view;
+  gint          kw_paragraph_alignment;
+  GtkWidget     *statusbar1;
+  GtkWidget     *statusbar2;
+  gchar         *gConfigFile;
+  GKeyFile      *keystring;
+  GtkTextView   *view;
   GtkTextBuffer *buffer;
-  GtkStack *stack;
+  GtkStack      *stack;
   cairo_surface_t *Sketchsurface;
   cairo_surface_t *surface;
-  GtkTextIter *curpos;
-  gint curPDFpage;
-  gint totalPDFpages;
-  gdouble PDFWidth;
-  gdouble PDFHeight;
-  gdouble PDFratio;
-  gint currentStack;
+  GtkTextIter     *curpos;
+  gint            curPDFpage;
+  gint            totalPDFpages;
+  gdouble         PDFWidth;
+  gdouble         PDFHeight;
+  gdouble         PDFratio;
+  gint            currentStack;
   PopplerDocument *doc;
-  GList *pdfSearch;
-  GList *pdfAnnotMapping;
-  GList *undoList;
-  PopplerAnnot *current_annot;
+  GList           *pdfSearch;
+  GList           *pdfAnnotMapping;
+  GList           *undoList;
+  PopplerAnnot    *current_annot;
   PopplerAnnotMapping map;
-  undo_datas undo;
-  GtkSpellChecker* spell;
-  GstElement *pipeline;
-  gint64 audio_total_duration;
-  gint64 audio_current_position;
+  undo_datas          undo;
+  GtkSpellChecker     *spell;
+  GstElement          *pipeline;
+  gint64              audio_total_duration;
+  gint64              audio_current_position;
 } APP_data;
 
 typedef struct {

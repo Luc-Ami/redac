@@ -19,5 +19,8 @@ redac_SOURCES = \
 	audio.c audio.h \
 	paving.c paving.h
 
+redac_LDFLAGS = \
+	-Wl,--export-dynamic
+
 redac_LDADD = $(REDAC_LIBS)
 
