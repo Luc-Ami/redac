@@ -722,12 +722,13 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   GtkWidget *iconButtonGotoAudio, *iconButtonGoJumpAudio;
 
   fIsDark = data_app->fDarkTheme;
-  toolbar = gtk_toolbar_new ();
-  gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
-  gtk_widget_set_margin_top(toolbar, 8);
-  gtk_widget_set_margin_bottom(toolbar, 8);
-	  gtk_widget_set_margin_start (toolbar, 8);
-  gtk_widget_set_margin_end (toolbar, 8);
+  toolbar = GTK_WIDGET(gtk_builder_get_object (data_app->builder, "toolbar"));
+//  toolbar = gtk_toolbar_new ();
+ // gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
+ // gtk_widget_set_margin_top(toolbar, 8);
+ // gtk_widget_set_margin_bottom(toolbar, 8);
+//	  gtk_widget_set_margin_start (toolbar, 8);
+//  gtk_widget_set_margin_end (toolbar, 8);
 
   /* toolbar toggle buttons bold */
   icon_bold = gtk_image_new_from_icon_name("format-text-bold-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -1223,6 +1224,7 @@ void UI_headerBar (GtkWidget *window, GtkWidget *grid, APP_data *data)
   main_menu_icon=gtk_image_new_from_icon_name ("view-list-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_button_set_image(GTK_BUTTON(main_menu),main_menu_icon);
   gtk_widget_set_tooltip_text(main_menu, _("Menu to access various file's operations"));
+
   gtk_grid_attach(GTK_GRID(grid), main_menu, 0, 0, 1, 1);
 
   button_prefs = gtk_button_new();
@@ -2336,32 +2338,42 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gchar *path_to_file, buffer_date[81];
 
   mainWindow =  UI_main_window (app, data);
-  GtkWidget *headBar=gtk_grid_new ();
+  gtk_widget_show (GTK_WIDGET(mainWindow));
+  vGrid  = GTK_WIDGET(gtk_builder_get_object (data->builder, "vGrid"));
+  gtk_widget_show (GTK_WIDGET(vGrid));
+  GtkWidget *headBar = GTK_WIDGET(gtk_builder_get_object (data->builder, "headBar"));
+  gtk_widget_show (GTK_WIDGET(headBar));
+
   /* main vbox packing widget */
-  vGrid=gtk_grid_new();
-  gtk_grid_set_row_homogeneous (GTK_GRID(vGrid),FALSE);
-  gtk_container_add(GTK_CONTAINER(mainWindow), vGrid);
+ // vGrid=gtk_grid_new();
+ // gtk_grid_set_row_homogeneous (GTK_GRID(vGrid),FALSE);
+ // gtk_container_add(GTK_CONTAINER(mainWindow), vGrid);
+
+
   /* guess the style for current theme */
   check_up_theme (mainWindow, data);
   /* pseudo headerBar */
-  UI_headerBar(mainWindow, headBar, data);
-  gtk_grid_attach(GTK_GRID(vGrid), headBar, 0, 0, 1, 1);
+  UI_headerBar (mainWindow, headBar, data);
+//  gtk_grid_attach (GTK_GRID(vGrid), headBar, 0, 0, 1, 1);
+
+
   /* gtkstack definitions and building */
-  stack  = GTK_STACK(gtk_stack_new ());
-  gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);// or GTK_STACK_TRANSITION_TYPE_CROSSFADE
+//  stack  = GTK_STACK (gtk_stack_new ());
+  stack = GTK_WIDGET(gtk_builder_get_object (data->builder, "stack"));
+//  gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);// or GTK_STACK_TRANSITION_TYPE_CROSSFADE
   /* in order to breath some extra space from window's edges */
-  g_object_set (stack, "margin-left", 12, NULL);
-  g_object_set (stack, "margin-right", 12, NULL);
+ // g_object_set (stack, "margin-left", 12, NULL);
+ // g_object_set (stack, "margin-right", 12, NULL);
 
   switcher = GTK_STACK_SWITCHER(gtk_stack_switcher_new ());
   gtk_stack_switcher_set_stack (switcher, stack);
-  gtk_grid_attach(GTK_GRID(headBar),GTK_WIDGET(switcher), 2, 0, 1, 1);
-  gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(stack), 0,2,1,1);
+  gtk_grid_attach (GTK_GRID(headBar),GTK_WIDGET(switcher), 2, 0, 1, 1);
+//  gtk_grid_attach (GTK_GRID(vGrid), GTK_WIDGET(stack), 0,2,1,1);
   gtk_widget_set_halign (GTK_WIDGET(switcher), GTK_ALIGN_CENTER);
 
   /* toolbar */
   toolbar = main_wp_toolbar (mainWindow, data);
-  gtk_grid_attach(GTK_GRID(vGrid), toolbar, 0,1,1,1);
+//  gtk_grid_attach (GTK_GRID(vGrid), toolbar, 0,1,1,1);
   /* and a scrolling window for Text view ! */
   scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindow1);
@@ -2404,10 +2416,12 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   misc_setup_text_buffer_tags (buffer);
 
   /* two statusbars arranged in a GtkGrid */
-  gridStatusBar = gtk_grid_new();
+//  gridStatusBar = gtk_grid_new();
+
+  gridStatusBar = GTK_WIDGET(gtk_builder_get_object (data->builder, "gridStatusBar"));
   g_object_set (gridStatusBar, "margin-top", 4, NULL);
   g_object_set (gridStatusBar, "margin-bottom", 6, NULL);
-  gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(gridStatusBar), 0,3,1,1);
+//  gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(gridStatusBar), 0,3,1,1);
   /* statusbar */
   UI_statusbar (mainWindow, gridStatusBar, data );  
   /* mimic nice page jumper of Evince */
