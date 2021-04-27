@@ -855,7 +855,7 @@ void misc_set_font_color_settings(APP_data *data )
 ***********************************/
 void misc_halt_after_glade_failure (APP_data *data)
 {
-     printf ("* CRITICAL : can't load glade UI file, quit application ! *\n");
+     printf ("\n\n* Redac CRITICAL : can't load glade UI file, quit application ! *\n\n");
      g_application_quit (G_APPLICATION(data->app));
 }
 

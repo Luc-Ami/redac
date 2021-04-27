@@ -44,6 +44,18 @@ redac_activate (GApplication *app, APP_data *data)
 {
   GList *list;
   GtkWidget *window, *scrolledwindow1;
+  GError *err = NULL; 
+
+  /* get datas from xml Glade file - CRITICAL : only in activate phase !!!! */
+  data->builder = NULL;
+  data->builder = gtk_builder_new ();
+
+  /* load UI file */
+
+  if(!gtk_builder_add_from_file (data->builder, find_ui_file ("main.ui"), &err)) {
+     g_error_free (err);
+     misc_halt_after_glade_failure (data);
+  }
 
   list = gtk_application_get_windows (app);
   /* test for uniqueness */
@@ -52,7 +64,7 @@ redac_activate (GApplication *app, APP_data *data)
       gtk_window_present (GTK_WINDOW (list->data));
     }
   else
-    {
+    {printf ("arrivé ici avec %s \n", find_ui_file ("main.ui"));
       redac_prepare_GUI (app, data);
       gtk_window_set_application (GTK_WINDOW (data->appWindow), app);
       gtk_widget_show (data->appWindow);
@@ -82,6 +94,8 @@ int main(int argc, char *argv[]) {
   g_signal_connect (app, "activate", G_CALLBACK (redac_activate), &app_data);
   /* main loop */
   status = g_application_run (G_APPLICATION (app), argc, argv);
+
+  g_object_unref (app_data.builder);
   g_object_unref (app);
 
   return status;

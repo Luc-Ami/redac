@@ -1188,12 +1188,18 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
 /****************************
   main window
 ****************************/
-GtkWidget *UI_main_window(GApplication *app)
+GtkWidget *UI_main_window(GApplication *app, APP_data *data)
 {
   GtkWidget *win;
 
  // win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  win = gtk_application_window_new (GTK_APPLICATION (app));
+
+/* version Glade */
+  win = GTK_WIDGET(gtk_builder_get_object (data->builder, "window_main"));
+  data->appWindow = win;
+  gtk_window_set_application (GTK_WINDOW(win), GTK_APPLICATION(app));
+  gtk_builder_connect_signals (data->builder, data);/* now all calls will get data structure as first parameter */
+//  win = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_widget_show (win);
   gtk_window_set_position (GTK_WINDOW(win), GTK_WIN_POS_CENTER);
   gtk_window_set_default_size (GTK_WINDOW(win), 980, 700);
@@ -2329,7 +2335,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   time_t rawtime;
   gchar *path_to_file, buffer_date[81];
 
-  mainWindow =  UI_main_window (app);
+  mainWindow =  UI_main_window (app, data);
   GtkWidget *headBar=gtk_grid_new ();
   /* main vbox packing widget */
   vGrid=gtk_grid_new();
