@@ -848,3 +848,31 @@ void misc_set_font_color_settings(APP_data *data )
 
 }
 
+
+/************************************
+  General exit with failure after
+  an issue with glade
+***********************************/
+void misc_halt_after_glade_failure (APP_data *data)
+{
+     printf ("* CRITICAL : can't load glade UI file, quit application ! *\n");
+     g_application_quit (G_APPLICATION(data->app));
+}
+
+/****************************************************
+  display an info:confirm dialog
+****************************************************/
+void misc_InfoDialog (GtkWidget *widget, const gchar* msg)
+{ 
+   GtkWidget *dialog;
+
+   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW(widget),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_INFO,
+                                           GTK_BUTTONS_CLOSE,
+                                           msg, NULL);
+   gtk_dialog_run (GTK_DIALOG (dialog));
+   gtk_widget_destroy (dialog);
+}
+
+
