@@ -89,9 +89,10 @@ on_prefs_clicked  (GtkButton  *button,  APP_data *data_app);
 gboolean key_event(GtkWidget *widget, GdkEventKey *event, APP_data    *data);
 void clipboard_request_image(GtkClipboard *clipboard, GdkPixbuf *pixbuf, gpointer data);
 void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu,APP_data *data_app);
+
 void
-on_main_menu_clicked  (GtkButton       *button,
-                                        APP_data *data_app);
+   on_main_menu_button_toggled (GtkToggleButton *togglebutton,  APP_data *data_app);
+   
 void menuitem_response (GtkMenuItem *menuitem, APP_data *user_data);
 void new_project(GtkMenuItem *menuitem,
                  APP_data    *user_data);

@@ -20,12 +20,238 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
 
 -->
 <interface>
-  <requires lib="gtk+" version="3.12"/>
+  <requires lib="gtk+" version="3.16"/>
   <!-- interface-license-type lgplv3 -->
-  <object class="GtkSizeGroup">
-    <widgets>
-      <widget name="stack"/>
-    </widgets>
+  <object class="GtkMenu" id="dropMenu">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="menuNewNote">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">New note</property>
+        <signal name="activate" handler="new_project" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuSaveNoteAs">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Save the note as ...  </property>
+        <signal name="activate" handler="save_standard_file" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuOpenNote">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Open a previous note ...</property>
+        <signal name="activate" handler="on_open_clicked" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="sep1">
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
+        <property name="can-focus">False</property>
+        <property name="margin-top">4</property>
+        <property name="margin-bottom">4</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menurecentNote">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Recent notes ...</property>
+        <property name="use-underline">True</property>
+        <signal name="activate" handler="menuitem_response" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="sep2">
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
+        <property name="can-focus">False</property>
+        <property name="margin-top">4</property>
+        <property name="margin-bottom">4</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuInsTxt">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Insert text from a file </property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="menuInsRTF">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">from a RTF file ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_import_clicked" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuMergeNote">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Merge with a _note ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_merge_clicked" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuPDF">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">PDF</property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="menuLoadPDF">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Load _PDF file ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_loadPDF_clicked" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuSavePDF">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Save _modifyed PDF file ..</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_savePDF_clicked" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuSketch">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Sketches</property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="menuSaveSketch">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Save current sketch ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_saveSketch_clicked" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuClearSketch">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Clear current sketch</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_clearSketch_clicked" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuAudio">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Audio</property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="menuLoadAudio">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Load Audio file ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_loadAudio_clicked" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuCloseAudio">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Close current Audio file</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_AudioCloseFile_clicked" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="sep3">
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
+        <property name="can-focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuHelp">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Help</property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="menuKey">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Keyboard shortcuts ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_keyHelp1_activate" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuWiki">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Online _Wiki ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_wiki1_activate" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuAbout">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">About Redac ...</property>
+                <property name="use-underline">True</property>
+                <signal name="activate" handler="on_about1_activate" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
   </object>
   <object class="GtkApplicationWindow" id="window_main">
     <property name="can-focus">False</property>
@@ -38,8 +264,6 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkToolbar" id="toolbar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-left">8</property>
-            <property name="margin-right">8</property>
             <property name="margin-start">8</property>
             <property name="margin-end">8</property>
             <property name="margin-top">8</property>
@@ -55,8 +279,6 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkStack" id="stack">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-left">12</property>
-            <property name="margin-right">12</property>
             <property name="margin-start">12</property>
             <property name="margin-end">12</property>
             <property name="transition-type">slide-left</property>
@@ -136,30 +358,15 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkLabel" id="labelMainTitle">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-left">24</property>
-            <property name="margin-right">24</property>
             <property name="margin-start">24</property>
             <property name="margin-end">24</property>
             <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;noname&lt;/b&gt;&lt;/small&gt;</property>
             <property name="use-markup">True</property>
+            <property name="ellipsize">start</property>
           </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="main_menu">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Menu to access various file's operations</property>
-            <property name="relief">none</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">format-justify-fill-symbolic</property>
-                <property name="icon_size">3</property>
-              </object>
-            </child>
-          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
         </child>
         <child>
           <object class="GtkButton" id="button_prefs">
@@ -174,13 +381,15 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="icon-name">view-more-symbolic</property>
-                <property name="icon_size">3</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="pack-type">end</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkStackSwitcher" id="switcher">
@@ -193,9 +402,35 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkMenuButton" id="menuButton">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Application main menu.
+Shortkey &lt;CTRL&gt;+&lt;M&gt;</property>
+            <property name="popup">dropMenu</property>
+            <signal name="toggled" handler="on_main_menu_button_toggled" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">format-justify-fill-symbolic</property>
+              </object>
+            </child>
+            <accelerator key="m" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="position">3</property>
+          </packing>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="stack"/>
+    </widgets>
   </object>
 </interface>
