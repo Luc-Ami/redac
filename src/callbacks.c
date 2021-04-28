@@ -199,16 +199,16 @@ countchange++;
   if(iPendingFormat>1)
      iPendingFormat=0;
   gtk_statusbar_push(statusbar, 0, msg);
-  g_free(msg);
+  g_free (msg);
 
   keyString = g_object_get_data(G_OBJECT(window1), "config");
   msg = g_strdup_printf(_("%s"), g_key_file_get_string(keyString, "application", "current-file", NULL));
-  gtk_label_set_markup (lookup_widget(GTK_WIDGET(window1), "labelMainTitle"),
+  gtk_label_set_markup (GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle")),
                              g_strdup_printf(_("<small><b>%s-<span foreground=\"red\">modified</span></b></small>"), msg));
 //  gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
   //                           msg);
   //gtk_window_set_title (GTK_WINDOW(window1),msg);
-  g_free(msg);
+  g_free (msg);
   /* now we check which tags are used */
   fUserClickedButton = FALSE;/* in order to avoid double calls to format callbacks */
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_bold"));
@@ -370,7 +370,7 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
             cairo_select_font_face(cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
             cairo_set_font_size(cr, 15 );
         }
-        g_free(newFont);
+        g_free (newFont);
   }
  
   /* we compute total size for undo engine */
@@ -486,7 +486,7 @@ gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event,
   if(!data->button_pressed || !data->doc)
      return TRUE;
 
-  gtk_widget_destroy (GTK_WIDGET(data->window));
+  gtk_widget_destroy  (GTK_WIDGET(data->window));
  
   data->button_pressed=FALSE;
   /* get absolute screen coordinates */
@@ -771,7 +771,7 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
       data->button_pressed=FALSE;
       return TRUE;
     }
-    gtk_widget_destroy (GTK_WIDGET(data->window));
+    gtk_widget_destroy  (GTK_WIDGET(data->window));
     data->button_pressed=FALSE;
     /* annotation mode _ yes I reuse PDF flag to simplify code */
     if(data->clipboardMode==PDF_SEL_MODE_NOTE) {  
@@ -783,7 +783,7 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
       if(tmpStr!=NULL) {
         draw_text (event->button.x, event->button.y, data, tmpStr );
       }
-      g_free(tmpStr);
+      g_free (tmpStr);
       return TRUE;
     }/* endif sel note */
 
@@ -888,7 +888,7 @@ on_clearSketch_clicked  (GtkButton  *button, APP_data *data_app)
                      );
               
   ret =  gtk_dialog_run(GTK_DIALOG(alertDlg));
-  gtk_widget_destroy (GTK_WIDGET(alertDlg));
+  gtk_widget_destroy  (GTK_WIDGET(alertDlg));
   if(ret==GTK_RESPONSE_OK) {
       keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config");
       color.red=g_key_file_get_double(keyString, "sketch", "paper.color.red", NULL);
@@ -936,10 +936,9 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
 
   dialog = create_prefs_dialog (data_app->appWindow, data_app);
   ret = gtk_dialog_run (GTK_DIALOG (dialog));
-printf ("tet vaut =%d \n", ret);
+
 
   if(ret == 1) {
-printf ("entrée ds OK \n");
     /* we get the current RGBA color */
     pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_fg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &text_color_fg);
@@ -1084,7 +1083,7 @@ printf ("entrée ds OK \n");
 
   /* cleaning */
   g_object_unref (data_app->tmpBuilder);
-  gtk_widget_destroy (GTK_WIDGET(dialog));  /* please note : with a Builder, you can only use destroy in case of the properties 'destroy with parent' isn't activated for the dualog */
+  gtk_widget_destroy  (GTK_WIDGET(dialog));  /* please note : with a Builder, you can only use destroy in case of the properties 'destroy with parent' isn't activated for the dualog */
 
 }
 
@@ -2485,7 +2484,7 @@ gboolean timeout_quick_save( APP_data *data)
                                       _("I save you work ... wait a moment, please. "),
                                       NULL);
        quick_save(data);
-       gtk_widget_destroy (GTK_WIDGET(alertDlg));
+       gtk_widget_destroy  (GTK_WIDGET(alertDlg));
   }
   return TRUE;
 }
@@ -2562,7 +2561,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
            break; 
          }
          case GDK_KEY_m:{ 
-           on_main_menu_clicked(lookup_widget(data->appWindow, "main_menu"), data);
+           on_main_menu_clicked (GTK_WIDGET(gtk_builder_get_object (data->builder, "button_prefs")), data);
            break; 
          }
          case GDK_KEY_F10:{
@@ -2612,8 +2611,8 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
               data->undo.undoMark=mark2;
               undo_push(data->currentStack, OP_TOGGLE_CASE, data);
               /* we go back to previous mode */
-              g_free(newStr);
-              g_free(tmpStr);
+              g_free (newStr);
+              g_free (tmpStr);
             }
             return TRUE;
             break;
@@ -2636,7 +2635,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
               tmpStr=gtk_text_buffer_get_text(data->buffer,&start,&end,FALSE);
               gtk_entry_set_text(search_entry,tmpStr);
               gtk_widget_grab_focus(search_entry);
-              g_free(tmpStr);
+              g_free (tmpStr);
            }                      
            break;
          }
@@ -2777,13 +2776,13 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
   /* first, we save once more time the current file */
   path_to_file = g_key_file_get_string(keyString, "application", "current-file", NULL);
   ret = save_gtk_rich_text(path_to_file, buffer);
-  g_free(path_to_file);
+  g_free (path_to_file);
 
   /* now we display the blocks with files and summaries */
  
   currentFileDialog=paving_window(user_data );
   ret=gtk_dialog_run(GTK_DIALOG(currentFileDialog));
-  gtk_widget_destroy (GTK_WIDGET(currentFileDialog));
+  gtk_widget_destroy  (GTK_WIDGET(currentFileDialog));
 
   if(ret>=PAVING_BUTTON1 && ret<=PAVING_BUTTON10) {
      file_to_load=ret-PAVING_BUTTON1;
@@ -2814,12 +2813,12 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
                  recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           g_strdup_printf("recent-file-%d",i-1), NULL));
                  g_key_file_set_string(keyString, "history", g_strdup_printf("recent-file-%d",i), recent_prev);
-                 g_free(recent_prev);
+                 g_free (recent_prev);
                  /* summaries */
                  content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
                                           g_strdup_printf("recent-content-%d",i-1), NULL));
                  g_key_file_set_string(keyString, "history", g_strdup_printf("recent-content-%d",i), content_prev);
-                 g_free(content_prev);
+                 g_free (content_prev);
              }/* endif */
          }/* next i*/
        }/* endif */
@@ -2829,7 +2828,7 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
      else {
        file_alert_dialog (path_to_file, window1);
      }
-     g_free(path_to_file);       
+     g_free (path_to_file);       
   }/* endif Buttons */
 }
 /**************************
@@ -2976,7 +2975,7 @@ gboolean on_PDF_scroll_event (GtkWidget *widget, GdkEvent *event, APP_data *data
 void on_menuPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
 {
 
-  gtk_widget_destroy(GTK_WIDGET(lookup_widget(GTK_WIDGET(menuitem), "menu1Sketch")));
+  gtk_widget_destroy (GTK_WIDGET(lookup_widget(GTK_WIDGET(menuitem), "menu1Sketch")));
   if(clipboard_paste_image(user_data, FALSE)!=0)
                printf("* can't paste inside sketch *\n"); 
 }
@@ -3000,7 +2999,7 @@ void on_menuPDFEditAnnot(GtkMenuItem *menuitem, APP_data *user_data)
   gchar *tmpStr=NULL;
 
   if(user_data->undo.annotStr!=NULL)
-           g_free(user_data->undo.annotStr);
+           g_free (user_data->undo.annotStr);
   user_data->undo.annotStr=g_strdup_printf("%s", poppler_annot_get_contents ( user_data->current_annot));
 
   tmpStr=dialog_add_text_annotation(user_data->appWindow, poppler_annot_get_contents ( user_data->current_annot), user_data);
@@ -3018,10 +3017,10 @@ void on_menuPDFEditAnnot(GtkMenuItem *menuitem, APP_data *user_data)
      poppler_annot_set_contents (user_data->current_annot,tmpStr);
   }
   else { 
-    g_free(user_data->undo.annotStr);
+    g_free (user_data->undo.annotStr);
     user_data->undo.annotStr=NULL;
   }
-  g_free(tmpStr);
+  g_free (tmpStr);
   PDF_display_page(user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
 }
 
@@ -3050,10 +3049,10 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
   user_data->undo.PDFpage=user_data->curPDFpage;
   user_data->undo.pix=NULL;
   if(user_data->undo.annotStr!=NULL)
-           g_free(user_data->undo.annotStr);
+           g_free (user_data->undo.annotStr);
   GtkColorChooserDialog *dialog = create_annotationColourDialog(user_data, _("Choose annotation color ..."));
   gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(dialog), &cp);
-  g_free(current_color);
+  g_free (current_color);
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
         gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(dialog), &color);
         current_color=poppler_color_new();
@@ -3064,7 +3063,7 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
         poppler_color_free(current_color);
         undo_push(user_data->currentStack, OP_SET_ANNOT_COLOR, user_data);
   }
-  gtk_widget_destroy(GTK_WIDGET(dialog));
+  gtk_widget_destroy (GTK_WIDGET(dialog));
   PDF_display_page(user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
 }
 
@@ -3078,11 +3077,11 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
   GdkRGBA cp;
   PopplerColor *current_color;
 
-  current_color=  poppler_annot_get_color ( user_data->current_annot);
+  current_color =  poppler_annot_get_color ( user_data->current_annot);
   cp.red = (gdouble)current_color->red/65535;
   cp.green = (gdouble)current_color->green/65535;
   cp.blue = (gdouble)current_color->blue/65535;
-  g_free(current_color);
+  g_free (current_color);
   user_data->undo.curStack=CURRENT_STACK_PDF;
   user_data->undo.opCode=OP_REMOVE_ANNOT;
   user_data->undo.color=cp;
@@ -3093,7 +3092,7 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
      user_data->undo.pix=NULL;
      user_data->undo.PDFpage=user_data->curPDFpage;
      if(user_data->undo.annotStr!=NULL)
-           g_free(user_data->undo.annotStr);
+           g_free (user_data->undo.annotStr);
      user_data->undo.annotStr=g_strdup_printf("%s", poppler_annot_get_contents ( user_data->current_annot));
      user_data->undo.annotType=poppler_annot_get_annot_type (user_data->current_annot);
      undo_push(user_data->currentStack, OP_REMOVE_ANNOT, user_data);
@@ -3108,7 +3107,7 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
                                       _("Warning !\nI can't, for now, *undo* removing for\nthis kind of annotation !\nProceed aniway ?"));
      if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_CANCEL) 
         ret=-1;
-     gtk_widget_destroy(GTK_WIDGET(dialog));
+     gtk_widget_destroy (GTK_WIDGET(dialog));
   }
   if(ret==0)
       poppler_page_remove_annot (poppler_document_get_page (user_data->doc, user_data->curPDFpage),
@@ -3237,7 +3236,7 @@ void on_go_jump_clicked(GtkButton *button, APP_data *data)
                            g_strdup_printf("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position)));    
   }
-  gtk_widget_destroy(GTK_WIDGET(dialog));
+  gtk_widget_destroy (GTK_WIDGET(dialog));
 }
 
 /******************************
@@ -3351,7 +3350,7 @@ on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
   GtkWidget *aboutDialog = create_aboutRedac(data);
   
   gtk_dialog_run(GTK_DIALOG (aboutDialog));  
-  gtk_widget_destroy(GTK_WIDGET (aboutDialog));
+  gtk_widget_destroy (GTK_WIDGET (aboutDialog));
   return;
 }
 
@@ -3373,7 +3372,7 @@ void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data)
                           GTK_BUTTONS_OK,NULL,
                           _("<big><b>Can't access to online wiki !</b></big>\nPlease, check your Internet connection\n and/or you desfault desktop file browser parameters."));
       rep=gtk_dialog_run(GTK_DIALOG(alertDlg));
-      gtk_widget_destroy (GTK_WIDGET(alertDlg));
+      gtk_widget_destroy  (GTK_WIDGET(alertDlg));
   }
 }
 

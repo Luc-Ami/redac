@@ -25,46 +25,87 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkWindow" id="window_main">
     <property name="can-focus">False</property>
     <child>
-      <!-- n-columns=3 n-rows=4 -->
+      <!-- n-columns=3 n-rows=5 -->
       <object class="GtkGrid" id="vGrid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
-          <!-- n-columns=3 n-rows=3 -->
+          <!-- n-columns=4 n-rows=1 -->
           <object class="GtkGrid" id="headBar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="main_menu">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Menu to access various file's operations</property>
+                <property name="relief">none</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">format-justify-fill-symbolic</property>
+                    <property name="icon_size">3</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="button_prefs">
+                <property name="name">button_prefs</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Application settings.</property>
+                <property name="relief">none</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">view-more-symbolic</property>
+                    <property name="icon_size">3</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkStackSwitcher" id="switcher">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkLabel" id="labelMainTitle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">24</property>
+                <property name="margin-end">24</property>
+                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;noname&lt;/b&gt;&lt;/small&gt;</property>
+                <property name="use-markup">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -79,7 +120,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -92,16 +133,10 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <placeholder/>
             </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -139,7 +174,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
@@ -166,7 +201,19 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
         <child>
           <placeholder/>
         </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
   <object class="GtkSizeGroup">
