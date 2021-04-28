@@ -1201,11 +1201,6 @@ GtkWidget *UI_main_window(GApplication *app, APP_data *data)
   gtk_window_set_application (GTK_WINDOW(win), GTK_APPLICATION(app));
   gtk_builder_connect_signals (data->builder, data);/* now all calls will get data structure as first parameter */
 //  win = gtk_application_window_new (GTK_APPLICATION (app));
-
-    GtkHeaderBar *hbar = GTK_WIDGET(gtk_builder_get_object (data->builder, "hb1"));
-  gtk_window_set_titlebar (GTK_WINDOW(win), hbar);
-
-
   gtk_widget_show (win);
   gtk_window_set_position (GTK_WINDOW(win), GTK_WIN_POS_CENTER);
   gtk_window_set_default_size (GTK_WINDOW(win), 980, 700);
@@ -1223,36 +1218,13 @@ void UI_headerBar (GtkWidget *window, GtkWidget *grid, APP_data *data)
   GtkWidget *main_menu, *main_menu_icon;
   GtkWidget *button_prefs, *icon_prefs, *labelMainTitle;
 
-
-//  main_menu = gtk_button_new ();
   
-  main_menu = GTK_WIDGET(gtk_builder_get_object (data->builder, "main_menu"));
-  
-  
- // gtk_button_set_relief(GTK_BUTTON(main_menu), GTK_RELIEF_NONE);
- // main_menu_icon=gtk_image_new_from_icon_name ("view-list-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
- // gtk_button_set_image(GTK_BUTTON(main_menu),main_menu_icon);
- // gtk_widget_set_tooltip_text(main_menu, _("Menu to access various file's operations"));
-
- // gtk_grid_attach(GTK_GRID(grid), main_menu, 0, 0, 1, 1);
-
-//  button_prefs = gtk_button_new();
+  main_menu =   GTK_WIDGET(gtk_builder_get_object (data->builder, "main_menu"));
   
   button_prefs = GTK_WIDGET(gtk_builder_get_object (data->builder, "button_prefs"));  
   
- // gtk_button_set_relief(GTK_BUTTON(button_prefs), GTK_RELIEF_NONE);
- // icon_prefs=gtk_image_new_from_icon_name ("view-more-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
- // gtk_button_set_image(GTK_BUTTON(button_prefs),icon_prefs);
- // gtk_widget_set_tooltip_text(button_prefs, _("Application settings."));
- // gtk_grid_attach(GTK_GRID(grid), button_prefs, 1, 0, 1, 1);
-
   labelMainTitle = GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"));  
   
- // gtk_label_set_markup (GTK_LABEL (labelMainTitle), _("<small><b>noname</b></small>"));
-//  g_object_set (labelMainTitle, "margin-left", 24, NULL);
-//  g_object_set (labelMainTitle, "margin-right", 24, NULL);
-//  gtk_grid_attach(GTK_GRID(grid), labelMainTitle, 3, 0, 1, 1);
-
   /* signals */
   g_signal_connect (G_OBJECT(main_menu), "clicked", 
         G_CALLBACK(on_main_menu_clicked), data);
@@ -2351,47 +2323,24 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gchar *path_to_file, buffer_date[81];
 
   mainWindow =  UI_main_window (app, data);
-  
-  
   gtk_widget_show (GTK_WIDGET(mainWindow));
   vGrid  = GTK_WIDGET(gtk_builder_get_object (data->builder, "vGrid"));
   gtk_widget_show (GTK_WIDGET(vGrid));
-  GtkWidget *headBar = GTK_WIDGET(gtk_builder_get_object (data->builder, "headBar"));
-  gtk_widget_show (GTK_WIDGET(headBar));
-
-  /* main vbox packing widget */
- // vGrid=gtk_grid_new();
- // gtk_grid_set_row_homogeneous (GTK_GRID(vGrid),FALSE);
- // gtk_container_add(GTK_CONTAINER(mainWindow), vGrid);
-
 
   /* guess the style for current theme */
   check_up_theme (mainWindow, data);
-  /* pseudo headerBar */
-  UI_headerBar (mainWindow, headBar, data);
-//  gtk_grid_attach (GTK_GRID(vGrid), headBar, 0, 0, 1, 1);
-
+  /* true headerBar is in Glade main.ui file */
+  UI_headerBar (mainWindow, NULL, data);
 
   /* gtkstack definitions and building */
-//  stack  = GTK_STACK (gtk_stack_new ());
-  stack = GTK_WIDGET(gtk_builder_get_object (data->builder, "stack"));
-//  gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);// or GTK_STACK_TRANSITION_TYPE_CROSSFADE
-  /* in order to breath some extra space from window's edges */
- // g_object_set (stack, "margin-left", 12, NULL);
- // g_object_set (stack, "margin-right", 12, NULL);
 
-//  switcher = GTK_STACK_SWITCHER (gtk_stack_switcher_new ());
+  stack = GTK_WIDGET(gtk_builder_get_object (data->builder, "stack"));
   switcher = GTK_WIDGET(gtk_builder_get_object (data->builder, "switcher"));  
   gtk_stack_switcher_set_stack (switcher, stack);
   
-//  gtk_grid_attach (GTK_GRID(headBar),GTK_WIDGET(switcher), 2, 0, 1, 1);
-//  gtk_grid_attach (GTK_GRID(vGrid), GTK_WIDGET(stack), 0,2,1,1);
-//  gtk_widget_set_halign (GTK_WIDGET(switcher), GTK_ALIGN_CENTER);
-
   /* toolbar */
   toolbar = main_wp_toolbar (mainWindow, data);
-//  gtk_grid_attach (GTK_GRID(vGrid), toolbar, 0,1,1,1);
-  /* and a scrolling window for Text view ! */
+
   scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindow1);
 
@@ -2465,7 +2414,6 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (mainWindow, mainWindow, "mainWindow");
-  GLADE_HOOKUP_OBJECT (mainWindow, headBar, "headBar");
   GLADE_HOOKUP_OBJECT (mainWindow, vGrid, "vGrid");
   GLADE_HOOKUP_OBJECT (mainWindow, scrolledwindow1, "scrolledwindow1");
   GLADE_HOOKUP_OBJECT (mainWindow, scrolledwindowPDF, "scrolledwindowPDF");
