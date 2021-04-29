@@ -15,7 +15,6 @@ void get_theme_selection_color(GtkWidget *widget);
 void set_up_view( GtkWidget *window1, APP_data *data_app);
 GtkWidget *main_wp_toolbar(GtkWidget *window, APP_data *data_app);
 GtkWidget *UI_main_window(GApplication *app, APP_data *data);
-void UI_headerBar(GtkWidget *window, GtkWidget *grid, APP_data *data);
 void UI_statusbar(GtkWidget *window, GtkWidget *grid, APP_data *data);
 void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data);
 

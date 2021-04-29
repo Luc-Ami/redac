@@ -897,27 +897,7 @@ GtkWidget *UI_main_window(GApplication *app, APP_data *data)
   return win;
 }
 
-/********************************
- build pseudo Gtk3 headerbar
-*******************************/
-void UI_headerBar (GtkWidget *window, GtkWidget *grid, APP_data *data)
-{
-  GtkWidget *button_prefs, *icon_prefs, *labelMainTitle;
 
-    
-  button_prefs = GTK_WIDGET(gtk_builder_get_object (data->builder, "button_prefs"));  
-  
-  labelMainTitle = GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"));  
-  
-  /* signals */
-
-  g_signal_connect (G_OBJECT(button_prefs), "clicked", 
-        G_CALLBACK(on_prefs_clicked), data);
-
-//  GLADE_HOOKUP_OBJECT (window, labelMainTitle, "labelMainTitle");
-//  GLADE_HOOKUP_OBJECT (window, button_prefs, "button_prefs");
-
-}
 /****************************
   set up main statusbar
 ****************************/
@@ -931,115 +911,48 @@ void UI_statusbar (GtkWidget *window, GtkWidget *grid, APP_data *data)
   GtkWidget *buttonZoomOut, *buttonZoomFitBest;
   GtkWidget *replace_entry, *image_task_due;
   GtkWidget *image_pdf_modif, *image_audio_jump_to_start;
-  GdkPixbuf *ico;
 
-  buttonPrevOccurrence = gtk_button_new_from_icon_name ("go-up-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(buttonPrevOccurrence, _("Click here to to go to the previous hit.\nWith PDF documents we jump to previous PAGE with hits"));
-
-  buttonNextOccurrence = gtk_button_new_from_icon_name("go-down-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(buttonNextOccurrence, _("Click here to go to the next hit.\nWith PDF documents we jump to next PAGE with hits"));
-
-  buttonReplace = gtk_button_new_from_icon_name("edit-find-replace", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(buttonReplace, _("Click here to replace text.\nYou can't change text inside PDF documents."));
-  gtk_widget_set_sensitive(GTK_WIDGET(buttonReplace), FALSE);
+  buttonPrevOccurrence = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonPrevOccurrence")); 
+  
+  buttonNextOccurrence = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonNextOccurrence")); 
+  
+  buttonReplace = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonReplace")); 
+   
+ 
   /* PDF zoom buttons */
-  buttonZoomIn = gtk_button_new_from_icon_name("zoom-in-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(buttonZoomIn, _("Click to Zoom in the PDF document."));
-  gtk_widget_set_sensitive(GTK_WIDGET(buttonZoomIn), FALSE);
-  buttonZoomOut = gtk_button_new_from_icon_name("zoom-out-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(buttonZoomOut, _("Click to Zoom out the PDF document."));
-  gtk_widget_set_sensitive(GTK_WIDGET(buttonZoomOut), FALSE);
-  buttonZoomFitBest = gtk_button_new_from_icon_name("zoom-fit-best-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(buttonZoomFitBest, _("Click to display the PDF document at its best size."));
-  gtk_widget_set_sensitive(GTK_WIDGET(buttonZoomFitBest), FALSE);
-
-  statusbar = gtk_statusbar_new();
+  buttonZoomIn = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomIn")); 
+  buttonZoomOut = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomOut")); 
+  buttonZoomFitBest =  GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomFitBest")); 
+  
+  statusbar = GTK_WIDGET (gtk_builder_get_object (data->builder, "statusbar")); 
  
-  gtk_grid_attach(GTK_GRID(grid), statusbar, 0,0,1,1);
-
-  PDF_modified_label = gtk_label_new("   ");
-  gtk_label_set_use_markup (GTK_LABEL (PDF_modified_label), TRUE);
-  gtk_grid_attach(GTK_GRID(grid), PDF_modified_label,1,0,1,1);
-
+  PDF_modified_label = GTK_WIDGET (gtk_builder_get_object (data->builder, "PDF_modified_label")); 
  
-  labelHitsFrame = gtk_frame_new(NULL);
-  gtk_widget_set_name(labelHitsFrame, "labelHitsFrame" );
-  g_object_set (labelHitsFrame, "margin-right", 24, NULL);
-  gtk_grid_attach(GTK_GRID(grid), labelHitsFrame,5,0,1,1);
+  /* editor */
+  
+  labelHitsFrame = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelHitsFrame")); 
 
-  labelHitsGrid = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_set_homogeneous(GTK_BOX(labelHitsGrid), FALSE);
-  gtk_container_add( GTK_CONTAINER( labelHitsFrame), labelHitsGrid);
+  labelHitsGrid = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelHitsGrid")); 
 
-  search_entry = gtk_search_entry_new ();
-  gtk_widget_set_name(search_entry, "search_entry" );
-  gtk_box_pack_start(GTK_BOX(labelHitsGrid), search_entry, TRUE, FALSE, 0);
-  gtk_widget_set_tooltip_text(search_entry, _("Type here the expression to find."));
+  search_entry = GTK_WIDGET (gtk_builder_get_object (data->builder, "search_entry")); 
 
-  labelHits = gtk_label_new(_("--hits"));
-  gtk_box_pack_start(GTK_BOX(labelHitsGrid), labelHits, TRUE, FALSE, 0);
+  labelHits = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelHits")); 
 
-  gtk_box_pack_start(GTK_BOX(labelHitsGrid), buttonPrevOccurrence, TRUE, FALSE, 0);
-  g_object_set (buttonPrevOccurrence, "margin-left", 6, NULL);
-  g_object_set (buttonPrevOccurrence, "margin-right", 2, NULL);
-
-  gtk_box_pack_start(GTK_BOX(labelHitsGrid), buttonNextOccurrence, TRUE, FALSE, 0);
-  g_object_set (buttonNextOccurrence, "margin-left", 6, NULL);
-  g_object_set (buttonNextOccurrence, "margin-right", 2, NULL);
-
-  gtk_widget_set_sensitive(GTK_WIDGET(buttonNextOccurrence),FALSE);
-  gtk_widget_set_sensitive(GTK_WIDGET(buttonPrevOccurrence),FALSE);
-
-  gtk_grid_attach(GTK_GRID(grid), buttonReplace, 8,0,1,1);
-  g_object_set (buttonReplace, "margin-left", 6, NULL);
-
-  replace_entry = gtk_entry_new ();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(replace_entry), _("Type here the replacing expression."));
-  gtk_grid_attach(GTK_GRID(grid), replace_entry, 9,0,1,1);
-  gtk_widget_set_sensitive(GTK_WIDGET(replace_entry),FALSE);
-
-  gtk_grid_attach(GTK_GRID(grid), buttonZoomOut, 10,0,1,1);
-  gtk_grid_attach(GTK_GRID(grid), buttonZoomFitBest, 11,0,1,1);
-  g_object_set (buttonZoomFitBest, "margin-left",6, NULL);
-  gtk_grid_attach(GTK_GRID(grid), buttonZoomIn, 12,0,1,1);
-  g_object_set (buttonZoomIn, "margin-left",6, NULL);
+  replace_entry = GTK_WIDGET (gtk_builder_get_object (data->builder, "replace_entry")); 
+  
   /* indicator auto-save */
-  image_task_due =gtk_image_new_from_icon_name ("alarm-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(image_task_due, _("Automatic background saving of your work (editor part)\nis activated."));
-  gtk_grid_attach(GTK_GRID(grid), image_task_due, 13,0,1,1);
-  g_object_set (image_task_due, "margin-left", 36, NULL);
+  image_task_due = GTK_WIDGET (gtk_builder_get_object (data->builder, "image_task_due")); 
+  
   /* audio auto repeat - jump to start icon */
-  image_audio_jump_to_start=gtk_image_new_from_icon_name ("media-playlist-repeat", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_tooltip_text(image_audio_jump_to_start, _("Automatic rewind to start of media after playing\nis activated."));
-  gtk_grid_attach(GTK_GRID(grid), image_audio_jump_to_start, 15,0,1,1);
-  g_object_set (image_audio_jump_to_start, "margin-left", 12, NULL);
+  
+  image_audio_jump_to_start = GTK_WIDGET (gtk_builder_get_object (data->builder, "image_audio_jump_to_start")); 
+  
+  image_pdf_modif = GTK_WIDGET (gtk_builder_get_object (data->builder, "image_pdf_modif"));  
 
-  ico = gdk_pixbuf_new_from_xpm_data((const char **)pdf_xpm);
-  image_pdf_modif =gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico);
-  gtk_widget_set_tooltip_text(image_pdf_modif, _("Please, notice that that the current PDF is modifyed\nand should be saved."));
-  gtk_grid_attach(GTK_GRID(grid), image_pdf_modif, 14,0,1,1);
-  g_object_set (image_pdf_modif, "margin-left", 36, NULL);
-
-  /* callbacks */
-  g_signal_connect(G_OBJECT(buttonReplace), "clicked", 
-       G_CALLBACK(on_replace_clicked), data);
-  g_signal_connect(search_entry, "search-changed", 
-                   G_CALLBACK(on_find_changed), data);
-
-  g_signal_connect(G_OBJECT(buttonNextOccurrence), "clicked", 
-        G_CALLBACK(on_find_next_clicked), data);
-  g_signal_connect(G_OBJECT(buttonPrevOccurrence), "clicked", 
-        G_CALLBACK(on_find_prev_clicked), data);
-
-  g_signal_connect(G_OBJECT(buttonZoomIn), "clicked", 
-        G_CALLBACK(on_PDF_zoom_in_clicked), data);
-  g_signal_connect(G_OBJECT(buttonZoomOut), "clicked", 
-        G_CALLBACK(on_PDF_zoom_out_clicked), data);
-  g_signal_connect(G_OBJECT(buttonZoomFitBest), "clicked", 
-        G_CALLBACK(on_PDF_zoom_fit_best_clicked), data);
+  /* callbacks are inside main.ui file */
 
   data->statusbar1 =statusbar;
+  
   GLADE_HOOKUP_OBJECT (window, buttonNextOccurrence, "buttonNextOccurrence");
   GLADE_HOOKUP_OBJECT (window, buttonPrevOccurrence, "buttonPrevOccurrence");
   GLADE_HOOKUP_OBJECT (window, labelHitsFrame, "labelHitsFrame");
@@ -1064,47 +977,50 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   GtkWidget *page_title, *page_entry;
   GtkWidget *page_label;
 
-  page_frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME(page_frame), GTK_SHADOW_OUT);
-  gtk_widget_set_name(page_frame, "page_frame" );
-  g_object_set (page_frame, "margin-left", 6, NULL);
-  g_object_set (page_frame, "margin-right", 6, NULL);
-  gtk_widget_set_hexpand (page_frame, FALSE);
-  gtk_grid_attach(GTK_GRID(grid), page_frame,2,0,1,1);
-  page_grid=gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_set_homogeneous(GTK_BOX(page_grid), FALSE);
-  gtk_container_add( GTK_CONTAINER(page_frame), page_grid);
+  page_frame = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_frame")); 
+//  gtk_frame_set_shadow_type (GTK_FRAME(page_frame), GTK_SHADOW_OUT);
+//  gtk_widget_set_name(page_frame, "page_frame" );
+//  g_object_set (page_frame, "margin-left", 6, NULL);
+//  g_object_set (page_frame, "margin-right", 6, NULL);
+//  gtk_widget_set_hexpand (page_frame, FALSE);
+//  gtk_grid_attach(GTK_GRID(grid), page_frame,2,0,1,1);
+  
+  
+  page_grid = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_grid")); 
+ // gtk_box_set_homogeneous(GTK_BOX(page_grid), FALSE);
+ // gtk_container_add( GTK_CONTAINER(page_frame), page_grid);
 
-  page_title=gtk_entry_new();
-  gtk_entry_set_text(GTK_ENTRY(page_title), _("Pg:"));
-  gtk_widget_set_name(page_title, "page_title" );
-  gtk_entry_set_max_length (GTK_ENTRY (page_title), 3);
-  gtk_entry_set_width_chars (GTK_ENTRY (page_title), 3);
-  gtk_widget_set_sensitive(GTK_WIDGET(page_title), FALSE);
-  gtk_widget_set_hexpand (page_title, TRUE);
-  gtk_entry_set_has_frame(GTK_ENTRY(page_title), FALSE );
-  gtk_box_pack_start(GTK_BOX(page_grid), page_title, TRUE, FALSE, 0);
+  page_title = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_title")); 
+  
+ // gtk_entry_set_text(GTK_ENTRY(page_title), _("Pg:"));
+//  gtk_widget_set_name(page_title, "page_title" );
+//  gtk_entry_set_max_length (GTK_ENTRY (page_title), 3);
+//  gtk_entry_set_width_chars (GTK_ENTRY (page_title), 3);
+//  gtk_widget_set_sensitive(GTK_WIDGET(page_title), FALSE);
+//  gtk_widget_set_hexpand (page_title, TRUE);
+//  gtk_entry_set_has_frame(GTK_ENTRY(page_title), FALSE );
+//  gtk_box_pack_start(GTK_BOX(page_grid), page_title, TRUE, FALSE, 0);
 
-  page_entry = gtk_entry_new ();
-  gtk_entry_set_has_frame(GTK_ENTRY(page_entry), TRUE );
-  gtk_widget_set_name(page_entry, "page_entry" );
-  gtk_entry_set_max_length (GTK_ENTRY (page_entry), 4);
-  gtk_entry_set_width_chars (GTK_ENTRY (page_entry), 3);
-  gtk_widget_set_hexpand (page_entry, TRUE);
-  gtk_box_pack_start(GTK_BOX(page_grid), page_entry, TRUE, FALSE, 0);
-  gtk_widget_set_tooltip_text(page_entry, _("Type here the #of PDF page where you want to jump."));
+  page_entry = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_entry")); 
+  
+//  gtk_entry_set_has_frame(GTK_ENTRY(page_entry), TRUE );
+//  gtk_widget_set_name(page_entry, "page_entry" );
+//  gtk_entry_set_max_length (GTK_ENTRY (page_entry), 4);
+ // gtk_entry_set_width_chars (GTK_ENTRY (page_entry), 3);
+//  gtk_widget_set_hexpand (page_entry, TRUE);
+//  gtk_box_pack_start(GTK_BOX(page_grid), page_entry, TRUE, FALSE, 0);
+ // gtk_widget_set_tooltip_text(page_entry, _("Type here the #of PDF page where you want to jump."));
 
-  page_label=gtk_entry_new();
-  gtk_entry_set_width_chars (GTK_ENTRY (page_label), 5);
-  gtk_entry_set_text(GTK_ENTRY(page_label), _("of--"));
-  gtk_widget_set_sensitive(GTK_WIDGET(page_label), FALSE);
-  gtk_widget_set_hexpand (page_label, TRUE);
-  gtk_box_pack_start(GTK_BOX(page_grid), page_label, TRUE, FALSE, 0);
-  gtk_widget_set_name(page_label, "page_label");
+  page_label = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_label")); 
+//  gtk_entry_set_width_chars (GTK_ENTRY (page_label), 5);
+//  gtk_entry_set_text(GTK_ENTRY(page_label), _("of--"));
+//  gtk_widget_set_sensitive(GTK_WIDGET(page_label), FALSE);
+ // gtk_widget_set_hexpand (page_label, TRUE);
+ // gtk_box_pack_start(GTK_BOX(page_grid), page_label, TRUE, FALSE, 0);
+ // gtk_widget_set_name(page_label, "page_label");
   // gtk_editable_set_editable(GTK_EDITABLE(page_label), FALSE);
 
-  g_signal_connect(page_entry, "changed", 
-                   G_CALLBACK(on_page_entry_changed), data);
+  /* callbacks are in main.ui file */
 
   GLADE_HOOKUP_OBJECT (window, page_title, "page_title");
   GLADE_HOOKUP_OBJECT (window, page_entry, "page_entry");
@@ -1142,7 +1058,7 @@ create_loadFileDialog (APP_data *data, gchar *sFileType)
   gtk_widget_show (dialog_action_area6);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area6), GTK_BUTTONBOX_END);
 
-  button43=  gtk_button_new_with_label (_("Cancel"));
+  button43 =  gtk_button_new_with_label (_("Cancel"));
   image43 = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
   gtk_button_set_always_show_image (GTK_BUTTON (button43), TRUE);
   gtk_button_set_image (GTK_BUTTON (button43), image43);
@@ -2012,7 +1928,6 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   /* guess the style for current theme */
   check_up_theme (mainWindow, data);
   /* true headerBar is in Glade main.ui file */
-  UI_headerBar (mainWindow, NULL, data);
 
   /* gtkstack definitions and building */
 
@@ -2067,9 +1982,6 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 //  gridStatusBar = gtk_grid_new();
 
   gridStatusBar = GTK_WIDGET(gtk_builder_get_object (data->builder, "gridStatusBar"));
-  g_object_set (gridStatusBar, "margin-top", 4, NULL);
-  g_object_set (gridStatusBar, "margin-bottom", 6, NULL);
-//  gtk_grid_attach(GTK_GRID(vGrid), GTK_WIDGET(gridStatusBar), 0,3,1,1);
   /* statusbar */
   UI_statusbar (mainWindow, gridStatusBar, data );  
   /* mimic nice page jumper of Evince */

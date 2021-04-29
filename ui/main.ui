@@ -292,24 +292,377 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
-          <!-- n-columns=3 n-rows=3 -->
+          <!-- n-columns=16 n-rows=1 -->
           <object class="GtkGrid" id="gridStatusBar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="margin-top">4</property>
+            <property name="margin-bottom">6</property>
+            <property name="hexpand">False</property>
             <child>
-              <placeholder/>
+              <object class="GtkStatusbar" id="statusbar">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-left">10</property>
+                <property name="margin-right">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="spacing">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkLabel" id="PDF_modified_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes">   </property>
+                <property name="use-markup">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkFrame" id="page_frame">
+                <property name="name">page_frame</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">out</property>
+                <child>
+                  <object class="GtkBox" id="page_grid">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkEntry" id="page_title">
+                        <property name="name">page_title</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="max-length">3</property>
+                        <property name="has-frame">False</property>
+                        <property name="width-chars">3</property>
+                        <property name="max-width-chars">4</property>
+                        <property name="text" translatable="yes">Pg:</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="page_entry">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Type here the #of PDF page where you want to jump.</property>
+                        <property name="max-length">4</property>
+                        <property name="width-chars">3</property>
+                        <property name="max-width-chars">5</property>
+                        <signal name="changed" handler="on_page_entry_changed" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="page_label">
+                        <property name="name">page_label</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="width-chars">5</property>
+                        <property name="max-width-chars">7</property>
+                        <property name="text" translatable="yes">of--</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label_item">
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkFrame" id="labelHitsFrame">
+                <property name="name">labelHitsFrame</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-end">24</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">out</property>
+                <child>
+                  <object class="GtkBox" id="labelHitsGrid">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkSearchEntry" id="search_entry">
+                        <property name="name">search_entry</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Type here the expression to find.</property>
+                        <property name="primary-icon-name">edit-find-symbolic</property>
+                        <property name="primary-icon-activatable">False</property>
+                        <property name="primary-icon-sensitive">False</property>
+                        <signal name="search-changed" handler="on_find_changed" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="labelHits">
+                        <property name="name">labelHits</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">--hits</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="buttonPrevOccurrence">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Click here to to go to the previous hit.
+With PDF documents we jump to previous PAGE with hits</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">2</property>
+                        <signal name="clicked" handler="on_find_prev_clicked" swapped="no"/>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">go-up-symbolic</property>
+                            <property name="icon_size">2</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="buttonNextOccurrence">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Click here to go to the next hit.
+With PDF documents we jump to next PAGE with hits</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">2</property>
+                        <signal name="clicked" handler="on_find_next_clicked" swapped="no"/>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">go-down-symbolic</property>
+                            <property name="icon_size">2</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                </child>
+                <child type="label_item">
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">5</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="buttonReplace">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Click here to replace text.
+You can't change text inside PDF documents.</property>
+                <property name="margin-start">6</property>
+                <signal name="clicked" handler="on_replace_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">edit-find-replace-symbolic</property>
+                    <property name="icon_size">2</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">8</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="replace_entry">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes">Type here the replacing expression.</property>
+              </object>
+              <packing>
+                <property name="left-attach">9</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonZoomOut">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="on_PDF_zoom_out_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes">Click to Zoom out the PDF document.</property>
+                    <property name="icon-name">zoom-out-symbolic</property>
+                    <property name="icon_size">2</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">10</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonZoomFitBest">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Click to display the PDF document at its best size.</property>
+                <property name="margin-start">6</property>
+                <signal name="clicked" handler="on_PDF_zoom_fit_best_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">zoom-fit-best-symbolic</property>
+                    <property name="icon_size">2</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">11</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonZoomIn">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Click to Zoom in the PDF document.</property>
+                <property name="margin-start">6</property>
+                <signal name="clicked" handler="on_PDF_zoom_in_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">zoom-in-symbolic</property>
+                    <property name="icon_size">2</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">12</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="image_task_due">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Automatic background saving of your work (editor part)
+is activated.</property>
+                <property name="margin-start">36</property>
+                <property name="icon-name">alarm-symbolic</property>
+                <property name="icon_size">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">13</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="image_audio_jump_to_start">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Automatic rewind to start of media after playing
+is activated.</property>
+                <property name="margin-start">12</property>
+                <property name="icon-name">media-playlist-repeat-symbolic</property>
+              </object>
+              <packing>
+                <property name="left-attach">15</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="image_pdf_modif">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Please, notice that that the current PDF is modifyed
+and should be saved</property>
+                <property name="margin-start">36</property>
+                <property name="icon-name">application-pdf</property>
+                <property name="icon_size">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">14</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
@@ -376,6 +729,7 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Application settings.</property>
             <property name="relief">none</property>
+            <signal name="clicked" handler="on_prefs_clicked" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
