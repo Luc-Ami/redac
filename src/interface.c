@@ -896,6 +896,7 @@ GtkWidget *UI_main_window(GApplication *app, APP_data *data)
   gtk_window_set_icon_name (GTK_WINDOW (win), "redac");
   return win;
 }
+
 /********************************
  build pseudo Gtk3 headerbar
 *******************************/
@@ -913,8 +914,8 @@ void UI_headerBar (GtkWidget *window, GtkWidget *grid, APP_data *data)
   g_signal_connect (G_OBJECT(button_prefs), "clicked", 
         G_CALLBACK(on_prefs_clicked), data);
 
-  GLADE_HOOKUP_OBJECT (window, labelMainTitle, "labelMainTitle");
-  GLADE_HOOKUP_OBJECT (window, button_prefs, "button_prefs");
+//  GLADE_HOOKUP_OBJECT (window, labelMainTitle, "labelMainTitle");
+//  GLADE_HOOKUP_OBJECT (window, button_prefs, "button_prefs");
 
 }
 /****************************
@@ -953,6 +954,7 @@ void UI_statusbar (GtkWidget *window, GtkWidget *grid, APP_data *data)
   gtk_widget_set_sensitive(GTK_WIDGET(buttonZoomFitBest), FALSE);
 
   statusbar = gtk_statusbar_new();
+ 
   gtk_grid_attach(GTK_GRID(grid), statusbar, 0,0,1,1);
 
   PDF_modified_label = gtk_label_new("   ");
@@ -2133,7 +2135,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 
   /* reload last document */
   gchar *s1 = g_key_file_get_string(keyString, "application", "current-file", NULL);
-  if(load_gtk_rich_text(s1, buffer, mainWindow)!=0) {
+  if(load_gtk_rich_text(s1, buffer, mainWindow, data)!=0) {
      misc_clear_text(buffer, "left");
      printf("* can't reload last work or it's the first start of this software ! *\n");
      /* the default filename is built inside gKeyfile if it isn"t already exists ! */
@@ -2143,7 +2145,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
      strftime(buffer_date, 80, "%c", localtime (&rawtime));/* don't change parameter %x */
      /* now we set-up a new default filename */
      path_to_file =  get_path_to_datas_file (buffer_date);
-     gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(mainWindow), "labelMainTitle")),
+     gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
                              g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
      
      /* rearrange list of recent files */

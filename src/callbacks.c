@@ -2796,7 +2796,7 @@ void menuitem_response(GtkMenuItem *menuitem, APP_data *user_data)
        /* now we set-up a new default filename */
        gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf (_("%s"), path_to_file));
        /* and we finally reload datas */
-       if(load_gtk_rich_text(path_to_file, buffer, window1)!=0) {
+       if(load_gtk_rich_text(path_to_file, buffer, window1, user_data)!=0) {
           misc_clear_text(buffer, "left");
        }
        /* rearrange list of recent files only if we haven't choosen the first !*/

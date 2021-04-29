@@ -42,7 +42,7 @@ void storeGKeyFile(APP_data *data_app, GKeyFile *keyString);
 void store_current_file_in_keyfile(GKeyFile *keyString, gchar *filename, gchar *summary);
 void rearrange_recent_file_list(GKeyFile *keyString);
 gchar *GetTempFileName(gchar *fileSchema);
-gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *window1);
+gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *window1, APP_data *data);
 gint save_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer);
 void
 on_open_clicked                 (GtkButton       *button,

@@ -509,7 +509,7 @@ void file_alert_dialog (gchar *filename, GtkWidget *window1 )
   file list ; do the same for
   extracts
 ***********************************/
-void rearrange_recent_file_list(GKeyFile *keyString)
+void rearrange_recent_file_list (GKeyFile *keyString)
 {
   gint i;
   gchar *recent_prev, *content_prev;
@@ -534,7 +534,7 @@ void rearrange_recent_file_list(GKeyFile *keyString)
    in the $TEMPDIR system repertory
 
 ***********************************/
-gchar *GetTempFileName(gchar *fileSchema)
+gchar *GetTempFileName (gchar *fileSchema)
 {
  gchar *tmpFile = NULL;
 
@@ -546,7 +546,7 @@ gchar *GetTempFileName(gchar *fileSchema)
   load a file in internal rich
   text format
 *******************************/
-gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *window1)
+gint load_gtk_rich_text (gchar *filename, GtkTextBuffer *buffer, GtkWidget *window1, APP_data *data)
 {
   GtkTextIter start, end; 
   gsize length;
@@ -589,7 +589,7 @@ gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *windo
   //gtk_text_buffer_deserialize_set_can_create_tags(buffer,format,TRUE); //SURTOU pas car c rée tags incrémentaux !!!
   gboolean deserialized = gtk_text_buffer_deserialize(buffer, buffer, format, &start, txtbuffer, fileSize, NULL);/* NULL mandatory ? ! */
   g_free(txtbuffer);
-  gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
+  gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
                              g_strdup_printf(_("<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"), filename));
   return 0;
 }
@@ -598,7 +598,7 @@ gint load_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer, GtkWidget *windo
   save a file in internal rich
   text format TODO modifiy for summarries 
 *******************************/
-gint save_gtk_rich_text(gchar *filename, GtkTextBuffer *buffer)
+gint save_gtk_rich_text (gchar *filename, GtkTextBuffer *buffer)
 {
   GtkTextIter start, end; 
   gsize length;
@@ -657,13 +657,13 @@ on_open_clicked (GtkButton *button, APP_data *data_app)
     path_to_file = g_key_file_get_string(keyString, "application", "current-file", NULL);
     ret = save_gtk_rich_text(path_to_file, buffer);
     g_free(path_to_file);
-    if(load_gtk_rich_text(filename, buffer, window1)==0) {   
+    if(load_gtk_rich_text(filename, buffer, window1, data_app)==0) {   
        /* rearrange list of recent files */
        rearrange_recent_file_list(keyString);
        /* we change the default values for gkeyfile + summary */
        store_current_file_in_keyfile(keyString, filename, misc_get_extract_from_document(data_app ));
        /* now we set-up a new default filename */
-       gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
+       gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data_app->builder, "labelMainTitle"))),
                              g_strdup_printf(_("<small><b>%s</b></small>"), filename)); 
        g_free(filename);
     }
@@ -755,7 +755,7 @@ void quick_save (APP_data *data)
       gtk_widget_destroy (GTK_WIDGET(alertDlg));
   }
   else {
-    gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
+    gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
                              g_strdup_printf(_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), filename));
     //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
       //                       g_strdup_printf(_("%s-saved"), filename));
@@ -829,7 +829,7 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
          /* we save also in standard Word processor format !!! */
          ret = save_RTF_rich_text(newFilename, data);
          /* we setup the window's title */
-         gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
+         gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
                              g_strdup_printf(_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), newFilename));
          //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
            //                  g_strdup_printf(_("%s"), newFilename));
@@ -1345,7 +1345,7 @@ void new_project(GtkMenuItem *menuitem, APP_data  *user_data)
   strftime(buffer_date, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
   /* now we set-up a new default filename */
   path_to_file =  get_path_to_datas_file(buffer_date);
-  gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "labelMainTitle")),
+  gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (user_data->builder, "labelMainTitle"))),
                              g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
 
  // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf(_("Redac:%s"), path_to_file));
