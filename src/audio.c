@@ -24,15 +24,14 @@
 converts an HH:MM:SS humain readable time to GST_time
 
 ********************************************************/
-gint64 audio_time_to_gst_time(gint64 hours, gint64 minutes, gint64 seconds)
+gint64 audio_time_to_gst_time (gint64 hours, gint64 minutes, gint64 seconds)
 {
-  gint64 vals, val=0; /* security value */
+  gint64 vals = 0, val=0; /* security value */
 
   if(hours<0 || hours>23 || minutes<0 || minutes>59 || seconds<0 || seconds>59)
     return val;
 
-  vals=hours*3600+minutes*60+seconds;
-  val = vals*GST_SECOND;
+  vals = (hours*3600) + (minutes*60)+seconds;
 
   return vals;
 }
@@ -92,8 +91,7 @@ void audio_seek_forward(GstElement *pipeline,
   (seeking)
   source = https://gstreamer.freedesktop.org/documentation/application-development/advanced/queryevents.html
 **************************/
-void
-audio_seek_to_time (GstElement *pipeline,
+void audio_seek_to_time (GstElement *pipeline,
                     gint64 seconds, gint64 duration_time_nanoseconds)
 {
   gint64 newPos, curPos, endPos, shift, val1;
@@ -140,7 +138,7 @@ gst_element_query_duration (GstElement *element,
                             GstFormat format,
                             gint64 *duration);
 ******************************/
-void audio_get_duration(GstElement *pipeline, gint64 *len )
+void audio_get_duration (GstElement *pipeline, gint64 *len)
 {
   gboolean ret=FALSE;
 
@@ -149,6 +147,7 @@ void audio_get_duration(GstElement *pipeline, gint64 *len )
      ret=gst_element_query_duration (pipeline, GST_FORMAT_TIME, len);
   }/* wend */
 }
+
 /************************************
  get current position ; like
  duration, GStreamer requires that we
@@ -156,7 +155,7 @@ void audio_get_duration(GstElement *pipeline, gint64 *len )
  Please note : the pipeline
  must be in PAUSED or PLAYING state
 *************************************/
-void audio_get_position(GstElement *pipeline, gint64 *pos )
+void audio_get_position (GstElement *pipeline, gint64 *pos)
 {
   gboolean ret=FALSE;
 
@@ -171,7 +170,7 @@ void audio_get_position(GstElement *pipeline, gint64 *pos )
  passed as pointers
 
 *************************************/
-void audio_gst_time_to_gdouble(gint64 time_value, gdouble *hh, gdouble *mm, gdouble *ss )
+void audio_gst_time_to_gdouble (gint64 time_value, gdouble *hh, gdouble *mm, gdouble *ss )
 {
    gint64 hour, min, sec, total;
 
@@ -189,7 +188,7 @@ void audio_gst_time_to_gdouble(gint64 time_value, gdouble *hh, gdouble *mm, gdou
   converts a GST_TIME guint64
  value to human readable string
 *************************************/
-gchar *audio_gst_time_to_str(gint64 time_value)
+gchar *audio_gst_time_to_str (gint64 time_value)
 {
    gint64 hour, min, sec, total;
    gchar *tmpStr=NULL;

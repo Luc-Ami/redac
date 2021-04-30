@@ -34,7 +34,7 @@ void
 audio_seek_to_time (GstElement *pipeline, gint64  seconds, gint64 duration_time_nanoseconds);
 //gint64 audio_get_duration(GstElement *pipeline );
 void audio_get_duration(GstElement *pipeline, gint64 *len );
-void audio_get_position(GstElement *pipeline, gint64 *pos );
+void audio_get_position(GstElement *pipeline, gint64 *pos);
 gchar *audio_gst_time_to_str(gint64 time_value);
 void audio_gst_time_to_gdouble(gint64 time_value, gdouble *hh, gdouble *mm, gdouble *ss );
 #endif /* AUDIO_H */

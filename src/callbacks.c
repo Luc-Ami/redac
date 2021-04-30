@@ -21,6 +21,8 @@
 #include "misc.h"
 #include "search.h"
 #include "pdf.h"
+#include "pdf.h"
+#include "audio.h"
 #include "undo.h"
 #include "paving.h"
 #include "settings.h"
@@ -3089,7 +3091,7 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
   user_data->undo.pix=NULL;
   if(user_data->undo.annotStr!=NULL)
            g_free (user_data->undo.annotStr);
-  GtkColorChooserDialog *dialog = create_annotationColourDialog(user_data, _("Choose annotation color ..."));
+  GtkColorChooserDialog *dialog = create_annotationColourDialog (user_data, _("Choose annotation color ..."));
   gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(dialog), &cp);
   g_free (current_color);
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
@@ -3139,7 +3141,7 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
   if(user_data->undo.annotType!=POPPLER_ANNOT_TEXT && user_data->undo.annotType!=POPPLER_ANNOT_HIGHLIGHT) {
      GtkWidget *dialog;
      GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
-     dialog = gtk_message_dialog_new (user_data->appWindow,
+     dialog = gtk_message_dialog_new (GTK_WINDOW(user_data->appWindow),
                                       flags,
                                       GTK_MESSAGE_QUESTION,
                                       GTK_BUTTONS_OK_CANCEL,
@@ -3176,8 +3178,8 @@ on_play_pause_clicked (GtkButton *button, APP_data *data)
     data->fAudioPlaying=FALSE;
     gst_element_set_state (data->pipeline, GST_STATE_PAUSED);
     /* we change the icon to pause || */
-    gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")  ), 
-                       GTK_IMAGE(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPlayAudio")));
+    gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")), 
+                       GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPlayAudio")));
     /* and we do a backward jump */
     audio_get_position(data->pipeline, &pos );
     data->audio_current_position=pos;
@@ -3186,7 +3188,7 @@ on_play_pause_clicked (GtkButton *button, APP_data *data)
   else {
    /* we change the icon to pause || */
     gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")  ), 
-                       GTK_IMAGE(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPauseAudio")));
+                       GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPauseAudio")));
     /* thus we must (re)start playing */
     data->fAudioPlaying=TRUE;
     gst_element_set_state (data->pipeline, GST_STATE_PLAYING);
@@ -3201,77 +3203,86 @@ on_play_pause_clicked (GtkButton *button, APP_data *data)
                            audio_gst_time_to_str(data->audio_current_position))); 
 }
 
-
-void
-on_jump_prev_clicked (GtkButton *button, APP_data *data)
+/*************************************
+ * audio : jump backward
+ * *********************************/
+void on_jump_prev_clicked (GtkButton *button, APP_data *data)
 {
-  gboolean ret=FALSE;
+  gboolean ret = FALSE;
   gint64 pos;
   GKeyFile *keyString;
   gint64 step;
  
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
-  step=(gint64)g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+  step = (gint64)g_key_file_get_double (keyString, "application", "audio-file-marks-step", NULL);
 
-  audio_get_position(data->pipeline, &pos );
-  audio_seek_backward(data->pipeline, step, pos, data->audio_total_duration);
+  audio_get_position (data->pipeline, &pos);
+  audio_seek_backward (data->pipeline, step, pos, data->audio_total_duration);
   /* refresh current position */
-  audio_get_position(data->pipeline, &pos );
-  data->audio_current_position=pos;
+  audio_get_position (data->pipeline, &pos);
+  data->audio_current_position = pos;
   /* we change the position display */
-  gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+  gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf ("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position)));
 } 
-
-void
-on_jump_next_clicked (GtkButton *button, APP_data *data)
+/*************************************
+ * audio : jump forward
+ * *********************************/
+void on_jump_next_clicked (GtkButton *button, APP_data *data)
 {
-  gboolean ret=FALSE;
+  gboolean ret = FALSE;
   gint64 pos;
   GKeyFile *keyString;
   gint64 step;
 
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
-  step=(gint64)g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+  step = (gint64) g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
 
-  audio_get_position(data->pipeline, &pos );
-  audio_seek_forward(data->pipeline, step, pos, data->audio_total_duration);
+  audio_get_position (data->pipeline, &pos);
+  audio_seek_forward (data->pipeline, step, pos, data->audio_total_duration);
   /* refresh current position */
-  audio_get_position(data->pipeline, &pos );
-  data->audio_current_position=pos;
+  audio_get_position (data->pipeline, &pos);
+  data->audio_current_position = pos;
   /* we change the position display */
-  gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+  gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf ("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position))); 
 
 }
 
-void on_go_jump_clicked(GtkButton *button, APP_data *data)
+/*******************************************
+ * audio : jump to an arbitrary position
+ * ****************************************/
+void on_go_jump_clicked (GtkButton *button, APP_data *data)
 {
   GtkWidget *dialog;
   gdouble val, hour, min, sec;
-  gint64 pos=0;
+  gint64 pos = 0;
+  gint ret;
 
   /* refresh current position */
-  audio_get_position(data->pipeline, &pos );
+  audio_get_position (data->pipeline, &pos);
   data->audio_current_position = pos;
 
-  dialog= misc_create_go_jump_dialog(data);
-
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
+  dialog = misc_create_go_jump_dialog (data);
+  ret = gtk_dialog_run (GTK_DIALOG (dialog));
+  
+  if(ret == GTK_RESPONSE_OK) {
     /* we get the current values */
-    hour=gtk_spin_button_get_value(GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "hourSpin")));
-    min=gtk_spin_button_get_value(GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "minuteSpin")));
-    sec=gtk_spin_button_get_value(GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "secondSpin")));
+    hour = gtk_spin_button_get_value (GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "hourSpin")));
+    min = gtk_spin_button_get_value (GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "minuteSpin")));
+    sec = gtk_spin_button_get_value (GTK_SPIN_BUTTON(lookup_widget(GTK_WIDGET(dialog), "secondSpin")));
     /* we seek to the new position */
+    
+    
     audio_seek_to_time (data->pipeline, 
-                        audio_time_to_gst_time((gint64)hour,(gint64) min ,(gint64)sec, data->audio_total_duration));
+                        audio_time_to_gst_time ((gint64)hour, (gint64)min ,(gint64)sec), data->audio_total_duration);
     /* refresh current position */
-    audio_get_position(data->pipeline, &pos );
-    data->audio_current_position=pos;
+    audio_get_position (data->pipeline, &pos);
+    data->audio_current_position = pos;
     /* we change the position display */
-    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+    gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf ("<tt><big>%s</big></tt>", 
                            audio_gst_time_to_str(data->audio_current_position)));    
   }
@@ -3286,7 +3297,7 @@ void on_go_jump_clicked(GtkButton *button, APP_data *data)
  schedulling - of course, the
  quick saving is controlled by a flag, but timout runs aniway
 ***************************************************************/
-gboolean timeout_audio_display_position( APP_data *data)
+gboolean timeout_audio_display_position ( APP_data *data)
 {
   GKeyFile *keyString;
   gint64 pos, len;
@@ -3309,29 +3320,31 @@ gboolean timeout_audio_display_position( APP_data *data)
        gst_message_unref (msg);
     } 
     if(pos>=data->audio_total_duration || error) {
-        data->fAudioPlaying=FALSE;
+        data->fAudioPlaying = FALSE;
         gst_element_set_state (data->pipeline, GST_STATE_PAUSED);
         /* we change button icon */
-        gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")  ), 
-                       GTK_IMAGE(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPlayAudio")));
+        gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")  ), 
+                       GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPlayAudio")));
         data->audio_current_position=data->audio_total_duration;
         /* if option checked, we rewind to audio's start */
-        if( g_key_file_get_boolean(keyString, "application", "audio-auto-rewind",NULL )){
-           audio_seek_to_time (data->pipeline, audio_time_to_gst_time(0,0 ,0, data->audio_total_duration));
+        if(g_key_file_get_boolean (keyString, "application", "audio-auto-rewind",NULL)) {
+           audio_seek_to_time (data->pipeline, 
+                               audio_time_to_gst_time (0, 0 ,0), data->audio_total_duration
+                              );
            /* refresh current position */
-           audio_get_position(data->pipeline, &pos );
-           data->audio_current_position=pos;
+           audio_get_position (data->pipeline, &pos);
+           data->audio_current_position = pos;
            /* we change the position display */
-           gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+           gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf ("<tt><big>%s</big></tt>", 
-                           audio_gst_time_to_str(data->audio_current_position)));  
+                           audio_gst_time_to_str (data->audio_current_position)));  
         }
     }
     gst_object_unref (bus);
     /* we change the position display */
-    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
+    gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf ("<tt><big>%s</big></tt>", 
-                           audio_gst_time_to_str(data->audio_current_position))); 
+                           audio_gst_time_to_str (data->audio_current_position))); 
   }
   return TRUE;
 }

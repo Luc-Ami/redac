@@ -687,7 +687,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_widget_show(iconButtonPauseAudio);
   iconButtonHomeAudio=gtk_image_new_from_icon_name ("media-skip-backward", GTK_ICON_SIZE_LARGE_TOOLBAR);
   iconButtonGotoAudio=gtk_image_new_from_icon_name ("media-skip-forward", GTK_ICON_SIZE_LARGE_TOOLBAR);
-  iconButtonGoJumpAudio=gtk_image_new_from_icon_name ("go-jump", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonGoJumpAudio=gtk_image_new_from_icon_name ("find-location-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   pRadioButtonPlayPauseAudio = gtk_tool_button_new (iconButtonPlayAudio,NULL);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonPlayPauseAudio, -1);  
   //gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonPlayPauseAudio),iconButtonPlayAudio);
@@ -875,7 +875,7 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
 /****************************
   main window
 ****************************/
-GtkWidget *UI_main_window(GApplication *app, APP_data *data)
+GtkWidget *UI_main_window (GApplication *app, APP_data *data)
 {
   GtkWidget *win;
 
@@ -980,10 +980,10 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   page_frame = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_frame")); 
 //  gtk_frame_set_shadow_type (GTK_FRAME(page_frame), GTK_SHADOW_OUT);
 //  gtk_widget_set_name(page_frame, "page_frame" );
-//  g_object_set (page_frame, "margin-left", 6, NULL);
-//  g_object_set (page_frame, "margin-right", 6, NULL);
+//  g_object_set (page_frame, "margin-start", 6, NULL);
+//  g_object_set (page_frame, "margin-end", 6, NULL);
 //  gtk_widget_set_hexpand (page_frame, FALSE);
-//  gtk_grid_attach(GTK_GRID(grid), page_frame,2,0,1,1);
+//  gtk_grid_attach (GTK_GRID(grid), page_frame,2,0,1,1);
   
   
   page_grid = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_grid")); 
@@ -1085,7 +1085,7 @@ GtkWidget *create_saveFileDialog (APP_data *data) {
 }
 
 /*********************************
-  help dialog 
+  help dialog for keys
 *********************************/
 GtkWidget *misc_create_help_dialog (GtkWidget *win)
 {
@@ -1101,17 +1101,16 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
   GtkWidget *labelSpace;
   GtkWidget *labelFormatBoldTitle;
   GtkWidget *labelAlignmentShortcuts;
-  GtkWidget *dialog_action_area11;
-  GtkWidget *okbutton6;
-  GtkWidget *imageOkButton6;
   GtkWidget *headerBar;
 
   helpDialog = gtk_dialog_new ();
   
   // https://stackoverflow.com/questions/53587997/how-to-fix-gtk-warning-content-added-to-the-action-area-of-a-dialog-using-he
   helpDialog = gtk_dialog_new_with_buttons ( _("Help..."),
-                                       win,
+                                       GTK_WINDOW(win),
                                        GTK_DIALOG_USE_HEADER_BAR, /// Use this FLAG here
+                                       _("Ok"),
+                                       1,
                                        NULL );
   
   
@@ -1125,15 +1124,15 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
   gtk_window_set_transient_for (GTK_WINDOW (helpDialog),  GTK_WINDOW(win)); 
   dialog_vbox11 = gtk_dialog_get_content_area (GTK_DIALOG (helpDialog));
   gtk_widget_show (dialog_vbox11);
-  gridDialogHeader= gtk_grid_new();
-  gtk_widget_set_name(gridDialogHeader, "gridDialogHeader");
-  g_object_set(gridDialogHeader, "margin-left", 10, NULL);
-  g_object_set(gridDialogHeader, "margin-right", 10, NULL);
+  gridDialogHeader = gtk_grid_new ();
+  gtk_widget_set_name (gridDialogHeader, "gridDialogHeader");
+  g_object_set (gridDialogHeader, "margin-start", 10, NULL);
+  g_object_set (gridDialogHeader, "margin-end", 10, NULL);
   gtk_widget_show (gridDialogHeader);
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialogHeader, TRUE, TRUE, 4);
 
   /* icon */
-  iconTitle = gtk_image_new_from_icon_name ("preferences-desktop-keyboard-shortcuts",GTK_ICON_SIZE_DIALOG);
+  iconTitle = gtk_image_new_from_icon_name ("input-keyboard-symbolic",GTK_ICON_SIZE_DIALOG);
  
   gtk_widget_set_halign (GTK_WIDGET (iconTitle), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (iconTitle), GTK_ALIGN_CENTER);
@@ -1152,29 +1151,29 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
   gtk_widget_set_margin_start (GTK_WIDGET(subTitle), 5);
   gtk_widget_set_margin_top (GTK_WIDGET(subTitle), 5);   
   
-  gtk_grid_attach(GTK_GRID(gridDialogHeader), subTitle, 1,1,2,1);
+  gtk_grid_attach (GTK_GRID(gridDialogHeader), subTitle, 1,1,2,1);
 
   gridDialog = gtk_grid_new();
   gtk_widget_set_name(gridDialog, "gridDialog");
  // gtk_grid_set_column_homogeneous (GTK_GRID(gridDialog), TRUE);
-  g_object_set(gridDialog, "margin-left", 10, NULL);
-  g_object_set(gridDialog, "margin-right", 10, NULL);
+  g_object_set (gridDialog, "margin-start", 10, NULL);
+  g_object_set (gridDialog, "margin-end", 10, NULL);
   gtk_widget_show (gridDialog);
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialog, TRUE, TRUE, 4);
   /* labels */
   labelFormat = gtk_label_new(_("<b><big>Format</big></b>"));
   gtk_widget_set_name(GTK_WIDGET(labelFormat), "labelFormat");
-  g_object_set(labelFormat, "margin-left", 4, NULL);
-  g_object_set(labelFormat, "margin-right", 4, NULL);
+  g_object_set (labelFormat, "margin-start", 4, NULL);
+  g_object_set (labelFormat, "margin-end", 4, NULL);
   gtk_widget_set_hexpand(GTK_WIDGET(labelFormat), TRUE);
   gtk_widget_set_halign (GTK_WIDGET(labelFormat), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelFormat), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormat, 0, 0, 3, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormat, 0, 0, 3, 1);
 
   labelAlignment = gtk_label_new(_("<b><big>Alignment</big></b>"));
   gtk_widget_set_name(GTK_WIDGET(labelAlignment), "labelAlignment");
-  g_object_set(labelAlignment, "margin-left", 4, NULL);
-  g_object_set(labelAlignment, "margin-right", 4, NULL);
+  g_object_set (labelAlignment, "margin-start", 4, NULL);
+  g_object_set (labelAlignment, "margin-end", 4, NULL);
   gtk_widget_set_hexpand(GTK_WIDGET(labelAlignment), TRUE);
   gtk_widget_set_halign (GTK_WIDGET(labelAlignment), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelAlignment), TRUE);
@@ -1182,8 +1181,8 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
 
   GtkWidget *labelPdfSketch = gtk_label_new(_("<b><big>PDF-Sketch</big></b>"));
   gtk_widget_set_name(GTK_WIDGET(labelPdfSketch), "labelPdfSketch");
-  g_object_set(labelPdfSketch, "margin-left", 4, NULL);
-  g_object_set(labelPdfSketch, "margin-right", 4, NULL);
+  g_object_set (labelPdfSketch, "margin-start", 4, NULL);
+  g_object_set (labelPdfSketch, "margin-end", 4, NULL);
   gtk_widget_set_hexpand(GTK_WIDGET(labelPdfSketch), TRUE);
   gtk_widget_set_halign (GTK_WIDGET(labelPdfSketch), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfSketch), TRUE);
@@ -1191,8 +1190,8 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
 
   GtkWidget *labelOther = gtk_label_new(_("<b><big>Application</big></b>"));
   gtk_widget_set_name(GTK_WIDGET(labelOther), "labelOther");
-  g_object_set(labelOther, "margin-left", 4, NULL);
-  g_object_set(labelOther, "margin-right", 4, NULL);
+  g_object_set (labelOther, "margin-start", 4, NULL);
+  g_object_set (labelOther, "margin-end", 4, NULL);
   gtk_widget_set_hexpand(GTK_WIDGET(labelOther), TRUE);
   gtk_widget_set_halign (GTK_WIDGET(labelOther), GTK_ALIGN_FILL);
   gtk_label_set_use_markup (GTK_LABEL (labelOther), TRUE);
@@ -1201,331 +1200,321 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
   labelFormatBoldTitle = gtk_label_new(_("Bold"));
   g_object_set (labelFormatBoldTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatBoldTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatBoldTitle, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatBoldTitle, 0, 1, 1, 1);
 
   GtkWidget *labelFormatItalicTitle = gtk_label_new(_("Italic"));
   g_object_set (labelFormatItalicTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatItalicTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatItalicTitle, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatItalicTitle, 0, 2, 1, 1);
 
   GtkWidget *labelFormatUnderlineTitle = gtk_label_new(_("Underline"));
   g_object_set (labelFormatUnderlineTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatUnderlineTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatUnderlineTitle, 0, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatUnderlineTitle, 0, 3, 1, 1);
 
   GtkWidget *labelFormatSuperscriptTitle = gtk_label_new(_("Superscript"));
   g_object_set (labelFormatSuperscriptTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatSuperscriptTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatSuperscriptTitle, 0, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatSuperscriptTitle, 0, 4, 1, 1);
 
   GtkWidget *labelFormatSubscriptTitle = gtk_label_new(_("Subscript"));
   g_object_set (labelFormatSubscriptTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatSubscriptTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatSubscriptTitle, 0, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatSubscriptTitle, 0, 5, 1, 1);
 
   GtkWidget *labelFormatstrikethroughTitle = gtk_label_new(_("Strikethrough"));
   g_object_set (labelFormatstrikethroughTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatstrikethroughTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatstrikethroughTitle, 0, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatstrikethroughTitle, 0, 6, 1, 1);
 
   GtkWidget *labelFormatHighlightTitle = gtk_label_new(_("Highlight"));
   g_object_set (labelFormatHighlightTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatHighlightTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatHighlightTitle, 0, 7, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatHighlightTitle, 0, 7, 1, 1);
 
   GtkWidget *labelFormatQuotationTitle = gtk_label_new(_("Quotation"));
   g_object_set (labelFormatQuotationTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelFormatQuotationTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFormatQuotationTitle, 0, 8, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFormatQuotationTitle, 0, 8, 1, 1);
 
   GtkWidget *labelUpLowCaseTitle = gtk_label_new(_("Toggle up/lower case"));
   g_object_set (labelUpLowCaseTitle, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelUpLowCaseTitle), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelUpLowCaseTitle, 0, 9, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelUpLowCaseTitle, 0, 9, 1, 1);
 
   GtkWidget *labelBoldShortcut = gtk_label_new(misc_get_pango_string("b", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelBoldShortcut), GTK_ALIGN_START);
   gtk_widget_show(labelBoldShortcut);
   gtk_label_set_use_markup (GTK_LABEL (labelBoldShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelBoldShortcut, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelBoldShortcut, 1, 1, 1, 1);
 
   GtkWidget *labelItalicShortcut = gtk_label_new(misc_get_pango_string("i", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelItalicShortcut), GTK_ALIGN_START);
   gtk_widget_show(labelItalicShortcut);
   gtk_label_set_use_markup (GTK_LABEL (labelItalicShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelItalicShortcut, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelItalicShortcut, 1, 2, 1, 1);
 
   GtkWidget *labelUnderlineShortcut = gtk_label_new(misc_get_pango_string("u", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelUnderlineShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelUnderlineShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelUnderlineShortcut, 1, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelUnderlineShortcut, 1, 3, 1, 1);
 
   GtkWidget *labelSuperscriptShortcut = gtk_label_new(misc_get_pango_string("^", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelSuperscriptShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelSuperscriptShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelSuperscriptShortcut, 1, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelSuperscriptShortcut, 1, 4, 1, 1);
 
   GtkWidget *labelSubscriptShortcut = gtk_label_new(misc_get_pango_string("_", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelSubscriptShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelSubscriptShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelSubscriptShortcut, 1, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelSubscriptShortcut, 1, 5, 1, 1);
 
   GtkWidget *labelStrikethroughShortcut = gtk_label_new(misc_get_pango_string("k", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelStrikethroughShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelStrikethroughShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelStrikethroughShortcut, 1, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelStrikethroughShortcut, 1, 6, 1, 1);
 
   GtkWidget *labelHighlightShortcut = gtk_label_new(misc_get_pango_string("h", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelHighlightShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelHighlightShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelHighlightShortcut, 1, 7, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelHighlightShortcut, 1, 7, 1, 1);
 
   GtkWidget *labelQuotationShortcut = gtk_label_new(misc_get_pango_string("\"", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelQuotationShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelQuotationShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelQuotationShortcut, 1, 8, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelQuotationShortcut, 1, 8, 1, 1);
 
   GtkWidget *labelUpLowCaseShortcut = gtk_label_new(misc_get_pango_string("F3", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelUpLowCaseShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelUpLowCaseShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelUpLowCaseShortcut, 1, 9, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelUpLowCaseShortcut, 1, 9, 1, 1);
 
 
 /* aligments */
   GtkWidget *labelAlignmentLeftShortcuts = gtk_label_new(_("Left"));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentLeftShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentLeftShortcuts, 3, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentLeftShortcuts, 3, 1, 1, 1);
 
   GtkWidget *labelAlignmentCenterShortcuts = gtk_label_new(_("Center"));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentCenterShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentCenterShortcuts, 3, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentCenterShortcuts, 3, 2, 1, 1);
 
   GtkWidget *labelAlignmentRightShortcuts = gtk_label_new(_("Right"));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentRightShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentRightShortcuts, 3, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentRightShortcuts, 3, 3, 1, 1);
 
   GtkWidget *labelAlignmentFillShortcuts = gtk_label_new(_("Fill"));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentFillShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentFillShortcuts, 3, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentFillShortcuts, 3, 4, 1, 1);
 
   GtkWidget *labelAlignmentLeftShortcut = gtk_label_new(misc_get_pango_string("(", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentLeftShortcut), GTK_ALIGN_START);
   gtk_widget_show(labelAlignmentLeftShortcut);
   gtk_label_set_use_markup (GTK_LABEL (labelAlignmentLeftShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentLeftShortcut, 4, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentLeftShortcut, 4, 1, 1, 1);
 
   GtkWidget *labelAlignmentCenterShortcut = gtk_label_new(misc_get_pango_string(":", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentCenterShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelAlignmentCenterShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentCenterShortcut, 4, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentCenterShortcut, 4, 2, 1, 1);
 
   GtkWidget *labelAlignmentRightShortcut = gtk_label_new(misc_get_pango_string(")", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentRightShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelAlignmentRightShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentRightShortcut, 4, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentRightShortcut, 4, 3, 1, 1);
 
   GtkWidget *labelAlignmentFillShortcut = gtk_label_new(misc_get_pango_string("=", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelAlignmentFillShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelAlignmentFillShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelAlignmentFillShortcut, 4, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelAlignmentFillShortcut, 4, 4, 1, 1);
 /* PDF & sketch */
   GtkWidget *labelPdfPgDownShortcuts = gtk_label_new(_("PDF : go next page"));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfPgDownShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfPgDownShortcuts, 5, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfPgDownShortcuts, 5, 1, 1, 1);
 
   GtkWidget *labelPdfPgDownShortcut = gtk_label_new(misc_get_pango_string(_("PgDown"), 0));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfPgDownShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfPgDownShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfPgDownShortcut, 6, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfPgDownShortcut, 6, 1, 1, 1);
 
   GtkWidget *labelPdfPgUpShortcuts = gtk_label_new(_("PDF : go previous page"));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfPgUpShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfPgUpShortcuts, 5, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfPgUpShortcuts, 5, 2, 1, 1);
 
   GtkWidget *labelPdfPgUpShortcut = gtk_label_new(misc_get_pango_string(_("PgUp"), 0));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfPgUpShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfPgUpShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfPgUpShortcut, 6, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfPgUpShortcut, 6, 2, 1, 1);
 
   GtkWidget *labelPdfFirstShortcuts = gtk_label_new(_("PDF : go first page"));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfFirstShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfFirstShortcuts, 5, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfFirstShortcuts, 5, 3, 1, 1);
 
   GtkWidget *labelPdfFirstShortcut = gtk_label_new(misc_get_pango_string("Home", 0));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfFirstShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfFirstShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfFirstShortcut, 6, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfFirstShortcut, 6, 3, 1, 1);
 
   GtkWidget *labelPdfLastShortcuts = gtk_label_new(_("PDF : go last page"));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfLastShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfLastShortcuts, 5, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfLastShortcuts, 5, 4, 1, 1);
 
   GtkWidget *labelPdfLastShortcut = gtk_label_new(misc_get_pango_string("End", 0));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfLastShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfLastShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfLastShortcut, 6, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfLastShortcut, 6, 4, 1, 1);
 
   GtkWidget *labelPdfSearchShortcuts = gtk_label_new(_("PDF : search"));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfSearchShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfSearchShortcuts, 5, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfSearchShortcuts, 5, 5, 1, 1);
 
   GtkWidget *labelPdfSearchShortcut = gtk_label_new(misc_get_pango_string("f", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfSearchShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfSearchShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfSearchShortcut, 6, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfSearchShortcut, 6, 5, 1, 1);
 
   GtkWidget *labelPdfZoomInShortcuts = gtk_label_new(_("PDF : zoom in"));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfZoomInShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfZoomInShortcuts, 5, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfZoomInShortcuts, 5, 6, 1, 1);
 
   GtkWidget *labelPdfZoomInShortcut = gtk_label_new(misc_get_pango_string("+", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfZoomInShortcut), GTK_ALIGN_START);
   gtk_widget_show(labelPdfZoomInShortcut);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfZoomInShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfZoomInShortcut, 6, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfZoomInShortcut, 6, 6, 1, 1);
 
   GtkWidget *labelPdfZoomOutShortcuts = gtk_label_new(_("PDF : zoom out"));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfZoomOutShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfZoomOutShortcuts, 5, 7, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfZoomOutShortcuts, 5, 7, 1, 1);
 
   GtkWidget *labelPdfZoomOutShortcut = gtk_label_new(misc_get_pango_string("-", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelPdfZoomOutShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelPdfZoomOutShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelPdfZoomOutShortcut, 6, 7, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelPdfZoomOutShortcut, 6, 7, 1, 1);
 /* sketch */
   GtkWidget *labelSketchPenUpShortcuts = gtk_label_new(_("Sketch : larger pen"));
   gtk_widget_set_halign (GTK_WIDGET(labelSketchPenUpShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelSketchPenUpShortcuts, 5, 8, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelSketchPenUpShortcuts, 5, 8, 1, 1);
 
   GtkWidget *labelSketchPenUpShortcut = gtk_label_new(misc_get_pango_string("+", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelSketchPenUpShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelSketchPenUpShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelSketchPenUpShortcut, 6, 8, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelSketchPenUpShortcut, 6, 8, 1, 1);
 
   GtkWidget *labelSketchPenDwnShortcuts = gtk_label_new(_("Sketch : leaner pen"));
   gtk_widget_set_halign (GTK_WIDGET(labelSketchPenDwnShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelSketchPenDwnShortcuts, 5, 9, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelSketchPenDwnShortcuts, 5, 9, 1, 1);
 
   GtkWidget *labelSketchPenDwnShortcut = gtk_label_new(misc_get_pango_string("-", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelSketchPenDwnShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelSketchPenDwnShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelSketchPenDwnShortcut, 6, 9, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelSketchPenDwnShortcut, 6, 9, 1, 1);
 /* application */
   GtkWidget *labelOthersHelpShortcuts = gtk_label_new(_("Help"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersHelpShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersHelpShortcuts, 7, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersHelpShortcuts, 7, 1, 1, 1);
 
   GtkWidget *labelOtherHelpShortcut = gtk_label_new(misc_get_pango_string("F1", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOtherHelpShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOtherHelpShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOtherHelpShortcut, 8, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOtherHelpShortcut, 8, 1, 1, 1);
 
   GtkWidget *labelOthersPasteImageShortcuts = gtk_label_new(_("Paste image"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersPasteImageShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersPasteImageShortcuts, 7, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersPasteImageShortcuts, 7, 2, 1, 1);
 
   GtkWidget *labelOtherPasteImageShortcut = gtk_label_new(misc_get_pango_string("v", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOtherPasteImageShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOtherPasteImageShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOtherPasteImageShortcut, 8, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOtherPasteImageShortcut, 8, 2, 1, 1);
 
   GtkWidget *labelOthersStorageShortcuts = gtk_label_new(_("Call main menu"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersStorageShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersStorageShortcuts, 7, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersStorageShortcuts, 7, 3, 1, 1);
 
   GtkWidget *labelOthersStorageShortcut = gtk_label_new(misc_get_pango_string("m", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersStorageShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersStorageShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersStorageShortcut, 8, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersStorageShortcut, 8, 3, 1, 1);
 
   GtkWidget *labelOthersQuickSaveShortcuts = gtk_label_new(_("Quick save"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersQuickSaveShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersQuickSaveShortcuts, 7, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersQuickSaveShortcuts, 7, 4, 1, 1);
 
   GtkWidget *labelOthersQuickSaveShortcut = gtk_label_new(misc_get_pango_string("s", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersQuickSaveShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersQuickSaveShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersQuickSaveShortcut, 8, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersQuickSaveShortcut, 8, 4, 1, 1);
 
   GtkWidget *labelOthersLoadPDFShortcuts = gtk_label_new(_("Load PDF file "));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersLoadPDFShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersLoadPDFShortcuts, 7, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersLoadPDFShortcuts, 7, 5, 1, 1);
 
   GtkWidget *labelOthersLoadPDFShortcut = gtk_label_new(misc_get_pango_string("d", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersLoadPDFShortcut), GTK_ALIGN_START);
   gtk_widget_show(labelOthersLoadPDFShortcut);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersLoadPDFShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersLoadPDFShortcut, 8, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersLoadPDFShortcut, 8, 5, 1, 1);
 
   GtkWidget *labelOthersFindShortcuts = gtk_label_new(_("Find for selected text"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersFindShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersFindShortcuts, 7, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersFindShortcuts, 7, 6, 1, 1);
 
   GtkWidget *labelOthersFindShortcut = gtk_label_new(misc_get_pango_string("f", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersFindShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersFindShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersFindShortcut, 8, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersFindShortcut, 8, 6, 1, 1);
 
   GtkWidget *labelOthersHideShortcuts = gtk_label_new(_("Hide/show main toolbar"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersHideShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersHideShortcuts, 7, 7, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersHideShortcuts, 7, 7, 1, 1);
 
   GtkWidget *labelOthersHideShortcut = gtk_label_new(misc_get_pango_string("F10", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersHideShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersHideShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersHideShortcut, 8, 7, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersHideShortcut, 8, 7, 1, 1);
 
   GtkWidget *labelOthersEditorPaneShortcuts = gtk_label_new(_("Switch to editor pane"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersEditorPaneShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersEditorPaneShortcuts, 7, 8, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersEditorPaneShortcuts, 7, 8, 1, 1);
 
   GtkWidget *labelOthersEditorPaneShortcut = gtk_label_new(misc_get_pango_string("1", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersEditorPaneShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersEditorPaneShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersEditorPaneShortcut, 8, 8, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersEditorPaneShortcut, 8, 8, 1, 1);
 
   GtkWidget *labelOthersPDFPaneShortcuts = gtk_label_new(_("Switch to PDF pane"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersPDFPaneShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersPDFPaneShortcuts, 7, 9, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersPDFPaneShortcuts, 7, 9, 1, 1);
 
   GtkWidget *labelOthersPDFPaneShortcut = gtk_label_new(misc_get_pango_string("2", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersPDFPaneShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersPDFPaneShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersPDFPaneShortcut, 8, 9, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersPDFPaneShortcut, 8, 9, 1, 1);
 
   GtkWidget *labelOthersSketchPaneShortcuts = gtk_label_new(_("Switch to sketch pane"));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersSketchPaneShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersSketchPaneShortcuts, 7, 10, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersSketchPaneShortcuts, 7, 10, 1, 1);
 
   GtkWidget *labelOthersSketchPaneShortcut = gtk_label_new(misc_get_pango_string("3", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersSketchPaneShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersSketchPaneShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersSketchPaneShortcut, 8, 10, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersSketchPaneShortcut, 8, 10, 1, 1);
 
   GtkWidget *labelOthersQuitShortcuts = gtk_label_new(_("Quit application"));
   g_object_set (labelOthersQuitShortcuts, "margin", 4, NULL);
   gtk_widget_set_halign (GTK_WIDGET(labelOthersQuitShortcuts), GTK_ALIGN_END);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersQuitShortcuts, 7, 11, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersQuitShortcuts, 7, 11, 1, 1);
 
   GtkWidget *labelOthersQuitShortcut = gtk_label_new(misc_get_pango_string("q", 1));
   gtk_widget_set_halign (GTK_WIDGET(labelOthersQuitShortcut), GTK_ALIGN_START);
   gtk_label_set_use_markup (GTK_LABEL (labelOthersQuitShortcut), TRUE);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelOthersQuitShortcut, 8, 11, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelOthersQuitShortcut, 8, 11, 1, 1);
 
   GtkWidget *separator=gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-  gtk_grid_attach(GTK_GRID (gridDialog), separator, 0, 12, 9, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), separator, 0, 12, 9, 1);
 
-  /* buttons */
-  dialog_action_area11 = gtk_dialog_get_action_area (GTK_DIALOG (helpDialog));
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area11), GTK_BUTTONBOX_CENTER);
 
-  okbutton6=  gtk_button_new_with_label (_("Ok"));
-  imageOkButton6 = gtk_image_new_from_icon_name ("gtk-ok",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (okbutton6), TRUE);
-  gtk_button_set_image (GTK_BUTTON (okbutton6), imageOkButton6);
-
-  gtk_dialog_add_action_widget (GTK_DIALOG (helpDialog), okbutton6, GTK_RESPONSE_OK);
-  gtk_widget_set_can_default (okbutton6, TRUE);
   gtk_widget_show_all(helpDialog);
   return helpDialog;
 }
@@ -1539,17 +1528,31 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
   GtkWidget *annotDialog, *gridDialog;
   GtkWidget *dialog_vbox11, *entry;
   GtkTextBuffer *buffer;
-  GtkWidget *dialog_action_area11, *okbutton6;
-  GtkWidget *imageOkButton6, *cancelbutton, *imagecancelbutton, *labelFont;
+  GtkWidget  *labelFont;
   GtkWidget *font_button, *separator;
+  GtkWidget *headerBar;
   gchar *newFont, *tmpStr=NULL;
   gint ret;
   GKeyFile *keyString;
 
   keyString = g_object_get_data(G_OBJECT(win), "config"); 
-  annotDialog = gtk_dialog_new ();
-  gtk_window_set_default_size(GTK_WINDOW(annotDialog), 240, 180);
-  gtk_window_set_title (GTK_WINDOW (annotDialog), _("New Annotation ..."));
+  
+  
+ // https://stackoverflow.com/questions/53587997/how-to-fix-gtk-warning-content-added-to-the-action-area-of-a-dialog-using-he
+  annotDialog = gtk_dialog_new_with_buttons ( _("New Annotation ..."),
+                                       GTK_WINDOW(win),
+                                       GTK_DIALOG_USE_HEADER_BAR, /// Use this FLAG here
+                                       _("Cancel"),
+                                       GTK_RESPONSE_CANCEL,
+                                       _("Ok"),
+                                       GTK_RESPONSE_OK,
+                                       NULL );  
+  
+  
+  headerBar = gtk_dialog_get_header_bar (GTK_DIALOG(annotDialog));
+  gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerBar), _("Type here annotation text"));
+  gtk_window_set_default_size(GTK_WINDOW(annotDialog),300, 180);
+ // gtk_window_set_title (GTK_WINDOW (annotDialog), _("New Annotation ..."));
   gtk_window_set_position (GTK_WINDOW (annotDialog), GTK_WIN_POS_MOUSE);
   gtk_window_set_modal (GTK_WINDOW (annotDialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (annotDialog), TRUE);
@@ -1564,56 +1567,36 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
   gtk_widget_show (gridDialog);
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialog, TRUE, TRUE, 4);
   /* entry */
-  buffer=gtk_text_buffer_new(NULL);
+  buffer = gtk_text_buffer_new(NULL);
   entry = gtk_text_view_new_with_buffer (buffer);
   gtk_widget_set_hexpand (entry,TRUE);
   gtk_widget_set_vexpand (entry,TRUE);
-  gtk_text_buffer_set_text(buffer, current_str, -1);
-  gtk_widget_show(entry);
-  gtk_grid_attach(GTK_GRID (gridDialog), entry, 0, 0, 2, 1);
+  gtk_text_buffer_set_text (buffer, current_str, -1);
+  gtk_widget_show (entry);
+  gtk_grid_attach (GTK_GRID (gridDialog), entry, 0, 0, 2, 1);
 
-  separator=gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-  gtk_widget_show(separator);
-  gtk_grid_attach(GTK_GRID (gridDialog), separator, 0, 1, 2, 1);
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_widget_show (separator);
+  gtk_grid_attach (GTK_GRID (gridDialog), separator, 0, 1, 2, 1);
   /* font - only for Sketch */
-  labelFont=gtk_label_new(_("Current font : "));
-  gtk_widget_show(labelFont);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelFont, 0, 2, 1, 1);
-  font_button=gtk_font_button_new_with_font ("sans 14");
-  gtk_widget_show(font_button);
-  gtk_grid_attach(GTK_GRID(gridDialog),font_button, 1, 2 , 1, 1);
+  labelFont = gtk_label_new(_("Current font : "));
+  gtk_widget_show (labelFont);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelFont, 0, 2, 1, 1);
+  font_button = gtk_font_button_new_with_font ("sans 14");
+  gtk_widget_show (font_button);
+  gtk_grid_attach (GTK_GRID(gridDialog),font_button, 1, 2 , 1, 1);
   gtk_font_chooser_set_font (GTK_FONT_CHOOSER(font_button), 
-                 g_key_file_get_string(keyString, "sketch", "font", NULL));
+                 g_key_file_get_string (keyString, "sketch", "font", NULL));
   if(data->currentStack==CURRENT_STACK_SKETCH) {
-    gtk_widget_set_sensitive(GTK_WIDGET(labelFont), TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(font_button), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(labelFont), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(font_button), TRUE);
   } else {
-    gtk_widget_set_sensitive(GTK_WIDGET(labelFont), FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(font_button), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(labelFont), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(font_button), FALSE);
   }
-  /* action area */
-  /* buttons */
-  dialog_action_area11 = gtk_dialog_get_action_area (GTK_DIALOG (annotDialog));
-  gtk_widget_show (dialog_action_area11);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area11), GTK_BUTTONBOX_CENTER);
-
-  okbutton6=  gtk_button_new_with_label (_("Ok"));
-  imageOkButton6 = gtk_image_new_from_icon_name ("gtk-ok",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (okbutton6), TRUE);
-  gtk_button_set_image (GTK_BUTTON (okbutton6), imageOkButton6);
-  gtk_widget_show (okbutton6);
-
-  cancelbutton= gtk_button_new_with_label (_("Cancel"));
-  imagecancelbutton = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (cancelbutton), TRUE);
-  gtk_button_set_image (GTK_BUTTON (cancelbutton), imagecancelbutton);
-  gtk_widget_show (cancelbutton);
-  gtk_dialog_add_action_widget (GTK_DIALOG (annotDialog), cancelbutton, GTK_RESPONSE_CANCEL);
-  gtk_dialog_add_action_widget (GTK_DIALOG (annotDialog), okbutton6, GTK_RESPONSE_OK);
-  gtk_widget_set_can_default (okbutton6, TRUE);
-
+ 
   /* run */
-  ret=gtk_dialog_run(GTK_DIALOG(annotDialog));
+  ret = gtk_dialog_run(GTK_DIALOG(annotDialog));
   if(ret==GTK_RESPONSE_OK) {
     GtkTextIter start, end;
     gtk_text_buffer_get_start_iter (buffer,&start);
@@ -1622,7 +1605,7 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
     /* get the fonts */
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_button));
     if(newFont!=NULL) {
-       g_key_file_set_string(keyString, "sketch", "font",newFont);
+       g_key_file_set_string (keyString, "sketch", "font",newFont);
        g_free (newFont);
     }
   }
@@ -1673,11 +1656,25 @@ GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
   GtkWidget *labelMinute, *labelSecond;
   GtkWidget *labelCurpos, *labelTitleCurpos, *labelNewPosition;
   gdouble hour, min, sec;
-
+  GtkWidget *headerBar;
+  
+  // https://stackoverflow.com/questions/53587997/how-to-fix-gtk-warning-content-added-to-the-action-area-of-a-dialog-using-he
+  goJumpDialog = gtk_dialog_new_with_buttons ( _("Jump to..."),
+                                       GTK_WINDOW(data_app->appWindow),
+                                       GTK_DIALOG_USE_HEADER_BAR, /// Use this FLAG here
+                                       _("Cancel"),
+                                       GTK_RESPONSE_CANCEL,
+                                      _("Ok"),
+                                       GTK_RESPONSE_OK,                                       
+                                       NULL );
+  
+  
+  headerBar = gtk_dialog_get_header_bar (GTK_DIALOG(goJumpDialog));
+  gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerBar), _("Select a new time position"));
   /* we read and convert to human form the media duration */
 
-  goJumpDialog = gtk_dialog_new ();
-  gtk_window_set_title (GTK_WINDOW (goJumpDialog), _("Jump to..."));
+ // goJumpDialog = gtk_dialog_new ();
+//  gtk_window_set_title (GTK_WINDOW (goJumpDialog), _("Jump to..."));
   gtk_window_set_position (GTK_WINDOW (goJumpDialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal (GTK_WINDOW (goJumpDialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (goJumpDialog), TRUE);
@@ -1689,109 +1686,92 @@ GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
   gtk_widget_show (dialog_vbox11);
   gridDialog = gtk_grid_new();
   gridHeader = gtk_grid_new();
-  g_object_set(gridDialog, "margin-left", 8, NULL);
-  g_object_set(gridDialog, "margin-right", 8, NULL);
+  g_object_set (gridDialog, "margin-start", 8, NULL);
+  g_object_set (gridDialog, "margin-end", 8, NULL);
  // gtk_grid_set_row_homogeneous (GTK_GRID (gridDialog), TRUE); 
   gtk_grid_set_column_homogeneous (GTK_GRID (gridDialog), TRUE); 
   gtk_grid_set_column_homogeneous (GTK_GRID (gridHeader), FALSE); 
   gtk_widget_show (gridDialog);
   gtk_widget_show (gridHeader);
-  gtk_grid_attach(GTK_GRID (gridDialog), gridHeader, 0, 0, 3, 1);
+  gtk_grid_attach (GTK_GRID (gridDialog), gridHeader, 0, 0, 3, 1);
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialog, TRUE, TRUE, 4);
 
   /* main icon */
-  iconGoJumpDialog=gtk_image_new_from_icon_name ("go-jump",GTK_ICON_SIZE_DIALOG);
-  gtk_widget_show(iconGoJumpDialog);  
-  g_object_set(iconGoJumpDialog, "margin-left", 4, NULL);
-  g_object_set(iconGoJumpDialog, "margin-right", 4, NULL);
-  gtk_grid_attach(GTK_GRID (gridHeader), iconGoJumpDialog, 0, 0, 1, 1);
+  iconGoJumpDialog = gtk_image_new_from_icon_name ("find-location-symbolic",GTK_ICON_SIZE_DIALOG);
+  gtk_widget_show (iconGoJumpDialog);  
+  g_object_set (iconGoJumpDialog, "margin-start", 4, NULL);
+  g_object_set (iconGoJumpDialog, "margin-end", 4, NULL);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (headerBar), GTK_WIDGET(iconGoJumpDialog));
   /* labels */
-  labelgoJumpDialog = gtk_label_new(_("<b><big>Select a new time position : \n</big></b><i>Please choose a time location within the audio file.\n</i>"));
+  labelgoJumpDialog = gtk_label_new(_("<i>Please choose a time location within the audio file.\n</i>"));
   gtk_widget_show(labelgoJumpDialog);
-  g_object_set(labelgoJumpDialog, "margin-left", 4, NULL);
-  g_object_set(labelgoJumpDialog, "margin-right", 4, NULL);
+  g_object_set (labelgoJumpDialog, "margin-start", 4, NULL);
+  g_object_set (labelgoJumpDialog, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelgoJumpDialog), TRUE);
-  gtk_grid_attach(GTK_GRID (gridHeader), labelgoJumpDialog, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (gridHeader), labelgoJumpDialog, 1, 0, 1, 1);
 
   /* various infos */
   labelTitleCurpos= gtk_label_new(_("<b>Current position :</b>"));
   gtk_widget_show(labelTitleCurpos);
-  g_object_set(labelTitleCurpos, "margin-left", 4, NULL);
-  g_object_set(labelTitleCurpos, "margin-right", 4, NULL);
+  g_object_set (labelTitleCurpos, "margin-start", 4, NULL);
+  g_object_set (labelTitleCurpos, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelTitleCurpos), TRUE);
-  gtk_grid_attach(GTK_GRID (gridHeader), labelTitleCurpos, 0, 1, 3, 1);
+  gtk_grid_attach (GTK_GRID (gridHeader), labelTitleCurpos, 0, 1, 3, 1);
 
   labelCurpos= gtk_label_new(g_strdup_printf (_("<i> %s of %s</i>"), 
                audio_gst_time_to_str(data_app->audio_current_position),
                audio_gst_time_to_str(data_app->audio_total_duration)));
   gtk_widget_show(labelCurpos);
-  g_object_set(labelCurpos, "margin-left", 4, NULL);
-  g_object_set(labelCurpos, "margin-right", 4, NULL);
+  g_object_set (labelCurpos, "margin-start", 4, NULL);
+  g_object_set (labelCurpos, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelCurpos), TRUE);
-  gtk_grid_attach(GTK_GRID (gridHeader), labelCurpos, 0, 2, 3, 1);
+  gtk_grid_attach (GTK_GRID (gridHeader), labelCurpos, 0, 2, 3, 1);
 
   labelNewPosition=gtk_label_new(_("<i><b>\nNew position : </b></i>"));
   gtk_widget_show(labelNewPosition);
-  g_object_set(labelCurpos, "margin-left", 4, NULL);
-  g_object_set(labelCurpos, "margin-right", 4, NULL);
+  g_object_set (labelCurpos, "margin-start", 4, NULL);
+  g_object_set (labelCurpos, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelNewPosition), TRUE);
-  gtk_grid_attach(GTK_GRID (gridHeader), labelNewPosition, 0, 3, 3, 1);
+  gtk_grid_attach (GTK_GRID (gridHeader), labelNewPosition, 0, 3, 3, 1);
 
 
   labelHour = gtk_label_new(_("Hour :"));
   gtk_widget_show(labelHour);
-  g_object_set(labelHour, "margin-left", 10, NULL);
-  g_object_set(labelHour, "margin-right", 4, NULL);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelHour, 0, 1, 1, 1); 
+  g_object_set (labelHour, "margin-start", 10, NULL);
+  g_object_set (labelHour, "margin-end", 4, NULL);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelHour, 0, 1, 1, 1); 
 
   labelMinute = gtk_label_new(_("Minute :"));
   gtk_widget_show(labelMinute);
-  g_object_set(labelMinute, "margin-left", 4, NULL);
-  g_object_set(labelMinute, "margin-right", 4, NULL);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelMinute, 1, 1, 1, 1); 
+  g_object_set (labelMinute, "margin-start", 4, NULL);
+  g_object_set (labelMinute, "margin-end", 4, NULL);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelMinute, 1, 1, 1, 1); 
 
   labelSecond = gtk_label_new(_("Second :"));
   gtk_widget_show(labelSecond);
-  g_object_set(labelSecond, "margin-left", 4, NULL);
-  g_object_set(labelSecond, "margin-right", 10, NULL);
-  gtk_grid_attach(GTK_GRID (gridDialog), labelSecond, 2, 1, 1, 1); 
+  g_object_set (labelSecond, "margin-start", 4, NULL);
+  g_object_set (labelSecond, "margin-end", 10, NULL);
+  gtk_grid_attach (GTK_GRID (gridDialog), labelSecond, 2, 1, 1, 1); 
 
   /* adjustments */
   GtkAdjustment *hour_adj = gtk_adjustment_new (0, 0, 23, 1, 10, 0);
   GtkWidget *hourSpin = gtk_spin_button_new (GTK_ADJUSTMENT (hour_adj), 1, 0);
   gtk_widget_show (hourSpin);
-  gtk_grid_attach(GTK_GRID(gridDialog),hourSpin, 0, 2 , 1, 1);
+  gtk_grid_attach (GTK_GRID(gridDialog),hourSpin, 0, 2 , 1, 1);
 
   GtkAdjustment *minute_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
   GtkWidget *minuteSpin = gtk_spin_button_new (GTK_ADJUSTMENT (minute_adj), 1, 0);
   gtk_widget_show (minuteSpin);
-  gtk_grid_attach(GTK_GRID(gridDialog),minuteSpin, 1, 2 , 1, 1);
+  gtk_grid_attach (GTK_GRID(gridDialog),minuteSpin, 1, 2 , 1, 1);
 
   GtkAdjustment *second_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
   GtkWidget *secondSpin = gtk_spin_button_new (GTK_ADJUSTMENT (second_adj), 1, 0);
   gtk_widget_show (secondSpin);
-  gtk_grid_attach(GTK_GRID(gridDialog),secondSpin, 2, 2 , 1, 1);
+  gtk_grid_attach (GTK_GRID(gridDialog),secondSpin, 2, 2 , 1, 1);
 
   
   /* buttons */
-  dialog_action_area11 = gtk_dialog_get_action_area (GTK_DIALOG (goJumpDialog));
-  gtk_widget_show (dialog_action_area11);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area11), GTK_BUTTONBOX_CENTER);
-
-  okbutton6=  gtk_button_new_with_label (_("Ok"));
-  imageOkButton6 = gtk_image_new_from_icon_name ("gtk-ok",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (okbutton6), TRUE);
-  gtk_button_set_image (GTK_BUTTON (okbutton6), imageOkButton6);
-  gtk_widget_show (okbutton6);
-
-  cancelbutton=  gtk_button_new_with_label (_("Cancel"));
-  imagecancelbutton = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (cancelbutton), TRUE);
-  gtk_button_set_image (GTK_BUTTON (cancelbutton), imagecancelbutton);
-  gtk_widget_show (cancelbutton);
-  gtk_dialog_add_action_widget (GTK_DIALOG (goJumpDialog), cancelbutton, GTK_RESPONSE_CANCEL);
-  gtk_dialog_add_action_widget (GTK_DIALOG (goJumpDialog), okbutton6, GTK_RESPONSE_OK);
-  gtk_widget_set_can_default (okbutton6, TRUE);
+ 
 
   GLADE_HOOKUP_OBJECT_NO_REF (goJumpDialog, goJumpDialog, "goJumpDialog");
   GLADE_HOOKUP_OBJECT (goJumpDialog, hourSpin, "hourSpin");

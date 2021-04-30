@@ -921,8 +921,7 @@ void quick_load_PDF(gchar *filename, APP_data *data)
 
   CB : load a reference AUDIO file
 ***********************************/
-void
-on_loadAudio_clicked  (GtkButton *button, APP_data *data)
+void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
   GError* err = NULL;
@@ -982,7 +981,7 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
     g_object_set (G_OBJECT (data->pipeline), "uri", gst_filename_to_uri(filename, &err), NULL);
     /* TODO we free previous Audio datas */
     /* TODO we load AUDIO datas */
-    g_free(uri_path);
+    g_free (uri_path);
     // TODO error management */
 
     /*  we unlock widgets and set dispplays */
@@ -997,16 +996,18 @@ on_loadAudio_clicked  (GtkButton *button, APP_data *data)
     gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , TRUE);
 
     /* vars and flags */
-    data->button_pressed=FALSE;
-    data->fAudioLoaded=TRUE;
-    data->fAudioPlaying=FALSE;
-     data->audio_current_position=0;
-    audio_get_duration(data->pipeline, &data->audio_total_duration );
-    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>00:00:00</big></tt>");
-    gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), 
+    data->button_pressed = FALSE;
+    data->fAudioLoaded   = TRUE;
+    data->fAudioPlaying  = FALSE;
+    data->audio_current_position = 0;
+    audio_get_duration (data->pipeline, &data->audio_total_duration);
+    
+    gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>00:00:00</big></tt>");
+    gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), 
                   g_strdup_printf("<tt><small>/%s</small></tt>", (gchar*)
                      audio_gst_time_to_str(data->audio_total_duration)));
-    g_free(filename);
+    g_free (filename);
+    
 
   }
   else
