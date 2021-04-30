@@ -1104,9 +1104,20 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
   GtkWidget *dialog_action_area11;
   GtkWidget *okbutton6;
   GtkWidget *imageOkButton6;
+  GtkWidget *headerBar;
 
   helpDialog = gtk_dialog_new ();
-  gtk_window_set_title (GTK_WINDOW (helpDialog), _("Help..."));
+  
+  // https://stackoverflow.com/questions/53587997/how-to-fix-gtk-warning-content-added-to-the-action-area-of-a-dialog-using-he
+  helpDialog = gtk_dialog_new_with_buttons ( _("Help..."),
+                                       win,
+                                       GTK_DIALOG_USE_HEADER_BAR, /// Use this FLAG here
+                                       NULL );
+  
+  
+  headerBar = gtk_dialog_get_header_bar (GTK_DIALOG(helpDialog));
+  gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerBar), _("Keyboard shortcuts"));
+  // gtk_window_set_title (GTK_WINDOW (helpDialog), _("Help..."));
   gtk_window_set_position (GTK_WINDOW (helpDialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal (GTK_WINDOW (helpDialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (helpDialog), TRUE);
@@ -1122,35 +1133,18 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialogHeader, TRUE, TRUE, 4);
 
   /* icon */
-  iconTitle=gtk_image_new_from_icon_name ("preferences-desktop-keyboard-shortcuts",GTK_ICON_SIZE_DIALOG);
- // gtk_misc_set_alignment (GTK_MISC (iconTitle), 0, 0.5);
+  iconTitle = gtk_image_new_from_icon_name ("preferences-desktop-keyboard-shortcuts",GTK_ICON_SIZE_DIALOG);
  
   gtk_widget_set_halign (GTK_WIDGET (iconTitle), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (iconTitle), GTK_ALIGN_CENTER);
  
   gtk_widget_set_hexpand (GTK_WIDGET(iconTitle), FALSE);
-//  gtk_misc_set_padding (GTK_MISC (iconTitle), 5, 5);
   
   gtk_widget_set_margin_start (GTK_WIDGET(iconTitle), 5);
   gtk_widget_set_margin_top (GTK_WIDGET(iconTitle), 5);  
-  
-  gtk_grid_attach (GTK_GRID(gridDialogHeader), iconTitle, 0,0,1,1);
-  /* title */
-  labelTitle = gtk_label_new("");
-  gtk_label_set_markup (GTK_LABEL (labelTitle),_("<big><b>Keyboard shortcuts :</b></big>"));
-  //gtk_misc_set_alignment (GTK_MISC (labelTitle), 0, 0.5);
-  
-  gtk_widget_set_halign (GTK_WIDGET (labelTitle), GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (GTK_WIDGET (labelTitle), GTK_ALIGN_CENTER);
-  
-  gtk_widget_set_hexpand(GTK_WIDGET(labelTitle), FALSE);
-  gtk_grid_attach(GTK_GRID(gridDialogHeader), labelTitle, 1,0,1,1);
-//  gtk_misc_set_padding (GTK_MISC (labelTitle), 5, 5);
-  
-  gtk_widget_set_margin_start (GTK_WIDGET(labelTitle), 5);
-  gtk_widget_set_margin_top (GTK_WIDGET(labelTitle), 5);  
-  
-  
+    
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (headerBar), GTK_WIDGET(iconTitle));
+    
   subTitle = gtk_label_new ("");
   gtk_label_set_markup(GTK_LABEL(subTitle), _("<i>Here is the various keys to set-up formatings and so on.\nWhen 2 keys are displayed, please keep in mind that\nyou must press the 2 keys in the same time.</i>"));
 //  gtk_misc_set_padding (GTK_MISC (subTitle), 5, 5);
