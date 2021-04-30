@@ -1030,20 +1030,20 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
 
 /*********************************
   load from file dialog 
+  * sFileType : message about
+  *  files
 *********************************/
-GtkWidget*
-create_loadFileDialog (APP_data *data, gchar *sFileType)
-{
+
+GtkWidget *create_loadFileDialog (APP_data *data, gchar *sFileType) {
   GtkWidget *loadFileDialog;
-  GtkWidget *dialog_vbox6;
-  GtkWidget *dialog_action_area6;
-  GtkWidget *button43;
-  GtkWidget *image43;
-  GtkWidget *button44;
-  GtkWidget *image44;
+ 
 
   loadFileDialog = gtk_file_chooser_dialog_new (sFileType, 
-                              GTK_WINDOW(data->appWindow), GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+                              GTK_WINDOW(data->appWindow), GTK_FILE_CHOOSER_ACTION_OPEN, 
+                              ("_Cancel"),  GTK_RESPONSE_CANCEL,
+                              ("_Open"),  GTK_RESPONSE_OK,
+                              NULL);
+                              
   g_object_set (loadFileDialog, "local-only", FALSE,  NULL);
   gtk_window_set_modal (GTK_WINDOW (loadFileDialog), TRUE);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (loadFileDialog), TRUE);
@@ -1051,51 +1051,25 @@ create_loadFileDialog (APP_data *data, gchar *sFileType)
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (loadFileDialog), TRUE);
   gtk_window_set_type_hint (GTK_WINDOW (loadFileDialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 
-  dialog_vbox6 = gtk_dialog_get_content_area (GTK_DIALOG (loadFileDialog));
-  gtk_widget_show (dialog_vbox6);
-
-  dialog_action_area6 = gtk_dialog_get_action_area (GTK_DIALOG (loadFileDialog));
-  gtk_widget_show (dialog_action_area6);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area6), GTK_BUTTONBOX_END);
-
-  button43 =  gtk_button_new_with_label (_("Cancel"));
-  image43 = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (button43), TRUE);
-  gtk_button_set_image (GTK_BUTTON (button43), image43);
-  gtk_widget_show (button43);
-  gtk_dialog_add_action_widget (GTK_DIALOG (loadFileDialog), button43, GTK_RESPONSE_CANCEL);
-  gtk_widget_set_can_default (button43, TRUE);
-
-  button44=  gtk_button_new_with_label (_("Open"));
-  image44 = gtk_image_new_from_icon_name ("gtk-open",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (button44), TRUE);
-  gtk_button_set_image (GTK_BUTTON (button44), image44);
-  gtk_widget_show (button44);
-  gtk_dialog_add_action_widget (GTK_DIALOG (loadFileDialog), button44, GTK_RESPONSE_OK);
-  gtk_widget_set_can_default (button44, TRUE);
-  /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (loadFileDialog, loadFileDialog, "loadFileDialog");
-  GLADE_HOOKUP_OBJECT_NO_REF (loadFileDialog, dialog_vbox6, "dialog_vbox6");
-  GLADE_HOOKUP_OBJECT_NO_REF (loadFileDialog, dialog_action_area6, "dialog_action_area6");
-  GLADE_HOOKUP_OBJECT (loadFileDialog, button43, "button43");
-  GLADE_HOOKUP_OBJECT (loadFileDialog, button44, "button44");
-
-  gtk_widget_grab_default (button44);
+ 
   return loadFileDialog;
 }
 
 /*********************************
   save to file dialog 
 *********************************/
-GtkWidget*
-create_saveFileDialog (APP_data *data)
-{
+GtkWidget *create_saveFileDialog (APP_data *data) {
   GtkWidget *saveFileDialog, *dialog_vbox6, *dialog_action_area6;
   GtkWidget *button43, *image43, *button44, *image44;
 
   saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), 
                                     GTK_WINDOW(data->appWindow),
-                                    GTK_FILE_CHOOSER_ACTION_SAVE, NULL);
+                                    GTK_FILE_CHOOSER_ACTION_SAVE, 
+                                    ("_Cancel"),  GTK_RESPONSE_CANCEL,
+                                    ("_Save"),  GTK_RESPONSE_OK,
+                                    NULL);
+                                    
   g_object_set (saveFileDialog, "local-only", FALSE,  NULL);
   gtk_window_set_modal (GTK_WINDOW (saveFileDialog), TRUE);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (saveFileDialog), TRUE);
@@ -1103,43 +1077,17 @@ create_saveFileDialog (APP_data *data)
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (saveFileDialog), TRUE);
   gtk_window_set_type_hint (GTK_WINDOW (saveFileDialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 
-  dialog_vbox6 = gtk_dialog_get_content_area (GTK_DIALOG (saveFileDialog));
-  gtk_widget_show (dialog_vbox6);
 
-  dialog_action_area6 = gtk_dialog_get_action_area (GTK_DIALOG (saveFileDialog));
-  gtk_widget_show (dialog_action_area6);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area6), GTK_BUTTONBOX_END);
-
-  button43=  gtk_button_new_with_label (_("Cancel"));
-  image43 = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (button43), TRUE);
-  gtk_button_set_image (GTK_BUTTON (button43), image43);
-  gtk_widget_show (button43);
-  gtk_dialog_add_action_widget (GTK_DIALOG (saveFileDialog), button43, GTK_RESPONSE_CANCEL);
-  gtk_widget_set_can_default (button43, TRUE);
-
-  button44=  gtk_button_new_with_label (_("Save"));
-  image44 = gtk_image_new_from_icon_name ("gtk-save",  GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_always_show_image (GTK_BUTTON (button44), TRUE);
-  gtk_button_set_image (GTK_BUTTON (button44), image44);
-  gtk_widget_show (button44);
-  gtk_dialog_add_action_widget (GTK_DIALOG (saveFileDialog), button44, GTK_RESPONSE_OK);
-  gtk_widget_set_can_default (button44, TRUE);
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (saveFileDialog, saveFileDialog, "saveFileDialog");
-  GLADE_HOOKUP_OBJECT_NO_REF (saveFileDialog, dialog_vbox6, "dialog_vbox6");
-  GLADE_HOOKUP_OBJECT_NO_REF (saveFileDialog, dialog_action_area6, "dialog_action_area6");
-  GLADE_HOOKUP_OBJECT (saveFileDialog, button43, "button43");
-  GLADE_HOOKUP_OBJECT (saveFileDialog, button44, "button44");
 
-  gtk_widget_grab_default (button44);
   return saveFileDialog;
 }
 
 /*********************************
   help dialog 
 *********************************/
-GtkWidget *misc_create_help_dialog(GtkWidget *win)
+GtkWidget *misc_create_help_dialog (GtkWidget *win)
 {
   GtkWidget *helpDialog;
   GtkWidget *dialog_vbox11;
@@ -1681,7 +1629,7 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_button));
     if(newFont!=NULL) {
        g_key_file_set_string(keyString, "sketch", "font",newFont);
-       g_free(newFont);
+       g_free (newFont);
     }
   }
   gtk_widget_destroy (GTK_WIDGET(annotDialog));
@@ -1720,7 +1668,7 @@ create_annotationColourDialog (APP_data *data_app, gchar *msg)
   jump to audio file position
   dialog
 **********************************/
-GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
+GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
 {
   GtkWidget *goJumpDialog, *dialog_vbox11;
   GtkWidget *gridDialog, *gridHeader;
@@ -1779,7 +1727,7 @@ GtkWidget *misc_create_go_jump_dialog(APP_data *data_app)
   gtk_label_set_use_markup (GTK_LABEL (labelTitleCurpos), TRUE);
   gtk_grid_attach(GTK_GRID (gridHeader), labelTitleCurpos, 0, 1, 3, 1);
 
-  labelCurpos= gtk_label_new(g_strdup_printf(_("<i> %s of %s</i>"), 
+  labelCurpos= gtk_label_new(g_strdup_printf (_("<i> %s of %s</i>"), 
                audio_gst_time_to_str(data_app->audio_current_position),
                audio_gst_time_to_str(data_app->audio_total_duration)));
   gtk_widget_show(labelCurpos);
@@ -1931,8 +1879,8 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 
   /* gtkstack definitions and building */
 
-  stack = GTK_WIDGET(gtk_builder_get_object (data->builder, "stack"));
-  switcher = GTK_WIDGET(gtk_builder_get_object (data->builder, "switcher"));  
+  stack = GTK_STACK(GTK_WIDGET(gtk_builder_get_object (data->builder, "stack")));
+  switcher = GTK_STACK_SWITCHER(GTK_WIDGET(gtk_builder_get_object (data->builder, "switcher")));  
   gtk_stack_switcher_set_stack (switcher, stack);
   
   /* toolbar */
@@ -1974,7 +1922,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowCrobar), "Sket", _("Sketch"));
   /* set-up default font for text view */
   set_up_view (mainWindow, data);
-  buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(view));
 
   misc_setup_text_buffer_tags (buffer);
 
@@ -2026,9 +1974,9 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
                        "/redac/", KILOWRITER_CONFIG, NULL); /* Create hidden directory to store Kilowriter data */
   /* we check if the directory already exists */
   if(!g_file_test (data->gConfigFile, G_FILE_TEST_EXISTS)) {
-     printf("* config.ini file absent or corrupted ! *\n");
+     printf ("* config.ini file absent or corrupted ! *\n");
      /* we create the directory */
-     gint i=g_mkdir (g_strdup_printf("%s/redac/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
+     gint i=g_mkdir (g_strdup_printf ("%s/redac/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
   }
 
   createGKeyFile (data, mainWindow);
@@ -2049,7 +1997,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gchar *s1 = g_key_file_get_string(keyString, "application", "current-file", NULL);
   if(load_gtk_rich_text(s1, buffer, mainWindow, data)!=0) {
      misc_clear_text(buffer, "left");
-     printf("* can't reload last work or it's the first start of this software ! *\n");
+     printf ("* can't reload last work or it's the first start of this software ! *\n");
      /* the default filename is built inside gKeyfile if it isn"t already exists ! */
      /* then we must add a default file name for default path ; in other case, we'll get a segfault */
      /* we get the current date */
@@ -2058,7 +2006,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
      /* now we set-up a new default filename */
      path_to_file =  get_path_to_datas_file (buffer_date);
      gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
-                             g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
+                             g_strdup_printf (_("<small><b>%s</b></small>"), path_to_file));
      
      /* rearrange list of recent files */
      rearrange_recent_file_list (keyString);
@@ -2067,7 +2015,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   }
   else
      store_current_file_in_keyfile(keyString, s1, misc_get_extract_from_document(data ));  
-  g_free(s1);
+  g_free (s1);
 
   /*  reload last PDF file ? */
   gtk_widget_hide (lookup_widget(GTK_WIDGET(data->appWindow),"image_pdf_modif"));
@@ -2080,7 +2028,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
         quick_load_PDF (s1, data);
      }
   }
-  g_free(s1);
+  g_free (s1);
 
   update_statusbar (buffer, data);
 
