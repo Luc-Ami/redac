@@ -258,18 +258,27 @@ GtkWidget *paving_window (APP_data *user_data )
   gint i, count = 0;
   const gchar espaces[]="                              ";
 
-  keyString = g_object_get_data(G_OBJECT(user_data->appWindow), "config");
+  keyString = g_object_get_data (G_OBJECT(user_data->appWindow), "config");
 
   pavingDialog = gtk_dialog_new ();
-  gtk_window_set_title (GTK_WINDOW (pavingDialog), _("Recent notes ..."));
+ /* header bar */
+  GtkWidget *hbar = gtk_header_bar_new ();
+  gtk_widget_show (hbar);
+  gtk_header_bar_set_title (GTK_HEADER_BAR (hbar), _("Recent notes ..."));
+//  gtk_header_bar_set_subtitle (GTK_HEADER_BAR (hbar), _("Define global settings for PlanLibre."));
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (hbar), FALSE);
+  gtk_window_set_titlebar (GTK_WINDOW(pavingDialog), hbar);  
+  
+//  gtk_window_set_title (GTK_WINDOW (pavingDialog), _("Recent notes ..."));
   gtk_widget_set_name (pavingDialog, "pavingDialog");
   gtk_window_set_position (GTK_WINDOW (pavingDialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal (GTK_WINDOW (pavingDialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (pavingDialog), TRUE);
   gtk_window_set_default_size (GTK_WINDOW(pavingDialog), 800, 600);
-  gtk_window_set_resizable (GTK_WINDOW(pavingDialog), TRUE);
   gtk_window_set_type_hint (GTK_WINDOW (pavingDialog), GDK_WINDOW_TYPE_HINT_DIALOG);
   gtk_window_set_transient_for (GTK_WINDOW (pavingDialog),  GTK_WINDOW(window1)); 
+  
+  
   dialog_vbox = gtk_dialog_get_content_area (GTK_DIALOG (pavingDialog));
 
   /* display grid */
@@ -292,38 +301,34 @@ GtkWidget *paving_window (APP_data *user_data )
   gtk_grid_set_row_spacing(GTK_GRID(gridTitle), 0);
   g_object_set (gridTitle, "margin", 0, NULL);  
   gtk_grid_attach (GTK_GRID(gridDisplay), gridTitle, 0,0,1,1);
+  
   /* icon */
   iconTitle = gtk_image_new_from_icon_name ("document-open-recent",GTK_ICON_SIZE_DIALOG);
-//  gtk_misc_set_alignment (GTK_MISC (iconTitle), 0, 0.5);
-  
   gtk_widget_set_halign (GTK_WIDGET(iconTitle), GTK_ALIGN_START);
   gtk_widget_set_valign (GTK_WIDGET(iconTitle), GTK_ALIGN_CENTER);
-  
   gtk_widget_set_hexpand (GTK_WIDGET(iconTitle), FALSE);
-  //gtk_misc_set_padding (GTK_MISC (iconTitle), 5, 5);
-  
   gtk_widget_set_margin_start (GTK_WIDGET(iconTitle), 5);  
   gtk_widget_set_margin_top (GTK_WIDGET(iconTitle), 5);   
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (hbar), GTK_WIDGET(iconTitle));
+  
+ // gtk_grid_attach (GTK_GRID(gridTitle), iconTitle, 0,0,1,1);
   
   
-  gtk_grid_attach (GTK_GRID(gridTitle), iconTitle, 0,0,1,1);
   /* title */
+/*
   labelTitle = gtk_label_new ("");
   gtk_label_set_markup (GTK_LABEL (labelTitle),_("<big><b>Recent notes :</b></big>"));
-//  gtk_misc_set_alignment (GTK_MISC (labelTitle), 0, 0.5);
   
   gtk_label_set_xalign (GTK_LABEL(labelTitle), 0); 
   gtk_label_set_yalign (GTK_LABEL(labelTitle), 0.5);   
   
   gtk_widget_set_hexpand (GTK_WIDGET(labelTitle), FALSE);
   gtk_grid_attach (GTK_GRID(gridTitle), labelTitle, 1,0,1,1);
-//  gtk_misc_set_padding (GTK_MISC (labelTitle), 5, 5);
   
   gtk_widget_set_margin_start (GTK_WIDGET(labelTitle), 5);  
   gtk_widget_set_margin_top (GTK_WIDGET(labelTitle), 5);   
-  
+  */
   subTitle = gtk_label_new ("");
-//  gtk_misc_set_padding (GTK_MISC (subTitle), 5, 5);
   
   gtk_widget_set_margin_start (GTK_WIDGET(subTitle), 5);  
   gtk_widget_set_margin_top (GTK_WIDGET(subTitle), 5); 
@@ -345,13 +350,15 @@ GtkWidget *paving_window (APP_data *user_data )
   /* gtk3 stuff for a button with text+image ! */
   buttonCancel = gtk_button_new_with_label (_("Cancel"));
   gtk_widget_set_name (buttonCancel, "myButtonCancel");
-  GtkWidget *buttonCancelImage = gtk_image_new_from_icon_name ("gtk-cancel",  GTK_ICON_SIZE_DIALOG);
-  gtk_button_set_always_show_image (GTK_BUTTON (buttonCancel), TRUE);
-  gtk_button_set_image (GTK_BUTTON (buttonCancel), buttonCancelImage);
-  gtk_widget_set_margin_start (buttonCancel, 32);
-  gtk_widget_set_margin_end (buttonCancel, 32);
-  g_object_set (buttonCancel, "margin", 8, NULL);  
-  gtk_grid_attach (GTK_GRID(gridTitle), buttonCancel, 3, 1, 1, 1);
+//  GtkWidget *buttonCancelImage = gtk_image_new_from_icon_name ("gtk-cancel", GTK_ICON_SIZE_DIALOG);
+//  gtk_button_set_always_show_image (GTK_BUTTON (buttonCancel), TRUE);
+ // gtk_button_set_image (GTK_BUTTON (buttonCancel), buttonCancelImage);
+ // gtk_widget_set_margin_start (buttonCancel, 32);
+ // gtk_widget_set_margin_end (buttonCancel, 32);
+ //  g_object_set (buttonCancel, "margin", 8, NULL);  
+ //  gtk_grid_attach (GTK_GRID(gridTitle), buttonCancel, 3, 1, 1, 1);
+ 
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (hbar), GTK_WIDGET(buttonCancel));
 
 
   /* creates all buttons */
