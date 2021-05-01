@@ -940,7 +940,7 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
   ret = gtk_dialog_run (GTK_DIALOG (dialog));
 
 
-  if(ret == 1) {
+  if(ret == GTK_RESPONSE_OK) {
     /* we get the current RGBA color */
     pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_fg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &text_color_fg);

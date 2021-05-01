@@ -1116,6 +1116,7 @@ GtkWidget *misc_create_help_dialog (GtkWidget *win)
   
   headerBar = gtk_dialog_get_header_bar (GTK_DIALOG(helpDialog));
   gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerBar), _("Keyboard shortcuts"));
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (headerBar), FALSE);
   // gtk_window_set_title (GTK_WINDOW (helpDialog), _("Help..."));
   gtk_window_set_position (GTK_WINDOW (helpDialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal (GTK_WINDOW (helpDialog), TRUE);
@@ -1550,8 +1551,9 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
   
   
   headerBar = gtk_dialog_get_header_bar (GTK_DIALOG(annotDialog));
+  g_object_set (headerBar, "spacing", 48, NULL);
   gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerBar), _("Type here annotation text"));
-  gtk_window_set_default_size(GTK_WINDOW(annotDialog),300, 180);
+  gtk_window_set_default_size(GTK_WINDOW(annotDialog),400, 180);
  // gtk_window_set_title (GTK_WINDOW (annotDialog), _("New Annotation ..."));
   gtk_window_set_position (GTK_WINDOW (annotDialog), GTK_WIN_POS_MOUSE);
   gtk_window_set_modal (GTK_WINDOW (annotDialog), TRUE);
@@ -1671,6 +1673,7 @@ GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
   
   headerBar = gtk_dialog_get_header_bar (GTK_DIALOG(goJumpDialog));
   gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerBar), _("Select a new time position"));
+  g_object_set (headerBar, "spacing", 48, NULL);
   /* we read and convert to human form the media duration */
 
  // goJumpDialog = gtk_dialog_new ();
@@ -1697,11 +1700,11 @@ GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
   gtk_box_pack_start (GTK_BOX (dialog_vbox11), gridDialog, TRUE, TRUE, 4);
 
   /* main icon */
-  iconGoJumpDialog = gtk_image_new_from_icon_name ("find-location-symbolic",GTK_ICON_SIZE_DIALOG);
-  gtk_widget_show (iconGoJumpDialog);  
-  g_object_set (iconGoJumpDialog, "margin-start", 4, NULL);
-  g_object_set (iconGoJumpDialog, "margin-end", 4, NULL);
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (headerBar), GTK_WIDGET(iconGoJumpDialog));
+ // iconGoJumpDialog = gtk_image_new_from_icon_name ("find-location-symbolic",GTK_ICON_SIZE_DIALOG);
+ // gtk_widget_show (iconGoJumpDialog);  
+//  g_object_set (iconGoJumpDialog, "margin-start", 4, NULL);
+//  g_object_set (iconGoJumpDialog, "margin-end", 4, NULL);
+//  gtk_header_bar_pack_start (GTK_HEADER_BAR (headerBar), GTK_WIDGET(iconGoJumpDialog));
   /* labels */
   labelgoJumpDialog = gtk_label_new(_("<i>Please choose a time location within the audio file.\n</i>"));
   gtk_widget_show(labelgoJumpDialog);
