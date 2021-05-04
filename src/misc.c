@@ -136,84 +136,93 @@ void misc_colorinvert_picture(GdkPixbuf *pb)
   return;
 }
 
-/*
-  activate/deactivate buttons in PDF stack
-entry : window1 == mainWindow
 
-*/
-void misc_set_gui_in_PDF_mode(GtkWidget *window1, gint prevStack)
+/************************************************************
+  activate/deactivate buttons in PDF stack
+entry : window1 == mainWindow, APP_data structure
+we also use fPdfLoaded field contained in APP_data structure
+**************************************************************/
+void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *data)
 {
   GtkTextIter iter;
-  GtkWidget *pSearchEntry=lookup_widget(window1, "search_entry"); 
-  GtkWidget *pNext=lookup_widget(window1, "buttonNextOccurrence");   
-  GtkWidget *pPrev=lookup_widget(window1, "buttonPrevOccurrence");   
+  GtkWidget *pSearchEntry = GTK_WIDGET(gtk_builder_get_object (data->builder, "search_entry"));
+  GtkWidget *pNext = GTK_WIDGET(gtk_builder_get_object (data->builder, "buttonNextOccurrence"));
+  GtkWidget *pPrev = GTK_WIDGET(gtk_builder_get_object (data->builder, "buttonPrevOccurrence"));   
+
+// le flag est fPdfLoaded
 
   /* redio tool buttons upper toolbar */
-  GtkWidget *pButtonText= lookup_widget(window1, "pRadioButtonTextSelect");
-  GtkWidget *pButtonPict= lookup_widget(window1, "pRadioButtonPictureSelect");
-  GtkWidget *pButtonHigh= lookup_widget(window1,"pRadioButtonHiglightSelect");
-  GtkWidget *pButtonAnnot= lookup_widget(window1,"pRadioButtonHiAnnotSelect");
-  GtkWidget *pButtonZoomIn=lookup_widget(window1,"buttonZoomIn");
-  GtkWidget *pButtonZoomOut=lookup_widget(window1,"buttonZoomOut");
-  GtkWidget *pbuttonZoomFitBest=lookup_widget(window1,"buttonZoomFitBest");
-  GtkWidget *pButtonPencil=lookup_widget(window1,"button_pencil");
-  GtkWidget *pLabelPDFMod=lookup_widget(window1,"PDF_modified_label");
-  GtkWidget *pg_frame= lookup_widget(GTK_WIDGET(window1), "page_frame"); 
-  GtkWidget *pg_title= lookup_widget(GTK_WIDGET(window1), "page_title"); 
-  GtkWidget *pg_entry= lookup_widget(GTK_WIDGET(window1), "page_entry"); 
-  GtkWidget *pg_label= lookup_widget(GTK_WIDGET(window1), "page_label"); 
-  GtkWidget *pg_labelHitsFrame= lookup_widget(GTK_WIDGET(window1), "labelHitsFrame"); 
-  GtkWidget *pLabelHits=lookup_widget(GTK_WIDGET(window1), "labelHits"); 
+  GtkWidget *pButtonText = lookup_widget(window1, "pRadioButtonTextSelect");
+  GtkWidget *pButtonPict = lookup_widget(window1, "pRadioButtonPictureSelect");
+  GtkWidget *pButtonHigh = lookup_widget(window1,"pRadioButtonHiglightSelect");
+  GtkWidget *pButtonAnnot = lookup_widget(window1,"pRadioButtonHiAnnotSelect");
+  
+  GtkWidget *pButtonZoomIn = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomIn"));
+  GtkWidget *pButtonZoomOut = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomOut"));
+  GtkWidget *pbuttonZoomFitBest = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomFitBest"));
+  
+  
+
+  GtkWidget *pButtonPencil = lookup_widget(window1,"button_pencil");
+  
+  GtkWidget *pLabelPDFMod = GTK_WIDGET (gtk_builder_get_object (data->builder, "PDF_modified_label"));
+  GtkWidget *pg_frame = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_frame"));
+  GtkWidget *pg_title = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_title"));
+  GtkWidget *pg_entry = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_entry"));
+  GtkWidget *pg_label = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_label"));
+  GtkWidget *pg_labelHitsFrame = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelHitsFrame"));
+  GtkWidget *pLabelHits = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelHits"));
   /* find and change buttons, statusbar */
-  GtkWidget *pButtonReplace= lookup_widget(window1, "buttonReplace");
-  GtkWidget *pReplaceEntry = lookup_widget(window1, "replace_entry");
+  GtkWidget *pButtonReplace = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonReplace"));
+  GtkWidget *pReplaceEntry = GTK_WIDGET (gtk_builder_get_object (data->builder, "replace_entry"));
   /* remove searchentry and remove all found and highlighted text */
-  gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
-  gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
+  gtk_entry_set_text (GTK_ENTRY(pSearchEntry),"");
+  gtk_label_set_text (GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
-  gtk_widget_set_sensitive(pSearchEntry, TRUE);
-  gtk_widget_set_sensitive(pButtonText, TRUE);
-  gtk_widget_set_sensitive(pButtonPict, TRUE);
-  gtk_widget_set_sensitive(pButtonHigh, TRUE);
-  gtk_widget_set_sensitive(pButtonAnnot, TRUE);
-  gtk_widget_set_sensitive(pButtonReplace, FALSE);
-  gtk_widget_set_sensitive(pReplaceEntry, FALSE);
-  gtk_widget_set_sensitive(pButtonZoomIn, TRUE);
-  gtk_widget_set_sensitive(pbuttonZoomFitBest, TRUE);
-  gtk_widget_set_sensitive(pButtonZoomOut, TRUE);
-  gtk_widget_set_sensitive(pButtonPencil, FALSE);
+  gtk_widget_set_sensitive (pg_frame, data->fPdfLoaded);  
+  gtk_widget_set_sensitive (pSearchEntry, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pButtonText, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pButtonPict, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pButtonHigh, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pButtonAnnot, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pButtonReplace, FALSE);
+  gtk_widget_set_sensitive (pReplaceEntry, FALSE);
+  gtk_widget_set_sensitive (pButtonZoomIn, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pbuttonZoomFitBest, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pButtonZoomOut, data->fPdfLoaded);
+  gtk_widget_set_sensitive (pButtonPencil, FALSE);
 
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_bold") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_italic") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_underline") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_superscript") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_subscript") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_highlight") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_quotation") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_bold") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_italic") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_underline") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_superscript") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_subscript") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_highlight") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_quotation") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
 
-  gtk_widget_show(pg_frame);
-  gtk_widget_show(pg_title);
-  gtk_widget_show(pg_entry);
-  gtk_widget_show(pLabelPDFMod);
-  gtk_widget_set_sensitive(pLabelPDFMod, FALSE);
-  gtk_widget_set_sensitive(pg_entry, TRUE);
-  gtk_widget_show(pg_label);
-  gtk_widget_hide(pButtonReplace);
-  gtk_widget_hide(pReplaceEntry);
-  gtk_widget_show(pButtonZoomIn);
-  gtk_widget_show(pButtonZoomOut);
-  gtk_widget_show(pbuttonZoomFitBest);
-  gtk_widget_show(pg_labelHitsFrame);
-  gtk_widget_show(pLabelHits);
-  gtk_widget_show(pSearchEntry);
-  gtk_widget_show(pNext);
-  gtk_widget_show(pPrev);
+  gtk_widget_show (pg_frame);
+  gtk_widget_show (pg_title);
+  gtk_widget_show (pg_entry);
+  gtk_widget_show (pLabelPDFMod);
+  gtk_widget_set_sensitive (pLabelPDFMod, FALSE);
+  gtk_widget_set_sensitive (pg_entry, TRUE);
+  gtk_widget_show (pg_label);
+  gtk_widget_hide (pButtonReplace);
+  gtk_widget_hide (pReplaceEntry);
+  gtk_widget_show (pButtonZoomIn);
+  gtk_widget_show (pButtonZoomOut);
+  gtk_widget_show (pbuttonZoomFitBest);
+  gtk_widget_show (pg_labelHitsFrame);
+  gtk_widget_show (pLabelHits);
+  gtk_widget_show (pSearchEntry);
+  gtk_widget_show (pNext);
+  gtk_widget_show (pPrev);
 }
 
 /*
@@ -249,46 +258,46 @@ void misc_set_gui_in_editor_mode(GtkWidget *window1, gint prevStack)
   gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
   gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
-  gtk_widget_set_sensitive(pSearchEntry, TRUE);
-  gtk_widget_set_sensitive(pButtonText, FALSE);
-  gtk_widget_set_sensitive(pButtonPict, FALSE);
-  gtk_widget_set_sensitive(pButtonHigh, FALSE);
-  gtk_widget_set_sensitive(pButtonAnnot, FALSE);
-  gtk_widget_set_sensitive(pButtonReplace, FALSE);
-  gtk_widget_set_sensitive(pReplaceEntry, FALSE);
-  gtk_widget_set_sensitive(pButtonZoomIn, FALSE);
-  gtk_widget_set_sensitive(pButtonZoomOut, FALSE);
-  gtk_widget_set_sensitive(pButtonPencil, FALSE);
-  //gtk_widget_set_sensitive(pg_entry, FALSE);
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_bold") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_italic") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_underline") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_superscript") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_subscript") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_highlight") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_quotation") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
-  gtk_widget_show(lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
+  gtk_widget_set_sensitive (pSearchEntry, TRUE);
+  gtk_widget_set_sensitive (pButtonText, FALSE);
+  gtk_widget_set_sensitive (pButtonPict, FALSE);
+  gtk_widget_set_sensitive (pButtonHigh, FALSE);
+  gtk_widget_set_sensitive (pButtonAnnot, FALSE);
+  gtk_widget_set_sensitive (pButtonReplace, FALSE);
+  gtk_widget_set_sensitive (pReplaceEntry, FALSE);
+  gtk_widget_set_sensitive (pButtonZoomIn, FALSE);
+  gtk_widget_set_sensitive (pButtonZoomOut, FALSE);
+  gtk_widget_set_sensitive (pButtonPencil, FALSE);
+  //gtk_widget_set_sensitive (pg_entry, FALSE);
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_bold") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_italic") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_underline") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_superscript") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_subscript") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_highlight") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_quotation") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
+  gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
 
-  gtk_widget_hide(pLabelPDFMod);
-  gtk_widget_hide(pg_frame);
-  gtk_widget_hide(pg_title);
-  gtk_widget_hide(pg_entry);
-  gtk_widget_hide(pg_label);
-  gtk_widget_show(pButtonReplace);
-  gtk_widget_show(pReplaceEntry);
-  gtk_widget_hide(pButtonZoomIn);
-  gtk_widget_hide(pButtonZoomOut);
-  gtk_widget_hide(pbuttonZoomFitBest);
-  gtk_widget_show(pg_labelHitsFrame);
-  gtk_widget_show(pLabelHits);
-  gtk_widget_show(pSearchEntry);
-  gtk_widget_show(pNext);
-  gtk_widget_show(pPrev);
+  gtk_widget_hide (pLabelPDFMod);
+  gtk_widget_hide (pg_frame);
+  gtk_widget_hide (pg_title);
+  gtk_widget_hide (pg_entry);
+  gtk_widget_hide (pg_label);
+  gtk_widget_show (pButtonReplace);
+  gtk_widget_show (pReplaceEntry);
+  gtk_widget_hide (pButtonZoomIn);
+  gtk_widget_hide (pButtonZoomOut);
+  gtk_widget_hide (pbuttonZoomFitBest);
+  gtk_widget_show (pg_labelHitsFrame);
+  gtk_widget_show (pLabelHits);
+  gtk_widget_show (pSearchEntry);
+  gtk_widget_show (pNext);
+  gtk_widget_show (pPrev);
 }
 
 /*
@@ -325,60 +334,61 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
   gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
-  gtk_widget_set_sensitive(pSearchEntry, FALSE);
-  gtk_widget_set_sensitive(pButtonText, FALSE);
-  gtk_widget_set_sensitive(pButtonPict, TRUE);
-  gtk_widget_set_sensitive(pButtonHigh, FALSE);
-  gtk_widget_set_sensitive(pButtonAnnot, TRUE);/* to allow text notes inside sketch */
-  gtk_widget_set_sensitive(pButtonReplace, FALSE);
-  gtk_widget_set_sensitive(pReplaceEntry, FALSE);
-  gtk_widget_set_sensitive(pButtonZoomIn, FALSE);
-  gtk_widget_set_sensitive(pButtonZoomOut, FALSE);
-  gtk_widget_set_sensitive(pButtonPencil, TRUE);
-  gtk_widget_set_sensitive(pg_entry, FALSE);
+  gtk_widget_set_sensitive (pSearchEntry, FALSE);
+  gtk_widget_set_sensitive (pButtonText, FALSE);
+  gtk_widget_set_sensitive (pButtonPict, TRUE);
+  gtk_widget_set_sensitive (pButtonHigh, FALSE);
+  gtk_widget_set_sensitive (pButtonAnnot, TRUE);/* to allow text notes inside sketch */
+  gtk_widget_set_sensitive (pButtonReplace, FALSE);
+  gtk_widget_set_sensitive (pReplaceEntry, FALSE);
+  gtk_widget_set_sensitive (pButtonZoomIn, FALSE);
+  gtk_widget_set_sensitive (pButtonZoomOut, FALSE);
+  gtk_widget_set_sensitive (pButtonPencil, TRUE);
+  gtk_widget_set_sensitive (pg_entry, FALSE);
 
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_bold") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_italic") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_underline") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_superscript") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_subscript") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_highlight") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_quotation") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
-  gtk_widget_hide(lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_bold") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_italic") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_underline") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_superscript") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_subscript") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_highlight") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_quotation") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
 
 
-  gtk_widget_hide(pg_label);
-  gtk_widget_hide(pg_frame);
-  gtk_widget_hide(pg_title);
-  gtk_widget_hide(pg_entry);
-  gtk_widget_hide(pLabelPDFMod);
-  gtk_widget_hide(pButtonReplace);
-  gtk_widget_hide(pReplaceEntry);
-  gtk_widget_hide(pButtonZoomIn);
-  gtk_widget_hide(pButtonZoomOut);
-  gtk_widget_hide(pbuttonZoomFitBest);
-  gtk_widget_hide(pg_labelHitsFrame);
-  gtk_widget_hide(pLabelHits);
-  gtk_widget_hide(pSearchEntry);
-  gtk_widget_hide(pNext);
-  gtk_widget_hide(pPrev);
+  gtk_widget_hide (pg_label);
+  gtk_widget_hide (pg_frame);
+  gtk_widget_hide (pg_title);
+  gtk_widget_hide (pg_entry);
+  gtk_widget_hide (pLabelPDFMod);
+  gtk_widget_hide (pButtonReplace);
+  gtk_widget_hide (pReplaceEntry);
+  gtk_widget_hide (pButtonZoomIn);
+  gtk_widget_hide (pButtonZoomOut);
+  gtk_widget_hide (pbuttonZoomFitBest);
+  gtk_widget_hide (pg_labelHitsFrame);
+  gtk_widget_hide (pLabelHits);
+  gtk_widget_hide (pSearchEntry);
+  gtk_widget_hide (pNext);
+  gtk_widget_hide (pPrev);
 }
 /*************************************
  change betwwen red anf green in order
   to remind the user if the current
   PDF has been modifyed
 *************************************/
-void update_PDF_state(APP_data *data, gint state)
+void update_PDF_state (APP_data *data, gint state)
 {
-  GtkWidget *window1=data->appWindow;
-  GtkWidget *pLabelPDFMod=lookup_widget(window1,"PDF_modified_label");
+  GtkWidget *window1 = data->appWindow;
+  GtkWidget *imgPDFModif =  GTK_WIDGET (gtk_builder_get_object (data->builder, "image_pdf_modif"));
+  GtkWidget *pLabelPDFMod = GTK_WIDGET (gtk_builder_get_object (data->builder, "PDF_modified_label"));
 
-  gtk_widget_hide( lookup_widget(GTK_WIDGET(window1),"image_pdf_modif"));
+  gtk_widget_hide (GTK_WIDGET(imgPDFModif));
   switch(state) {
     case PDF_NON_MODIF:{
       gtk_label_set_markup (GTK_LABEL (pLabelPDFMod), "<span background=\"green\">   </span>");
@@ -386,7 +396,7 @@ void update_PDF_state(APP_data *data, gint state)
     }
     case PDF_MODIF:{
       gtk_label_set_markup (GTK_LABEL (pLabelPDFMod), "<span background=\"red\" foreground=\"white\"><b> ! </b></span>");
-      gtk_widget_show( lookup_widget(GTK_WIDGET(window1),"image_pdf_modif"));
+      gtk_widget_show (GTK_WIDGET(imgPDFModif));
       break;
     }
     default:{
@@ -406,7 +416,7 @@ void update_statusbarPDF(APP_data *data)
   GtkWidget *pg_label= lookup_widget(GTK_WIDGET(window1), "page_label"); 
   gtk_entry_set_text(GTK_ENTRY(pg_entry),g_strdup_printf("%d",data->curPDFpage+1));
   if(data->doc)
-     gtk_widget_set_sensitive(pg_entry, TRUE);
+     gtk_widget_set_sensitive (pg_entry, TRUE);
 
   gtk_entry_set_text(GTK_ENTRY(pg_label),g_strdup_printf(_("of %d"),data->totalPDFpages));
 
@@ -751,27 +761,27 @@ void misc_set_sensitive_format_buttons(gboolean state, APP_data *data)
   window1 = data->appWindow;
 
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_bold"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_italic"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_underline"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_superscript"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_subscript"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_strikethrough"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_highlight"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
   button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill"));
-  gtk_widget_set_sensitive( button, state);
+  gtk_widget_set_sensitive ( button, state);
 }
 
 /**********************************
@@ -781,19 +791,19 @@ void misc_set_sensitive_format_buttons(gboolean state, APP_data *data)
 void misc_prepare_timeouts(APP_data *data )
 {
   if(g_key_file_get_boolean(data->keystring, "application", "interval-save",  NULL) ) {
-      gtk_widget_show( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
+      gtk_widget_show ( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
     }
     else
-      gtk_widget_hide( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
+      gtk_widget_hide ( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
   g_timeout_add_seconds(300, timeout_quick_save, data);/* yes, it's an intelligent call, keep as it */
   /* timer for audio display */
   g_timeout_add_seconds(1, timeout_audio_display_position, data);/* yes, it's an intelligent call, keep as it */
   /* display auto-repeat indicator ? */
   if(g_key_file_get_boolean(data->keystring, "application", "audio-auto-rewind",  NULL) ) {
-      gtk_widget_show( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
+      gtk_widget_show ( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
     }
     else
-      gtk_widget_hide( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
+      gtk_widget_hide ( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
 }
 
 /**********************************

@@ -16,14 +16,19 @@
 #include <gst/gst.h>
 #include "interface.h" /* glade requirement */
 #include "support.h" /* glade requirement */
+#include "misc.h"
 #include "mttfiles.h"
+#include "audio.h"
+#include "undo.h"
+#include "search.h"
+#include "pdf.h"
 
 /*
  * Internal helper: equivalent to mkdir -p on linux.
  * Will recursively create missing folders to make the required foldername, and mode.
  * Always returns true!
  */
-gboolean mkFullDir(gchar *folderName, gint mode)
+gboolean mkFullDir (gchar *folderName, gint mode)
 {
   gchar *partialFolderName, *pPartialFolderName;
   gchar **folderParts;
@@ -1070,22 +1075,22 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
   PopplerDocument *doc =NULL;
 
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1),"config");
+  keyString = g_object_get_data (G_OBJECT(window1),"config");
   canvas = lookup_widget(GTK_WIDGET(window1), "crPDF");
 
   /* we free previous search datas */
-  search_free_PDF_search_datas(data);
+  search_free_PDF_search_datas (data);
  
   GtkFileFilter *filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.pdf");
   gtk_file_filter_add_pattern (filter, "*.PDF");
   gtk_file_filter_set_name (filter, _("PDF files"));
-  GtkWidget *dialog = create_loadFileDialog(data, _("Open PDF file ..."));
+  GtkWidget *dialog = create_loadFileDialog (data, _("Open PDF file ..."));
   /* we should replace home dir by the current path if it exists ! */
-  tmpStr=g_key_file_get_string(keyString, "application", "current-PDF-file", NULL);
+  tmpStr = g_key_file_get_string (keyString, "application", "current-PDF-file", NULL);
   if(strlen(tmpStr)>0) {
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_path_get_dirname(tmpStr));
-    g_free(tmpStr);
+    g_free (tmpStr);
   }
   else
      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
@@ -1095,35 +1100,35 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy (GTK_WIDGET(dialog)); 
     /* we convert finename's path to URI path */
-    uri_path = g_filename_to_uri(filename, NULL,NULL);
+    uri_path = g_filename_to_uri (filename, NULL,NULL);
     /* we load PDF Poppler's doc */
-    doc = poppler_document_new_from_file(uri_path, NULL, &err);
-    g_free(uri_path);
+    doc = poppler_document_new_from_file (uri_path, NULL, &err);
+    g_free (uri_path);
     if (!doc) {
-        printf("%s\n", err->message);
-        g_error_free(err);
+        printf ("%s\n", err->message);
+        g_error_free (err);
         return;
     }
     /* we store PDF filename and path in config file */
-    g_key_file_set_string(keyString, "application", "current-PDF-file", filename);
-    g_key_file_set_string(keyString, "application", "current-PDF-file-basename", 
+    g_key_file_set_string (keyString, "application", "current-PDF-file", filename);
+    g_key_file_set_string (keyString, "application", "current-PDF-file-basename", 
                       g_filename_display_basename (filename));
  if(data->doc)
-    g_object_unref(data->doc);
-    undo_free_all_PDF_ops(data);
-    data->doc=doc;
-    data->curPDFpage=0;
-    data->button_pressed=FALSE;
-    data->totalPDFpages=poppler_document_get_n_pages(data->doc);
-    if(data->currentStack == CURRENT_STACK_PDF ) {
-      update_statusbarPDF(data);
+    g_object_unref (data->doc);
+    undo_free_all_PDF_ops (data);
+    data->doc            = doc;
+    data->curPDFpage     = 0;
+    data->button_pressed = FALSE;
+    data->totalPDFpages  = poppler_document_get_n_pages (data->doc);
+    if(data->currentStack == CURRENT_STACK_PDF) {
+      update_statusbarPDF (data);
     }
-    page = poppler_document_get_page(data->doc, 0);
+    page = poppler_document_get_page (data->doc, 0);
     poppler_page_get_size (page, &width, &height);
-    data->PDFWidth=width;
-    data->PDFHeight=height;
-    ratio = misc_get_PDF_ratio(width,  gtk_widget_get_allocated_width (window1));
-    data->PDFratio=ratio;
+    data->PDFWidth      = width;
+    data->PDFHeight     = height;
+    ratio = misc_get_PDF_ratio (width, gtk_widget_get_allocated_width (window1));
+    data->PDFratio      = ratio;
 
     w = (gint) (width*ratio);
     h = (gint) (height*ratio);
@@ -1133,18 +1138,19 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
     data->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w, h);
     cr = cairo_create (data->surface);
     /* fill in white the page */
-    cairo_set_source_rgb(cr, 1.0, 1, 1);
-    cairo_rectangle(cr, 0, 0, w, h);
-    cairo_fill(cr);
-    cairo_scale(cr, ratio,ratio);
+    cairo_set_source_rgb (cr, 1.0, 1, 1);
+    cairo_rectangle (cr, 0, 0, w, h);
+    cairo_fill (cr);
+    cairo_scale (cr, ratio,ratio);
     poppler_page_render (page, cr);
-    g_object_unref(page);
+    g_object_unref (page);
     cairo_destroy (cr);
     gtk_widget_set_size_request (canvas, w, h);
     gtk_widget_queue_draw (canvas);
-    g_free(filename);
-    data->fPdfLoaded=TRUE;
-    update_PDF_state(data, PDF_NON_MODIF);
+    g_free (filename);
+    data->fPdfLoaded = TRUE;
+    update_PDF_state (data, PDF_NON_MODIF);
+    misc_set_gui_in_PDF_mode (data->appWindow, data->currentStack, data);
   }
   else
         gtk_widget_destroy (dialog); 

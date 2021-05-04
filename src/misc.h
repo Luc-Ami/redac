@@ -128,30 +128,30 @@ typedef struct {
 
 GArray *
 pgd_annots_create_quads_array_for_rectangle (PopplerRectangle *rect);
-gint misc_get_current_alignment(GtkTextBuffer *buffer);
-void misc_colorinvert_picture(GdkPixbuf *pb);
-void misc_set_gui_in_PDF_mode(GtkWidget *window1, gint prevStack);
-void misc_set_gui_in_editor_mode(GtkWidget *window1, gint prevStack);
-void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack);
-void update_statusbarSketch(APP_data *data);
-void update_statusbarPDF(APP_data *data);
-void update_PDF_state(APP_data *data, gint state);
-void misc_setup_text_buffer_tags(GtkTextBuffer *buffer);
-gdouble misc_get_PDF_ratio(gdouble pdf_width, gdouble draw_width);
+gint misc_get_current_alignment (GtkTextBuffer *buffer);
+void misc_colorinvert_picture( GdkPixbuf *pb);
+void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *data);
+void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack);
+void misc_set_gui_in_sketch_mode (GtkWidget *window1, gint prevStack);
+void update_statusbarSketch (APP_data *data);
+void update_statusbarPDF (APP_data *data);
+void update_PDF_state (APP_data *data, gint state);
+void misc_setup_text_buffer_tags (GtkTextBuffer *buffer);
+gdouble misc_get_PDF_ratio (gdouble pdf_width, gdouble draw_width);
 void misc_clear_text (GtkTextBuffer *buffer, const gchar  *tag);
 void misc_append_empty_paragraph (GtkTextBuffer *buffer, gint row, gint total);
-void misc_remove_alignment_tags(GtkTextBuffer *buffer, GtkTextIter start, GtkTextIter end);
-gchar *misc_get_pango_string(const gchar *key, const gint modifier);
+void misc_remove_alignment_tags (GtkTextBuffer *buffer, GtkTextIter start, GtkTextIter end);
+gchar *misc_get_pango_string (const gchar *key, const gint modifier);
 void undo_popup_menu (GtkWidget *attach_widget, GtkMenu *menu);
-gint misc_get_paragraph_quadding(GtkTextBuffer *buffer, GtkTextIter iter);
-GtkTextTag *misc_get_tag_from_code(GtkTextBuffer *buffer, gint code);
-void misc_init_vars (APP_data *data );
-void misc_init_spell_checker (APP_data *data );
+gint misc_get_paragraph_quadding (GtkTextBuffer *buffer, GtkTextIter iter);
+GtkTextTag *misc_get_tag_from_code (GtkTextBuffer *buffer, gint code);
+void misc_init_vars (APP_data *data);
+void misc_init_spell_checker (APP_data *data);
 gchar *misc_get_extract_from_document (APP_data *data );
 void misc_jump_to_end_view (GtkWidget *sw, GtkTextBuffer *buffer, GtkTextView *view);
 void misc_set_sensitive_format_buttons (gboolean state, APP_data *data);
-void misc_prepare_timeouts (APP_data *data );
-void misc_set_font_color_settings (APP_data *data );
+void misc_prepare_timeouts (APP_data *data);
+void misc_set_font_color_settings (APP_data *data);
 void misc_halt_after_glade_failure (APP_data *data);
 void misc_InfoDialog (GtkWidget *widget, const gchar* msg);
 

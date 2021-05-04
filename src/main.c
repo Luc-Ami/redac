@@ -57,18 +57,18 @@ redac_activate (GApplication *app, APP_data *data)
      misc_halt_after_glade_failure (data);
   }
 
-  list = gtk_application_get_windows (app);
+  list = gtk_application_get_windows (GTK_APPLICATION(app));
   /* test for uniqueness */
   if (list)
     {
       gtk_window_present (GTK_WINDOW (list->data));
     }
   else
-    {printf ("arrivé ici avec %s \n", find_ui_file ("main.ui"));
+    {
       redac_prepare_GUI (app, data);
-      gtk_window_set_application (GTK_WINDOW (data->appWindow), app);
-      gtk_widget_show (data->appWindow);
-      gtk_widget_show (data->view);
+      gtk_window_set_application (GTK_WINDOW (data->appWindow), GTK_APPLICATION(app));
+      gtk_widget_show (GTK_WIDGET(data->appWindow));
+      gtk_widget_show (GTK_WIDGET(data->view));
       /* move to something like end of text */
       scrolledwindow1 = lookup_widget (GTK_WIDGET(data->appWindow), "scrolledwindow1");
       // misc_jump_to_end_view (scrolledwindow1, data->buffer, data->view);
@@ -81,7 +81,7 @@ redac_activate (GApplication *app, APP_data *data)
 
 ***********************/
 
-int main(int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
   GtkApplication *app;
   APP_data app_data;
   gint status;
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
   /* Initialize GStreamer */
   gst_init (&argc, &argv);
   app = gtk_application_new ("org.gtk.redac", 0);
-  app_data.app=app;
+  app_data.app = app;
   g_signal_connect (app, "startup", G_CALLBACK (redac_startup), &app_data);
   g_signal_connect (app, "activate", G_CALLBACK (redac_activate), &app_data);
   /* main loop */

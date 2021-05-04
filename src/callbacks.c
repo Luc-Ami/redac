@@ -2863,46 +2863,47 @@ set_position (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer user_
 void
 on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
 {
-  gchar *tmpStr=NULL;
+  gchar *tmpStr = NULL;
   gint prevStack;
-  GtkTextBuffer *buffer=user_data->buffer;
+  GtkTextBuffer *buffer = user_data->buffer;
   GtkTextIter iter;
+
 
   gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
   
   GtkWidget *statusbar = user_data->statusbar1; /* main statusbar */
   tmpStr = gtk_stack_get_visible_child_name (GTK_STACK(gobject));
 
-  prevStack=user_data->currentStack;
-  if(prevStack== CURRENT_STACK_EDITOR) {
+  prevStack = user_data->currentStack;
+  if(prevStack == CURRENT_STACK_EDITOR) {
      gtk_text_buffer_select_range (buffer, &iter, &iter); // unselect text
   }
   if(prevStack== CURRENT_STACK_PDF) {
      /* unselect in PDF page */
      if(user_data->pdfSearch) {
-       search_free_PDF_search_datas(user_data);
+       search_free_PDF_search_datas (user_data);
      }
   }
   /* we change widgets state according to current stack */
   if(g_ascii_strncasecmp ((gchar*)  tmpStr,"Note",4* sizeof(gchar))  ==  0 ) {
-     update_statusbar(user_data->buffer, user_data);
+     update_statusbar (user_data->buffer, user_data);
      user_data->currentStack = CURRENT_STACK_EDITOR;
-     misc_set_gui_in_editor_mode(user_data->appWindow, prevStack);   
-     gtk_widget_grab_focus(GTK_WIDGET(user_data->view));
+     misc_set_gui_in_editor_mode (user_data->appWindow, prevStack);   
+     gtk_widget_grab_focus (GTK_WIDGET(user_data->view));
   }
   else if(g_ascii_strncasecmp ((gchar*)  tmpStr,"Refe",4* sizeof(gchar))  ==  0 ) {
-         update_statusbarPDF(user_data); 
+         update_statusbarPDF (user_data); 
          user_data->currentStack = CURRENT_STACK_PDF;
-         misc_set_gui_in_PDF_mode(user_data->appWindow, prevStack);
-         gtk_widget_grab_focus(GTK_WIDGET(user_data->PDFScrollable));
+         misc_set_gui_in_PDF_mode (user_data->appWindow, prevStack, user_data);
+         gtk_widget_grab_focus (GTK_WIDGET(user_data->PDFScrollable));
        }
        else if(g_ascii_strncasecmp ((gchar*)  tmpStr,"Sket",4* sizeof(gchar))  ==  0 ) {
-                  update_statusbarSketch(user_data);
+                  update_statusbarSketch (user_data);
                   user_data->currentStack = CURRENT_STACK_SKETCH;
-                  misc_set_gui_in_sketch_mode(user_data->appWindow, prevStack);// tempo until sketch built !!!!
+                  misc_set_gui_in_sketch_mode (user_data->appWindow, prevStack);// tempo until sketch built !!!!
              }
   /* we store current cursor position */
-  user_data->curpos=&iter;
+  user_data->curpos = &iter;
   /* never free tmpStr ! */
 }
 /************************************
