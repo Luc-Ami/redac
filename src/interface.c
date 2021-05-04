@@ -409,51 +409,36 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
 
   fIsDark = data_app->fDarkTheme;
   toolbar = GTK_WIDGET(gtk_builder_get_object (data_app->builder, "toolbar"));
-//  toolbar = gtk_toolbar_new ();
- // gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
- // gtk_widget_set_margin_top(toolbar, 8);
- // gtk_widget_set_margin_bottom(toolbar, 8);
-//	  gtk_widget_set_margin_start (toolbar, 8);
-//  gtk_widget_set_margin_end (toolbar, 8);
 
   /* toolbar toggle buttons bold */
-  icon_bold = gtk_image_new_from_icon_name("format-text-bold-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  icon_italic = gtk_image_new_from_icon_name("format-text-italic-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  icon_underline = gtk_image_new_from_icon_name("format-text-underline-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-/*
-  if(data_app->fDarkTheme)
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)clear_format_light_xpm);
-  else
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)clear_format_xpm);
-  icon_clear_format = gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
-*/
-  icon_clear_format=gtk_image_new_from_icon_name ("edit-clear-all-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  icon_bold = gtk_image_new_from_icon_name ("format-text-bold-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  icon_italic = gtk_image_new_from_icon_name ("format-text-italic-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  icon_underline = gtk_image_new_from_icon_name ("format-text-underline-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  icon_clear_format = gtk_image_new_from_icon_name ("edit-clear-all-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+  icon_undo = gtk_image_new_from_icon_name ("edit-undo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
 /*
-  if(data_app->fDarkTheme)
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)undo_light_xpm);
-  else
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)undo_xpm);
-  icon_undo =gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico);
-*/
-
-  icon_undo =gtk_image_new_from_icon_name ("edit-undo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
-
   if( fIsDark)
       ico = gdk_pixbuf_new_from_xpm_data((const char **)superscript_light_xpm);
   else
       ico = gdk_pixbuf_new_from_xpm_data((const char **)superscript_xpm);
   icon_superscript  =gtk_image_new_from_pixbuf(ico);
   g_object_unref(ico); 
-
+  */
+  
+  icon_superscript  = gtk_image_new_from_icon_name ("view-sort-descending-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR); 
+  
+/*
   if(fIsDark)
       ico = gdk_pixbuf_new_from_xpm_data((const char **)subscript_light_xpm);
   else
       ico = gdk_pixbuf_new_from_xpm_data((const char **)subscript_xpm);
   icon_subscript=gtk_image_new_from_pixbuf(ico);
   g_object_unref(ico); 
+*/
+  
+  icon_subscript  = gtk_image_new_from_icon_name ("view-sort-ascending-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);   
 
 /*
   if(data_app->fDarkTheme)
@@ -521,12 +506,12 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
  
   /* radiobuttons : thanks to Pascal developers 
    here: https://fr.wikibooks.org/wiki/Programmation_GTK2_en_Pascal/GtkRadioToolButton*/
-  pRadioButtonLeft = gtk_radio_tool_button_new(NULL);
+  pRadioButtonLeft = gtk_radio_tool_button_new (NULL);
 
-  icon_left_format = gtk_image_new_from_icon_name("format-justify-left-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  icon_center_format = gtk_image_new_from_icon_name("format-justify-center-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  icon_right_format = gtk_image_new_from_icon_name("format-justify-right-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  icon_fill_format = gtk_image_new_from_icon_name("format-justify-fill-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  icon_left_format = gtk_image_new_from_icon_name ("format-justify-left-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  icon_center_format = gtk_image_new_from_icon_name ("format-justify-center-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  icon_right_format = gtk_image_new_from_icon_name ("format-justify-right-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  icon_fill_format = gtk_image_new_from_icon_name ("format-justify-fill-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
 
   GSList *group = NULL; 
 
@@ -577,15 +562,18 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), standardSeperator, -1);
 
   /* clipboard mode radiobuttons */
-  pRadioButtonTextSelect=gtk_radio_tool_button_new(NULL);
+  pRadioButtonTextSelect = gtk_radio_tool_button_new (NULL);
 
-
+/*
   if(fIsDark)
       ico = gdk_pixbuf_new_from_xpm_data((const char **)text_select_light_xpm);
   else
       ico = gdk_pixbuf_new_from_xpm_data((const char **)text_select_xpm);
   icon_text_select  =gtk_image_new_from_pixbuf(ico);
   g_object_unref(ico); 
+*/
+
+  icon_text_select = gtk_image_new_from_icon_name ("edit-select-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
 /*
   if(data_app->fDarkTheme)
@@ -595,30 +583,36 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   icon_picture_select  =gtk_image_new_from_pixbuf(ico);
   g_object_unref(ico); 
 */
-icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  icon_picture_select = gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
 
-  if(fIsDark)
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)star_highlight_light_xpm);
-  else
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)star_highlight_xpm);
-  icon_highlight_select=gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico);
+ // if(fIsDark)
+  //    ico = gdk_pixbuf_new_from_xpm_data((const char **)star_highlight_light_xpm);
+ // else
+   //   ico = gdk_pixbuf_new_from_xpm_data((const char **)star_highlight_xpm);
+ // icon_highlight_select=gtk_image_new_from_pixbuf(ico);
+ // g_object_unref(ico);
 
+  icon_highlight_select = gtk_image_new_from_icon_name ("starred-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+/*
   if(fIsDark)
       ico = gdk_pixbuf_new_from_xpm_data((const char **)text_note_light_xpm);
   else
       ico = gdk_pixbuf_new_from_xpm_data((const char **)text_note_xpm);
   icon_text_annot  =gtk_image_new_from_pixbuf(ico);
   g_object_unref(ico); 
+*/
+
+  icon_text_annot = gtk_image_new_from_icon_name ("media-view-subtitles-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
 
   GSList *group_clip = NULL; 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonTextSelect), icon_text_select);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonTextSelect, -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonTextSelect), _("Copy selected area inside PDF files\nto clipboard as pure text.")); 
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect), group_clip);
-  group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonTextSelect), icon_text_select);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonTextSelect, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonTextSelect), _("Copy selected area inside PDF files\nto clipboard as pure text.")); 
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect));
 
   pRadioButtonPictureSelect = gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonPictureSelect, -1);
@@ -643,12 +637,17 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect));
   /* sketch tools */
+  /*
   if(fIsDark)
      ico = gdk_pixbuf_new_from_xpm_data((const char **)pencil_light_xpm);
   else
      ico = gdk_pixbuf_new_from_xpm_data((const char **)pencil_xpm);
   icon_pencil=gtk_image_new_from_pixbuf(ico);
   g_object_unref(ico); 
+  */
+  icon_pencil = gtk_image_new_from_icon_name ("input-tablet-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);  
+  
+  
   button_pencil= gtk_radio_tool_button_new(group_clip);
   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_pencil),icon_pencil); 
   gtk_widget_set_tooltip_text(GTK_WIDGET(button_pencil), _("Freehand drawing tool"));
@@ -682,11 +681,11 @@ icon_picture_select =gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_
   gtk_widget_set_sensitive(GTK_WIDGET(audioPlaySpeed), FALSE);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), audioPlaySpeedContainer, -1);  
 
-  iconButtonPlayAudio =gtk_image_new_from_icon_name ("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
-  iconButtonPauseAudio =gtk_image_new_from_icon_name ("media-playback-pause", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonPlayAudio =gtk_image_new_from_icon_name ("media-playback-start-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonPauseAudio =gtk_image_new_from_icon_name ("media-playback-pause-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show(iconButtonPauseAudio);
-  iconButtonHomeAudio=gtk_image_new_from_icon_name ("media-skip-backward", GTK_ICON_SIZE_LARGE_TOOLBAR);
-  iconButtonGotoAudio=gtk_image_new_from_icon_name ("media-skip-forward", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonHomeAudio=gtk_image_new_from_icon_name ("media-skip-backward-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonGotoAudio=gtk_image_new_from_icon_name ("media-skip-forward-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   iconButtonGoJumpAudio=gtk_image_new_from_icon_name ("find-location-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   pRadioButtonPlayPauseAudio = gtk_tool_button_new (iconButtonPlayAudio,NULL);
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonPlayPauseAudio, -1);  
@@ -1536,7 +1535,7 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
   gint ret;
   GKeyFile *keyString;
 
-  keyString = g_object_get_data(G_OBJECT(win), "config"); 
+  keyString = g_object_get_data (G_OBJECT(win), "config"); 
   
   
  // https://stackoverflow.com/questions/53587997/how-to-fix-gtk-warning-content-added-to-the-action-area-of-a-dialog-using-he
@@ -1598,7 +1597,7 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
   }
  
   /* run */
-  ret = gtk_dialog_run(GTK_DIALOG(annotDialog));
+  ret = gtk_dialog_run (GTK_DIALOG(annotDialog));
   if(ret==GTK_RESPONSE_OK) {
     GtkTextIter start, end;
     gtk_text_buffer_get_start_iter (buffer,&start);
@@ -1661,7 +1660,7 @@ GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
   GtkWidget *headerBar;
   
   // https://stackoverflow.com/questions/53587997/how-to-fix-gtk-warning-content-added-to-the-action-area-of-a-dialog-using-he
-  goJumpDialog = gtk_dialog_new_with_buttons ( _("Jump to..."),
+  goJumpDialog = gtk_dialog_new_with_buttons (_("Jump to..."),
                                        GTK_WINDOW(data_app->appWindow),
                                        GTK_DIALOG_USE_HEADER_BAR, /// Use this FLAG here
                                        _("Cancel"),
@@ -1707,51 +1706,51 @@ GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
 //  gtk_header_bar_pack_start (GTK_HEADER_BAR (headerBar), GTK_WIDGET(iconGoJumpDialog));
   /* labels */
   labelgoJumpDialog = gtk_label_new(_("<i>Please choose a time location within the audio file.\n</i>"));
-  gtk_widget_show(labelgoJumpDialog);
+  gtk_widget_show (labelgoJumpDialog);
   g_object_set (labelgoJumpDialog, "margin-start", 4, NULL);
   g_object_set (labelgoJumpDialog, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelgoJumpDialog), TRUE);
   gtk_grid_attach (GTK_GRID (gridHeader), labelgoJumpDialog, 1, 0, 1, 1);
 
   /* various infos */
-  labelTitleCurpos= gtk_label_new(_("<b>Current position :</b>"));
-  gtk_widget_show(labelTitleCurpos);
+  labelTitleCurpos = gtk_label_new (_("<b>Current position :</b>"));
+  gtk_widget_show (labelTitleCurpos);
   g_object_set (labelTitleCurpos, "margin-start", 4, NULL);
   g_object_set (labelTitleCurpos, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelTitleCurpos), TRUE);
   gtk_grid_attach (GTK_GRID (gridHeader), labelTitleCurpos, 0, 1, 3, 1);
 
-  labelCurpos= gtk_label_new(g_strdup_printf (_("<i> %s of %s</i>"), 
+  labelCurpos = gtk_label_new (g_strdup_printf (_("<i> %s of %s</i>"), 
                audio_gst_time_to_str(data_app->audio_current_position),
                audio_gst_time_to_str(data_app->audio_total_duration)));
-  gtk_widget_show(labelCurpos);
+  gtk_widget_show (labelCurpos);
   g_object_set (labelCurpos, "margin-start", 4, NULL);
   g_object_set (labelCurpos, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelCurpos), TRUE);
   gtk_grid_attach (GTK_GRID (gridHeader), labelCurpos, 0, 2, 3, 1);
 
-  labelNewPosition=gtk_label_new(_("<i><b>\nNew position : </b></i>"));
-  gtk_widget_show(labelNewPosition);
+  labelNewPosition = gtk_label_new (_("<i><b>\nNew position : </b></i>"));
+  gtk_widget_show (labelNewPosition);
   g_object_set (labelCurpos, "margin-start", 4, NULL);
   g_object_set (labelCurpos, "margin-end", 4, NULL);
   gtk_label_set_use_markup (GTK_LABEL (labelNewPosition), TRUE);
   gtk_grid_attach (GTK_GRID (gridHeader), labelNewPosition, 0, 3, 3, 1);
 
 
-  labelHour = gtk_label_new(_("Hour :"));
-  gtk_widget_show(labelHour);
+  labelHour = gtk_label_new (_("Hour :"));
+  gtk_widget_show (labelHour);
   g_object_set (labelHour, "margin-start", 10, NULL);
   g_object_set (labelHour, "margin-end", 4, NULL);
   gtk_grid_attach (GTK_GRID (gridDialog), labelHour, 0, 1, 1, 1); 
 
-  labelMinute = gtk_label_new(_("Minute :"));
-  gtk_widget_show(labelMinute);
+  labelMinute = gtk_label_new (_("Minute :"));
+  gtk_widget_show (labelMinute);
   g_object_set (labelMinute, "margin-start", 4, NULL);
   g_object_set (labelMinute, "margin-end", 4, NULL);
   gtk_grid_attach (GTK_GRID (gridDialog), labelMinute, 1, 1, 1, 1); 
 
-  labelSecond = gtk_label_new(_("Second :"));
-  gtk_widget_show(labelSecond);
+  labelSecond = gtk_label_new (_("Second :"));
+  gtk_widget_show (labelSecond);
   g_object_set (labelSecond, "margin-start", 4, NULL);
   g_object_set (labelSecond, "margin-end", 10, NULL);
   gtk_grid_attach (GTK_GRID (gridDialog), labelSecond, 2, 1, 1, 1); 
@@ -1760,17 +1759,17 @@ GtkWidget *misc_create_go_jump_dialog (APP_data *data_app)
   GtkAdjustment *hour_adj = gtk_adjustment_new (0, 0, 23, 1, 10, 0);
   GtkWidget *hourSpin = gtk_spin_button_new (GTK_ADJUSTMENT (hour_adj), 1, 0);
   gtk_widget_show (hourSpin);
-  gtk_grid_attach (GTK_GRID(gridDialog),hourSpin, 0, 2 , 1, 1);
+  gtk_grid_attach (GTK_GRID(gridDialog), hourSpin, 0, 2 , 1, 1);
 
   GtkAdjustment *minute_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
   GtkWidget *minuteSpin = gtk_spin_button_new (GTK_ADJUSTMENT (minute_adj), 1, 0);
   gtk_widget_show (minuteSpin);
-  gtk_grid_attach (GTK_GRID(gridDialog),minuteSpin, 1, 2 , 1, 1);
+  gtk_grid_attach (GTK_GRID(gridDialog), minuteSpin, 1, 2 , 1, 1);
 
   GtkAdjustment *second_adj = gtk_adjustment_new (0, 0, 59, 1, 10, 0);
   GtkWidget *secondSpin = gtk_spin_button_new (GTK_ADJUSTMENT (second_adj), 1, 0);
   gtk_widget_show (secondSpin);
-  gtk_grid_attach (GTK_GRID(gridDialog),secondSpin, 2, 2 , 1, 1);
+  gtk_grid_attach (GTK_GRID(gridDialog), secondSpin, 2, 2 , 1, 1);
 
   
   /* buttons */

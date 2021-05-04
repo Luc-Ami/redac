@@ -303,7 +303,7 @@ GtkWidget *paving_window (APP_data *user_data )
   gtk_grid_attach (GTK_GRID(gridDisplay), gridTitle, 0,0,1,1);
   
   /* icon */
-  iconTitle = gtk_image_new_from_icon_name ("document-open-recent",GTK_ICON_SIZE_DIALOG);
+  iconTitle = gtk_image_new_from_icon_name ("document-open-recent-symbolic",GTK_ICON_SIZE_DIALOG);
   gtk_widget_set_halign (GTK_WIDGET(iconTitle), GTK_ALIGN_START);
   gtk_widget_set_valign (GTK_WIDGET(iconTitle), GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (GTK_WIDGET(iconTitle), FALSE);

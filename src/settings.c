@@ -77,7 +77,8 @@ GtkWidget *create_prefs_dialog (GtkWidget *win, APP_data *data_app)
   gtk_container_add (GTK_CONTAINER(content_area), notebook);
   hbar  = gtk_dialog_get_header_bar (GTK_DIALOG(configDialog));
   gtk_header_bar_set_subtitle (GTK_HEADER_BAR (hbar), _("Define global settings for Redac!.")); 
-  icon = gtk_image_new_from_icon_name ("preferences-other-symbolic", GTK_ICON_SIZE_DIALOG);
+ // icon = gtk_image_new_from_icon_name ("preferences-other-symbolic", GTK_ICON_SIZE_DIALOG);
+  /*
   gtk_widget_set_halign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
  
@@ -87,6 +88,7 @@ GtkWidget *create_prefs_dialog (GtkWidget *win, APP_data *data_app)
   gtk_widget_set_margin_top (GTK_WIDGET(icon), 5);  
   gtk_widget_show (icon);  
   gtk_header_bar_pack_start (GTK_HEADER_BAR (hbar), GTK_WIDGET(icon));
+  */
   /* get pointers on various GtkWidgets */
   configAutoSave = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "configAutoSave"));
 
