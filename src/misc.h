@@ -154,5 +154,8 @@ void misc_prepare_timeouts (APP_data *data);
 void misc_set_font_color_settings (APP_data *data);
 void misc_halt_after_glade_failure (APP_data *data);
 void misc_InfoDialog (GtkWidget *widget, const gchar* msg);
+void misc_display_clipboard_text_info (const gchar *tmpStr, APP_data *data);
+void misc_display_clipboard_image_info (APP_data *data);
+
 
 #endif /* MISC_H */

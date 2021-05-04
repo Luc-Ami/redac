@@ -488,9 +488,9 @@ gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event,
   if(!data->button_pressed || !data->doc)
      return TRUE;
 
-  gtk_widget_destroy  (GTK_WIDGET(data->window));
+  gtk_widget_destroy (GTK_WIDGET(data->window));
  
-  data->button_pressed=FALSE;
+  data->button_pressed = FALSE;
   /* get absolute screen coordinates */
   gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
 
@@ -505,35 +505,36 @@ gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event,
      }
      case PDF_SEL_MODE_PICT: { /* clip mode picture */
        if( data->w>0 && data->h>0) {
-         pPixDatas=gdk_pixbuf_get_from_window (gtk_widget_get_window (data->PDFScrollable),
+         pPixDatas = gdk_pixbuf_get_from_window (gtk_widget_get_window (data->PDFScrollable),
                              data->x1-root_xs, data->y1-root_ys,
                              data->w, data->h);
    
          /* save pixbuf to ClipBoard */
          GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
          gtk_clipboard_set_image   (clipboard, pPixDatas);
-         g_object_unref(pPixDatas);
+         g_object_unref (pPixDatas);
+         misc_display_clipboard_image_info (data);
        }
        break;
      }
      case PDF_SEL_MODE_HIGH: {/* highlighting selection mode */
        if( data->w>0 && data->h>0) {
-         PDF_set_highlight_selection(data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
+         PDF_set_highlight_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
-         update_PDF_state(data, PDF_MODIF);
+         update_PDF_state (data, PDF_MODIF);
        }
        break;
      }
      case PDF_SEL_MODE_NOTE: { /* simple text note */
        /* bug hunt : force to a widh and height of at least 24 pixels ! */
        if(data->w<24)
-         data->w=24;
+         data->w = 24;
        if(data->h<24)
-         data->h=24;
+         data->h = 24;
 
-       PDF_set_text_annot_selection(data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
+       PDF_set_text_annot_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
-       update_PDF_state(data, PDF_MODIF);
+       update_PDF_state (data, PDF_MODIF);
 //TODO in 2037 ? PDF_set_free_text_annot_selection(data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
   //                     data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
        break;
@@ -719,31 +720,31 @@ gboolean on_PDF_draw_motion_event_callback(GtkWidget *widget, GdkEvent  *event, 
 /************************************
  Button press on sketch stack
 *************************************/
-gboolean on_sketch_draw_button_press_callback(GtkWidget *widget, GdkEvent *event, APP_data *data)
+gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 
 {
   /* we must check if it's a RIGHT click code==3, left code ==1 middle code=2 */
   if (gdk_event_get_event_type(event) == GDK_BUTTON_PRESS)  {
-    data->x1=(gint)event->button.x;/* common to Right click and left click in pencil mode - relative coordinates to current window, drawing area without decorations*/
-    data->y1=(gint)event->button.y;
+    data->x1 = (gint)event->button.x;/* common to Right click and left click in pencil mode - relative coordinates to current window, drawing area without decorations*/
+    data->y1 = (gint)event->button.y;
     data->x1_event_root =  event->button.x_root;/* for undo : absolute screen coordinates */
     data->y1_event_root =  event->button.y_root;
     if(event->button.button==3) {
-       data->button_pressed=FALSE;/* yes, to avoid mistakes on drawings */
+       data->button_pressed = FALSE;/* yes, to avoid mistakes on drawings */
        GtkMenu *menu;
        GtkWidget *window1 = data->appWindow;
-       menu = create_menu_sketch(window1, data);
-       gtk_menu_popup(GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
+       menu = create_menu_sketch( window1, data);
+       gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
        return TRUE;
     }
     if(data->fPencilTool) {
-        data->button_pressed=TRUE;
+        data->button_pressed = TRUE;
     }
     else /* are we  in screenshot mode or annotation mode ? */
       {
-           data->x1=(gint)event->button.x_root;
-           data->y1=(gint)event->button.y_root;
-           data->button_pressed=TRUE;
+           data->x1 = (gint)event->button.x_root;
+           data->y1 = (gint)event->button.y_root;
+           data->button_pressed = TRUE;
            data->window = create_select_window();
     }
     return TRUE;
@@ -770,20 +771,20 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
 
   if(data->button_pressed) {    
     if(data->fPencilTool) {
-      data->button_pressed=FALSE;
+      data->button_pressed = FALSE;
       return TRUE;
     }
-    gtk_widget_destroy  (GTK_WIDGET(data->window));
-    data->button_pressed=FALSE;
+    gtk_widget_destroy (GTK_WIDGET(data->window));
+    data->button_pressed = FALSE;
     /* annotation mode _ yes I reuse PDF flag to simplify code */
-    if(data->clipboardMode==PDF_SEL_MODE_NOTE) {  
-      pBtnColor=lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+    if(data->clipboardMode == PDF_SEL_MODE_NOTE) {  
+      pBtnColor = lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
       /* we get the current RGBA color */
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
 
-      tmpStr=dialog_add_text_annotation(data->appWindow, "", data);
+      tmpStr = dialog_add_text_annotation(data->appWindow, "", data);
       if(tmpStr!=NULL) {
-        draw_text (event->button.x, event->button.y, data, tmpStr );
+        draw_text (event->button.x, event->button.y, data, tmpStr);
       }
       g_free (tmpStr);
       return TRUE;
@@ -793,13 +794,14 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
     if( data->w>0 && data->h>0) {
       /* get absolute screen coordinates , it's a request to copy selected area to clipboard */
       gdk_window_get_origin (gtk_widget_get_window (data->SketchScrollable), &root_xs, &root_ys);
-      pPixDatas=gdk_pixbuf_get_from_window (gtk_widget_get_window (data->SketchScrollable),
+      pPixDatas = gdk_pixbuf_get_from_window (gtk_widget_get_window (data->SketchScrollable),
                              data->x1-root_xs, data->y1-root_ys,
                              data->w, data->h);   
       /* save pixbuf to ClipBoard */
-      clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-      gtk_clipboard_set_image   (clipboard, pPixDatas);
-      g_object_unref(pPixDatas);
+      clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+      gtk_clipboard_set_image (clipboard, pPixDatas);
+      g_object_unref (pPixDatas);
+      misc_display_clipboard_image_info (data);
     }/* endif w h >0 */
   }/* endif button pressed */
   return TRUE;
@@ -2070,14 +2072,14 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
         if(i<2) {
           sensitive=FALSE;
         }
-        gtk_widget_set_sensitive(GTK_WIDGET(bNext),sensitive);
-        gtk_widget_set_sensitive(GTK_WIDGET(bPrev),sensitive);
+        gtk_widget_set_sensitive (GTK_WIDGET(bNext),sensitive);
+        gtk_widget_set_sensitive (GTK_WIDGET(bPrev),sensitive);
         if(i>0) {
           sensitive=TRUE;
         }
         if(data->currentStack==CURRENT_STACK_EDITOR) {
-            gtk_widget_set_sensitive(GTK_WIDGET(bReplace),sensitive);
-            gtk_widget_set_sensitive(GTK_WIDGET(pReplaceEntry),sensitive);
+            gtk_widget_set_sensitive (GTK_WIDGET(bReplace),sensitive);
+            gtk_widget_set_sensitive (GTK_WIDGET(pReplaceEntry),sensitive);
         }
         gtk_label_set_text(GTK_LABEL(hits), g_strdup_printf (_("%d hits"), i));
         /* we get a pointer on current position */
@@ -2142,10 +2144,10 @@ on_replace_clicked  (GtkButton *button, APP_data *data)
          if(remaining_hits<1) {
            sensitive=FALSE;
          }   
-         gtk_widget_set_sensitive(GTK_WIDGET(bNext),sensitive);
-         gtk_widget_set_sensitive(GTK_WIDGET(bPrev),sensitive);
-         gtk_widget_set_sensitive(GTK_WIDGET(bReplace),sensitive);
-         gtk_widget_set_sensitive(GTK_WIDGET(replace_entry),sensitive);
+         gtk_widget_set_sensitive (GTK_WIDGET(bNext),sensitive);
+         gtk_widget_set_sensitive (GTK_WIDGET(bPrev),sensitive);
+         gtk_widget_set_sensitive (GTK_WIDGET(bReplace),sensitive);
+         gtk_widget_set_sensitive (GTK_WIDGET(replace_entry),sensitive);
          gtk_label_set_text(GTK_LABEL(hits), g_strdup_printf (_("%d hits"), remaining_hits)); 
        }
        undo_push(data->currentStack, OP_REPLACE_TEXT, data);
@@ -2274,30 +2276,34 @@ void sketch_moveDown (GtkWidget *parentWindow, APP_data *data)
  see : https://stackoverflow.com/questions/3482570/how-to-have-gtk-controlc-to-be-handled-or-not
 
 *********************************/
-void copy_to_clipboard(GtkTextView *view, APP_data *data)
+void copy_to_clipboard (GtkTextView *view, APP_data *data)
 {
   GtkTextIter start, end;
   GtkTextMark *mark;
   gsize length;
   gint offset;
   gboolean fSel;
-  GdkPixbuf *pix=NULL;
+  GdkPixbuf *pix = NULL;
 
   /* we check if there is a selection */
   if(gtk_text_buffer_get_has_selection (data->buffer)) {
-    fSel=gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end);
+     fSel = gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end);
      /* we compute length of selection in char offsets */
-     offset=gtk_text_iter_get_offset(&end)-gtk_text_iter_get_offset(&start);
+     offset = gtk_text_iter_get_offset (&end)- gtk_text_iter_get_offset (&start);
      /* if length==1 it can be an image */
-     pix=gtk_text_iter_get_pixbuf (&start);
+     pix = gtk_text_iter_get_pixbuf (&start);
      if(pix && (offset==1)) {/* we musr check if it's ONLY an image, not a mix */
        printf ("* send pixbuf only to clipboard *\n");
-       GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+       misc_display_clipboard_image_info (data);
+       GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
        gtk_clipboard_set_image (clipboard, pix);
        /* we stop emission in order to sens only the pixbuf /image to the system(s clipboard */ 
        g_signal_stop_emission_by_name (G_OBJECT (view), "copy-clipboard");
      }
-     else printf ("* Send Rich text to clipboard *\n");
+     else {
+		 printf ("* Send Rich text to clipboard *\n");
+		 misc_display_clipboard_text_info ((const gchar *) "-", data);
+     }
   }
 }
 /******************************
@@ -2307,28 +2313,28 @@ void copy_to_clipboard(GtkTextView *view, APP_data *data)
  Note : if the clipboard contains a pure Image,
  the paste operation if already catched
 *********************************************/
-void paste_clipboard(GtkTextView *view, APP_data *data)
+void paste_clipboard (GtkTextView *view, APP_data *data)
 {
   GtkTextMark *mark1, *mark2;
   GtkTextIter iter, start;
 
-  gtk_text_buffer_get_iter_at_mark(data->buffer, &iter, gtk_text_buffer_get_insert(data->buffer));
+  gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, gtk_text_buffer_get_insert(data->buffer));
   mark2=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
 
   /* position just before insertion point */
-  gboolean fbackwrd=gtk_text_iter_backward_char (&iter);
-  if(gtk_text_iter_get_offset(&iter)==0) 
-     data->undo.fIsStart=TRUE;
+  gboolean fbackwrd = gtk_text_iter_backward_char (&iter);
+  if(gtk_text_iter_get_offset (&iter)==0) 
+     data->undo.fIsStart = TRUE;
   else
-     data->undo.fIsStart=FALSE;
-  mark1=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
+     data->undo.fIsStart = FALSE;
+  mark1 = gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
   //TODO undo_reset_serialized_buffer(data);
-  data->undo.serialized_buffer=NULL;
-  data->undo.annotStr=NULL;
-  data->undo.pix=NULL;
-  data->undo.undoMark=mark2;
-  data->undo.beforeMark=mark1;
-  undo_push(data->currentStack, OP_INS_BLOCK, data);
+  data->undo.serialized_buffer = NULL;
+  data->undo.annotStr = NULL;
+  data->undo.pix = NULL;
+  data->undo.undoMark   = mark2;
+  data->undo.beforeMark = mark1;
+  undo_push (data->currentStack, OP_INS_BLOCK, data);
 }
 /******************************
  CTRL+X ; works even if
@@ -2336,7 +2342,7 @@ void paste_clipboard(GtkTextView *view, APP_data *data)
 - we use the PopUp menu inside the textview
 The rich text formatting is stored
 *********************************************/
-void cut_to_clipboard(GtkTextView *view, APP_data *data)
+void cut_to_clipboard (GtkTextView *view, APP_data *data)
 {
   GtkTextIter start, end;
   GtkTextMark *mark;
@@ -2345,19 +2351,20 @@ void cut_to_clipboard(GtkTextView *view, APP_data *data)
 
   /* we check if there is a selection */
   if(gtk_text_buffer_get_has_selection (data->buffer)) {
-    fSel=gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end);
-    mark=gtk_text_buffer_create_mark (data->buffer, NULL,&start,FALSE);
+    fSel = gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end);
+    mark = gtk_text_buffer_create_mark (data->buffer, NULL, &start, FALSE);
     /* now we must preserve the richtext content and push it on undo engine */
     //TODO undo_reset_serialized_buffer(data);
-    data->undo.start_sel=start;
-    data->undo.end_sel=end;
-    data->undo.undoMark=mark;
-    GdkAtom format = gtk_text_buffer_register_serialize_tagset(data->buffer, "application/x-gtk-text-buffer-rich-text");
-    data->undo.serialized_buffer=gtk_text_buffer_serialize(data->buffer, data->buffer, format, &start, &end, &length);
-    data->undo.buffer_length=length;
-    data->undo.annotStr=NULL;
-    data->undo.pix=NULL;
-    undo_push(data->currentStack, OP_DEL_BLOCK, data);
+    data->undo.start_sel = start;
+    data->undo.end_sel   = end;
+    data->undo.undoMark  = mark;
+    GdkAtom format = gtk_text_buffer_register_serialize_tagset (data->buffer, "application/x-gtk-text-buffer-rich-text");
+    data->undo.serialized_buffer = gtk_text_buffer_serialize (data->buffer, data->buffer, format, &start, &end, &length);
+    data->undo.buffer_length = length;
+    data->undo.annotStr = NULL;
+    data->undo.pix      = NULL;
+    undo_push (data->currentStack, OP_DEL_BLOCK, data);
+    misc_display_clipboard_text_info ((const gchar *) "-", data);
   }
 }
 /*****************************
@@ -2658,7 +2665,7 @@ key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
          }
          case GDK_KEY_minus:case GDK_KEY_KP_Subtract:{
            if(data->currentStack==CURRENT_STACK_PDF) {
-                 on_PDF_zoom_out_clicked(widget, data);
+                 on_PDF_zoom_out_clicked (widget, data);
            return TRUE;
            }
           if(data->currentStack==CURRENT_STACK_SKETCH) {
@@ -2863,13 +2870,13 @@ set_position (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer user_
 void
 on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
 {
-  gchar *tmpStr = NULL;
+  const gchar *tmpStr;
   gint prevStack;
   GtkTextBuffer *buffer = user_data->buffer;
   GtkTextIter iter;
 
 
-  gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
   
   GtkWidget *statusbar = user_data->statusbar1; /* main statusbar */
   tmpStr = gtk_stack_get_visible_child_name (GTK_STACK(gobject));
@@ -2917,7 +2924,7 @@ on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
  * ********************************/
 
 void
-   on_main_menu_button_toggled (GtkToggleButton *togglebutton,  APP_data *data_app)
+   on_main_menu_button_toggled (GtkToggleButton *togglebutton, APP_data *data_app)
 
 {
   GtkWidget *savePDF;
@@ -2935,15 +2942,15 @@ void
   gtk_widget_set_sensitive (savePDF, data_app->fPdfLoaded);
   gtk_widget_set_sensitive (AudioCloseFile, data_app->fAudioLoaded);
   if(data_app->currentStack==CURRENT_STACK_SKETCH) 
-     gtk_widget_set_sensitive(clearSketch, TRUE);
+     gtk_widget_set_sensitive (clearSketch, TRUE);
   else
-     gtk_widget_set_sensitive(clearSketch, FALSE); 
+     gtk_widget_set_sensitive (clearSketch, FALSE); 
      
   /* we update summary of current file */
-  keyString=data_app->keystring;
+  keyString = data_app->keystring;
   if(keyString==NULL) {
      printf ("* INTERNAL ERROR in module interface.c *\n");
-     return NULL;
+     return;
   }  
   store_current_file_in_keyfile (keyString, g_key_file_get_string (keyString, "history","recent-file-0", NULL) , 
                                  misc_get_extract_from_document(data_app));      

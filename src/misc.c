@@ -886,3 +886,39 @@ void misc_InfoDialog (GtkWidget *widget, const gchar* msg)
 }
 
 
+/********************************************
+ * show message when some text is sent to
+ * clipboard
+ * parameters : 
+ * - a string
+ * - a APP_data structure
+ * ****************************************/
+void misc_display_clipboard_text_info (const gchar *tmpStr, APP_data *data)
+{
+    GtkWidget *labelClipBoard = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelClipBoard"));
+  	
+	printf ("PDF : sélection non vide = long = %d\n", strlen (tmpStr)); 
+	gint i =  strlen (tmpStr);
+	if(i>0) {
+		printf ("contenu:\n%s\n", tmpStr);
+		gtk_label_set_text (GTK_LABEL(labelClipBoard), _("Text copied"));
+	}
+	else {
+	   gtk_label_set_text (GTK_LABEL(labelClipBoard), _("---"));		
+    }	
+}
+
+/********************************************
+ * show message when some text is sent to
+ * clipboard
+ * parameters : 
+ * - a string
+ * - a APP_data structure
+ * ****************************************/
+void misc_display_clipboard_image_info (APP_data *data)
+{
+    GtkWidget *labelClipBoard = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelClipBoard"));
+  	
+	gtk_label_set_text (GTK_LABEL(labelClipBoard), _("Image copied"));
+
+}

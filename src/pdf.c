@@ -9,6 +9,8 @@
 #include <libintl.h>
 #include <locale.h>
 
+#include <string.h>
+
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
@@ -483,46 +485,56 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   PopplerPage *page;
   PopplerRectangle selection; /* in original PDF points 4 gdouble bounding rectnagle coord*/
   gdouble ratio, v_v_adj, v_h_adj;
+  GtkWidget *labelClipBoard = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelClipBoard"));
  
   /* we read current adjustments on scrollable window */
-  GtkAdjustment *v_adj= gtk_scrolled_window_get_vadjustment (sw);
-  GtkAdjustment *h_adj= gtk_scrolled_window_get_hadjustment (sw);
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (sw);
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (sw);
   v_v_adj = gtk_adjustment_get_value (v_adj);
   v_h_adj = gtk_adjustment_get_value (h_adj);
   /* we get a pointer on the current page */
-  page = poppler_document_get_page(data->doc, pdf_page);
+  page = poppler_document_get_page (data->doc, pdf_page);
   /* we convert surface/Gdk scaled coordinates to PDF coordinates */
   ratio = data->PDFratio;/* don't use other computed value !!! 2 aug 2018 */
   /* we translate to PDF coordinates */
-  selection.x1= (gdouble) (x+v_h_adj)/ratio;
-  selection.y1= (gdouble) (y+v_v_adj)/ratio;
-  selection.x2= (gdouble) (x+v_h_adj+w)/ratio;
-  selection.y2= (gdouble) (y+v_v_adj+h)/ratio;
+  selection.x1 = (gdouble) (x+v_h_adj)/ratio;
+  selection.y1 = (gdouble) (y+v_v_adj)/ratio;
+  selection.x2 = (gdouble) (x+v_h_adj+w)/ratio;
+  selection.y2 = (gdouble) (y+v_v_adj+h)/ratio;
 //printf("coord width=%.2f height pdf=%.2f x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", width, height,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
-  tmpStr = poppler_page_get_selected_text(page, POPPLER_SELECTION_GLYPH, &selection);
+  tmpStr = poppler_page_get_selected_text (page, POPPLER_SELECTION_GLYPH, &selection);
 
   /* copy text to ClipBoard */
-  GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+  GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, tmpStr, -1);
-  g_object_unref(page);
-  g_free(tmpStr);
+  g_object_unref (page);
+  /* we test if selected area if empty of text */
+  if(tmpStr) {
+    misc_display_clipboard_text_info ((const gchar *) tmpStr, data);
+    g_free (tmpStr);
+  }	  
+  else {
+	printf ("PDF sélection vide ! \n");
+	gtk_label_set_text (GTK_LABEL(labelClipBoard), _("---"));
+  }	  
+
 }
 
 /******************
   zoom IN PDF
 ******************/
-void on_PDF_zoom_in_clicked  (GtkButton *button, APP_data *data)
+void on_PDF_zoom_in_clicked (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
 
   keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
 
   if(data->doc) {
-     data->PDFratio=data->PDFratio*1.1;
-     if(data->PDFratio*data->PDFWidth>PDF_VIEW_MAX_WIDTH)
-         data->PDFratio=PDF_VIEW_MAX_WIDTH/data->PDFWidth;
-     PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
-     g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
+     data->PDFratio = data->PDFratio*1.1;
+     if(data->PDFratio*data->PDFWidth > PDF_VIEW_MAX_WIDTH)
+         data->PDFratio = PDF_VIEW_MAX_WIDTH/data->PDFWidth;
+     PDF_display_page (data->appWindow, data->curPDFpage, data->doc, data);
+     g_key_file_set_double (keyString, "reference-document", "zoom", data->PDFratio);
   }
 }
 
