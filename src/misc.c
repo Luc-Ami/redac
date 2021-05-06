@@ -192,20 +192,23 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   gtk_widget_set_sensitive (pButtonZoomOut, data->fPdfLoaded);
   gtk_widget_set_sensitive (pButtonPencil, FALSE);
 
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_bold") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_italic") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_underline") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_superscript") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_subscript") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_highlight") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_quotation") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
-  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
-
+  /* hide only if we are on PDF stack */
+  if(data->currentStack == CURRENT_STACK_PDF) { 
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_bold") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_italic") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_underline") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_superscript") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_subscript") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_strikethrough") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_highlight") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_quotation") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_clear_format") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
+	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
+  }
+  
   gtk_widget_show (pg_frame);
   gtk_widget_show (pg_title);
   gtk_widget_show (pg_entry);
@@ -230,7 +233,7 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
 entry : window1 == mainWindow
 
 */
-void misc_set_gui_in_editor_mode(GtkWidget *window1, gint prevStack)
+void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
 {
   /* redio tool buttons upper toolbar */
   GtkWidget *pSearchEntry=lookup_widget(window1, "search_entry"); 
@@ -346,6 +349,8 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonPencil, TRUE);
   gtk_widget_set_sensitive (pg_entry, FALSE);
 
+  /* we hide only if current stack is Sketch */
+  
   gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_bold") );
   gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_italic") );
   gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_underline") );

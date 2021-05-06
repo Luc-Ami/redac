@@ -22,6 +22,7 @@
 #include "undo.h"
 #include "search.h"
 #include "pdf.h"
+#include "mttexport.h"
 
 /*
  * Internal helper: equivalent to mkdir -p on linux.
@@ -74,11 +75,11 @@ static GKeyFile *storage_load(const char *pathname)
 	}
 	return keyfile;
 }
-/*
+/***********************************
 
  store all program's settings
 
-*/
+************************************/
 gint storage_save( gchar *pathname, APP_data *data_app)
 {
   gchar *data = NULL, buffer[81];
@@ -91,14 +92,14 @@ gint storage_save( gchar *pathname, APP_data *data_app)
   GdkRGBA color;   
   GtkWidget *pBtnColor; 
 
-  keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config"); 
+  keyString = g_object_get_data (G_OBJECT(data_app->appWindow), "config"); 
   /* we get the current RGBA color */
   pBtnColor=lookup_widget(GTK_WIDGET(data_app->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
 
-  gchar* tmpStr = g_strdup_printf(_(" %s settings auto-generated - Do not edit!"), "Redac 0.1");
+  gchar* tmpStr = g_strdup_printf (_(" %s settings auto-generated - Do not edit!"), "Redac 0.1");
   g_key_file_set_comment (keyString, NULL, NULL, tmpStr, NULL);
-  g_key_file_set_string(keyString, "version-info", "version", CURRENT_VERSION);
+  g_key_file_set_string (keyString, "version-info", "version", CURRENT_VERSION);
   /* we store window geometry */
   gtk_window_get_position (GTK_WINDOW(data_app->appWindow), &pos_x, &pos_y); 
   gtk_window_get_size (GTK_WINDOW(data_app->appWindow), &width_height[0], &width_height[1]);
@@ -107,35 +108,34 @@ gint storage_save( gchar *pathname, APP_data *data_app)
   g_key_file_set_integer (keyString, "application", "geometry.width", width_height[0]);
   g_key_file_set_integer (keyString, "application", "geometry.height",width_height[1]);
 
-  g_key_file_set_double(keyString, "application", "fg.color.red", color.red);
-  g_key_file_set_double(keyString, "application", "fg.color.green", color.green);
-  g_key_file_set_double(keyString, "application", "fg.color.blue", color.blue);
-
+  g_key_file_set_double (keyString, "application", "fg.color.red", color.red);
+  g_key_file_set_double (keyString, "application", "fg.color.green", color.green);
+  g_key_file_set_double (keyString, "application", "fg.color.blue", color.blue);
 
 
   /* we get the current date */
-  time ( &rawtime );
-  strftime(buffer, 80, "%c", localtime(&rawtime));
+  time (&rawtime );
+  strftime (buffer, 80, "%c", localtime(&rawtime));
 
-  if(!g_key_file_get_string(keyString, "application", "current-file", NULL)) {
-       printf("* invalid file name *\n");
-       g_key_file_set_string(keyString, "application", "current-file", g_strdup_printf("Redac-%s.kw", buffer));
+  if(!g_key_file_get_string (keyString, "application", "current-file", NULL)) {
+       printf ("* invalid file name *\n");
+       g_key_file_set_string (keyString, "application", "current-file", g_strdup_printf ("Redac-%s.kw", buffer));
   }
-  if(!g_key_file_get_string(keyString, "application", "current-PDF-file", NULL)) {
-       printf("* invalid file name *\n");
-       g_key_file_set_string(keyString, "application", "current-PDF-file", "");
+  if(!g_key_file_get_string (keyString, "application", "current-PDF-file", NULL)) {
+       printf ("* invalid file name *\n");
+       g_key_file_set_string (keyString, "application", "current-PDF-file", "");
   }
 
-  g_key_file_set_integer(keyString, "reference-document", "page", data_app->curPDFpage);
+  g_key_file_set_integer (keyString, "reference-document", "page", data_app->curPDFpage);
 
-  data = g_key_file_to_data(keyString, &length, &error);
+  data = g_key_file_to_data (keyString, &length, &error);
 
-  if (!g_file_set_contents(data_app->gConfigFile, data, length, &error)) {
-		printf("Failed to store information: %s", error->message);
-		g_error_free(error);
+  if(!g_file_set_contents (data_app->gConfigFile, data, length, &error)) {
+		printf ("Failed to store information: %s", error->message);
+		g_error_free (error);
   }
-  g_free(data);
-  g_free(tmpStr);
+  g_free (data);
+  g_free (tmpStr);
 
   return ret;
 }
@@ -143,7 +143,7 @@ gint storage_save( gchar *pathname, APP_data *data_app)
 /*******************************
  Creates a new config file
  ******************************/
-void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
+void createNewKeyFile (APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
 {
     gint width_height[2], i;
     gchar buffer[81];
@@ -151,9 +151,9 @@ void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     gchar *tmpStr2;
     GError *error;
 
-    gchar* tmpStr = g_strdup_printf(_(" %s settings auto-generated - Do not edit!"), "Redac 0.1");
+    gchar* tmpStr = g_strdup_printf (_(" %s settings auto-generated - Do not edit!"), "Redac 0.1");
     g_key_file_set_comment (keyString, NULL, NULL, tmpStr, NULL);
-    g_key_file_set_string(keyString, "version-info", "version", CURRENT_VERSION);
+    g_key_file_set_string (keyString, "version-info", "version", CURRENT_VERSION);
     g_key_file_set_integer (keyString, "application", "geometry.x", 0);
     g_key_file_set_integer (keyString, "application", "geometry.y", 0);
     /* we get the current  window geometry */
@@ -162,17 +162,17 @@ void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     g_key_file_set_integer (keyString, "application", "geometry.width",  width_height[0]);
     g_key_file_set_integer (keyString, "application", "geometry.height", width_height[1]);
     /* we get the current date */
-    time ( &rawtime );
-    strftime(buffer, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
+    time (&rawtime);
+    strftime (buffer, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
   
-    g_key_file_set_string(keyString, "application", "current-file", get_path_to_datas_file(buffer));
+    g_key_file_set_string (keyString, "application", "current-file", get_path_to_datas_file(buffer));
 
     /* setup and store the basename */
-    tmpStr2= g_key_file_get_string(keyString, "application", "current-file", NULL);
-    g_key_file_set_string(keyString, "application", "current-file-basename", 
+    tmpStr2 = g_key_file_get_string (keyString, "application", "current-file", NULL);
+    g_key_file_set_string (keyString, "application", "current-file-basename", 
                       g_filename_display_basename (tmpStr2));
 
-    g_free(tmpStr2);
+    g_free (tmpStr2);
     /* general settings */
     g_key_file_set_boolean(keyString, "application", "interval-save", FALSE);
     g_key_file_set_boolean(keyString, "application", "autoreload-PDF", FALSE);
@@ -184,8 +184,8 @@ void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     g_key_file_set_boolean(keyString, "application", "prompt-before-quit", TRUE);
     g_key_file_set_boolean(keyString, "application", "prompt-before-overwrite", TRUE);
     /* PDF file */
-    g_key_file_set_string(keyString, "application", "current-PDF-file", "");
-    g_key_file_set_string(keyString, "application", "current-PDF-file-basename", "");
+    g_key_file_set_string (keyString, "application", "current-PDF-file", "");
+    g_key_file_set_string (keyString, "application", "current-PDF-file-basename", "");
     /* default foreground color */
     g_key_file_set_double(keyString, "application", "fg.color.red", 0.15);
     g_key_file_set_double(keyString, "application", "fg.color.green", 0.94);
@@ -194,9 +194,9 @@ void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     /* audio */
     /* recent files */
     for(i=0;i<MAX_RECENT_FILES;i++) {
-       g_key_file_set_string(keyString, "history", g_strdup_printf("recent-file-%d", i), 
+       g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-file-%d", i), 
                       "");
-       g_key_file_set_string(keyString, "history", g_strdup_printf("recent-content-%d", i), 
+       g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-content-%d", i), 
                       "");
     }
     /* editor */
@@ -209,7 +209,7 @@ void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     g_key_file_set_double(keyString, "editor", "paper.color.green", 0.9764);
     g_key_file_set_double(keyString, "editor", "paper.color.blue", 0.9451);
     /* default text font */
-    g_key_file_set_string(keyString, "editor", "font", "Sans 12");
+    g_key_file_set_string (keyString, "editor", "font", "Sans 12");
     /* PDF */
     g_key_file_set_double(keyString, "reference-document", "zoom", 1);
     g_key_file_set_integer(keyString, "reference-document", "page", 0);
@@ -223,13 +223,13 @@ void createNewKeyFile(APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     g_key_file_set_double(keyString, "sketch", "paper.color.green", 1);
     g_key_file_set_double(keyString, "sketch", "paper.color.blue", 1);
     /* default text font */
-    g_key_file_set_string(keyString, "sketch", "font", "Sans 14");
+    g_key_file_set_string (keyString, "sketch", "font", "Sans 14");
     g_key_file_set_double(keyString, "sketch", "pen-width", 2);
 
     gchar *context = g_key_file_to_data (keyString, NULL, &error);
     g_file_set_contents (data_app->gConfigFile, context, -1, NULL);
-    g_free(tmpStr);
-    g_free(context);
+    g_free (tmpStr);
+    g_free (context);
     return;
 }
 
@@ -280,7 +280,7 @@ void createGKeyFile(APP_data *data_app, GtkWidget *win)
     /* we get the current date */
     time ( &rawtime );
     strftime(buffer, 80, "%c", localtime(&rawtime));
-    g_key_file_set_string(keyString, "application", "current-file", 
+    g_key_file_set_string (keyString, "application", "current-file", 
                       get_path_to_datas_file(buffer));
   }
   /* general settings */
@@ -314,8 +314,8 @@ void createGKeyFile(APP_data *data_app, GtkWidget *win)
   }
 
   /* get and store the basename */
-  tmpStr= g_key_file_get_string(keyString, "application", "current-file", NULL);
-  g_key_file_set_string(keyString, "application", "current-file-basename", 
+  tmpStr= g_key_file_get_string (keyString, "application", "current-file", NULL);
+  g_key_file_set_string (keyString, "application", "current-file-basename", 
                       g_filename_display_basename (tmpStr));  
   /* default forreground color */
    if(!g_key_file_has_key(keyString, "application", "fg.color.red", NULL)) { 
@@ -336,31 +336,31 @@ void createGKeyFile(APP_data *data_app, GtkWidget *win)
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
   /* check for recent files and recent files summary */
   for(i=0;i<MAX_RECENT_FILES;i++) {
-     if(!g_key_file_has_key(keyString, "history", g_strdup_printf("recent-file-%d",i ), NULL)) {
-         g_key_file_set_string(keyString, "history", g_strdup_printf("recent-file-%d", i),"");
+     if(!g_key_file_has_key(keyString, "history", g_strdup_printf ("recent-file-%d",i ), NULL)) {
+         g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-file-%d", i),"");
      }
-     if(!g_key_file_has_key(keyString, "history", g_strdup_printf("recent-content-%d",i ), NULL)) {
-         g_key_file_set_string(keyString, "history", g_strdup_printf("recent-content-%d", i),"");
+     if(!g_key_file_has_key(keyString, "history", g_strdup_printf ("recent-content-%d",i ), NULL)) {
+         g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-content-%d", i),"");
      }
   }
 
 
   /* if the current file-0 is empty ther is something wrong, so we store the current file name as first entry */
   if(!g_key_file_has_key(keyString, "history", "recent-file-0", NULL)) {
-         g_key_file_set_string(keyString, "history", "recent-file-0", tmpStr );
+         g_key_file_set_string (keyString, "history", "recent-file-0", tmpStr );
   }
-  g_free(tmpStr);
+  g_free (tmpStr);
 /* TODO : same thing for file content ? */
 
-  /* PDF stuff - thus we gain a g_free(tmpStr) ;-) */
+  /* PDF stuff - thus we gain a g_free (tmpStr) ;-) */
   if(!g_key_file_has_key(keyString, "application", "current-PDF-file", NULL)) { 
-     g_key_file_set_string(keyString, "application","current-PDF-file", 
+     g_key_file_set_string (keyString, "application","current-PDF-file", 
                       "");
   }
-  tmpStr= g_key_file_get_string(keyString, "application", "current-PDF-file", NULL);
-  g_key_file_set_string(keyString, "application", "current-PDF-file-basename", 
+  tmpStr= g_key_file_get_string (keyString, "application", "current-PDF-file", NULL);
+  g_key_file_set_string (keyString, "application", "current-PDF-file-basename", 
                       g_filename_display_basename (tmpStr));
-  g_free(tmpStr);
+  g_free (tmpStr);
   /* editor */
   /* text color */
   if(!g_key_file_has_key(keyString, "editor", "text.color.red", NULL)) { 
@@ -384,7 +384,7 @@ void createGKeyFile(APP_data *data_app, GtkWidget *win)
   }
   /* default text font */
   if(!g_key_file_has_key(keyString, "editor", "font", NULL)) { 
-     g_key_file_set_string(keyString, "editor", "font", "Sans 12");
+     g_key_file_set_string (keyString, "editor", "font", "Sans 12");
   }
 
   /* PDF */
@@ -418,7 +418,7 @@ void createGKeyFile(APP_data *data_app, GtkWidget *win)
   }
   /* default text font */
   if(!g_key_file_has_key(keyString, "sketch", "font", NULL)) { 
-        g_key_file_set_string(keyString, "sketch", "font", "Sans 14");
+        g_key_file_set_string (keyString, "sketch", "font", "Sans 14");
   }
 
   if(!g_key_file_has_key(keyString, "sketch", "pen-width", NULL)) { 
@@ -436,18 +436,18 @@ void createGKeyFile(APP_data *data_app, GtkWidget *win)
  */
 void destroyGKeyFile(APP_data *data_app, GtkWidget *win)
 {
-  GKeyFile *keyString = g_object_get_data(G_OBJECT(win),"config");
+  GKeyFile *keyString = g_object_get_data (G_OBJECT(win),"config");
   printf("* GKeyfile destroyed successfully *\n");
 
   //  storeGKeyFile(keyString);
 
   g_key_file_free(keyString);
   if (data_app->gConfigFile != NULL) {
-    g_free(data_app->gConfigFile);
+    g_free (data_app->gConfigFile);
   }
 }
 
-void storeGKeyFile(APP_data *data_app, GKeyFile *keyString)
+void storeGKeyFile (APP_data *data_app, GKeyFile *keyString)
 {
   gsize length;
   gchar **outText;
@@ -457,22 +457,22 @@ void storeGKeyFile(APP_data *data_app, GKeyFile *keyString)
   
      
   /* Write the configuration file to disk */
-  folderName = g_path_get_dirname(data_app->gConfigFile);
+  folderName = g_path_get_dirname (data_app->gConfigFile);
   outText = g_key_file_to_data (keyString, &length, &error);
 
   if (!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) {
     /* Unable to immediately write to file, so attempt to recreate folders */
-    mkFullDir(folderName, S_IRWXU);
+    mkFullDir (folderName, S_IRWXU);
 
-    if (!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) { 
-      g_print(_("Error saving %s: %s\n"), data_app->gConfigFile, error->message);
-      g_error_free(error);
+    if(!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) { 
+      g_print (_("Error saving %s: %s\n"), data_app->gConfigFile, error->message);
+      g_error_free (error);
       error = NULL;
     }
   }
   
-  g_free(outText);
-  g_free(folderName);
+  g_free (outText);
+  g_free (folderName);
 }
 
 /***********************************
@@ -482,12 +482,12 @@ void storeGKeyFile(APP_data *data_app, GKeyFile *keyString)
 **********************************/
 void store_current_file_in_keyfile(GKeyFile *keyString, gchar *filename, gchar *summary)
 {
-   g_key_file_set_string(keyString, "application", "current-file", filename);
+   g_key_file_set_string (keyString, "application", "current-file", filename);
    /* setup and store the basename */
-   g_key_file_set_string(keyString, "application", "current-file-basename", 
+   g_key_file_set_string (keyString, "application", "current-file-basename", 
                       g_filename_display_basename (filename));
-   g_key_file_set_string(keyString, "history", "recent-file-0", filename );
-   g_key_file_set_string(keyString, "history", "recent-content-0", summary );/* start of file's content */
+   g_key_file_set_string (keyString, "history", "recent-file-0", filename );
+   g_key_file_set_string (keyString, "history", "recent-content-0", summary );/* start of file's content */
 }
 
 /***********************************
@@ -499,13 +499,13 @@ void file_alert_dialog (gchar *filename, GtkWidget *window1 )
   GtkWidget *alertDlg;
   GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 
-  alertDlg =  gtk_message_dialog_new (GTK_WINDOW(window1),
+  alertDlg = gtk_message_dialog_new (GTK_WINDOW(window1),
                                       flags,
                                       GTK_MESSAGE_ERROR,
                                       GTK_BUTTONS_OK,
                                       _("The file :%s isn't a correct file\nor it's currupted. Operation cancelled !"),
                                       filename);
-  gint retrun= gtk_dialog_run(GTK_DIALOG(alertDlg));
+  gint ret = gtk_dialog_run (GTK_DIALOG(alertDlg));
   gtk_widget_destroy (GTK_WIDGET(alertDlg));
 }
 
@@ -520,16 +520,16 @@ void rearrange_recent_file_list (GKeyFile *keyString)
   gchar *recent_prev, *content_prev;
 
   for(i=MAX_RECENT_FILES-1; i>0; i--) {     
-     if(g_key_file_has_key(keyString, "history", g_strdup_printf("recent-file-%d",i-1 ), NULL)) {
-                 recent_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
-                                          g_strdup_printf("recent-file-%d",i-1), NULL));
-                 g_key_file_set_string(keyString, "history", g_strdup_printf("recent-file-%d",i), recent_prev);
-                 g_free(recent_prev);
+     if(g_key_file_has_key(keyString, "history", g_strdup_printf ("recent-file-%d",i-1 ), NULL)) {
+                 recent_prev = g_strdup_printf ("%s", g_key_file_get_string (keyString, "history", 
+                                          g_strdup_printf ("recent-file-%d",i-1), NULL));
+                 g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-file-%d",i), recent_prev);
+                 g_free (recent_prev);
                  /* summaries */
-                 content_prev = g_strdup_printf("%s", g_key_file_get_string(keyString, "history", 
-                                          g_strdup_printf("recent-content-%d",i-1), NULL));
-                 g_key_file_set_string(keyString, "history", g_strdup_printf("recent-content-%d",i), content_prev);
-                 g_free(content_prev);
+                 content_prev = g_strdup_printf ("%s", g_key_file_get_string (keyString, "history", 
+                                          g_strdup_printf ("recent-content-%d",i-1), NULL));
+                 g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-content-%d",i), content_prev);
+                 g_free (content_prev);
 
      }
   }
@@ -543,7 +543,7 @@ gchar *GetTempFileName (gchar *fileSchema)
 {
  gchar *tmpFile = NULL;
 
- tmpFile = tempnam(NULL, fileSchema );
+ tmpFile = tempnam (NULL, fileSchema );
  return tmpFile;
 }
 
@@ -561,41 +561,41 @@ gint load_gtk_rich_text (gchar *filename, GtkTextBuffer *buffer, GtkWidget *wind
   GError **error;
   glong fileSize;
   gchar rich_text_sign[]={0x47, 0x54, 0x4B, 0x54, 0x45, 0x58, 0x54,0x00};
-  GdkAtom format = gtk_text_buffer_register_deserialize_tagset(buffer, "application/x-gtk-text-buffer-rich-text");
+  GdkAtom format = gtk_text_buffer_register_deserialize_tagset (buffer, "application/x-gtk-text-buffer-rich-text");
 
   /* we open the file */
-  inputFile = fopen(filename,"rb");
+  inputFile = fopen (filename,"rb");
   if(inputFile==NULL) {
-          printf("* ERROR : can't open Redac file:%s *\n", filename);
+          printf ("* ERROR : can't open Redac file:%s *\n", filename);
           return -1;
   }
   /* we compute the size before dynamically allocate buffer */
-  glong prev = ftell(inputFile);   
-  fseek(inputFile, 0L, SEEK_END);
-  glong sz = ftell(inputFile);
-  fseek(inputFile, prev, SEEK_SET);
+  glong prev = ftell (inputFile);   
+  fseek (inputFile, 0L, SEEK_END);
+  glong sz = ftell (inputFile);
+  fseek (inputFile, prev, SEEK_SET);
   /* we allocate the buffer */
   if(sz<=0)
     return -1;
-  txtbuffer = g_malloc0(sz*sizeof(guint8)+sizeof(guint8));
-  fileSize = fread(txtbuffer, sizeof(guint8), sz, inputFile);
-  fclose(inputFile);
+  txtbuffer = g_malloc0 (sz*sizeof(guint8)+sizeof(guint8));
+  fileSize  = fread (txtbuffer, sizeof(guint8), sz, inputFile);
+  fclose (inputFile);
   /* now we check if it's a TRUE Gtk Rich text file */
-  if (strncmp(txtbuffer,&rich_text_sign,7)!=0) {/* sign GTKTEXT string */
-      g_free(txtbuffer);
+  if(strncmp (txtbuffer, (gchar *) &rich_text_sign, 7)!=0) {/* sign GTKTEXT string */
+      g_free (txtbuffer);
       file_alert_dialog (filename, window1);
      return -1;
   }
-  misc_clear_text(buffer, "left");
-  gtk_text_buffer_get_start_iter(buffer, &start);
+  misc_clear_text (buffer, "left");
+  gtk_text_buffer_get_start_iter (buffer, &start);
   //gtk_text_buffer_get_iter_at_offset(buffer,&start,0);
   gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_remove_all_tags (buffer, &start, &end);
   //gtk_text_buffer_deserialize_set_can_create_tags(buffer,format,TRUE); //SURTOU pas car c rée tags incrémentaux !!!
   gboolean deserialized = gtk_text_buffer_deserialize(buffer, buffer, format, &start, txtbuffer, fileSize, NULL);/* NULL mandatory ? ! */
-  g_free(txtbuffer);
+  g_free (txtbuffer);
   gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
-                             g_strdup_printf(_("<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"), filename));
+                             g_strdup_printf (_("<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"), filename));
   return 0;
 }
 
@@ -610,18 +610,18 @@ gint save_gtk_rich_text (gchar *filename, GtkTextBuffer *buffer)
   gint i, ret=0;
   FILE *outputFile;
 
-  gtk_text_buffer_get_start_iter(buffer, &start);
-  gtk_text_buffer_get_end_iter(buffer, &end);
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_get_end_iter (buffer, &end);
   /* we remove all GtkSpell tags ! */
   gtk_text_buffer_remove_tag_by_name (buffer, "gtkspell-misspelled", &start, &end);
 
-  GdkAtom format = gtk_text_buffer_register_serialize_tagset(buffer, "application/x-gtk-text-buffer-rich-text");
-  guint8 *serialized = gtk_text_buffer_serialize(buffer, buffer, format, &start, &end, &length);
+  GdkAtom format = gtk_text_buffer_register_serialize_tagset (buffer, "application/x-gtk-text-buffer-rich-text");
+  guint8 *serialized = gtk_text_buffer_serialize (buffer, buffer, format, &start, &end, &length);
 
   /* we save as internal Gtk riche text format not the standard RTF format */
-  outputFile = fopen(filename, "wb");
-  fwrite(serialized, sizeof(guint8), length, outputFile);
-  fclose(outputFile);
+  outputFile = fopen (filename, "wb");
+  fwrite (serialized, sizeof(guint8), length, outputFile);
+  fclose (outputFile);
   return ret;
 }
 
@@ -646,31 +646,31 @@ on_open_clicked (GtkButton *button, APP_data *data_app)
 
   buffer = data_app->buffer;
   GtkWidget *window1 = data_app->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1), "config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
 
-  GtkWidget *dialog = create_loadFileDialog(data_app, _("Open Redac file ..."));
+  GtkWidget *dialog = create_loadFileDialog (data_app, _("Open Redac file ..."));
   /* Set defaults, or get saved values*/
   /* we should replace home dir by the current path if it exists ! */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
   /* we must extract a short filename */
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   /* run dialog */
-  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+  if(gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy (GTK_WIDGET(dialog)); 
     /* first, we save once more time the current file */
-    path_to_file = g_key_file_get_string(keyString, "application", "current-file", NULL);
-    ret = save_gtk_rich_text(path_to_file, buffer);
-    g_free(path_to_file);
-    if(load_gtk_rich_text(filename, buffer, window1, data_app)==0) {   
+    path_to_file = g_key_file_get_string (keyString, "application", "current-file", NULL);
+    ret = save_gtk_rich_text (path_to_file, buffer);
+    g_free (path_to_file);
+    if(load_gtk_rich_text (filename, buffer, window1, data_app)==0) {   
        /* rearrange list of recent files */
-       rearrange_recent_file_list(keyString);
+       rearrange_recent_file_list (keyString);
        /* we change the default values for gkeyfile + summary */
-       store_current_file_in_keyfile(keyString, filename, misc_get_extract_from_document(data_app ));
+       store_current_file_in_keyfile (keyString, filename, misc_get_extract_from_document(data_app));
        /* now we set-up a new default filename */
        gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data_app->builder, "labelMainTitle"))),
-                             g_strdup_printf(_("<small><b>%s</b></small>"), filename)); 
-       g_free(filename);
+                             g_strdup_printf (_("<small><b>%s</b></small>"), filename)); 
+       g_free (filename);
     }
   }
   else
@@ -689,38 +689,42 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
   GKeyFile *keyString;
   gchar *path_to_file;
   gint ret;
-  gboolean flag=TRUE;
+  gboolean flag = TRUE;
 
-  keyString = g_object_get_data(G_OBJECT(window1), "config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
   GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 
-  if(g_key_file_get_boolean(keyString, "application", "prompt-before-quit",NULL )) {
+  if(g_key_file_get_boolean (keyString, "application", "prompt-before-quit",NULL )) {
       dialog = gtk_message_dialog_new (GTK_WINDOW(window1), flags,
                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL,
                 _("Do you really want to quit this program ?\nTake it easy, your work\nwill be automatically saved."));
-      if(gtk_dialog_run(GTK_DIALOG(dialog))!=GTK_RESPONSE_OK)
-         flag=FALSE;
-      gtk_widget_destroy(GTK_WIDGET(dialog));
+      if(gtk_dialog_run (GTK_DIALOG(dialog))!=GTK_RESPONSE_OK)
+         flag = FALSE;
+      gtk_widget_destroy (GTK_WIDGET(dialog));
   }
   if(flag) {
      buffer = data_app->buffer;
      /* default dump in current folder ! */
-     path_to_file = g_key_file_get_string(keyString, "application", "current-file", NULL);
+     path_to_file = g_key_file_get_string (keyString, "application", "current-file", NULL);
      /* native Gtk dump */
-     ret = save_gtk_rich_text(path_to_file, buffer);
+     ret = save_gtk_rich_text (path_to_file, buffer);
      /* RTF compatible version */
-     ret = save_RTF_rich_text(path_to_file, data_app);
+     ret = save_RTF_rich_text (path_to_file, data_app);
      /* we change the default values for gkeyfile */
-     store_current_file_in_keyfile(keyString, path_to_file, misc_get_extract_from_document(data_app));
-     g_free(path_to_file);
-     storage_save( data_app->gConfigFile, data_app);
-     destroyGKeyFile(data_app, window1);
-     undo_free_all(data_app);
-     printf("* Freed successfully All undo datas *\n");
-     //g_object_unref(data_app->spell);
+     store_current_file_in_keyfile (keyString, path_to_file, misc_get_extract_from_document (data_app));
+     g_free (path_to_file);
+     storage_save (data_app->gConfigFile, data_app);
+     destroyGKeyFile (data_app, window1);
+     undo_free_all (data_app);
+     printf ("* Freed successfully All undo datas *\n");
+     //g_object_unref (data_app->spell);
+
      gst_element_set_state (data_app->pipeline, GST_STATE_NULL);
-     gst_object_unref (data_app->pipeline);
-     g_application_quit (data_app->app);
+          printf ("avant \n");
+     if(data_app->pipeline)
+          gst_object_unref (data_app->pipeline);
+      printf ("apres \n");
+     g_application_quit (G_APPLICATION(data_app->app));
   }
  return TRUE;
 }
@@ -740,10 +744,10 @@ void quick_save (APP_data *data)
 
   buffer = data->buffer;
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1), "config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
   /* first, we get as default the current filename  */
-  filename = g_key_file_get_string(keyString, "application", "current-file", NULL);
-  tmpFileName = g_strdup_printf("%s.rtf", filename);
+  filename = g_key_file_get_string (keyString, "application", "current-file", NULL);
+  tmpFileName = g_strdup_printf ("%s.rtf", filename);
 
   ret = save_gtk_rich_text(filename, buffer);
   /* we save also in standard Word processor format !!! */
@@ -756,20 +760,20 @@ void quick_save (APP_data *data)
                                       GTK_BUTTONS_OK,
                                       _("Problem during quick save of :\n%s"),
                                       filename);
-      ret=gtk_dialog_run(GTK_DIALOG(alertDlg));
+      ret=gtk_dialog_run (GTK_DIALOG(alertDlg));
       gtk_widget_destroy (GTK_WIDGET(alertDlg));
   }
   else {
     gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
-                             g_strdup_printf(_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), filename));
+                             g_strdup_printf (_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), filename));
     //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
-      //                       g_strdup_printf(_("%s-saved"), filename));
-    //gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf(_("Redac:%s-saved"),filename) );
+      //                       g_strdup_printf (_("%s-saved"), filename));
+    //gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf (_("Redac:%s-saved"),filename) );
     /* we change the default values for gkeyfile */
     store_current_file_in_keyfile(keyString, filename, misc_get_extract_from_document(data));
   }
-  g_free(filename);
-  g_free(tmpFileName);
+  g_free (filename);
+  g_free (tmpFileName);
   /* we free previous search datas */
   search_free_PDF_search_datas(data);
 }
@@ -793,24 +797,24 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
 
   buffer = data->buffer;
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1), "config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
   /* first, we get as default the current filename  */
-  filename = g_key_file_get_string(keyString, "application", "current-file-basename", NULL);
+  filename = g_key_file_get_string (keyString, "application", "current-file-basename", NULL);
 
   GtkWidget *dialog = create_saveFileDialog(data);
   /* Set defaults and get path for current filename */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
-                         g_path_get_dirname(g_key_file_get_string(keyString, "application", "current-file", NULL) ));
+                         g_path_get_dirname(g_key_file_get_string (keyString, "application", "current-file", NULL) ));
   /* we must extract a short filename */
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
   /* run dialog */
-  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+  if (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
          newFilename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
          /* we check if filename has .kw extension */
          if( !g_str_has_suffix (newFilename, ".kw" )) {
               /* we add suffix to the filename */
-              tmpFileName = g_strdup_printf("%s.kw", newFilename);
-              g_free(newFilename);
+              tmpFileName = g_strdup_printf ("%s.kw", newFilename);
+              g_free (newFilename);
               newFilename = tmpFileName;
          }
          /* we must check if a file with same name exists */
@@ -823,10 +827,10 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
                                       GTK_BUTTONS_OK_CANCEL,
                                       _("The file :%s exists !\nOverwrite existing file ?"),
                                       newFilename);
-           if(gtk_dialog_run(GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
+           if(gtk_dialog_run (GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
                 gtk_widget_destroy (GTK_WIDGET(alertDlg));
                 gtk_widget_destroy (GTK_WIDGET(dialog));
-                g_free(newFilename);
+                g_free (newFilename);
                 return;
            }
          }
@@ -835,18 +839,18 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
          ret = save_RTF_rich_text(newFilename, data);
          /* we setup the window's title */
          gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
-                             g_strdup_printf(_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), newFilename));
+                             g_strdup_printf (_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), newFilename));
          //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
-           //                  g_strdup_printf(_("%s"), newFilename));
-         // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf("Redac:%s",newFilename) );
+           //                  g_strdup_printf (_("%s"), newFilename));
+         // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf ("Redac:%s",newFilename) );
          /* rearrange list of recent files */
          rearrange_recent_file_list(keyString);
          /* we change the default values for gkeyfile */
          store_current_file_in_keyfile(keyString, newFilename, misc_get_extract_from_document(data));
-         g_free(newFilename);
+         g_free (newFilename);
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
-  g_free(filename);
+  g_free (filename);
 }
 /**************************************
   quick load a PDF at program's restart
@@ -864,7 +868,7 @@ void quick_load_PDF(gchar *filename, APP_data *data)
   PopplerDocument *doc =NULL;
 
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1),"config");
+  keyString = g_object_get_data (G_OBJECT(window1),"config");
   canvas = lookup_widget(GTK_WIDGET(window1), "crPDF");
 
   /* we free previous search datas */
@@ -873,18 +877,18 @@ void quick_load_PDF(gchar *filename, APP_data *data)
   uri_path = g_filename_to_uri(filename, NULL,NULL);
   /* we load PDF Poppler's doc */
   doc = poppler_document_new_from_file(uri_path, NULL, &err);
-  g_free(uri_path);
+  g_free (uri_path);
   if (!doc) {
         printf("%s\n", err->message);
         g_error_free(err);
         return;
   }
   /* we store PDF filename and path in config file */
-  g_key_file_set_string(keyString, "application", "current-PDF-file", filename);
-  g_key_file_set_string(keyString, "application", "current-PDF-file-basename", 
+  g_key_file_set_string (keyString, "application", "current-PDF-file", filename);
+  g_key_file_set_string (keyString, "application", "current-PDF-file-basename", 
                       g_filename_display_basename (filename));
   if(data->doc) 
-    g_object_unref(data->doc);
+    g_object_unref (data->doc);
   undo_free_all_PDF_ops(data);
   data->doc=doc;
   //data->curPDFpage=0;
@@ -913,7 +917,7 @@ void quick_load_PDF(gchar *filename, APP_data *data)
   cairo_fill(cr);
   cairo_scale(cr, ratio,ratio);
   poppler_page_render (page, cr);
-  g_object_unref(page);
+  g_object_unref (page);
   cairo_destroy (cr);
   gtk_widget_set_size_request (canvas, w, h);
   gtk_widget_queue_draw (canvas);
@@ -935,7 +939,7 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
   GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
   gint ret;
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1),"config");
+  keyString = g_object_get_data (G_OBJECT(window1),"config");
 
  
   GtkFileFilter *filter = gtk_file_filter_new ();
@@ -955,7 +959,7 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
 
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
-  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+  if (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy (GTK_WIDGET(dialog)); 
     /* we must play with something like a Gtk file chooser bug ;-) */
@@ -971,9 +975,9 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
                           GTK_BUTTONS_OK,
                           _("<b><big>Can't proceeed !</big></b>\nThe file :<i>\n\n%s </i>\n\nisn't a valid audio file !"),
                           filename);
-           ret=gtk_dialog_run(GTK_DIALOG(alertDlg));
+           ret=gtk_dialog_run (GTK_DIALOG(alertDlg));
            gtk_widget_destroy (GTK_WIDGET(alertDlg));
-           g_free(filename);
+           g_free (filename);
            return;
          }
 
@@ -1009,7 +1013,7 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
     
     gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>00:00:00</big></tt>");
     gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), 
-                  g_strdup_printf("<tt><small>/%s</small></tt>", (gchar*)
+                  g_strdup_printf ("<tt><small>/%s</small></tt>", (gchar*)
                      audio_gst_time_to_str(data->audio_total_duration)));
     g_free (filename);
     
@@ -1032,7 +1036,7 @@ on_AudioCloseFile_clicked  (GtkButton *button, APP_data *data)
   gchar *uri_path, *filename;
 
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1),"config");
+  keyString = g_object_get_data (G_OBJECT(window1),"config");
 
   // printf("demande libérer mémoire fichier audio ! \n");
     gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>--:--:--</big></tt>");
@@ -1062,7 +1066,7 @@ on_AudioCloseFile_clicked  (GtkButton *button, APP_data *data)
   CB : load a reference PDF file
 ***********************************/
 void
-on_loadPDF_clicked  (GtkButton *button, APP_data *data)
+	on_loadPDF_clicked (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
   GError* err = NULL;
@@ -1072,7 +1076,7 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
   gdouble width, height, ratio;
   GtkWidget *canvas;
   PopplerPage *page;
-  PopplerDocument *doc =NULL;
+  PopplerDocument *doc = NULL;
 
   GtkWidget *window1 = data->appWindow;
   keyString = g_object_get_data (G_OBJECT(window1),"config");
@@ -1088,23 +1092,24 @@ on_loadPDF_clicked  (GtkButton *button, APP_data *data)
   GtkWidget *dialog = create_loadFileDialog (data, _("Open PDF file ..."));
   /* we should replace home dir by the current path if it exists ! */
   tmpStr = g_key_file_get_string (keyString, "application", "current-PDF-file", NULL);
-  if(strlen(tmpStr)>0) {
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_path_get_dirname(tmpStr));
+  if(strlen (tmpStr)>0) {
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_path_get_dirname (tmpStr));
     g_free (tmpStr);
   }
-  else
+  else {
      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
-
+  }
+  
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
-  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+  if(gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy (GTK_WIDGET(dialog)); 
     /* we convert finename's path to URI path */
-    uri_path = g_filename_to_uri (filename, NULL,NULL);
+    uri_path = g_filename_to_uri (filename, NULL, NULL);
     /* we load PDF Poppler's doc */
     doc = poppler_document_new_from_file (uri_path, NULL, &err);
     g_free (uri_path);
-    if (!doc) {
+    if(!doc) {
         printf ("%s\n", err->message);
         g_error_free (err);
         return;
@@ -1175,28 +1180,28 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
   GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1), "config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
   GtkFileFilter *filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.pdf");
   gtk_file_filter_add_pattern (filter, "*.PDF");
   gtk_file_filter_set_name (filter, _("PDF files"));
-  filename = g_key_file_get_string(keyString, "application", "current-file-basename", NULL);
+  filename = g_key_file_get_string (keyString, "application", "current-file-basename", NULL);
 
   GtkWidget *dialog = create_saveFileDialog(data);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
-                         g_path_get_dirname(g_key_file_get_string(keyString, "application", "current-file", NULL) ));
+                         g_path_get_dirname(g_key_file_get_string (keyString, "application", "current-file", NULL) ));
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   /* we must extract a short filename */
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), g_strdup_printf("%s.PDF",filename));
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), g_strdup_printf ("%s.PDF",filename));
   /* run dialog */
-  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+  if (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
          newFilename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
          /* we check if filename has .pdf extension */
          if( !g_str_has_suffix (newFilename, ".PDF" ) && !g_str_has_suffix (newFilename, ".pdf" )) {
               /* we correct the filename */
-              tmpFileName = g_strdup_printf("%s.PDF", newFilename);
-              g_free(newFilename);
+              tmpFileName = g_strdup_printf ("%s.PDF", newFilename);
+              g_free (newFilename);
               newFilename = tmpFileName;
          }
          /* we must check if a file with same name exists */
@@ -1209,10 +1214,10 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
                           GTK_BUTTONS_OK_CANCEL,
                           _("The file :\n%s already exists !\nDo you really want to Overwrite an existing PDF file ?"),
                           newFilename);
-           if(gtk_dialog_run(GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
+           if(gtk_dialog_run (GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
               gtk_widget_destroy (GTK_WIDGET(alertDlg));
               gtk_widget_destroy (GTK_WIDGET(dialog));
-              g_free(newFilename);
+              g_free (newFilename);
               return;
            }
          }
@@ -1220,24 +1225,24 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
          tmpAuxFile = GetTempFileName("Redac");
          poppler_document_save (data->doc, g_filename_to_uri(tmpAuxFile, NULL,NULL),
                                 &err);    
-         g_object_unref(data->doc);
+         g_object_unref (data->doc);
          /* then we load temporary file to memory */
          data->doc = poppler_document_new_from_file(g_filename_to_uri(tmpAuxFile, NULL,NULL), NULL, &err);
-         g_free(tmpAuxFile);
+         g_free (tmpAuxFile);
          /* then we save to the TRUE path */
          poppler_document_save (data->doc, g_filename_to_uri(newFilename, NULL,NULL),
                                 &err);    
          /* we store PDF filename and path in config file */
-         g_key_file_set_string(keyString, "application", "current-PDF-file", newFilename);
-         g_key_file_set_string(keyString, "application", "current-PDF-file-basename", 
+         g_key_file_set_string (keyString, "application", "current-PDF-file", newFilename);
+         g_key_file_set_string (keyString, "application", "current-PDF-file-basename", 
                       g_filename_display_basename (newFilename)); 
-         g_free(newFilename);
+         g_free (newFilename);
          /* and we redraw the PDF window */
          PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
          update_PDF_state(data, PDF_NON_MODIF);
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
-  g_free(filename);
+  g_free (filename);
 }
 
 /*
@@ -1255,7 +1260,7 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
   GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 
   GtkWidget *window1 = data_app->appWindow;
-  keyString = g_object_get_data(G_OBJECT(window1), "config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
   GtkFileFilter *filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.png");
   gtk_file_filter_add_pattern (filter, "*.PNG");
@@ -1264,18 +1269,18 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
   GtkWidget *dialog = create_saveFileDialog(data_app);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
-                         g_path_get_dirname(g_key_file_get_string(keyString, "application", "current-file", NULL) ));
+                         g_path_get_dirname(g_key_file_get_string (keyString, "application", "current-file", NULL) ));
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   /* we must extract a short filename */
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), g_strdup_printf("%s.PNG",_("noname")));
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), g_strdup_printf ("%s.PNG",_("noname")));
   /* run dialog */
-  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+  if (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
          newFilename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
          /* we check if filename has .PNG extension */
          if( !g_str_has_suffix (newFilename, ".PNG" ) && !g_str_has_suffix (newFilename, ".png" )) {
               /* we correct the filename */
-              tmpFileName = g_strdup_printf("%s.PNG", newFilename);
-              g_free(newFilename);
+              tmpFileName = g_strdup_printf ("%s.PNG", newFilename);
+              g_free (newFilename);
               newFilename = tmpFileName;
          }
          /* we must check if a file with same name exists */
@@ -1287,10 +1292,10 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
                                       GTK_BUTTONS_OK_CANCEL,
                                       _("The file :%s exists !\nOverwrite existing file ?"),
                                       newFilename);
-           if(gtk_dialog_run(GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
+           if(gtk_dialog_run (GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
                 gtk_widget_destroy (GTK_WIDGET(alertDlg));
                 gtk_widget_destroy (GTK_WIDGET(dialog));
-                g_free(newFilename);
+                g_free (newFilename);
                 return;
            }
          }
@@ -1298,8 +1303,8 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
          pPixDatas=gdk_pixbuf_get_from_surface (data_app->Sketchsurface,
                              0,0,CROBAR_VIEW_MAX_WIDTH,CROBAR_VIEW_MAX_HEIGHT);
          gdk_pixbuf_save (pPixDatas, newFilename, "png", &error,  NULL);
-         g_object_unref(pPixDatas);
-         g_free(newFilename);
+         g_object_unref (pPixDatas);
+         g_free (newFilename);
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
 }
@@ -1314,8 +1319,8 @@ on_help_clicked   (GtkWidget  *win)
 {
   GtkWidget *dlg;
 
-  dlg = misc_create_help_dialog(win);
-  gtk_dialog_run(GTK_DIALOG(dlg));
+  dlg = misc_create_help_dialog (win);
+  gtk_dialog_run (GTK_DIALOG(dlg));
   gtk_widget_destroy (GTK_WIDGET(dlg));
 }
 
@@ -1324,7 +1329,7 @@ on_help_clicked   (GtkWidget  *win)
  callback : setup a new environment
 
 ***************************************/
-void new_project(GtkMenuItem *menuitem, APP_data  *user_data)
+void new_project (GtkMenuItem *menuitem, APP_data  *user_data)
 {
   GKeyFile *keyString;
   GtkTextBuffer *buffer;
@@ -1337,31 +1342,31 @@ void new_project(GtkMenuItem *menuitem, APP_data  *user_data)
   buffer = user_data->buffer;
   GtkWidget *window1 = user_data->appWindow;
 
-  keyString = g_object_get_data(G_OBJECT(window1), "config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
   /* first, we save once more time the current file */
-  path_to_file = g_key_file_get_string(keyString, "application", "current-file", NULL);
-  ret = save_gtk_rich_text(path_to_file, buffer);
-  g_free(path_to_file);
+  path_to_file = g_key_file_get_string (keyString, "application", "current-file", NULL);
+  ret = save_gtk_rich_text (path_to_file, buffer);
+  g_free (path_to_file);
   /* reset undo engine */
-  undo_free_all(user_data);
+  undo_free_all (user_data);
   /* now we clear the datas */
-  misc_clear_text(buffer, "left");
+  misc_clear_text (buffer, "left");
   
   /* we get the current date */
-  time ( &rawtime );
-  strftime(buffer_date, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
+  time (&rawtime);
+  strftime (buffer_date, 80, "%c", localtime (&rawtime));/* don't change parameter %x */
   /* now we set-up a new default filename */
-  path_to_file =  get_path_to_datas_file(buffer_date);
+  path_to_file =  get_path_to_datas_file (buffer_date);
   gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (user_data->builder, "labelMainTitle"))),
-                             g_strdup_printf(_("<small><b>%s</b></small>"), path_to_file));
+                             g_strdup_printf (_("<small><b>%s</b></small>"), path_to_file));
 
- // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf(_("Redac:%s"), path_to_file));
+ // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf (_("Redac:%s"), path_to_file));
   /* and we save the new "empty file" */
-  ret = save_gtk_rich_text(path_to_file, buffer);  
+  ret = save_gtk_rich_text (path_to_file, buffer);  
   /* rearrange list of recent files */
-  rearrange_recent_file_list(keyString);
+  rearrange_recent_file_list (keyString);
   /* we change the default values for gkeyfile */
-  store_current_file_in_keyfile(keyString, path_to_file, " ");
-  user_data->fPdfLoaded=FALSE;
+  store_current_file_in_keyfile (keyString, path_to_file, " ");
+  user_data->fPdfLoaded = FALSE;
 }
 
