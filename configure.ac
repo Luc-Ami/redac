@@ -1,7 +1,7 @@
 ### INITIALIZATION #############################################################
 # In this section we do preparations for initializing our build system.
 
-AC_INIT([redac], [0.1], [amiluc_bis@yahoo.fr])
+AC_INIT([redac], [0.2], [amiluc_bis@yahoo.fr])
 AC_CONFIG_SRCDIR([src/main.c])
 AM_INIT_AUTOMAKE([-W foreign])
 AM_SILENT_RULES([no])
@@ -33,6 +33,7 @@ PKG_CHECK_MODULES([REDAC], [
 GETTEXT_PACKAGE=${PACKAGE_TARNAME}
 AC_SUBST([GETTEXT_PACKAGE])
 AC_SUBST(ALL_LINGUAS) # veriy !
+AC_SUBST(LDFLAGS) 
 ### OUTPUT #####################################################################
 # After checking all this stuff, we must output our results to the rest of the
 # build system. That is what this section does.
