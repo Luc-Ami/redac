@@ -270,14 +270,14 @@ GtkWidget *create_menu_PDF (GtkWidget *win, APP_data *data_app)
 
   if(data_app->current_annot==NULL) {
     /* we deactivate menus since there isn't any annotation on current page */
-    gtk_widget_set_sensitive(menu1PDFEditAnnot, FALSE);
-    gtk_widget_set_sensitive(menu1PDFColorAnnot, FALSE);
-    gtk_widget_set_sensitive(menu1PDFRemoveAnnot, FALSE);
+    gtk_widget_set_sensitive (menu1PDFEditAnnot, FALSE);
+    gtk_widget_set_sensitive (menu1PDFColorAnnot, FALSE);
+    gtk_widget_set_sensitive (menu1PDFRemoveAnnot, FALSE);
   }
   else {/* we check if it's a text annot */
     if( poppler_annot_get_annot_type (data_app->current_annot)  !=POPPLER_ANNOT_TEXT && 
             poppler_annot_get_annot_type (data_app->current_annot)  !=POPPLER_ANNOT_FREE_TEXT)
-           gtk_widget_set_sensitive(menu1PDFEditAnnot, FALSE);
+           gtk_widget_set_sensitive (menu1PDFEditAnnot, FALSE);
   }
   g_signal_connect ((gpointer) menu1PDFEditAnnot, "activate",
                     G_CALLBACK (on_menuPDFEditAnnot),
@@ -448,58 +448,63 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   icon_strike = gtk_image_new_from_pixbuf(ico);
   g_object_unref(ico); 
 */
-  icon_strike =gtk_image_new_from_icon_name ("format-text-strikethrough-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  icon_strike = gtk_image_new_from_icon_name ("format-text-strikethrough-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
-  ico = gdk_pixbuf_new_from_xpm_data((const char **)highlight_xpm);
-  icon_highlight=gtk_image_new_from_pixbuf(ico);
+  ico = gdk_pixbuf_new_from_xpm_data ((const char **)highlight_xpm);
+  icon_highlight = gtk_image_new_from_pixbuf (ico);
   g_object_unref(ico); 
 
+/*
   if(fIsDark)
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)quotation_light_xpm);
+     ico = gdk_pixbuf_new_from_xpm_data ((const char **)quotation_light_xpm);
   else
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)quotation_xpm);
-  icon_quotation=gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
+     ico = gdk_pixbuf_new_from_xpm_data ((const char **)quotation_xpm);
+     
+  icon_quotation = gtk_image_new_from_pixbuf(ico);
+  g_object_unref (ico); 
+*/
 
+  icon_quotation = gtk_image_new_from_icon_name ("format-indent-more-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  
   /* edition buttons */
   /* formatting buttons */
 
   button_bold = gtk_toggle_tool_button_new ();
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_bold, -1);  
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_bold),icon_bold);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(button_bold), _("Toggle to/from bold either \nfor current selection\nor next typing."));
+  gtk_toolbar_insert  (GTK_TOOLBAR(toolbar), button_bold, -1);  
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_bold),icon_bold);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_bold), _("Toggle to/from bold either \nfor current selection\nor next typing."));
 
   button_italic = gtk_toggle_tool_button_new ();
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_italic, -1);  
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_italic, -1);  
 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_italic),icon_italic);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(button_italic), _("Toggle to/from italic either \nfor current selection\nor next typing."));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_italic),icon_italic);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_italic), _("Toggle to/from italic either \nfor current selection\nor next typing."));
   button_underline = gtk_toggle_tool_button_new ();
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_underline, -1); 
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_underline, -1); 
 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_underline),icon_underline);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(button_underline), _("Toggle to/from underline either \nfor current selection\nor next typing."));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_underline),icon_underline);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_underline), _("Toggle to/from underline either \nfor current selection\nor next typing."));
   /* other formattings */
    button_superscript = gtk_toggle_tool_button_new ();
-   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_superscript, -1); 
-   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_superscript),icon_superscript);
- gtk_widget_set_tooltip_text(GTK_WIDGET(button_superscript), _("Toggle to/from superscript either \nfor current selection\nor next typing."));
+   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_superscript, -1); 
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_superscript),icon_superscript);
+ gtk_widget_set_tooltip_text (GTK_WIDGET(button_superscript), _("Toggle to/from superscript either \nfor current selection\nor next typing."));
    button_subscript=gtk_toggle_tool_button_new ();
-   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_subscript, -1);    
-   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_subscript),icon_subscript);
- gtk_widget_set_tooltip_text(GTK_WIDGET(button_subscript), _("Toggle to/from subscript either \nfor current selection\nor next typing."));
+   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_subscript, -1);    
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_subscript),icon_subscript);
+ gtk_widget_set_tooltip_text (GTK_WIDGET(button_subscript), _("Toggle to/from subscript either \nfor current selection\nor next typing."));
    button_strikethrough=gtk_toggle_tool_button_new ();
-   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_strikethrough, -1); 
-   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_strikethrough),icon_strike);
- gtk_widget_set_tooltip_text(GTK_WIDGET(button_strikethrough), _("Toggle to/from strikethrough \nfor current selection\nor next typing."));
+   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_strikethrough, -1); 
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_strikethrough),icon_strike);
+ gtk_widget_set_tooltip_text (GTK_WIDGET(button_strikethrough), _("Toggle to/from strikethrough \nfor current selection\nor next typing."));
    button_highlight=gtk_toggle_tool_button_new ();
-   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_highlight, -1); 
-   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_highlight),icon_highlight);
- gtk_widget_set_tooltip_text(GTK_WIDGET(button_highlight), _("Apply highlighting \nfor current selection\nor next typing."));
+   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_highlight, -1); 
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_highlight),icon_highlight);
+ gtk_widget_set_tooltip_text (GTK_WIDGET(button_highlight), _("Apply highlighting \nfor current selection\nor next typing."));
    button_quotation=gtk_toggle_tool_button_new ();
-   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_quotation, -1); 
-   gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_quotation),icon_quotation);
-gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quotation style either \nfor current selection\nor next typing."));
+   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_quotation, -1); 
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_quotation),icon_quotation);
+gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quotation style either \nfor current selection\nor next typing."));
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_bold), FALSE);
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_italic), FALSE);
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_underline), FALSE);
@@ -515,32 +520,32 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
 
   GSList *group = NULL; 
 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonLeft), icon_left_format);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonLeft, -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonLeft), _("Align to left \nthe whole current paragraph.")); 
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonLeft), group);
-  group = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonLeft));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonLeft), icon_left_format);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonLeft, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonLeft), _("Align to left \nthe whole current paragraph.")); 
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonLeft), group);
+  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonLeft));
 
   pRadioButtonCenter = gtk_radio_tool_button_new(group);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonCenter, -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonCenter), _("Align to center \nthe whole current paragraph.")); 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonCenter), icon_center_format);
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonCenter), group);
-  group = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonCenter));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonCenter, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonCenter), _("Align to center \nthe whole current paragraph.")); 
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonCenter), icon_center_format);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonCenter), group);
+  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonCenter));
 
   pRadioButtonRight = gtk_radio_tool_button_new(group);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonRight, -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonRight), _("Align to right \nthe whole current paragraph.")); 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonRight), icon_right_format);
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonRight), group);
-  group = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonRight));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonRight, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonRight), _("Align to right \nthe whole current paragraph.")); 
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonRight), icon_right_format);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonRight), group);
+  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonRight));
 
   pRadioButtonFill = gtk_radio_tool_button_new(group);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonFill, -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonFill), _("Justify left AND right \nthe whole current paragraph.")); 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonFill), icon_fill_format);
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonFill), group);
-  group = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonFill));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonFill, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonFill), _("Justify left AND right \nthe whole current paragraph.")); 
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonFill), icon_fill_format);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonFill), group);
+  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonFill));
 
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(pRadioButtonLeft), TRUE);
 
@@ -548,18 +553,18 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   /* standard button */
 
   button_clear_format = gtk_tool_button_new (icon_clear_format,NULL);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_clear_format, -1);  
-  gtk_widget_set_tooltip_text(GTK_WIDGET(button_clear_format), _("Remove all character \nformattings from current selection.")); 
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_clear_format, -1);  
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_clear_format), _("Remove all character \nformattings from current selection.")); 
   /* undo button */
 
   button_undo = gtk_tool_button_new (icon_undo,NULL);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), button_undo, -1);   
-  gtk_widget_set_tooltip_text(GTK_WIDGET(button_undo), _("Undo last operation."));
-  gtk_widget_set_sensitive(GTK_WIDGET(button_undo), FALSE);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_undo, -1);   
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_undo), _("Undo last operation."));
+  gtk_widget_set_sensitive (GTK_WIDGET(button_undo), FALSE);
 
-  standardSeperator=gtk_separator_tool_item_new ();
-  gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(standardSeperator), TRUE);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), standardSeperator, -1);
+  standardSeperator = gtk_separator_tool_item_new ();
+  gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM(standardSeperator), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), standardSeperator, -1);
 
   /* clipboard mode radiobuttons */
   pRadioButtonTextSelect = gtk_radio_tool_button_new (NULL);
@@ -609,33 +614,33 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
 
   GSList *group_clip = NULL; 
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonTextSelect), icon_text_select);
-  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonTextSelect, -1);
-  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonTextSelect), _("Copy selected area inside PDF files\nto clipboard as pure text.")); 
+  gtk_toolbar_insert  (GTK_TOOLBAR(toolbar), pRadioButtonTextSelect, -1);
+  gtk_widget_set_tooltip_text  (GTK_WIDGET(pRadioButtonTextSelect), _("Copy selected area inside PDF files\nto clipboard as pure text.")); 
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect));
 
   pRadioButtonPictureSelect = gtk_radio_tool_button_new(group_clip);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonPictureSelect, -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonPictureSelect), _("Copy selected area inside PDF files or sketches \nto clipboard as pure image.")); 
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonPictureSelect), icon_picture_select);
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect), group_clip);
-  group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonPictureSelect, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonPictureSelect), _("Copy selected area inside PDF files or sketches \nto clipboard as pure image.")); 
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonPictureSelect), icon_picture_select);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect));
 
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(pRadioButtonTextSelect), TRUE);
 
-  pRadioButtonHiglightSelect=gtk_radio_tool_button_new(group_clip);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonHiglightSelect, -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonHiglightSelect), _("Highlight selected area inside PDF document. \nPlease don't forget to save your PDF document !"));
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonHiglightSelect), icon_highlight_select);
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect), group_clip);
-  group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect));
+  pRadioButtonHiglightSelect = gtk_radio_tool_button_new(group_clip);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonHiglightSelect, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiglightSelect), _("Highlight selected area inside PDF document. \nPlease don't forget to save your PDF document !"));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHiglightSelect), icon_highlight_select);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect));
 
-  pRadioButtonHiAnnotSelect=gtk_radio_tool_button_new(group_clip);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(pRadioButtonHiAnnotSelect), -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonHiAnnotSelect), _("Set-up text annotation inside \nselected area on PDF or sketch document. \nPlease don't forget to save your PDF/sketch document to keep \nyour changes !"));
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonHiAnnotSelect), icon_text_annot);
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect), group_clip);
-  group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect));
+  pRadioButtonHiAnnotSelect = gtk_radio_tool_button_new(group_clip);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(pRadioButtonHiAnnotSelect), -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiAnnotSelect), _("Set-up text annotation inside \nselected area on PDF or sketch document. \nPlease don't forget to save your PDF/sketch document to keep \nyour changes !"));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHiAnnotSelect), icon_text_annot);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect));
   /* sketch tools */
   /*
   if(fIsDark)
@@ -648,88 +653,88 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   icon_pencil = gtk_image_new_from_icon_name ("input-tablet-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);  
   
   
-  button_pencil= gtk_radio_tool_button_new(group_clip);
-  gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(button_pencil),icon_pencil); 
-  gtk_widget_set_tooltip_text(GTK_WIDGET(button_pencil), _("Freehand drawing tool"));
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(button_pencil), -1);
-  gtk_radio_tool_button_set_group(GTK_RADIO_TOOL_BUTTON(button_pencil), group_clip);
-  group_clip = gtk_radio_tool_button_get_group(GTK_RADIO_TOOL_BUTTON(button_pencil));
+  button_pencil = gtk_radio_tool_button_new(group_clip);
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_pencil),icon_pencil); 
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_pencil), _("Freehand drawing tool"));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(button_pencil), -1);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(button_pencil), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(button_pencil));
   
   /* color button */
   color_button_item = gtk_tool_item_new();
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(color_button_item), -1);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(color_button_item), _("Click here to choose color for :\n- highlighting of PDF areas.\n-annotation color for PDF and sketches documents.\n-pencil color for sketches."));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(color_button_item), -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(color_button_item), _("Click here to choose color for :\n- highlighting of PDF areas.\n-annotation color for PDF and sketches documents.\n-pencil color for sketches."));
   color_button=gtk_color_button_new (); 
-  gtk_container_add(GTK_CONTAINER(color_button_item), color_button);
+  gtk_container_add (GTK_CONTAINER(color_button_item), color_button);
   
   /* audio buttons */
   audioSeperator=gtk_separator_tool_item_new ();
-  gtk_separator_tool_item_set_draw(GTK_SEPARATOR_TOOL_ITEM(audioSeperator), TRUE);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audioSeperator), -1); 
+  gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM(audioSeperator), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audioSeperator), -1); 
  /* playing speed combobox */
-  GtkToolItem *audioPlaySpeedContainer=gtk_tool_item_new();
-  GtkWidget *audioPlaySpeed=gtk_combo_box_text_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(audioPlaySpeed), _("Choose here the playing speed. 1 for a normal speed,\nover 1 for a faster speed,\nunder 1 for a slower speed."));
+  GtkToolItem *audioPlaySpeedContainer = gtk_tool_item_new ();
+  GtkWidget *audioPlaySpeed = gtk_combo_box_text_new ();
+  gtk_widget_set_tooltip_text (GTK_WIDGET(audioPlaySpeed), _("Choose here the playing speed. 1 for a normal speed,\nover 1 for a faster speed,\nunder 1 for a slower speed."));
  // gtk_widget_show (audioPlaySpeed);
-  gtk_container_add(GTK_CONTAINER(audioPlaySpeedContainer), audioPlaySpeed);
+  gtk_container_add (GTK_CONTAINER(audioPlaySpeedContainer), audioPlaySpeed);
   gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.5"));
   gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.2"));
   gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.0"));
   gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.8"));
   gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.5"));
   gtk_combo_box_set_active (GTK_COMBO_BOX(audioPlaySpeed), 2);
-  gtk_widget_set_sensitive(GTK_WIDGET(audioPlaySpeed), FALSE);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), audioPlaySpeedContainer, -1);  
+  gtk_widget_set_sensitive (GTK_WIDGET(audioPlaySpeed), FALSE);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), audioPlaySpeedContainer, -1);  
 
-  iconButtonPlayAudio =gtk_image_new_from_icon_name ("media-playback-start-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
-  iconButtonPauseAudio =gtk_image_new_from_icon_name ("media-playback-pause-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
-  gtk_widget_show(iconButtonPauseAudio);
-  iconButtonHomeAudio=gtk_image_new_from_icon_name ("media-skip-backward-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
-  iconButtonGotoAudio=gtk_image_new_from_icon_name ("media-skip-forward-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
-  iconButtonGoJumpAudio=gtk_image_new_from_icon_name ("find-location-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonPlayAudio = gtk_image_new_from_icon_name ("media-playback-start-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonPauseAudio = gtk_image_new_from_icon_name ("media-playback-pause-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_widget_show (iconButtonPauseAudio);
+  iconButtonHomeAudio   = gtk_image_new_from_icon_name ("media-skip-backward-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonGotoAudio   = gtk_image_new_from_icon_name ("media-skip-forward-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  iconButtonGoJumpAudio = gtk_image_new_from_icon_name ("find-location-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   pRadioButtonPlayPauseAudio = gtk_tool_button_new (iconButtonPlayAudio,NULL);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonPlayPauseAudio, -1);  
-  //gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pRadioButtonPlayPauseAudio),iconButtonPlayAudio);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonPlayPauseAudio), _("Play or pause-rewind current audio file.\nRewind's length is defined in 'audio' settings."));
-  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonPlayPauseAudio), FALSE);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonPlayPauseAudio, -1);  
+  //gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonPlayPauseAudio),iconButtonPlayAudio);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonPlayPauseAudio), _("Play or pause-rewind current audio file.\nRewind's length is defined in 'audio' settings."));
+  gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonPlayPauseAudio), FALSE);
   /* counter */
-  GtkToolItem *audio_position=gtk_tool_item_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(audio_position), _("Position within current audio file"));
+  GtkToolItem *audio_position = gtk_tool_item_new();
+  gtk_widget_set_tooltip_text (GTK_WIDGET(audio_position), _("Position within current audio file"));
   GtkWidget *audio_position_label = gtk_label_new("<tt><big>--:--:--</big></tt>");/* tt for Monospace font family */
   gtk_label_set_use_markup (GTK_LABEL (audio_position_label), TRUE);
-  gtk_container_add(GTK_CONTAINER(audio_position), audio_position_label);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_position), -1);
-  gtk_widget_set_sensitive(GTK_WIDGET(audio_position), FALSE);
+  gtk_container_add (GTK_CONTAINER(audio_position), audio_position_label);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_position), -1);
+  gtk_widget_set_sensitive (GTK_WIDGET(audio_position), FALSE);
   /* total audio file duration */
-  GtkToolItem *audio_total=gtk_tool_item_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(audio_total), _("Total duration of current audio file"));
+  GtkToolItem *audio_total = gtk_tool_item_new();
+  gtk_widget_set_tooltip_text (GTK_WIDGET(audio_total), _("Total duration of current audio file"));
   GtkWidget *audio_total_label = gtk_label_new("<tt><small>/--:--:--</small></tt>");
   gtk_label_set_use_markup (GTK_LABEL (audio_total_label), TRUE);
-  gtk_container_add(GTK_CONTAINER(audio_total), audio_total_label);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_total), -1);
-  gtk_widget_set_sensitive(GTK_WIDGET(audio_total), FALSE);
+  gtk_container_add (GTK_CONTAINER(audio_total), audio_total_label);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_total), -1);
+  gtk_widget_set_sensitive (GTK_WIDGET(audio_total), FALSE);
   /* goto previous mark */
   pRadioButtonRewindAudio = gtk_tool_button_new (iconButtonHomeAudio,NULL);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonRewindAudio, -1);  
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonRewindAudio), _("Jump backward in current audio file.\nJump's length is defined in 'audio' settings."));
-  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonRewindAudio), FALSE);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonRewindAudio, -1);  
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonRewindAudio), _("Jump backward in current audio file.\nJump's length is defined in 'audio' settings."));
+  gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonRewindAudio), FALSE);
   /* goto next mark */
   pRadioButtonGotoAudio = gtk_tool_button_new (iconButtonGotoAudio,NULL);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonGotoAudio, -1);  
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonGotoAudio), _("Jump forward in current audio file.\nJump's length is defined in 'audio' settings."));
-  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonGotoAudio), FALSE);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonGotoAudio, -1);  
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonGotoAudio), _("Jump forward in current audio file.\nJump's length is defined in 'audio' settings."));
+  gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonGotoAudio), FALSE);
   /* jump to ... */
   pRadioButtonGoJumpAudio = gtk_tool_button_new (iconButtonGoJumpAudio,NULL);
-  gtk_toolbar_insert(GTK_TOOLBAR(toolbar), pRadioButtonGoJumpAudio, -1);  
-  gtk_widget_set_tooltip_text(GTK_WIDGET(pRadioButtonGoJumpAudio), _("Jump to a specifed position within current audio file."));
-  gtk_widget_set_sensitive(GTK_WIDGET(pRadioButtonGoJumpAudio), FALSE); 
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonGoJumpAudio, -1);  
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonGoJumpAudio), _("Jump to a specifed position within current audio file."));
+  gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonGoJumpAudio), FALSE); 
   
 
-  gtk_widget_show_all(toolbar);
+  gtk_widget_show_all (toolbar);
   /* set cSS states */
-  toggle_css_value(GTK_WIDGET(button_bold), FALSE);
-  toggle_css_value(GTK_WIDGET(button_italic), FALSE);
-  toggle_css_value(GTK_WIDGET(button_underline), FALSE);
+  toggle_css_value (GTK_WIDGET(button_bold), FALSE);
+  toggle_css_value (GTK_WIDGET(button_italic), FALSE);
+  toggle_css_value (GTK_WIDGET(button_underline), FALSE);
   /* accelerators - it's complex for GtkToggleTool buttons - we must get a pointer on the child inside the toggle 
 
    see : https://stackoverflow.com/questions/19657017/handling-clicked-accelerator-on-a-gtktoggletoolbutton-gtkmm 
@@ -776,35 +781,35 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   /* format callbacks */
-  g_signal_connect(G_OBJECT(button_bold), "toggled", 
+  g_signal_connect (G_OBJECT(button_bold), "toggled", 
         G_CALLBACK(on_bold_clicked), data_app);
-  g_signal_connect(G_OBJECT(button_italic), "toggled", 
+  g_signal_connect (G_OBJECT(button_italic), "toggled", 
         G_CALLBACK(on_italic_clicked), data_app);
-  g_signal_connect(G_OBJECT(button_underline), "toggled", 
+  g_signal_connect (G_OBJECT(button_underline), "toggled", 
         G_CALLBACK(on_underline_clicked), data_app);
   /* other formatings */
-  g_signal_connect(G_OBJECT(button_superscript), "toggled", 
+  g_signal_connect (G_OBJECT(button_superscript), "toggled", 
         G_CALLBACK(on_superscript_clicked), data_app);
-  g_signal_connect(G_OBJECT(button_subscript), "toggled", 
+  g_signal_connect (G_OBJECT(button_subscript), "toggled", 
         G_CALLBACK(on_subscript_clicked), data_app);
-  g_signal_connect(G_OBJECT(button_strikethrough), "toggled", 
+  g_signal_connect (G_OBJECT(button_strikethrough), "toggled", 
         G_CALLBACK(on_strikethrough_clicked), data_app);
-  g_signal_connect(G_OBJECT(button_highlight), "toggled", 
+  g_signal_connect (G_OBJECT(button_highlight), "toggled", 
         G_CALLBACK(on_highlight_clicked), data_app);
-  g_signal_connect(G_OBJECT(button_quotation), "toggled", 
+  g_signal_connect (G_OBJECT(button_quotation), "toggled", 
         G_CALLBACK(on_quotation_clicked), data_app);
 
-  g_signal_connect(G_OBJECT(button_clear_format), "clicked", 
+  g_signal_connect (G_OBJECT(button_clear_format), "clicked", 
         G_CALLBACK(on_clear_format_clicked), data_app);
-  g_signal_connect(G_OBJECT(button_undo), "clicked", 
+  g_signal_connect (G_OBJECT(button_undo), "clicked", 
         G_CALLBACK(on_undo_clicked), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonPlayPauseAudio), "clicked", 
+  g_signal_connect (G_OBJECT(pRadioButtonPlayPauseAudio), "clicked", 
         G_CALLBACK(on_play_pause_clicked), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonRewindAudio), "clicked", 
+  g_signal_connect (G_OBJECT(pRadioButtonRewindAudio), "clicked", 
         G_CALLBACK(on_jump_prev_clicked), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonGotoAudio), "clicked", 
+  g_signal_connect (G_OBJECT(pRadioButtonGotoAudio), "clicked", 
         G_CALLBACK(on_jump_next_clicked), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonGoJumpAudio), "clicked", 
+  g_signal_connect (G_OBJECT(pRadioButtonGoJumpAudio), "clicked", 
         G_CALLBACK(on_go_jump_clicked), data_app);
 
   g_signal_connect ((gpointer) audioPlaySpeed, "changed",
@@ -812,24 +817,24 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
                     data_app);
 
   /* for toogle radio buttons we must pass GSlist as parameter in order to get the Active button in group */
-  g_signal_connect(G_OBJECT(pRadioButtonLeft), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonLeft), "toggled", 
         G_CALLBACK(on_button_alignment_toggled), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonCenter), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonCenter), "toggled", 
         G_CALLBACK(on_button_alignment_toggled), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonRight), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonRight), "toggled", 
         G_CALLBACK(on_button_alignment_toggled), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonFill), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonFill), "toggled", 
         G_CALLBACK(on_button_alignment_toggled), data_app);
 
-  g_signal_connect(G_OBJECT(pRadioButtonTextSelect), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonTextSelect), "toggled", 
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonPictureSelect), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonPictureSelect), "toggled", 
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonHiglightSelect), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonHiglightSelect), "toggled", 
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
-  g_signal_connect(G_OBJECT(pRadioButtonHiAnnotSelect), "toggled", 
+  g_signal_connect (G_OBJECT(pRadioButtonHiAnnotSelect), "toggled", 
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
-  g_signal_connect(G_OBJECT(button_pencil), "toggled", 
+  g_signal_connect (G_OBJECT(button_pencil), "toggled", 
         G_CALLBACK(on_button_button_pencil_toggled), data_app);
 
   /* register objects */
@@ -867,7 +872,7 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(button_quotation), _("Toggle to/from quot
   GLADE_HOOKUP_OBJECT (window, audioPlaySpeed, "audioPlaySpeed");
 
   GLADE_HOOKUP_OBJECT (window, button_undo, "button_undo");
-  data_app->pBtnUndo=GTK_WIDGET(button_undo);
+  data_app->pBtnUndo = GTK_WIDGET(button_undo);
   return toolbar;
 }
 
@@ -987,7 +992,7 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   
   page_grid = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_grid")); 
  // gtk_box_set_homogeneous(GTK_BOX(page_grid), FALSE);
- // gtk_container_add( GTK_CONTAINER(page_frame), page_grid);
+ // gtk_container_add ( GTK_CONTAINER(page_frame), page_grid);
 
   page_title = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_title")); 
   
@@ -995,7 +1000,7 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
 //  gtk_widget_set_name(page_title, "page_title" );
 //  gtk_entry_set_max_length (GTK_ENTRY (page_title), 3);
 //  gtk_entry_set_width_chars (GTK_ENTRY (page_title), 3);
-//  gtk_widget_set_sensitive(GTK_WIDGET(page_title), FALSE);
+//  gtk_widget_set_sensitive (GTK_WIDGET(page_title), FALSE);
 //  gtk_widget_set_hexpand (page_title, TRUE);
 //  gtk_entry_set_has_frame(GTK_ENTRY(page_title), FALSE );
 //  gtk_box_pack_start(GTK_BOX(page_grid), page_title, TRUE, FALSE, 0);
@@ -1008,12 +1013,12 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
  // gtk_entry_set_width_chars (GTK_ENTRY (page_entry), 3);
 //  gtk_widget_set_hexpand (page_entry, TRUE);
 //  gtk_box_pack_start(GTK_BOX(page_grid), page_entry, TRUE, FALSE, 0);
- // gtk_widget_set_tooltip_text(page_entry, _("Type here the #of PDF page where you want to jump."));
+ // gtk_widget_set_tooltip_text (page_entry, _("Type here the #of PDF page where you want to jump."));
 
   page_label = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_label")); 
 //  gtk_entry_set_width_chars (GTK_ENTRY (page_label), 5);
 //  gtk_entry_set_text(GTK_ENTRY(page_label), _("of--"));
-//  gtk_widget_set_sensitive(GTK_WIDGET(page_label), FALSE);
+//  gtk_widget_set_sensitive (GTK_WIDGET(page_label), FALSE);
  // gtk_widget_set_hexpand (page_label, TRUE);
  // gtk_box_pack_start(GTK_BOX(page_grid), page_label, TRUE, FALSE, 0);
  // gtk_widget_set_name(page_label, "page_label");
@@ -1039,8 +1044,8 @@ GtkWidget *create_loadFileDialog (APP_data *data, gchar *sFileType) {
 
   loadFileDialog = gtk_file_chooser_dialog_new (sFileType, 
                               GTK_WINDOW(data->appWindow), GTK_FILE_CHOOSER_ACTION_OPEN, 
-                              ("_Cancel"),  GTK_RESPONSE_CANCEL,
-                              ("_Open"),  GTK_RESPONSE_OK,
+                              _("_Cancel"),  GTK_RESPONSE_CANCEL,
+                              _("_Open"),  GTK_RESPONSE_OK,
                               NULL);
                               
   g_object_set (loadFileDialog, "local-only", FALSE,  NULL);
@@ -1870,16 +1875,16 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gtk_widget_show (scrolledwindowPDF);
   viewportPDF = gtk_viewport_new (NULL,NULL);
   crPDF = PDF_prepare_drawable();
-  gtk_container_add(GTK_CONTAINER(viewportPDF), crPDF);  
-  gtk_container_add(GTK_CONTAINER(scrolledwindowPDF), viewportPDF);
+  gtk_container_add (GTK_CONTAINER(viewportPDF), crPDF);  
+  gtk_container_add (GTK_CONTAINER(scrolledwindowPDF), viewportPDF);
 
   /* and a paint/draw/hand notes scrolling window ! */
   scrolledwindowCrobar = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindowCrobar);
   viewCrobar = gtk_viewport_new (NULL,NULL);
   crCrobar = sketch_prepare_drawable();
-  gtk_container_add(GTK_CONTAINER(viewCrobar), crCrobar);  
-  gtk_container_add(GTK_CONTAINER(scrolledwindowCrobar), viewCrobar);
+  gtk_container_add (GTK_CONTAINER(viewCrobar), crCrobar);  
+  gtk_container_add (GTK_CONTAINER(scrolledwindowCrobar), viewCrobar);
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindow1),GTK_SHADOW_ETCHED_IN);
@@ -2013,31 +2018,31 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 
  /* callbacks */
  
-  g_signal_connect(buffer, "changed",
+  g_signal_connect (buffer, "changed",
         G_CALLBACK(update_statusbar), data);
 
-  g_signal_connect(buffer, "mark_set", 
+  g_signal_connect (buffer, "mark_set", 
         G_CALLBACK(mark_set_callback), data);
 
-  g_signal_connect(view, "cut-clipboard", 
+  g_signal_connect (view, "cut-clipboard", 
         G_CALLBACK(cut_to_clipboard), data);
 
-  g_signal_connect(view, "copy-clipboard", 
+  g_signal_connect (view, "copy-clipboard", 
         G_CALLBACK(copy_to_clipboard), data);
 
-  g_signal_connect(view, "paste-clipboard", 
+  g_signal_connect (view, "paste-clipboard", 
         G_CALLBACK(paste_clipboard), data);
 
-  g_signal_connect(view, "backspace", 
+  g_signal_connect (view, "backspace", 
         G_CALLBACK(backspace), data);
 
-  g_signal_connect(view, "delete-from-cursor", 
+  g_signal_connect (view, "delete-from-cursor", 
         G_CALLBACK(delete), data);
 
-  g_signal_connect(G_OBJECT(mainWindow), "delete_event",
+  g_signal_connect (G_OBJECT(mainWindow), "delete_event",
         G_CALLBACK(on_quit_clicked), data);
   /* keypress event in order to catch shortcuts WITHOUT widgets */
-  g_signal_connect(G_OBJECT(mainWindow), "key-press-event", 
+  g_signal_connect (G_OBJECT(mainWindow), "key-press-event", 
                    G_CALLBACK(key_event), data);
   
   g_signal_connect (scrolledwindow1, "size-allocate", G_CALLBACK (ScrollToEnd), data);
@@ -2052,23 +2057,23 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   g_signal_connect (G_OBJECT(stack), "notify::visible-child",
                   G_CALLBACK (on_stack_changed),
                   data);
-  g_signal_connect(G_OBJECT(crPDF), "draw",
+  g_signal_connect (G_OBJECT(crPDF), "draw",
 					 G_CALLBACK(draw_callback), data); 
  /* events to build selection rectangles on the PDF renderer */
-  g_signal_connect(G_OBJECT(crPDF), "button-press-event",
+  g_signal_connect (G_OBJECT(crPDF), "button-press-event",
 					 G_CALLBACK(on_PDF_draw_button_press_callback), data);
-  g_signal_connect(G_OBJECT(crPDF), "button-release-event",
+  g_signal_connect (G_OBJECT(crPDF), "button-release-event",
 					 G_CALLBACK(on_PDF_draw_button_release_callback), data);
-  g_signal_connect(G_OBJECT(crPDF), "motion-notify-event",
+  g_signal_connect (G_OBJECT(crPDF), "motion-notify-event",
 					 G_CALLBACK(on_PDF_draw_motion_event_callback), data);
   /* events for sketch area */
-  g_signal_connect(G_OBJECT(crCrobar), "draw",
+  g_signal_connect (G_OBJECT(crCrobar), "draw",
 					 G_CALLBACK(sketch_draw_callback), data); 
-  g_signal_connect(G_OBJECT(crCrobar), "button-press-event",
+  g_signal_connect (G_OBJECT(crCrobar), "button-press-event",
 					 G_CALLBACK(on_sketch_draw_button_press_callback), data);
-  g_signal_connect(G_OBJECT(crCrobar), "button-release-event",
+  g_signal_connect (G_OBJECT(crCrobar), "button-release-event",
 					 G_CALLBACK(on_sketch_draw_button_release_callback), data);
-  g_signal_connect(G_OBJECT(crCrobar), "motion-notify-event",
+  g_signal_connect (G_OBJECT(crCrobar), "motion-notify-event",
 					 G_CALLBACK(on_sketch_draw_motion_event_callback), data);
 
   misc_set_gui_in_editor_mode (data->appWindow, CURRENT_STACK_EDITOR); 
