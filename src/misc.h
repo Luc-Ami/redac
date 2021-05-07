@@ -77,7 +77,7 @@ typedef struct {
   gboolean    fPdfLoaded;
   gboolean    fAudioLoaded;
   gboolean    fAudioPlaying;
-  GtkApplication *app;
+  GApplication *app;
   GtkWidget    *window;
   GtkWidget    *appWindow;
   GtkWidget    *PDFdrawable;

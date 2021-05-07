@@ -83,17 +83,18 @@ redac_activate (GApplication *app, APP_data *data)
 
 int main (int argc, char *argv[]) {
   GtkApplication *app;
+  GApplicationFlags flags = G_APPLICATION_FLAGS_NONE;
   APP_data app_data;
   gint status;
 
   /* Initialize GStreamer */
   gst_init (&argc, &argv);
-  app = gtk_application_new ("org.gtk.redac", 0);
-  app_data.app = app;
-  g_signal_connect (app, "startup", G_CALLBACK (redac_startup), &app_data);
-  g_signal_connect (app, "activate", G_CALLBACK (redac_activate), &app_data);
+  app = gtk_application_new ("org.gtk.redac", flags);
+  app_data.app = G_APPLICATION (app);
+  g_signal_connect (app_data.app, "startup", G_CALLBACK (redac_startup), &app_data);
+  g_signal_connect (app_data.app, "activate", G_CALLBACK (redac_activate), &app_data);
   /* main loop */
-  status = g_application_run (G_APPLICATION (app), argc, argv);
+  status = g_application_run (G_APPLICATION (app_data.app), argc, argv);
 printf ("éyape builder \n");
   g_object_unref (app_data.builder);
   printf ("éyape app \n");

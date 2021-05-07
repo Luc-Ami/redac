@@ -720,10 +720,11 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
      //g_object_unref (data_app->spell);
 
      gst_element_set_state (data_app->pipeline, GST_STATE_NULL);
-          printf ("avant \n");
+
      if(data_app->pipeline)
           gst_object_unref (data_app->pipeline);
-      printf ("apres \n");
+      
+
      g_application_quit (G_APPLICATION(data_app->app));
   }
  return TRUE;
