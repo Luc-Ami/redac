@@ -441,10 +441,9 @@ void createGKeyFile (APP_data *data_app, GtkWidget *win)
  * Saves config file (config.ini) to disk, and frees associated memory.
  * Automatically called when save data is destroyed (i.e. user closed searchmonkey).
  ************************************************************************************/
-void destroyGKeyFile(APP_data *data_app, GtkWidget *win)
+void destroyGKeyFile (APP_data *data_app, GtkWidget *win)
 {
   GKeyFile *keyString = g_object_get_data (G_OBJECT(win),"config");
-  printf ("* GKeyfile destroyed successfully *\n");
 
   //  storeGKeyFile(keyString);
 
@@ -452,20 +451,24 @@ void destroyGKeyFile(APP_data *data_app, GtkWidget *win)
   if (data_app->gConfigFile != NULL) {
     g_free (data_app->gConfigFile);
   }
+  printf ("* GKeyfile destroyed successfully *\n");  
 }
 
-void storeGKeyFile (APP_data *data_app, GKeyFile *keyString)
+/* function non used, buggy */
+
+void storeGKeyFile2 (APP_data *data_app, GKeyFile *keyString)
 {
   gsize length;
   gchar **outText;// ancienne fiorme **ouText
+  gchar *outText1;
   GError *error = NULL;
   gchar *folderName;
   GtkWidget *okCancelDialog;
   
-     
+
   /* Write the configuration file to disk */
   folderName = g_path_get_dirname (data_app->gConfigFile);
-  outText = g_key_file_to_data (keyString, &length, &error);
+  outText1 = g_key_file_to_data (keyString, &length, &error);// retuens a newly allocated string holding the contents of the GKeyFile
 
   if(!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) {
     /* Unable to immediately write to file, so attempt to recreate folders */
@@ -478,6 +481,7 @@ void storeGKeyFile (APP_data *data_app, GKeyFile *keyString)
     }
   }
   
+  g_free (outText1);
   g_free (outText);
   g_free (folderName);
 }
