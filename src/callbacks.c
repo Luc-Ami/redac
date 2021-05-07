@@ -32,8 +32,8 @@
   global vars 
 *******************/
 
-static gboolean fdont_care=FALSE;
-static gboolean show_toolbar=TRUE;
+static gboolean fdont_care   = FALSE;
+static gboolean show_toolbar = TRUE;
 static gboolean fBold = FALSE;
 static gboolean fItalic = FALSE;
 static gboolean fUnderline = FALSE;
@@ -44,38 +44,39 @@ static gboolean fStrikethrough = FALSE;
 static gboolean fQuotation = FALSE;
 static gboolean fUserClickedButton = FALSE;
 static gint iPendingFormat = 0; /* a flag to report a formatting to the next call */
-static gint iPendingOffset=0, iCurrentOffset=0;
+static gint iPendingOffset = 0, iCurrentOffset = 0;
 static gint kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
 
 /****************************************
   callback : updade infos on statusbar 
 *****************************************/ 
-void update_statusbar(GtkTextBuffer *buffer, APP_data *data) 
+void update_statusbar (GtkTextBuffer *buffer, APP_data *data) 
 {
   gchar *msg;
   gint total_chars, total_words;
   GtkTextIter iter, start, end;
-  GtkWidget *window1=NULL, *button;
+  GtkWidget *window1 = NULL, *button;
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;
   GKeyFile *keyString;
   GtkTextView *view;
-  GtkStatusbar  *statusbar=data->statusbar1;
-static gint countchange=0;
-countchange++;
+  GtkStatusbar  *statusbar = data->statusbar1;
+  static gint countchange = 0;
+  
+  countchange++;
 
   window1 = data->appWindow;
-  view=data->view;
+  view    = data->view;
 
   fUserClickedButton = TRUE;
-  gtk_statusbar_pop(statusbar, 0); 
-  gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+  gtk_statusbar_pop (statusbar, 0); 
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
   /* we compute current char offset */
-  iCurrentOffset=gtk_text_iter_get_offset(&iter);
-  total_chars = gtk_text_buffer_get_char_count(buffer);
-  total_words = countWords(buffer);
-  msg = g_strdup_printf (_("Paragraph: %d/%d  %d Chars  %d Words"),gtk_text_iter_get_line(&iter)+1,  
-                           gtk_text_buffer_get_line_count(buffer), total_chars, total_words);/* page=(row+1)/66+1 */
+  iCurrentOffset = gtk_text_iter_get_offset (&iter);
+  total_chars = gtk_text_buffer_get_char_count (buffer);
+  total_words = countWords (buffer);
+  msg = g_strdup_printf (_("Paragraph: %d/%d  %d Chars  %d Words"),gtk_text_iter_get_line (&iter)+1,  
+                           gtk_text_buffer_get_line_count (buffer), total_chars, total_words);/* page=(row+1)/66+1 */
   /* section to apply marking on last char */
 
   start = iter;
@@ -84,13 +85,13 @@ countchange++;
   iPendingFormat++;
   tagTable1 = gtk_text_buffer_get_tag_table (buffer);
   if(fBold) {
-     tag = gtk_text_tag_table_lookup(tagTable1, "bold");
-     if(iCurrentOffset<iPendingOffset) {
+     tag = gtk_text_tag_table_lookup (tagTable1, "bold");
+     if(iCurrentOffset < iPendingOffset) {
         fBold          = FALSE;
         iPendingFormat = -1;
      }
      else {
-         if(iPendingFormat>1) {
+         if(iPendingFormat > 1) {
            start = end;      
            gtk_text_iter_set_offset  (&start,iPendingOffset);
            gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
@@ -481,7 +482,7 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
   mode and if, we close the selection window
  Then we switch according to clipmode
 ********************************************/
-gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event, APP_data *data)
+gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 {
   GdkPixbuf *pPixDatas = NULL;
   gint root_xs, root_ys;
@@ -2024,14 +2025,14 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
   GtkWidget *tView, *bPrev, *bNext, *bReplace, *pReplaceEntry, *hits;
   const gchar *tmpStr;
   GtkTextIter iter, start;
-  gint i=0, j, count=0;
+  gint i = 0, j, count = 0;
   gboolean sensitive = TRUE;
   
  
   GtkWidget *window1 = data->appWindow;
   buffer = data->buffer;
 
-  tView=lookup_widget(GTK_WIDGET(window1), "view");
+  tView = lookup_widget(GTK_WIDGET(window1), "view");
   hits = lookup_widget(GTK_WIDGET(window1), "labelHits");
   bPrev = lookup_widget(GTK_WIDGET(window1), "buttonNextOccurrence");
   bNext = lookup_widget(GTK_WIDGET(window1), "buttonPrevOccurrence");
@@ -2051,13 +2052,13 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
               /* we must reset the GList */
                 search_free_PDF_search_datas(data);
                 if(data->doc) {
-                  count=0;
-                  data->pdfSearch=NULL;
-                  i=search_hits_inside_PDF_document(data, tmpStr);
+                  count = 0;
+                  data->pdfSearch = NULL;
+                  i = search_hits_inside_PDF_document (data, tmpStr);
                   /* we draw rectangles */
                   PDF_display_page (window1,data->curPDFpage, data->doc, data);                        
-                  search_draw_selection_current_page(data->curPDFpage, data, data->surface);                   
-                  update_statusbarPDF(data);
+                  search_draw_selection_current_page (data->curPDFpage, data, data->surface);                   
+                  update_statusbarPDF (data);
                   //gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
                   /* we check results */
                  // GList *l=g_list_first(data->pdfSearch);
@@ -2073,24 +2074,24 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
            }
         }/* strlen */
         /* we activate or not the [next] and [previous] buttons */
-        if(i<2) {
-          sensitive=FALSE;
+        if(i < 2) {
+          sensitive = FALSE;
         }
         gtk_widget_set_sensitive (GTK_WIDGET(bNext),sensitive);
         gtk_widget_set_sensitive (GTK_WIDGET(bPrev),sensitive);
-        if(i>0) {
-          sensitive=TRUE;
+        if(i > 0) {
+          sensitive = TRUE;
         }
-        if(data->currentStack==CURRENT_STACK_EDITOR) {
+        if(data->currentStack == CURRENT_STACK_EDITOR) {
             gtk_widget_set_sensitive (GTK_WIDGET(bReplace),sensitive);
             gtk_widget_set_sensitive (GTK_WIDGET(pReplaceEntry),sensitive);
         }
-        gtk_label_set_text(GTK_LABEL(hits), g_strdup_printf (_("%d hits"), i));
+        gtk_label_set_text (GTK_LABEL(hits), g_strdup_printf (_("%d hits"), i));
         /* we get a pointer on current position */
-        gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+        gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
         gtk_text_buffer_get_start_iter (buffer, &start);
-        if(data->currentStack==CURRENT_STACK_EDITOR) {
-            find(tView, buffer, tmpStr, &start,0);
+        if(data->currentStack == CURRENT_STACK_EDITOR) {
+            find (tView, buffer, tmpStr, &start,0);
         }
         else {
              printf ("request to find inside PDF \n");
@@ -2506,7 +2507,7 @@ gboolean timeout_quick_save (APP_data *data)
   keypress events 
 *******************************/
 gboolean
-key_event(GtkWidget *widget, GdkEventKey *event, APP_data *data)
+key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
 {
   GtkWidget *search_entry, *replace_entry, *page_entry;
   gchar *tmpStr;
@@ -3014,14 +3015,14 @@ gboolean on_PDF_scroll_event (GtkWidget *widget, GdkEvent *event, APP_data *data
 
   scroll_event = (GdkEventScroll *) event;
 
-  if(scroll_event->delta_y<0) {
+  if(scroll_event->delta_y < 0) {
     /* smooth scroll Up */
-    PDF_moveUp(widget, data);
+    PDF_moveUp (widget, data);
   }
 
-  if(scroll_event->delta_y>0) {
+  if(scroll_event->delta_y > 0) {
     /* smooth scroll down */
-    PDF_moveDown(widget, data);
+    PDF_moveDown (widget, data);
   }
    return TRUE;  
 }
@@ -3053,32 +3054,32 @@ void on_menuCenteredPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
 **************************************/
 void on_menuPDFEditAnnot(GtkMenuItem *menuitem, APP_data *user_data)
 {
-  gchar *tmpStr=NULL;
+  gchar *tmpStr = NULL;
 
-  if(user_data->undo.annotStr!=NULL)
+  if(user_data->undo.annotStr != NULL)
            g_free (user_data->undo.annotStr);
-  user_data->undo.annotStr=g_strdup_printf ("%s", poppler_annot_get_contents ( user_data->current_annot));
+  user_data->undo.annotStr = g_strdup_printf ("%s", poppler_annot_get_contents ( user_data->current_annot));
 
-  tmpStr=dialog_add_text_annotation(user_data->appWindow, poppler_annot_get_contents ( user_data->current_annot), user_data);
-  if(tmpStr!=NULL) {
+  tmpStr = dialog_add_text_annotation(user_data->appWindow, poppler_annot_get_contents ( user_data->current_annot), user_data);
+  if(tmpStr != NULL) {
      /* undo engine */
-     user_data->undo.curStack=CURRENT_STACK_PDF;
-     user_data->undo.opCode=OP_SET_ANNOT_STR;
-     user_data->undo.pix=NULL;
-     user_data->undo.x1=user_data->x1;
-     user_data->undo.y1=user_data->y1;
-     user_data->undo.x2=user_data->x2;
-     user_data->undo.y2=user_data->y2;
-     user_data->undo.PDFpage=user_data->curPDFpage;
-     undo_push(user_data->currentStack, OP_SET_ANNOT_STR, user_data);
+     user_data->undo.curStack = CURRENT_STACK_PDF;
+     user_data->undo.opCode   = OP_SET_ANNOT_STR;
+     user_data->undo.pix      = NULL;
+     user_data->undo.x1       = user_data->x1;
+     user_data->undo.y1       = user_data->y1;
+     user_data->undo.x2       = user_data->x2;
+     user_data->undo.y2       = user_data->y2;
+     user_data->undo.PDFpage  = user_data->curPDFpage;
+     undo_push (user_data->currentStack, OP_SET_ANNOT_STR, user_data);
      poppler_annot_set_contents (user_data->current_annot,tmpStr);
   }
   else { 
     g_free (user_data->undo.annotStr);
-    user_data->undo.annotStr=NULL;
+    user_data->undo.annotStr = NULL;
   }
   g_free (tmpStr);
-  PDF_display_page(user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
+  PDF_display_page (user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
 }
 
 /*************************************
@@ -3203,20 +3204,20 @@ on_play_pause_clicked (GtkButton *button, APP_data *data)
   }
   else {
    /* we change the icon to pause || */
-    gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")  ), 
+    gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")  ), 
                        GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPauseAudio")));
     /* thus we must (re)start playing */
-    data->fAudioPlaying=TRUE;
+    data->fAudioPlaying = TRUE;
     gst_element_set_state (data->pipeline, GST_STATE_PLAYING);
   }
   /*  display current position */
   ret=FALSE;
-  audio_get_position(data->pipeline, &pos );
-  data->audio_current_position=pos;
+  audio_get_position (data->pipeline, &pos);
+  data->audio_current_position = pos;
   /* we change the position display */
   gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(data->appWindow), "audio_position_label")), 
                            g_strdup_printf ("<tt><big>%s</big></tt>", 
-                           audio_gst_time_to_str(data->audio_current_position))); 
+                           audio_gst_time_to_str (data->audio_current_position))); 
 }
 
 /*************************************
@@ -3367,46 +3368,46 @@ gboolean timeout_audio_display_position ( APP_data *data)
 /**************************/
 /* audio speed call back */
 /**************************/
-void on_audioPlaySpeed_changed(GtkComboBox *combobox, APP_data *data)
+void on_audioPlaySpeed_changed (GtkComboBox *combobox, APP_data *data)
 {
   gdouble speed;
   gint64 pos;
   GstEvent *seek_event;/* see : https://stackoverflow.com/questions/29222275/how-to-modify-playback-speed-of-audio-stream-in-gstreamer */
   gboolean result;
 
-  speed=gtk_combo_box_get_active (GTK_COMBO_BOX(lookup_widget(GTK_WIDGET(data->appWindow), "audioPlaySpeed")));
+  speed = gtk_combo_box_get_active (GTK_COMBO_BOX(lookup_widget(GTK_WIDGET(data->appWindow), "audioPlaySpeed")));
   switch((gint)speed) {
     case 0:{
-       speed=1.5;
+       speed = 1.5;
        break;
     }
     case 1:{
-       speed=1.2;
+       speed = 1.2;
        break;
     }
     case 2:{
-       speed=1;
+       speed = 1;
        break;
     }
     case 3:{
-       speed=0.8;
+       speed = 0.8;
        break;
     }
     case 4:{
-       speed=0.5;
+       speed = 0.5;
        break;
     }
     default:{
       printf ("* unknown error on playing speed selection ! *\n");
-      speed=1;
+      speed = 1;
     }
   }/* end switch */
   /* we set the new speed */
-  audio_get_position(data->pipeline, &pos );
-  data->audio_current_position=pos;
+  audio_get_position (data->pipeline, &pos );
+  data->audio_current_position = pos;
   seek_event = gst_event_new_seek (speed, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
         GST_SEEK_TYPE_SET, pos, GST_SEEK_TYPE_NONE, 0);
-  result=gst_element_send_event(data->pipeline, seek_event);
+  result = gst_element_send_event (data->pipeline, seek_event);
   if(!result) {
      printf ("* Warning ! Can't set up the requested audio speed ! *\n");
   }
@@ -3445,9 +3446,9 @@ void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data)
 }
 
 void
-on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data)
+  on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data)
 {
-  on_help_clicked(data->appWindow);
+  on_help_clicked (data->appWindow);
   return;
 }
 
@@ -3461,11 +3462,25 @@ void ScrollToEnd (GtkWidget *widget, GdkRectangle *allocation, APP_data *data)
   GtkAdjustment *adj;
   GtkWidget *scrolledwindow1;
 
-  if (widget != NULL) { }
-  if (allocation != NULL) { }
+  if(widget != NULL) { }
+  if(allocation != NULL) { }
 
   scrolledwindow1 = lookup_widget (GTK_WIDGET(data->appWindow), "scrolledwindow1");
   adj = gtk_scrolled_window_get_vadjustment
         (GTK_SCROLLED_WINDOW (scrolledwindow1));
   gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
+}
+
+/**********************************************
+ *  callabck to catch close window event
+ * (delete event)
+ * ******************************************/
+gboolean on_close_window_clicked (GtkWidget *widget,
+                              GdkEvent  *event,
+                              APP_data   *data)
+{
+	
+	printf ("signal delete window \n");
+	on_quit_clicked (data->appWindow, event, data);
+	return TRUE;
 }

@@ -95,10 +95,10 @@ int main (int argc, char *argv[]) {
   g_signal_connect (app_data.app, "activate", G_CALLBACK (redac_activate), &app_data);
   /* main loop */
   status = g_application_run (G_APPLICATION (app_data.app), argc, argv);
-printf ("éyape builder \n");
+
   g_object_unref (app_data.builder);
-  printf ("éyape app \n");
+
   g_object_unref (app);
-printf ("éyape retour main \n");
+
   return status;
 }

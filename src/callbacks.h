@@ -163,4 +163,8 @@ void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data);
 
 void on_keyHelp1_activate (GtkMenuItem  *menuitem, APP_data *data);
 void ScrollToEnd (GtkWidget *widget, GdkRectangle *allocation, APP_data *data);
+gboolean on_close_window_clicked (GtkWidget *widget,
+                              GdkEvent  *event,
+                              APP_data   *data);
+
 #endif /* CALLBACKS_H */

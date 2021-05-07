@@ -134,7 +134,7 @@ void get_theme_selection_color (GtkWidget *widget)
 {
   GdkRGBA  color1, color2;
 
-  GdkScreen* screen = gdk_screen_get_default();
+  GdkScreen* screen = gdk_screen_get_default ();
   GtkStyleContext* style_context = gtk_widget_get_style_context(widget);
 
   gtk_style_context_get (style_context, GTK_STATE_FLAG_SELECTED,
@@ -159,7 +159,7 @@ static gboolean widget_is_dark (GtkWidget *widget)
   /* check the TEXT color is the best way, since a background can be an image, not a text !*/
   gtk_style_context_get_color (style_context, GTK_STATE_FLAG_NORMAL, &fg);
   
-  textAvg = fg.red+fg.green+fg.blue;
+  textAvg = fg.red + fg.green + fg.blue;
 
   if (textAvg >1.5)  
      return TRUE;
@@ -195,10 +195,10 @@ void sketch_prepare (APP_data *data )
   GdkRGBA color;
 
   cr = cairo_create (data->Sketchsurface);
-  color.red=g_key_file_get_double (data->keystring, "sketch", "paper.color.red", NULL);
-  color.green=g_key_file_get_double (data->keystring, "sketch", "paper.color.green", NULL);
-  color.blue=g_key_file_get_double (data->keystring, "sketch", "paper.color.blue", NULL);
-  color.alpha=1;
+  color.red   = g_key_file_get_double (data->keystring, "sketch", "paper.color.red", NULL);
+  color.green = g_key_file_get_double (data->keystring, "sketch", "paper.color.green", NULL);
+  color.blue  = g_key_file_get_double (data->keystring, "sketch", "paper.color.blue", NULL);
+  color.alpha = 1;
   cairo_set_source_rgb (cr, color.red, color.green, color.blue);
   cairo_rectangle (cr, 0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
   cairo_fill (cr);
@@ -396,7 +396,7 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   GtkToolItem *color_button_item;
   GtkWidget *color_button;
   GtkAccelGroup *accel_group;
-  gboolean fIsDark=FALSE;
+  gboolean fIsDark = FALSE;
   /* audio section */
   GtkToolItem *audioSeperator;
   GtkToolItem *pRadioButtonPlayPauseAudio;
@@ -664,7 +664,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   color_button_item = gtk_tool_item_new();
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(color_button_item), -1);
   gtk_widget_set_tooltip_text (GTK_WIDGET(color_button_item), _("Click here to choose color for :\n- highlighting of PDF areas.\n-annotation color for PDF and sketches documents.\n-pencil color for sketches."));
-  color_button=gtk_color_button_new (); 
+  color_button = gtk_color_button_new (); 
   gtk_container_add (GTK_CONTAINER(color_button_item), color_button);
   
   /* audio buttons */
@@ -708,7 +708,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   /* total audio file duration */
   GtkToolItem *audio_total = gtk_tool_item_new();
   gtk_widget_set_tooltip_text (GTK_WIDGET(audio_total), _("Total duration of current audio file"));
-  GtkWidget *audio_total_label = gtk_label_new("<tt><small>/--:--:--</small></tt>");
+  GtkWidget *audio_total_label = gtk_label_new ("<tt><small>/--:--:--</small></tt>");
   gtk_label_set_use_markup (GTK_LABEL (audio_total_label), TRUE);
   gtk_container_add (GTK_CONTAINER(audio_total), audio_total_label);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(audio_total), -1);
@@ -955,7 +955,7 @@ void UI_statusbar (GtkWidget *window, GtkWidget *grid, APP_data *data)
 
   /* callbacks are inside main.ui file */
 
-  data->statusbar1 =statusbar;
+  data->statusbar1 = statusbar;
   
   GLADE_HOOKUP_OBJECT (window, buttonNextOccurrence, "buttonNextOccurrence");
   GLADE_HOOKUP_OBJECT (window, buttonPrevOccurrence, "buttonPrevOccurrence");
@@ -1881,26 +1881,26 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   /* and a paint/draw/hand notes scrolling window ! */
   scrolledwindowCrobar = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindowCrobar);
-  viewCrobar = gtk_viewport_new (NULL,NULL);
-  crCrobar = sketch_prepare_drawable();
+  viewCrobar = gtk_viewport_new (NULL, NULL);
+  crCrobar = sketch_prepare_drawable ();
   gtk_container_add (GTK_CONTAINER(viewCrobar), crCrobar);  
   gtk_container_add (GTK_CONTAINER(scrolledwindowCrobar), viewCrobar);
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindow1),GTK_SHADOW_ETCHED_IN);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow1),GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindowPDF), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindowPDF),GTK_SHADOW_ETCHED_IN);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindowPDF),GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindowCrobar), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW (scrolledwindowCrobar),GTK_SHADOW_ETCHED_IN);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindowCrobar),GTK_SHADOW_ETCHED_IN);
 
   /* main Gtk text view */
   view = prepare_view ();
   gtk_container_add (GTK_CONTAINER (scrolledwindow1), view);
 
   /* place stack */ 
-  gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindow1), "Note", _("Notes"));
-  gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowPDF), "Refe", _("Reference"));
-  gtk_stack_add_titled(stack, GTK_WIDGET(scrolledwindowCrobar), "Sket", _("Sketch"));
+  gtk_stack_add_titled (stack, GTK_WIDGET(scrolledwindow1), "Note", _("Notes"));
+  gtk_stack_add_titled (stack, GTK_WIDGET(scrolledwindowPDF), "Refe", _("Reference"));
+  gtk_stack_add_titled (stack, GTK_WIDGET(scrolledwindowCrobar), "Sket", _("Sketch"));
   /* set-up default font for text view */
   set_up_view (mainWindow, data);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(view));
@@ -1951,13 +1951,13 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   /* we parse datas from config file */
 
   /* we get the configuration file */
-  data->gConfigFile=g_build_filename(g_get_user_config_dir (), 
+  data->gConfigFile = g_build_filename(g_get_user_config_dir (), 
                        "/redac/", KILOWRITER_CONFIG, NULL); /* Create hidden directory to store Kilowriter data */
   /* we check if the directory already exists */
   if(!g_file_test (data->gConfigFile, G_FILE_TEST_EXISTS)) {
      printf ("* config.ini file absent or corrupted ! *\n");
      /* we create the directory */
-     gint i=g_mkdir (g_strdup_printf ("%s/redac/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
+     gint i = g_mkdir (g_strdup_printf ("%s/redac/", g_get_user_config_dir ()), S_IRWXU);/* i's a macro from gstdio.h */
   }
 
   createGKeyFile (data, mainWindow);
@@ -1965,25 +1965,25 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 
   keyString = g_object_get_data (G_OBJECT(mainWindow), "config");
   /* same for application */
-  data->keystring = keyString;
-  data->iAudioSmartRew=g_key_file_get_double (keyString, "application", "audio-file-rewind-step", NULL);
-  data->iAudioSmartJump=g_key_file_get_double (keyString, "application", "audio-file-marks-step", NULL);
+  data->keystring       = keyString;
+  data->iAudioSmartRew  = g_key_file_get_double (keyString, "application", "audio-file-rewind-step", NULL);
+  data->iAudioSmartJump = g_key_file_get_double (keyString, "application", "audio-file-marks-step", NULL);
 
-  misc_set_font_color_settings(data );
+  misc_set_font_color_settings (data);
 
   /* we paint sketch background now */
   sketch_prepare (data);
 
   /* reload last document */
-  gchar *s1 = g_key_file_get_string(keyString, "application", "current-file", NULL);
-  if(load_gtk_rich_text(s1, buffer, mainWindow, data)!=0) {
-     misc_clear_text(buffer, "left");
+  gchar *s1 = g_key_file_get_string (keyString, "application", "current-file", NULL);
+  if(load_gtk_rich_text (s1, buffer, mainWindow, data)!=0) {
+     misc_clear_text (buffer, "left");
      printf ("* can't reload last work or it's the first start of this software ! *\n");
      /* the default filename is built inside gKeyfile if it isn"t already exists ! */
      /* then we must add a default file name for default path ; in other case, we'll get a segfault */
      /* we get the current date */
      time (&rawtime);
-     strftime(buffer_date, 80, "%c", localtime (&rawtime));/* don't change parameter %x */
+     strftime( buffer_date, 80, "%c", localtime (&rawtime));/* don't change parameter %x */
      /* now we set-up a new default filename */
      path_to_file =  get_path_to_datas_file (buffer_date);
      gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
@@ -1994,17 +1994,18 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
      /* we change the default values for gkeyfile */
      store_current_file_in_keyfile (keyString, path_to_file, "[...]");
   }
-  else
-     store_current_file_in_keyfile(keyString, s1, misc_get_extract_from_document(data ));  
+  else {
+     store_current_file_in_keyfile (keyString, s1, misc_get_extract_from_document (data));  
+  }
   g_free (s1);
 
   /*  reload last PDF file ? */
   gtk_widget_hide (lookup_widget(GTK_WIDGET(data->appWindow),"image_pdf_modif"));
-  s1 = g_key_file_get_string(keyString, "application", "current-PDF-file", NULL);
-  if(g_key_file_get_boolean(keyString, "application", "autoreload-PDF",NULL )) {
+  s1 = g_key_file_get_string (keyString, "application", "current-PDF-file", NULL);
+  if(g_key_file_get_boolean (keyString, "application", "autoreload-PDF",NULL )) {
      if(g_file_test (s1, G_FILE_TEST_EXISTS) ){
         /* reset default PDF zoom ratio */
-        data->PDFratio = g_key_file_get_double (keyString, "reference-document", "zoom", NULL);
+        data->PDFratio   = g_key_file_get_double (keyString, "reference-document", "zoom", NULL);
         data->curPDFpage = g_key_file_get_integer (keyString, "reference-document", "page", NULL);
         quick_load_PDF (s1, data);
      }
@@ -2040,12 +2041,13 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
         G_CALLBACK(delete), data);
 
   g_signal_connect (G_OBJECT(mainWindow), "delete_event",
-        G_CALLBACK(on_quit_clicked), data);
+        G_CALLBACK(on_close_window_clicked), data);
   /* keypress event in order to catch shortcuts WITHOUT widgets */
   g_signal_connect (G_OBJECT(mainWindow), "key-press-event", 
                    G_CALLBACK(key_event), data);
   
   g_signal_connect (scrolledwindow1, "size-allocate", G_CALLBACK (ScrollToEnd), data);
+  
   g_signal_connect (G_OBJECT(scrolledwindowPDF), "size-allocate",
                   G_CALLBACK (on_PDF_size_changed),
                   data);

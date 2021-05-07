@@ -741,10 +741,10 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
           gst_object_unref (data_app->pipeline);
      }
       
-printf ("arrivé ici dans Quit \n");
      g_application_quit (G_APPLICATION(data_app->app));
-     printf ("après g_app qui \n");
+
   }
+  
  return FALSE;// Manadtory : returns FALSE because of g_application mecjanism ! */
 }
 

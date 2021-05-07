@@ -236,30 +236,30 @@ entry : window1 == mainWindow
 void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
 {
   /* redio tool buttons upper toolbar */
-  GtkWidget *pSearchEntry=lookup_widget(window1, "search_entry"); 
-  GtkWidget *pNext=lookup_widget(window1, "buttonNextOccurrence");   
-  GtkWidget *pPrev=lookup_widget(window1, "buttonPrevOccurrence");
-  GtkWidget *pButtonText= lookup_widget(window1, "pRadioButtonTextSelect");
-  GtkWidget *pButtonPict= lookup_widget(window1, "pRadioButtonPictureSelect");
-  GtkWidget *pButtonHigh= lookup_widget(window1,"pRadioButtonHiglightSelect");
-  GtkWidget *pButtonAnnot= lookup_widget(window1,"pRadioButtonHiAnnotSelect");
-  GtkWidget *pButtonZoomIn=lookup_widget(window1,"buttonZoomIn");
-  GtkWidget *pButtonZoomOut=lookup_widget(window1,"buttonZoomOut");
-  GtkWidget *pbuttonZoomFitBest=lookup_widget(window1,"buttonZoomFitBest");
-  GtkWidget *pButtonPencil=lookup_widget(window1,"button_pencil");
-  GtkWidget *pLabelPDFMod=lookup_widget(window1,"PDF_modified_label");
-  GtkWidget *pg_frame= lookup_widget(GTK_WIDGET(window1), "page_frame"); 
-  GtkWidget *pg_title= lookup_widget(GTK_WIDGET(window1), "page_title"); 
-  GtkWidget *pg_entry= lookup_widget(GTK_WIDGET(window1), "page_entry"); 
-  GtkWidget *pg_label= lookup_widget(GTK_WIDGET(window1), "page_label"); 
-  GtkWidget *pg_labelHitsFrame= lookup_widget(GTK_WIDGET(window1), "labelHitsFrame"); 
-  GtkWidget *pLabelHits=lookup_widget(GTK_WIDGET(window1), "labelHits"); 
+  GtkWidget *pSearchEntry = lookup_widget(window1, "search_entry"); 
+  GtkWidget *pNext = lookup_widget(window1, "buttonNextOccurrence");   
+  GtkWidget *pPrev = lookup_widget(window1, "buttonPrevOccurrence");
+  GtkWidget *pButtonText = lookup_widget(window1, "pRadioButtonTextSelect");
+  GtkWidget *pButtonPict = lookup_widget(window1, "pRadioButtonPictureSelect");
+  GtkWidget *pButtonHigh = lookup_widget(window1,"pRadioButtonHiglightSelect");
+  GtkWidget *pButtonAnnot = lookup_widget(window1,"pRadioButtonHiAnnotSelect");
+  GtkWidget *pButtonZoomIn = lookup_widget(window1,"buttonZoomIn");
+  GtkWidget *pButtonZoomOut = lookup_widget(window1,"buttonZoomOut");
+  GtkWidget *pbuttonZoomFitBest = lookup_widget(window1,"buttonZoomFitBest");
+  GtkWidget *pButtonPencil = lookup_widget(window1,"button_pencil");
+  GtkWidget *pLabelPDFMod = lookup_widget(window1,"PDF_modified_label");
+  GtkWidget *pg_frame = lookup_widget(GTK_WIDGET(window1), "page_frame"); 
+  GtkWidget *pg_title = lookup_widget(GTK_WIDGET(window1), "page_title"); 
+  GtkWidget *pg_entry = lookup_widget(GTK_WIDGET(window1), "page_entry"); 
+  GtkWidget *pg_label = lookup_widget(GTK_WIDGET(window1), "page_label"); 
+  GtkWidget *pg_labelHitsFrame = lookup_widget(GTK_WIDGET(window1), "labelHitsFrame"); 
+  GtkWidget *pLabelHits = lookup_widget(GTK_WIDGET(window1), "labelHits"); 
   /* find and change buttons, statusbar */
-  GtkWidget *pButtonReplace= lookup_widget(window1, "buttonReplace");
+  GtkWidget *pButtonReplace = lookup_widget(window1, "buttonReplace");
   GtkWidget *pReplaceEntry = lookup_widget(window1, "replace_entry");
   /* remove searchentry and remove all found and highlighted text */
-  gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
-  gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
+  gtk_entry_set_text (GTK_ENTRY(pSearchEntry),"");
+  gtk_label_set_text (GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
   gtk_widget_set_sensitive (pSearchEntry, TRUE);
   gtk_widget_set_sensitive (pButtonText, FALSE);
@@ -410,41 +410,43 @@ void update_PDF_state (APP_data *data, gint state)
   }/* end switch */   
 }
 
-void update_statusbarPDF(APP_data *data) 
+void update_statusbarPDF (APP_data *data) 
 {
-  gchar *msg, *filename, *tmpStr=NULL;
-  GtkWidget *window1=data->appWindow;
-  GKeyFile *keyString=data->keystring;
+  gchar *msg, *filename, *tmpStr = NULL;
+  GtkWidget *window1 = data->appWindow;
+  GKeyFile *keyString = data->keystring;
   GtkWidget *statusbar = GTK_STATUSBAR(data->statusbar1);
 
-  GtkWidget *pg_entry= lookup_widget(GTK_WIDGET(window1), "page_entry"); 
-  GtkWidget *pg_label= lookup_widget(GTK_WIDGET(window1), "page_label"); 
-  gtk_entry_set_text(GTK_ENTRY(pg_entry),g_strdup_printf("%d",data->curPDFpage+1));
-  if(data->doc)
+  GtkWidget *pg_entry = lookup_widget(GTK_WIDGET(window1), "page_entry"); 
+  GtkWidget *pg_label = lookup_widget(GTK_WIDGET(window1), "page_label"); 
+  gtk_entry_set_text (GTK_ENTRY(pg_entry), g_strdup_printf ("%d",data->curPDFpage+1));
+  if(data->doc) {
      gtk_widget_set_sensitive (pg_entry, TRUE);
-
-  gtk_entry_set_text(GTK_ENTRY(pg_label),g_strdup_printf(_("of %d"),data->totalPDFpages));
+  }
+  
+  gtk_entry_set_text (GTK_ENTRY(pg_label), g_strdup_printf(_("of %d"), data->totalPDFpages));
 
   //gtk_label_set_markup (GTK_LABEL (pg_label),g_strdup_printf(_("of %d"),data->totalPDFpages));
 
-  filename= g_key_file_get_string(keyString, "application", "current-PDF-file-basename", NULL);
-  if(strlen(filename)>36) {
-     tmpStr=g_strdup_printf("%s...", g_strndup (filename,36));
-     g_free(filename);
-     filename=tmpStr;
+  filename = g_key_file_get_string(keyString, "application", "current-PDF-file-basename", NULL);
+  if(strlen (filename) > 36) {
+     tmpStr = g_strdup_printf("%s...", g_strndup (filename,36));
+     g_free (filename);
+     filename = tmpStr;
   }
-  gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0); 
+  gtk_statusbar_pop (GTK_STATUSBAR(statusbar), 0); 
   if(data->doc) {
-      msg = g_strdup_printf(_("PDF : %s"), filename);
-      g_free(filename);
+      msg = g_strdup_printf (_("PDF : %s"), filename);
+      g_free (filename);
   }
-  else
-      msg=g_strdup_printf("%s",_("No PDF Document"));
-  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, msg);
-  g_free(msg);
+  else {
+      msg = g_strdup_printf ("%s",_("No PDF Document"));
+  }
+  gtk_statusbar_push (GTK_STATUSBAR(statusbar), 0, msg);
+  g_free (msg);
 }
 
-void update_statusbarSketch(APP_data *data) 
+void update_statusbarSketch (APP_data *data) 
 {
   GtkStatusbar  *statusbar;
   gchar *msg;
