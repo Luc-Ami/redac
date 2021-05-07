@@ -483,7 +483,7 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
 ********************************************/
 gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event, APP_data *data)
 {
-  GdkPixbuf *pPixDatas;
+  GdkPixbuf *pPixDatas = NULL;
   gint root_xs, root_ys;
 
   if(!data->button_pressed || !data->doc)
@@ -511,10 +511,13 @@ gboolean on_PDF_draw_button_release_callback(GtkWidget *widget, GdkEvent *event,
                              data->w, data->h);
    
          /* save pixbuf to ClipBoard */
-         GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-         gtk_clipboard_set_image   (clipboard, pPixDatas);
-         g_object_unref (pPixDatas);
-         misc_display_clipboard_image_info (data);
+         if(pPixDatas) {
+			// GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+			 gtk_clipboard_set_image (data->clipboard, pPixDatas);
+			 g_object_unref (pPixDatas);
+			 misc_display_clipboard_image_info (data);
+		 }
+
        }
        break;
      }
@@ -3026,12 +3029,12 @@ gboolean on_PDF_scroll_event (GtkWidget *widget, GdkEvent *event, APP_data *data
 /*************************************
   CB : called by paste in sketch menu
 **************************************/
-void on_menuPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
+void on_menuPasteSketch (GtkMenuItem *menuitem, APP_data *user_data)
 {
 
   gtk_widget_destroy (GTK_WIDGET(lookup_widget(GTK_WIDGET(menuitem), "menu1Sketch")));
-  if(clipboard_paste_image(user_data, FALSE)!=0)
-               printf ("* can't paste inside sketch *\n"); 
+  if(clipboard_paste_image (user_data, FALSE)!=0)
+               printf ("* Redac critical : can't paste inside sketch *\n"); 
 }
 
 /*************************************
@@ -3040,8 +3043,8 @@ void on_menuPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
 **************************************/
 void on_menuCenteredPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
 {
-  if(clipboard_paste_image(user_data, TRUE)!=0)
-               printf ("* can't paste inside sketch *\n"); 
+  if(clipboard_paste_image (user_data, TRUE) !=0)
+               printf ("* Redac critical : can't paste inside sketch *\n"); 
 }
 
 /*************************************

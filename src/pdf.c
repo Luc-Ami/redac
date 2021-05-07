@@ -481,7 +481,7 @@ void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page,
 void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page, 
                              GtkWidget *sw, APP_data *data)
 {
-  gchar *tmpStr;
+  gchar *tmpStr = NULL;
   PopplerPage *page;
   PopplerRectangle selection; /* in original PDF points 4 gdouble bounding rectnagle coord*/
   gdouble ratio, v_v_adj, v_h_adj;
@@ -505,8 +505,13 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   tmpStr = poppler_page_get_selected_text (page, POPPLER_SELECTION_GLYPH, &selection);
 
   /* copy text to ClipBoard */
-  GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_set_text (clipboard, tmpStr, -1);
+
+  if(tmpStr) {
+	if(strlen(tmpStr)>0) {
+		// GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+		gtk_clipboard_set_text (data->clipboard, tmpStr, -1);
+	}
+  }
   g_object_unref (page);
   /* we test if selected area if empty of text */
   if(tmpStr) {

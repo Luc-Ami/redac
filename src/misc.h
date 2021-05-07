@@ -116,6 +116,7 @@ typedef struct {
   GstElement          *pipeline;
   gint64              audio_total_duration;
   gint64              audio_current_position;
+  GtkClipboard* clipboard;
 } APP_data;
 
 typedef struct {

@@ -36,16 +36,16 @@ gboolean mkFullDir (gchar *folderName, gint mode)
   gint i = 0;
   
   /* Completely split folderName into parts */
-  folderParts = g_strsplit_set(folderName, G_DIR_SEPARATOR_S, -1);
-  partialFolderName = g_strdup(folderName);
+  folderParts = g_strsplit_set (folderName, G_DIR_SEPARATOR_S, -1);
+  partialFolderName = g_strdup (folderName);
   pPartialFolderName = partialFolderName;
 
   while (folderParts[i] != NULL) {
-    pPartialFolderName = g_stpcpy(pPartialFolderName, folderParts[i]);
-    pPartialFolderName = g_stpcpy(pPartialFolderName, G_DIR_SEPARATOR_S);
+    pPartialFolderName = g_stpcpy (pPartialFolderName, folderParts[i]);
+    pPartialFolderName = g_stpcpy (pPartialFolderName, G_DIR_SEPARATOR_S);
     
     if (!g_file_test (partialFolderName, G_FILE_TEST_IS_DIR)) {
-      g_mkdir(partialFolderName, mode);
+      g_mkdir (partialFolderName, mode);
     }
     i++;
   }
@@ -62,25 +62,26 @@ gboolean mkFullDir (gchar *folderName, gint mode)
  from Intel's conman, so many thanks !
   here : https://kernel.googlesource.com/pub/scm/network/connman/connman/+/2ea605a3fe31f03384fa3ad0f01a901da3a7c095/src/storage.c
 *******************************************/
-static GKeyFile *storage_load(const char *pathname)
+static GKeyFile *storage_load (const char *pathname)
 {
-	GKeyFile *keyfile = NULL;
-	GError *error = NULL;
-	keyfile = g_key_file_new();
-	if (!g_key_file_load_from_file(keyfile, pathname, 0, &error)) {
-		printf("Unable to load %s: %s", pathname, error->message);
-		g_clear_error(&error);
-		g_key_file_free(keyfile);
+	GKeyFile *keyfile	 = NULL;
+	GError *error 	     = NULL;
+	keyfile = g_key_file_new ();
+	if (!g_key_file_load_from_file (keyfile, pathname, 0, &error)) {
+		printf ("Unable to load %s: %s", pathname, error->message);
+		g_clear_error (&error);
+		g_key_file_free (keyfile);
 		keyfile = NULL;
 	}
 	return keyfile;
 }
+
 /***********************************
 
  store all program's settings
 
 ************************************/
-gint storage_save( gchar *pathname, APP_data *data_app)
+gint storage_save (gchar *pathname, APP_data *data_app)
 {
   gchar *data = NULL, buffer[81];
   gsize length = 0;
@@ -94,7 +95,7 @@ gint storage_save( gchar *pathname, APP_data *data_app)
 
   keyString = g_object_get_data (G_OBJECT(data_app->appWindow), "config"); 
   /* we get the current RGBA color */
-  pBtnColor=lookup_widget(GTK_WIDGET(data_app->appWindow), "color_button");
+  pBtnColor = lookup_widget(GTK_WIDGET(data_app->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
 
   gchar* tmpStr = g_strdup_printf (_(" %s settings auto-generated - Do not edit!"), "Redac 0.1");
@@ -115,14 +116,14 @@ gint storage_save( gchar *pathname, APP_data *data_app)
 
   /* we get the current date */
   time (&rawtime );
-  strftime (buffer, 80, "%c", localtime(&rawtime));
+  strftime (buffer, 80, "%c", localtime (&rawtime));
 
   if(!g_key_file_get_string (keyString, "application", "current-file", NULL)) {
-       printf ("* invalid file name *\n");
+       printf ("* Redac critical : configuration file,  invalid file name *\n");
        g_key_file_set_string (keyString, "application", "current-file", g_strdup_printf ("Redac-%s.kw", buffer));
   }
   if(!g_key_file_get_string (keyString, "application", "current-PDF-file", NULL)) {
-       printf ("* invalid file name *\n");
+       printf ("* Redac critical : configuration file, invalid file name *\n");
        g_key_file_set_string (keyString, "application", "current-PDF-file", "");
   }
 
@@ -163,7 +164,7 @@ void createNewKeyFile (APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     g_key_file_set_integer (keyString, "application", "geometry.height", width_height[1]);
     /* we get the current date */
     time (&rawtime);
-    strftime (buffer, 80, "%c", localtime(&rawtime));/* don't change parameter %x */
+    strftime (buffer, 80, "%c", localtime (&rawtime));/* don't change parameter %x */
   
     g_key_file_set_string (keyString, "application", "current-file", get_path_to_datas_file(buffer));
 
@@ -174,22 +175,22 @@ void createNewKeyFile (APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
 
     g_free (tmpStr2);
     /* general settings */
-    g_key_file_set_boolean(keyString, "application", "interval-save", FALSE);
-    g_key_file_set_boolean(keyString, "application", "autoreload-PDF", FALSE);
-    g_key_file_set_boolean(keyString, "application", "audio-file-loaded", FALSE);
-    g_key_file_set_double(keyString, "application", "audio-file-rewind-step", 2.0);
-    g_key_file_set_double(keyString, "application", "audio-file-marks-step", 15.0);
-    g_key_file_set_boolean(keyString, "application", "audio-auto-rewind", TRUE);
+    g_key_file_set_boolean (keyString, "application", "interval-save", FALSE);
+    g_key_file_set_boolean (keyString, "application", "autoreload-PDF", FALSE);
+    g_key_file_set_boolean (keyString, "application", "audio-file-loaded", FALSE);
+    g_key_file_set_double (keyString, "application", "audio-file-rewind-step", 2.0);
+    g_key_file_set_double (keyString, "application", "audio-file-marks-step", 15.0);
+    g_key_file_set_boolean (keyString, "application", "audio-auto-rewind", TRUE);
     g_key_file_set_integer (keyString, "application", "interval-save-frequency", 5);
-    g_key_file_set_boolean(keyString, "application", "prompt-before-quit", TRUE);
-    g_key_file_set_boolean(keyString, "application", "prompt-before-overwrite", TRUE);
+    g_key_file_set_boolean (keyString, "application", "prompt-before-quit", TRUE);
+    g_key_file_set_boolean (keyString, "application", "prompt-before-overwrite", TRUE);
     /* PDF file */
     g_key_file_set_string (keyString, "application", "current-PDF-file", "");
     g_key_file_set_string (keyString, "application", "current-PDF-file-basename", "");
     /* default foreground color */
-    g_key_file_set_double(keyString, "application", "fg.color.red", 0.15);
-    g_key_file_set_double(keyString, "application", "fg.color.green", 0.94);
-    g_key_file_set_double(keyString, "application", "fg.color.blue", 0.09);
+    g_key_file_set_double (keyString, "application", "fg.color.red", 0.15);
+    g_key_file_set_double (keyString, "application", "fg.color.green", 0.94);
+    g_key_file_set_double (keyString, "application", "fg.color.blue", 0.09);
 
     /* audio */
     /* recent files */
@@ -201,30 +202,30 @@ void createNewKeyFile (APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     }
     /* editor */
     /* text color */
-    g_key_file_set_double(keyString, "editor", "text.color.red", 0);
-    g_key_file_set_double(keyString, "editor", "text.color.green", 0);
-    g_key_file_set_double(keyString, "editor", "text.color.blue", 0);
+    g_key_file_set_double (keyString, "editor", "text.color.red", 0);
+    g_key_file_set_double (keyString, "editor", "text.color.green", 0);
+    g_key_file_set_double (keyString, "editor", "text.color.blue", 0);
     /* background color : cream */
-    g_key_file_set_double(keyString, "editor", "paper.color.red", 0.984);
-    g_key_file_set_double(keyString, "editor", "paper.color.green", 0.9764);
-    g_key_file_set_double(keyString, "editor", "paper.color.blue", 0.9451);
+    g_key_file_set_double (keyString, "editor", "paper.color.red", 0.984);
+    g_key_file_set_double (keyString, "editor", "paper.color.green", 0.9764);
+    g_key_file_set_double (keyString, "editor", "paper.color.blue", 0.9451);
     /* default text font */
     g_key_file_set_string (keyString, "editor", "font", "Sans 12");
     /* PDF */
-    g_key_file_set_double(keyString, "reference-document", "zoom", 1);
-    g_key_file_set_integer(keyString, "reference-document", "page", 0);
+    g_key_file_set_double (keyString, "reference-document", "zoom", 1);
+    g_key_file_set_integer (keyString, "reference-document", "page", 0);
     /* background color : white */
-    g_key_file_set_double(keyString, "reference-document", "paper.color.red", 1);
-    g_key_file_set_double(keyString, "reference-document", "paper.color.green", 1);
-    g_key_file_set_double(keyString, "reference-document", "paper.color.blue", 1);
+    g_key_file_set_double (keyString, "reference-document", "paper.color.red", 1);
+    g_key_file_set_double (keyString, "reference-document", "paper.color.green", 1);
+    g_key_file_set_double (keyString, "reference-document", "paper.color.blue", 1);
     /* sketch */
     /* background color : white */
-    g_key_file_set_double(keyString, "sketch", "paper.color.red", 1);
-    g_key_file_set_double(keyString, "sketch", "paper.color.green", 1);
-    g_key_file_set_double(keyString, "sketch", "paper.color.blue", 1);
+    g_key_file_set_double (keyString, "sketch", "paper.color.red", 1);
+    g_key_file_set_double (keyString, "sketch", "paper.color.green", 1);
+    g_key_file_set_double (keyString, "sketch", "paper.color.blue", 1);
     /* default text font */
     g_key_file_set_string (keyString, "sketch", "font", "Sans 14");
-    g_key_file_set_double(keyString, "sketch", "pen-width", 2);
+    g_key_file_set_double (keyString, "sketch", "pen-width", 2);
 
     gchar *context = g_key_file_to_data (keyString, NULL, &error);
     g_file_set_contents (data_app->gConfigFile, context, -1, NULL);
@@ -237,7 +238,7 @@ void createNewKeyFile (APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
  * Attempts to load the searchmonkey config.ini file.
  * If invalid, or non-existant, creates new config file.
  */
-void createGKeyFile(APP_data *data_app, GtkWidget *win)
+void createGKeyFile (APP_data *data_app, GtkWidget *win)
 {
   GKeyFile *keyString;
   gint i, width, height, pos_x, pos_y;
@@ -251,197 +252,203 @@ void createGKeyFile(APP_data *data_app, GtkWidget *win)
 
   if(!g_key_file_load_from_file (keyString, data_app->gConfigFile,
                                   G_KEY_FILE_KEEP_COMMENTS,
-                                  NULL)) {printf("pb =%s\n",data_app->gConfigFile );
-    createNewKeyFile(data_app, win, keyString);
+                                  NULL)) {printf ("pb =%s\n",data_app->gConfigFile );
+    createNewKeyFile (data_app, win, keyString);
   } 
   /* we read datas for config.ini file */
 
-  if (g_key_file_has_key(keyString, "application", "geometry.width", NULL)) {
+  if(g_key_file_has_key (keyString, "application", "geometry.width", NULL)) {
     width = g_key_file_get_integer (keyString, "application", "geometry.width",  NULL);  
   }
-  else width =980;
-  if (g_key_file_has_key(keyString, "application", "geometry.height", NULL)) {
+  else {
+	width = 980;
+  }
+  
+  if(g_key_file_has_key (keyString, "application", "geometry.height", NULL)) {
     height = g_key_file_get_integer (keyString, "application", "geometry.height",  NULL);  
   }
-  else height =700;
+  else {
+	   height =700;
+  }
+  
   pos_x = 64;
   pos_y = 64;
-  if (g_key_file_has_key(keyString, "application", "geometry.x", NULL)) {
+  if(g_key_file_has_key (keyString, "application", "geometry.x", NULL)) {
     pos_x = g_key_file_get_integer (keyString, "application", "geometry.x",  NULL);  
   }
-  if (g_key_file_has_key(keyString, "application", "geometry.y", NULL)) {
+  if (g_key_file_has_key (keyString, "application", "geometry.y", NULL)) {
     pos_y = g_key_file_get_integer (keyString, "application", "geometry.y",  NULL);  
   }
 
-  gtk_window_move(GTK_WINDOW(win), pos_x, pos_y);
+  gtk_window_move (GTK_WINDOW(win), pos_x, pos_y);
   gtk_window_resize (GTK_WINDOW(win), width, height);
   /* some stuff about default file */
-  if(!g_key_file_has_key(keyString, "application", "current-file", NULL)) { 
+  if(!g_key_file_has_key (keyString, "application", "current-file", NULL)) { 
     /* we get the current date */
-    time ( &rawtime );
-    strftime(buffer, 80, "%c", localtime(&rawtime));
+    time (&rawtime);
+    strftime(buffer, 80, "%c", localtime (&rawtime));
     g_key_file_set_string (keyString, "application", "current-file", 
-                      get_path_to_datas_file(buffer));
+                      get_path_to_datas_file (buffer));
   }
   /* general settings */
-  if(!g_key_file_has_key(keyString, "application", "interval-save", NULL)) {
-    g_key_file_set_boolean(keyString, "application", "interval-save", FALSE);
+  if(!g_key_file_has_key (keyString, "application", "interval-save", NULL)) {
+    g_key_file_set_boolean (keyString, "application", "interval-save", FALSE);
   }
-  if(!g_key_file_has_key(keyString, "application", "autoreload-PDF", NULL)) {
-    g_key_file_set_boolean(keyString, "application", "autoreload-PDF", FALSE);
+  if(!g_key_file_has_key (keyString, "application", "autoreload-PDF", NULL)) {
+    g_key_file_set_boolean (keyString, "application", "autoreload-PDF", FALSE);
   }
-  if(!g_key_file_has_key(keyString, "application", "audio-auto-rewind", NULL)) {
-    g_key_file_set_boolean(keyString, "application", "audio-auto-rewind", FALSE);
+  if(!g_key_file_has_key (keyString, "application", "audio-auto-rewind", NULL)) {
+    g_key_file_set_boolean (keyString, "application", "audio-auto-rewind", FALSE);
   }
 
-  if(!g_key_file_has_key(keyString, "application", "interval-save-frequency", NULL)) {
+  if(!g_key_file_has_key (keyString, "application", "interval-save-frequency", NULL)) {
     g_key_file_set_integer (keyString, "application", "interval-save-frequency", 5);
   }
-  if(!g_key_file_has_key(keyString, "application", "prompt-before-quit", NULL)) {
-    g_key_file_set_boolean(keyString, "application", "prompt-before-quit", TRUE);
+  if(!g_key_file_has_key (keyString, "application", "prompt-before-quit", NULL)) {
+    g_key_file_set_boolean (keyString, "application", "prompt-before-quit", TRUE);
   }
-  if(!g_key_file_has_key(keyString, "application", "prompt-before-overwrite", NULL)) {
-    g_key_file_set_boolean(keyString, "application", "prompt-before-overwrite", TRUE);
+  if(!g_key_file_has_key (keyString, "application", "prompt-before-overwrite", NULL)) {
+    g_key_file_set_boolean (keyString, "application", "prompt-before-overwrite", TRUE);
   }
-  if(!g_key_file_has_key(keyString, "application", "audio-file-loaded", NULL)) {
-    g_key_file_set_boolean(keyString, "application", "audio-file-loaded", FALSE);
+  if(!g_key_file_has_key (keyString, "application", "audio-file-loaded", NULL)) {
+    g_key_file_set_boolean (keyString, "application", "audio-file-loaded", FALSE);
   }
-  if(!g_key_file_has_key(keyString, "application", "audio-file-rewind-step", NULL)) {
-    g_key_file_set_double(keyString, "application", "audio-file-rewind-step", 2.0);
+  if(!g_key_file_has_key (keyString, "application", "audio-file-rewind-step", NULL)) {
+    g_key_file_set_double (keyString, "application", "audio-file-rewind-step", 2.0);
   }
-  if(!g_key_file_has_key(keyString, "application", "audio-file-marks-step", NULL)) {
-    g_key_file_set_double(keyString, "application", "audio-file-marks-step", 15.0);
+  if(!g_key_file_has_key (keyString, "application", "audio-file-marks-step", NULL)) {
+    g_key_file_set_double (keyString, "application", "audio-file-marks-step", 15.0);
   }
 
   /* get and store the basename */
-  tmpStr= g_key_file_get_string (keyString, "application", "current-file", NULL);
+  tmpStr = g_key_file_get_string (keyString, "application", "current-file", NULL);
   g_key_file_set_string (keyString, "application", "current-file-basename", 
                       g_filename_display_basename (tmpStr));  
   /* default forreground color */
-   if(!g_key_file_has_key(keyString, "application", "fg.color.red", NULL)) { 
-      g_key_file_set_double(keyString, "application", "fg.color.red", 0.15);
+   if(!g_key_file_has_key (keyString, "application", "fg.color.red", NULL)) { 
+      g_key_file_set_double (keyString, "application", "fg.color.red", 0.15);
    }
-   if(!g_key_file_has_key(keyString, "application", "fg.color.green", NULL)) { 
-      g_key_file_set_double(keyString, "application", "fg.color.green", 0.94);
+   if(!g_key_file_has_key (keyString, "application", "fg.color.green", NULL)) { 
+      g_key_file_set_double (keyString, "application", "fg.color.green", 0.94);
    }
-   if(!g_key_file_has_key(keyString, "application", "fg.color.blue", NULL)) { 
-      g_key_file_set_double(keyString, "application", "fg.color.blue", 0.09);
+   if(!g_key_file_has_key (keyString, "application", "fg.color.blue", NULL)) { 
+      g_key_file_set_double (keyString, "application", "fg.color.blue", 0.09);
    }
   /* set default value for color chooser button */
-  pBtnColor=lookup_widget(GTK_WIDGET(win), "color_button");
-  color.red=g_key_file_get_double(keyString, "application", "fg.color.red", NULL);
-  color.green=g_key_file_get_double(keyString, "application", "fg.color.green", NULL);
-  color.blue=g_key_file_get_double(keyString, "application", "fg.color.blue", NULL);
-  color.alpha=1;
+  pBtnColor = lookup_widget(GTK_WIDGET(win), "color_button");
+  color.red = g_key_file_get_double (keyString, "application", "fg.color.red", NULL);
+  color.green = g_key_file_get_double (keyString, "application", "fg.color.green", NULL);
+  color.blue = g_key_file_get_double (keyString, "application", "fg.color.blue", NULL);
+  color.alpha = 1;
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
   /* check for recent files and recent files summary */
   for(i=0;i<MAX_RECENT_FILES;i++) {
-     if(!g_key_file_has_key(keyString, "history", g_strdup_printf ("recent-file-%d",i ), NULL)) {
+     if(!g_key_file_has_key (keyString, "history", g_strdup_printf ("recent-file-%d",i ), NULL)) {
          g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-file-%d", i),"");
      }
-     if(!g_key_file_has_key(keyString, "history", g_strdup_printf ("recent-content-%d",i ), NULL)) {
+     if(!g_key_file_has_key (keyString, "history", g_strdup_printf ("recent-content-%d",i ), NULL)) {
          g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-content-%d", i),"");
      }
   }
 
 
   /* if the current file-0 is empty ther is something wrong, so we store the current file name as first entry */
-  if(!g_key_file_has_key(keyString, "history", "recent-file-0", NULL)) {
+  if(!g_key_file_has_key (keyString, "history", "recent-file-0", NULL)) {
          g_key_file_set_string (keyString, "history", "recent-file-0", tmpStr );
   }
   g_free (tmpStr);
 /* TODO : same thing for file content ? */
 
   /* PDF stuff - thus we gain a g_free (tmpStr) ;-) */
-  if(!g_key_file_has_key(keyString, "application", "current-PDF-file", NULL)) { 
+  if(!g_key_file_has_key (keyString, "application", "current-PDF-file", NULL)) { 
      g_key_file_set_string (keyString, "application","current-PDF-file", 
                       "");
   }
-  tmpStr= g_key_file_get_string (keyString, "application", "current-PDF-file", NULL);
+  tmpStr = g_key_file_get_string (keyString, "application", "current-PDF-file", NULL);
   g_key_file_set_string (keyString, "application", "current-PDF-file-basename", 
                       g_filename_display_basename (tmpStr));
   g_free (tmpStr);
   /* editor */
   /* text color */
-  if(!g_key_file_has_key(keyString, "editor", "text.color.red", NULL)) { 
-    g_key_file_set_double(keyString, "editor", "text.color.red", 0);
+  if(!g_key_file_has_key (keyString, "editor", "text.color.red", NULL)) { 
+    g_key_file_set_double (keyString, "editor", "text.color.red", 0);
   }
-  if(!g_key_file_has_key(keyString, "editor", "text.color.green", NULL)) { 
-    g_key_file_set_double(keyString, "editor", "text.color.green", 0);
+  if(!g_key_file_has_key (keyString, "editor", "text.color.green", NULL)) { 
+    g_key_file_set_double (keyString, "editor", "text.color.green", 0);
   }
-  if(!g_key_file_has_key(keyString, "editor", "text.color.blue", NULL)) { 
-    g_key_file_set_double(keyString, "editor", "text.color.blue", 0);
+  if(!g_key_file_has_key (keyString, "editor", "text.color.blue", NULL)) { 
+    g_key_file_set_double (keyString, "editor", "text.color.blue", 0);
   }
   /* background color : cream */
-  if(!g_key_file_has_key(keyString, "editor", "paper.color.red", NULL)) { 
-     g_key_file_set_double(keyString, "editor", "paper.color.red", 0.984);
+  if(!g_key_file_has_key (keyString, "editor", "paper.color.red", NULL)) { 
+     g_key_file_set_double (keyString, "editor", "paper.color.red", 0.984);
   }
-  if(!g_key_file_has_key(keyString, "editor", "paper.color.green", NULL)) { 
-      g_key_file_set_double(keyString, "editor", "paper.color.green", 0.9764);
+  if(!g_key_file_has_key (keyString, "editor", "paper.color.green", NULL)) { 
+      g_key_file_set_double (keyString, "editor", "paper.color.green", 0.9764);
   }
-  if(!g_key_file_has_key(keyString, "editor", "paper.color.blue", NULL)) { 
-    g_key_file_set_double(keyString, "editor", "paper.color.blue", 0.9451);
+  if(!g_key_file_has_key (keyString, "editor", "paper.color.blue", NULL)) { 
+    g_key_file_set_double (keyString, "editor", "paper.color.blue", 0.9451);
   }
   /* default text font */
-  if(!g_key_file_has_key(keyString, "editor", "font", NULL)) { 
+  if(!g_key_file_has_key (keyString, "editor", "font", NULL)) { 
      g_key_file_set_string (keyString, "editor", "font", "Sans 12");
   }
 
   /* PDF */
-  if(!g_key_file_has_key(keyString, "reference-document", "zoom", NULL)) { 
-     g_key_file_set_double(keyString, "reference-document", "zoom", 1);
+  if(!g_key_file_has_key (keyString, "reference-document", "zoom", NULL)) { 
+     g_key_file_set_double (keyString, "reference-document", "zoom", 1);
   }
-  if(!g_key_file_has_key(keyString, "reference-document", "page", NULL)) { 
-     g_key_file_set_integer(keyString, "reference-document", "page", 0);
+  if(!g_key_file_has_key (keyString, "reference-document", "page", NULL)) { 
+     g_key_file_set_integer (keyString, "reference-document", "page", 0);
   }
   /* background color : white */
-  if(!g_key_file_has_key(keyString, "reference-document", "paper.color.red", NULL)) { 
-     g_key_file_set_double(keyString, "reference-document", "paper.color.red", 1);
+  if(!g_key_file_has_key (keyString, "reference-document", "paper.color.red", NULL)) { 
+     g_key_file_set_double (keyString, "reference-document", "paper.color.red", 1);
   }
-  if(!g_key_file_has_key(keyString, "reference-document", "paper.color.green", NULL)) { 
-      g_key_file_set_double(keyString, "reference-document", "paper.color.green", 1);
+  if(!g_key_file_has_key (keyString, "reference-document", "paper.color.green", NULL)) { 
+      g_key_file_set_double (keyString, "reference-document", "paper.color.green", 1);
   }
-  if(!g_key_file_has_key(keyString, "reference-document", "paper.color.blue", NULL)) { 
-    g_key_file_set_double(keyString, "reference-document", "paper.color.blue", 1);
+  if(!g_key_file_has_key (keyString, "reference-document", "paper.color.blue", NULL)) { 
+    g_key_file_set_double (keyString, "reference-document", "paper.color.blue", 1);
   }
 
   /* sketch */
   /* background color : white */
-  if(!g_key_file_has_key(keyString, "sketch", "paper.color.red", NULL)) { 
-     g_key_file_set_double(keyString, "sketch", "paper.color.red", 1);
+  if(!g_key_file_has_key (keyString, "sketch", "paper.color.red", NULL)) { 
+     g_key_file_set_double (keyString, "sketch", "paper.color.red", 1);
   }
-  if(!g_key_file_has_key(keyString, "sketch", "paper.color.green", NULL)) { 
-      g_key_file_set_double(keyString, "sketch", "paper.color.green", 1);
+  if(!g_key_file_has_key (keyString, "sketch", "paper.color.green", NULL)) { 
+      g_key_file_set_double (keyString, "sketch", "paper.color.green", 1);
   }
-  if(!g_key_file_has_key(keyString, "sketch", "paper.color.blue", NULL)) { 
-    g_key_file_set_double(keyString, "sketch", "paper.color.blue", 1);
+  if(!g_key_file_has_key (keyString, "sketch", "paper.color.blue", NULL)) { 
+    g_key_file_set_double (keyString, "sketch", "paper.color.blue", 1);
   }
   /* default text font */
-  if(!g_key_file_has_key(keyString, "sketch", "font", NULL)) { 
+  if(!g_key_file_has_key (keyString, "sketch", "font", NULL)) { 
         g_key_file_set_string (keyString, "sketch", "font", "Sans 14");
   }
 
-  if(!g_key_file_has_key(keyString, "sketch", "pen-width", NULL)) { 
-     g_key_file_set_double(keyString, "sketch", "pen-width", 2);
+  if(!g_key_file_has_key (keyString, "sketch", "pen-width", NULL)) { 
+     g_key_file_set_double (keyString, "sketch", "pen-width", 2);
   }
 
   /* store in main window */
-  g_object_set_data(G_OBJECT(win), "config", keyString);
+  g_object_set_data (G_OBJECT(win), "config", keyString);
 //  g_key_file_free (keyString);
 }
 
-/*
+/*************************************************************************************
  * Saves config file (config.ini) to disk, and frees associated memory.
  * Automatically called when save data is destroyed (i.e. user closed searchmonkey).
- */
+ ************************************************************************************/
 void destroyGKeyFile(APP_data *data_app, GtkWidget *win)
 {
   GKeyFile *keyString = g_object_get_data (G_OBJECT(win),"config");
-  printf("* GKeyfile destroyed successfully *\n");
+  printf ("* GKeyfile destroyed successfully *\n");
 
   //  storeGKeyFile(keyString);
 
-  g_key_file_free(keyString);
+  g_key_file_free (keyString);
   if (data_app->gConfigFile != NULL) {
     g_free (data_app->gConfigFile);
   }
@@ -450,7 +457,7 @@ void destroyGKeyFile(APP_data *data_app, GtkWidget *win)
 void storeGKeyFile (APP_data *data_app, GKeyFile *keyString)
 {
   gsize length;
-  gchar **outText;
+  gchar **outText;// ancienne fiorme **ouText
   GError *error = NULL;
   gchar *folderName;
   GtkWidget *okCancelDialog;
@@ -460,7 +467,7 @@ void storeGKeyFile (APP_data *data_app, GKeyFile *keyString)
   folderName = g_path_get_dirname (data_app->gConfigFile);
   outText = g_key_file_to_data (keyString, &length, &error);
 
-  if (!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) {
+  if(!g_file_get_contents (data_app->gConfigFile, outText, &length, &error)) {
     /* Unable to immediately write to file, so attempt to recreate folders */
     mkFullDir (folderName, S_IRWXU);
 
@@ -480,7 +487,7 @@ void storeGKeyFile (APP_data *data_app, GKeyFile *keyString)
   current filename and store 
   in config file in  memory  
 **********************************/
-void store_current_file_in_keyfile(GKeyFile *keyString, gchar *filename, gchar *summary)
+void store_current_file_in_keyfile (GKeyFile *keyString, gchar *filename, gchar *summary)
 {
    g_key_file_set_string (keyString, "application", "current-file", filename);
    /* setup and store the basename */
@@ -520,7 +527,7 @@ void rearrange_recent_file_list (GKeyFile *keyString)
   gchar *recent_prev, *content_prev;
 
   for(i=MAX_RECENT_FILES-1; i>0; i--) {     
-     if(g_key_file_has_key(keyString, "history", g_strdup_printf ("recent-file-%d",i-1 ), NULL)) {
+     if(g_key_file_has_key (keyString, "history", g_strdup_printf ("recent-file-%d",i-1 ), NULL)) {
                  recent_prev = g_strdup_printf ("%s", g_key_file_get_string (keyString, "history", 
                                           g_strdup_printf ("recent-file-%d",i-1), NULL));
                  g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-file-%d",i), recent_prev);
@@ -560,12 +567,12 @@ gint load_gtk_rich_text (gchar *filename, GtkTextBuffer *buffer, GtkWidget *wind
   FILE *inputFile;
   GError **error;
   glong fileSize;
-  gchar rich_text_sign[]={0x47, 0x54, 0x4B, 0x54, 0x45, 0x58, 0x54,0x00};
+  gchar rich_text_sign[] = {0x47, 0x54, 0x4B, 0x54, 0x45, 0x58, 0x54,0x00};
   GdkAtom format = gtk_text_buffer_register_deserialize_tagset (buffer, "application/x-gtk-text-buffer-rich-text");
 
   /* we open the file */
   inputFile = fopen (filename,"rb");
-  if(inputFile==NULL) {
+  if(inputFile == NULL) {
           printf ("* ERROR : can't open Redac file:%s *\n", filename);
           return -1;
   }
@@ -575,15 +582,17 @@ gint load_gtk_rich_text (gchar *filename, GtkTextBuffer *buffer, GtkWidget *wind
   glong sz = ftell (inputFile);
   fseek (inputFile, prev, SEEK_SET);
   /* we allocate the buffer */
-  if(sz<=0)
+  if(sz<=0) {
     return -1;
+  }
+  
   txtbuffer = g_malloc0 (sz*sizeof(guint8)+sizeof(guint8));
   fileSize  = fread (txtbuffer, sizeof(guint8), sz, inputFile);
   fclose (inputFile);
   /* now we check if it's a TRUE Gtk Rich text file */
   if(strncmp (txtbuffer, (gchar *) &rich_text_sign, 7)!=0) {/* sign GTKTEXT string */
-      g_free (txtbuffer);
-      file_alert_dialog (filename, window1);
+     g_free (txtbuffer);
+     file_alert_dialog (filename, window1);
      return -1;
   }
   misc_clear_text (buffer, "left");
@@ -673,8 +682,9 @@ on_open_clicked (GtkButton *button, APP_data *data_app)
        g_free (filename);
     }
   }
-  else
+  else {
      gtk_widget_destroy (GTK_WIDGET(dialog)); 
+  }
 }
 
 /*********************************
@@ -698,8 +708,10 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
       dialog = gtk_message_dialog_new (GTK_WINDOW(window1), flags,
                     GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL,
                 _("Do you really want to quit this program ?\nTake it easy, your work\nwill be automatically saved."));
-      if(gtk_dialog_run (GTK_DIALOG(dialog))!=GTK_RESPONSE_OK)
+                
+      if(gtk_dialog_run (GTK_DIALOG(dialog))!=GTK_RESPONSE_OK) {
          flag = FALSE;
+      }
       gtk_widget_destroy (GTK_WIDGET(dialog));
   }
   if(flag) {
@@ -721,13 +733,15 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
 
      gst_element_set_state (data_app->pipeline, GST_STATE_NULL);
 
-     if(data_app->pipeline)
+     if(data_app->pipeline) {
           gst_object_unref (data_app->pipeline);
+     }
       
-
+printf ("arrivé ici dans Quit \n");
      g_application_quit (G_APPLICATION(data_app->app));
+     printf ("après g_app qui \n");
   }
- return TRUE;
+ return FALSE;// Manadtory : returns FALSE because of g_application mecjanism ! */
 }
 
 /***********************************
@@ -750,10 +764,10 @@ void quick_save (APP_data *data)
   filename = g_key_file_get_string (keyString, "application", "current-file", NULL);
   tmpFileName = g_strdup_printf ("%s.rtf", filename);
 
-  ret = save_gtk_rich_text(filename, buffer);
+  ret = save_gtk_rich_text (filename, buffer);
   /* we save also in standard Word processor format !!! */
-  ret = save_RTF_rich_text(tmpFileName, data);
-  if(ret!=0) {
+  ret = save_RTF_rich_text (tmpFileName, data);
+  if(ret != 0) {
       GtkWidget *alertDlg;
       alertDlg =  gtk_message_dialog_new (GTK_WINDOW(window1),
                                       flags,
@@ -761,22 +775,19 @@ void quick_save (APP_data *data)
                                       GTK_BUTTONS_OK,
                                       _("Problem during quick save of :\n%s"),
                                       filename);
-      ret=gtk_dialog_run (GTK_DIALOG(alertDlg));
+      ret = gtk_dialog_run (GTK_DIALOG(alertDlg));
       gtk_widget_destroy (GTK_WIDGET(alertDlg));
   }
   else {
     gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
                              g_strdup_printf (_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), filename));
-    //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
-      //                       g_strdup_printf (_("%s-saved"), filename));
-    //gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf (_("Redac:%s-saved"),filename) );
     /* we change the default values for gkeyfile */
-    store_current_file_in_keyfile(keyString, filename, misc_get_extract_from_document(data));
+    store_current_file_in_keyfile (keyString, filename, misc_get_extract_from_document(data));
   }
   g_free (filename);
   g_free (tmpFileName);
   /* we free previous search datas */
-  search_free_PDF_search_datas(data);
+  search_free_PDF_search_datas (data);
 }
 
 /*********************************
@@ -786,7 +797,7 @@ void quick_save (APP_data *data)
   - one as native Gtk Rich text
   - other as standard RTF (Ms) 
 ********************************/
-void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
+void save_standard_file (GtkMenuItem *menuitem, APP_data  *data)
 {
   GError *error = NULL;
   GKeyFile *keyString;
@@ -802,10 +813,10 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
   /* first, we get as default the current filename  */
   filename = g_key_file_get_string (keyString, "application", "current-file-basename", NULL);
 
-  GtkWidget *dialog = create_saveFileDialog(data);
+  GtkWidget *dialog = create_saveFileDialog (data);
   /* Set defaults and get path for current filename */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
-                         g_path_get_dirname(g_key_file_get_string (keyString, "application", "current-file", NULL) ));
+                         g_path_get_dirname (g_key_file_get_string (keyString, "application", "current-file", NULL) ));
   /* we must extract a short filename */
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
   /* run dialog */
@@ -835,19 +846,16 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
                 return;
            }
          }
-         ret = save_gtk_rich_text(newFilename, buffer);
+         ret = save_gtk_rich_text (newFilename, buffer);
          /* we save also in standard Word processor format !!! */
-         ret = save_RTF_rich_text(newFilename, data);
+         ret = save_RTF_rich_text (newFilename, data);
          /* we setup the window's title */
          gtk_label_set_markup (GTK_LABEL(GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle"))),
                              g_strdup_printf (_("<small><b>%s-<span foreground=\"green\">saved</span></b></small>"), newFilename));
-         //gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
-           //                  g_strdup_printf (_("%s"), newFilename));
-         // gtk_window_set_title (GTK_WINDOW(window1),g_strdup_printf ("Redac:%s",newFilename) );
          /* rearrange list of recent files */
          rearrange_recent_file_list(keyString);
          /* we change the default values for gkeyfile */
-         store_current_file_in_keyfile(keyString, newFilename, misc_get_extract_from_document(data));
+         store_current_file_in_keyfile (keyString, newFilename, misc_get_extract_from_document(data));
          g_free (newFilename);
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
@@ -856,7 +864,7 @@ void save_standard_file(GtkMenuItem *menuitem, APP_data  *data)
 /**************************************
   quick load a PDF at program's restart
 ***************************************/
-void quick_load_PDF(gchar *filename, APP_data *data)
+void quick_load_PDF (gchar *filename, APP_data *data)
 {
   GKeyFile *keyString;
   GError* err = NULL;
@@ -866,42 +874,45 @@ void quick_load_PDF(gchar *filename, APP_data *data)
   gdouble width, height, ratio;
   GtkWidget *canvas;
   PopplerPage *page;
-  PopplerDocument *doc =NULL;
+  PopplerDocument *doc = NULL;
 
   GtkWidget *window1 = data->appWindow;
   keyString = g_object_get_data (G_OBJECT(window1),"config");
   canvas = lookup_widget(GTK_WIDGET(window1), "crPDF");
 
   /* we free previous search datas */
-  search_free_PDF_search_datas(data);
+  search_free_PDF_search_datas (data);
   /* we convert finename's path to URI path */
-  uri_path = g_filename_to_uri(filename, NULL,NULL);
+  uri_path = g_filename_to_uri (filename, NULL,NULL);
   /* we load PDF Poppler's doc */
-  doc = poppler_document_new_from_file(uri_path, NULL, &err);
+  doc = poppler_document_new_from_file (uri_path, NULL, &err);
   g_free (uri_path);
-  if (!doc) {
-        printf("%s\n", err->message);
-        g_error_free(err);
+  
+  if(!doc) {
+        printf ("%s\n", err->message);
+        g_error_free (err);
         return;
   }
   /* we store PDF filename and path in config file */
   g_key_file_set_string (keyString, "application", "current-PDF-file", filename);
   g_key_file_set_string (keyString, "application", "current-PDF-file-basename", 
                       g_filename_display_basename (filename));
-  if(data->doc) 
+  if(data->doc) {
     g_object_unref (data->doc);
-  undo_free_all_PDF_ops(data);
-  data->doc=doc;
-  //data->curPDFpage=0;
-  data->button_pressed=FALSE;
-  data->totalPDFpages=poppler_document_get_n_pages(data->doc);
-  if(data->currentStack == CURRENT_STACK_PDF ) {
-      update_statusbarPDF(data);
   }
-  page = poppler_document_get_page(data->doc, data->curPDFpage);
+  
+  undo_free_all_PDF_ops (data);
+  data->doc = doc;
+  //data->curPDFpage=0;
+  data->button_pressed = FALSE;
+  data->totalPDFpages  = poppler_document_get_n_pages (data->doc);
+  if(data->currentStack == CURRENT_STACK_PDF) {
+      update_statusbarPDF (data);
+  }
+  page = poppler_document_get_page (data->doc, data->curPDFpage);
   poppler_page_get_size (page, &width, &height);
-  data->PDFWidth=width;
-  data->PDFHeight=height;
+  data->PDFWidth  = width;
+  data->PDFHeight = height;
   ratio = data->PDFratio;
 //  data->PDFratio=ratio;
 
@@ -913,25 +924,25 @@ void quick_load_PDF(gchar *filename, APP_data *data)
   data->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w, h);
   cr = cairo_create (data->surface);
   /* fill in white the page */
-  cairo_set_source_rgb(cr, 1.0, 1, 1);
-  cairo_rectangle(cr, 0, 0, w, h);
-  cairo_fill(cr);
-  cairo_scale(cr, ratio,ratio);
+  cairo_set_source_rgb (cr, 1.0, 1, 1);
+  cairo_rectangle (cr, 0, 0, w, h);
+  cairo_fill (cr);
+  cairo_scale (cr, ratio,ratio);
   poppler_page_render (page, cr);
   g_object_unref (page);
   cairo_destroy (cr);
   gtk_widget_set_size_request (canvas, w, h);
   gtk_widget_queue_draw (canvas);
 
-  data->fPdfLoaded=TRUE;
-  update_PDF_state(data, PDF_NON_MODIF);
+  data->fPdfLoaded = TRUE;
+  update_PDF_state (data, PDF_NON_MODIF);
 }
 
 /**********************************
 
   CB : load a reference AUDIO file
 ***********************************/
-void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
+void on_loadAudio_clicked (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
   GError* err = NULL;
@@ -955,7 +966,7 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
   gtk_file_filter_add_pattern (filter, "*.WMA");
   gtk_file_filter_add_pattern (filter, "*.wma");
   gtk_file_filter_set_name (filter, _("Audio files"));
-  GtkWidget *dialog = create_loadFileDialog(data, _("Open audio file ..."));
+  GtkWidget *dialog = create_loadFileDialog (data, _("Open audio file ..."));
   /* we should replace home dir by the current path if it exists ! */
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
 
@@ -976,14 +987,14 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
                           GTK_BUTTONS_OK,
                           _("<b><big>Can't proceeed !</big></b>\nThe file :<i>\n\n%s </i>\n\nisn't a valid audio file !"),
                           filename);
-           ret=gtk_dialog_run (GTK_DIALOG(alertDlg));
+           ret = gtk_dialog_run (GTK_DIALOG(alertDlg));
            gtk_widget_destroy (GTK_WIDGET(alertDlg));
            g_free (filename);
            return;
          }
 
     /* we convert finename's path to URI path */
-    uri_path = g_filename_to_uri(filename, NULL,NULL);
+    uri_path = g_filename_to_uri (filename, NULL,NULL);
     if(data->pipeline) {
        gst_element_set_state (data->pipeline, GST_STATE_NULL);
        //gst_object_unref (data->pipeline);!!! surtout pas 
@@ -995,15 +1006,15 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
     // TODO error management */
 
     /*  we unlock widgets and set dispplays */
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , TRUE);
 
     /* vars and flags */
     data->button_pressed = FALSE;
@@ -1015,13 +1026,14 @@ void on_loadAudio_clicked  (GtkButton *button, APP_data *data)
     gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>00:00:00</big></tt>");
     gtk_label_set_markup (GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), 
                   g_strdup_printf ("<tt><small>/%s</small></tt>", (gchar*)
-                     audio_gst_time_to_str(data->audio_total_duration)));
+                     audio_gst_time_to_str (data->audio_total_duration)));
     g_free (filename);
     
 
   }
-  else
+  else {
         gtk_widget_destroy (GTK_WIDGET(dialog)); 
+  }
 }
 
 /************************************
@@ -1039,24 +1051,24 @@ on_AudioCloseFile_clicked  (GtkButton *button, APP_data *data)
   GtkWidget *window1 = data->appWindow;
   keyString = g_object_get_data (G_OBJECT(window1),"config");
 
-  // printf("demande libérer mémoire fichier audio ! \n");
+  // printf ("demande libérer mémoire fichier audio ! \n");
     gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>--:--:--</big></tt>");
     gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), "<tt><small>/--:--:--</small></tt>");
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , FALSE);
    /* vars and flags */
-    data->button_pressed=FALSE;
-    data->fAudioLoaded=FALSE;
-    data->fAudioPlaying=FALSE;
-    data->audio_total_duration=0;
-    data->audio_current_position=0;
+    data->button_pressed = FALSE;
+    data->fAudioLoaded   = FALSE;
+    data->fAudioPlaying  = FALSE;
+    data->audio_total_duration   = 0;
+    data->audio_current_position = 0;
     if(data->pipeline) {
        gst_element_set_state (data->pipeline, GST_STATE_NULL);
        //gst_object_unref (data->pipeline);!!! surtout pas 
@@ -1093,12 +1105,12 @@ void
   GtkWidget *dialog = create_loadFileDialog (data, _("Open PDF file ..."));
   /* we should replace home dir by the current path if it exists ! */
   tmpStr = g_key_file_get_string (keyString, "application", "current-PDF-file", NULL);
-  if(strlen (tmpStr)>0) {
+  if(strlen (tmpStr) > 0) {
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_path_get_dirname (tmpStr));
     g_free (tmpStr);
   }
   else {
-     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir());
+     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_home_dir ());
   }
   
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
@@ -1158,8 +1170,9 @@ void
     update_PDF_state (data, PDF_NON_MODIF);
     misc_set_gui_in_PDF_mode (data->appWindow, data->currentStack, data);
   }
-  else
-        gtk_widget_destroy (dialog); 
+  else {
+     gtk_widget_destroy (dialog); 
+  }
 }
 
 /******************************************
@@ -1188,10 +1201,10 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
   gtk_file_filter_set_name (filter, _("PDF files"));
   filename = g_key_file_get_string (keyString, "application", "current-file-basename", NULL);
 
-  GtkWidget *dialog = create_saveFileDialog(data);
+  GtkWidget *dialog = create_saveFileDialog (data);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
-                         g_path_get_dirname(g_key_file_get_string (keyString, "application", "current-file", NULL) ));
+                         g_path_get_dirname (g_key_file_get_string (keyString, "application", "current-file", NULL) ));
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   /* we must extract a short filename */
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), g_strdup_printf ("%s.PDF",filename));
@@ -1223,15 +1236,17 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
            }
          }
          /* first we save to temporary folder and clean memory */
-         tmpAuxFile = GetTempFileName("Redac");
-         poppler_document_save (data->doc, g_filename_to_uri(tmpAuxFile, NULL,NULL),
+         tmpAuxFile = GetTempFileName ("Redac");
+         poppler_document_save (data->doc, 
+                                g_filename_to_uri (tmpAuxFile, NULL, NULL),
                                 &err);    
          g_object_unref (data->doc);
          /* then we load temporary file to memory */
-         data->doc = poppler_document_new_from_file(g_filename_to_uri(tmpAuxFile, NULL,NULL), NULL, &err);
+         data->doc = poppler_document_new_from_file (g_filename_to_uri (tmpAuxFile, NULL, NULL), NULL, &err);
          g_free (tmpAuxFile);
          /* then we save to the TRUE path */
-         poppler_document_save (data->doc, g_filename_to_uri(newFilename, NULL,NULL),
+         poppler_document_save (data->doc, 
+                                g_filename_to_uri (newFilename, NULL, NULL),
                                 &err);    
          /* we store PDF filename and path in config file */
          g_key_file_set_string (keyString, "application", "current-PDF-file", newFilename);
@@ -1239,18 +1254,18 @@ on_savePDF_clicked  (GtkButton *button, APP_data *data)
                       g_filename_display_basename (newFilename)); 
          g_free (newFilename);
          /* and we redraw the PDF window */
-         PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
-         update_PDF_state(data, PDF_NON_MODIF);
+         PDF_display_page (data->appWindow, data->curPDFpage, data->doc, data);
+         update_PDF_state (data, PDF_NON_MODIF);
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
   g_free (filename);
 }
 
-/*
+/*****************************
 
   CB : save current sketch
 
-*/
+*****************************/
 void
 on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
 {
@@ -1267,10 +1282,10 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
   gtk_file_filter_add_pattern (filter, "*.PNG");
   gtk_file_filter_set_name (filter, _("PNG Image files"));
 
-  GtkWidget *dialog = create_saveFileDialog(data_app);
+  GtkWidget *dialog = create_saveFileDialog (data_app);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), 
-                         g_path_get_dirname(g_key_file_get_string (keyString, "application", "current-file", NULL) ));
+                         g_path_get_dirname (g_key_file_get_string (keyString, "application", "current-file", NULL) ));
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   /* we must extract a short filename */
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), g_strdup_printf ("%s.PNG",_("noname")));
@@ -1278,7 +1293,7 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
   if (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
          newFilename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
          /* we check if filename has .PNG extension */
-         if( !g_str_has_suffix (newFilename, ".PNG" ) && !g_str_has_suffix (newFilename, ".png" )) {
+         if(!g_str_has_suffix (newFilename, ".PNG" ) && !g_str_has_suffix (newFilename, ".png" )) {
               /* we correct the filename */
               tmpFileName = g_strdup_printf ("%s.PNG", newFilename);
               g_free (newFilename);
@@ -1293,7 +1308,7 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
                                       GTK_BUTTONS_OK_CANCEL,
                                       _("The file :%s exists !\nOverwrite existing file ?"),
                                       newFilename);
-           if(gtk_dialog_run (GTK_DIALOG(alertDlg))==GTK_RESPONSE_CANCEL) {
+           if(gtk_dialog_run (GTK_DIALOG(alertDlg)) == GTK_RESPONSE_CANCEL) {
                 gtk_widget_destroy (GTK_WIDGET(alertDlg));
                 gtk_widget_destroy (GTK_WIDGET(dialog));
                 g_free (newFilename);
@@ -1301,8 +1316,8 @@ on_saveSketch_clicked  (GtkButton  *button, APP_data *data_app)
            }
          }
          GdkPixbuf *pPixDatas;
-         pPixDatas=gdk_pixbuf_get_from_surface (data_app->Sketchsurface,
-                             0,0,CROBAR_VIEW_MAX_WIDTH,CROBAR_VIEW_MAX_HEIGHT);
+         pPixDatas = gdk_pixbuf_get_from_surface (data_app->Sketchsurface,
+                             0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
          gdk_pixbuf_save (pPixDatas, newFilename, "png", &error,  NULL);
          g_object_unref (pPixDatas);
          g_free (newFilename);

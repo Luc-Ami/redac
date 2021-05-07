@@ -674,39 +674,40 @@ void undo_popup_menu(GtkWidget *attach_widget, GtkMenu *menu)
  initialize various
   values
 **********************/
-void misc_init_vars(APP_data *data )
+void misc_init_vars (APP_data *data )
 {
-  data->x1=0;
-  data->y1=0;
-  data->w=0;
-  data->h=0;
-  data->iAudioSmartRew=2;
-  data->button_pressed=FALSE;
-  data->fPdfLoaded=FALSE;
-  data->fAudioLoaded=FALSE;
-  data->fAudioPlaying=FALSE;
-  data->PDFratio=1;
-  data->clipboardMode=0; /* default : copy to clipboard the text datas */
-  data->curPDFpage=0;
-  data->totalPDFpages=0;
-  data->doc=NULL;
-  data->pdfSearch=NULL;
-  data->pdfAnnotMapping=NULL;
-  data->kw_paragraph_alignment=KW_ALIGNMENT_LEFT;
-  data->fPencilTool=FALSE;
-  data->currentStack=CURRENT_STACK_EDITOR;
+  data->x1 = 0;
+  data->y1 = 0;
+  data->w  = 0;
+  data->h  = 0;
+  data->iAudioSmartRew = 2;
+  data->button_pressed = FALSE;
+  data->fPdfLoaded     = FALSE;
+  data->fAudioLoaded   = FALSE;
+  data->fAudioPlaying  = FALSE;
+  data->PDFratio       = 1;
+  data->clipboardMode  = 0; /* default : copy to clipboard the text datas */
+  data->curPDFpage     = 0;
+  data->totalPDFpages  = 0;
+  data->doc = NULL;
+  data->pdfSearch = NULL;
+  data->pdfAnnotMapping = NULL;
+  data->kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
+  data->fPencilTool = FALSE;
+  data->currentStack = CURRENT_STACK_EDITOR;
   /* we prepare Sketch area display */
-  data->Sketchsurface=NULL;
-  data->surface=NULL;
+  data->Sketchsurface = NULL;
+  data->surface = NULL;
   /* undo engine */
-  data->undo.opCode=OP_NONE;
-  data->undoList=NULL;
-  data->undo.annotStr=NULL;
-  data->undo.pix=NULL;
-  data->undo.serialized_buffer=NULL;
-  data->pipeline=NULL;/* GStreamer element */
-  data->audio_total_duration=0;
-  data->audio_current_position=0;
+  data->undo.opCode = OP_NONE;
+  data->undoList = NULL;
+  data->undo.annotStr = NULL;
+  data->undo.pix = NULL;
+  data->undo.serialized_buffer = NULL;
+  data->pipeline = NULL;/* GStreamer element */
+  data->audio_total_duration = 0;
+  data->audio_current_position = 0;
+  data->clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
 }
 
 /************************
