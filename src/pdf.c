@@ -10,7 +10,7 @@
 #include <locale.h>
 
 #include <string.h>
-
+#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
@@ -20,6 +20,7 @@
 #include "misc.h"
 #include "pdf.h"
 #include "undo.h"
+#include "search.h"
 
 /********************************
   test if there is an annotation 
@@ -27,41 +28,41 @@
   position
 
 ********************************/
-PopplerAnnot *PDF_find_annot_at_position(gint x, gint y, APP_data *data)
+PopplerAnnot *PDF_find_annot_at_position (gint x, gint y, APP_data *data)
 {
   PopplerRectangle selection; /* in original PDF points 4 gdouble bounding rectangle coord*/
   gdouble ratio, v_v_adj, v_h_adj;
   gint i=0, x1, y1, x2, y2;
-  GList *l=NULL;
+  GList *l = NULL;
   PopplerAnnotMapping *current_annot_map;
-  PopplerAnnot *current_annot=NULL;
+  PopplerAnnot *current_annot = NULL;
 
-  if(data->pdfAnnotMapping==NULL)
+  if(data->pdfAnnotMapping == NULL)
     return current_annot;
   /* we read current adjustments on scrollable window */
-  GtkAdjustment *v_adj= gtk_scrolled_window_get_vadjustment (data->PDFScrollable);
-  GtkAdjustment *h_adj= gtk_scrolled_window_get_hadjustment (data->PDFScrollable);
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
   v_v_adj = gtk_adjustment_get_value (v_adj);
   v_h_adj = gtk_adjustment_get_value (h_adj);   
   ratio = data->PDFratio;
   /* we translate to PDF coordinates */
-  selection.x1= (gdouble) (x+v_h_adj)/ratio;
-  selection.y1= (gdouble)data->PDFHeight- (y+v_v_adj)/ratio;/* yes PDF inverted vertical coordinates ! */
+  selection.x1 = (gdouble) (x+v_h_adj)/ratio;
+  selection.y1 = (gdouble)data->PDFHeight - (y+v_v_adj)/ratio;/* yes PDF inverted vertical coordinates ! */
   /* now we search the first PopplerAnnot with coincident coordinates */
-  l=data->pdfAnnotMapping;
+  l = data->pdfAnnotMapping;
   for(l;l!=NULL;l=l->next) {
-    current_annot_map=(PopplerAnnotMapping *)l->data;
+    current_annot_map = (PopplerAnnotMapping *)l->data;
  //  printf("annot=%d coordonneés x1=%.2f y1=%.2f x2=%.2f y2=%.2f souris x1=%.2f y1=%.2f \n", i+1, current_annot_map->area.x1, 
    //           current_annot_map->area.y1, current_annot_map->area.x2, current_annot_map->area.y2, selection.x1,selection.y1);
 
-    if(selection.x1>=current_annot_map->area.x1 && selection.y1>=current_annot_map->area.y1 
-       && selection.x1<=current_annot_map->area.x2 && selection.y1<=current_annot_map->area.y2) {
+    if(selection.x1 >= current_annot_map->area.x1 && selection.y1 >= current_annot_map->area.y1 
+       && selection.x1 <= current_annot_map->area.x2 && selection.y1 <= current_annot_map->area.y2) {
         // printf("bingo ! coinc for annot =%d annotype =%d \n", i+1, poppler_annot_get_annot_type (current_annot_map->annot));
-        current_annot=current_annot_map->annot;
-        data->x1=(gint)current_annot_map->area.x1;
-        data->y1=(gint)current_annot_map->area.y1;
-        data->x2=(gint)current_annot_map->area.x2;
-        data->y2=(gint)current_annot_map->area.y2;
+        current_annot = current_annot_map->annot;
+        data->x1 = (gint)current_annot_map->area.x1;
+        data->y1 = (gint)current_annot_map->area.y1;
+        data->x2 = (gint)current_annot_map->area.x2;
+        data->y2 = (gint)current_annot_map->area.y2;
     }
     i++;
   }
@@ -77,14 +78,14 @@ PopplerAnnot *PDF_find_annot_at_position(gint x, gint y, APP_data *data)
   all necessary datas : current page,
   a pointer on PDF, doc, and so son
 ************************************/
-GList *PDF_get_annot_mapping(APP_data *data)
+GList *PDF_get_annot_mapping (APP_data *data)
 {
   PopplerPage *pPage;
 
-  if(data->doc==NULL)
+  if(data->doc == NULL)
     return NULL;
   pPage = poppler_document_get_page (data->doc, data->curPDFpage);
-  if(pPage==NULL)
+  if(pPage == NULL)
     return NULL;  
   return poppler_page_get_annot_mapping (pPage);
 }
@@ -104,11 +105,11 @@ void PDF_display_page (GtkWidget *window1, gint page, PopplerDocument *pdoc, APP
   PopplerPage *pPage;
   GtkWidget *canvas;
 
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
-  color.red=g_key_file_get_double(keyString, "reference-document", "paper.color.red", NULL);
-  color.green=g_key_file_get_double(keyString, "reference-document", "paper.color.green", NULL);
-  color.blue=g_key_file_get_double(keyString, "reference-document", "paper.color.blue", NULL);
-  color.alpha=1;
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+  color.red   = g_key_file_get_double (keyString, "reference-document", "paper.color.red", NULL);
+  color.green = g_key_file_get_double (keyString, "reference-document", "paper.color.green", NULL);
+  color.blue  = g_key_file_get_double (keyString, "reference-document", "paper.color.blue", NULL);
+  color.alpha = 1;
 
   canvas = lookup_widget(GTK_WIDGET(window1), "crPDF");
   pPage = poppler_document_get_page (pdoc, page);
@@ -129,18 +130,19 @@ void PDF_display_page (GtkWidget *window1, gint page, PopplerDocument *pdoc, APP
   //cairo_rectangle(cr, 0, 0, w, h);
   //cairo_fill(cr);
   /*  background centered */
-  cairo_set_source_rgb(cr, color.red, color.green, color.blue);
-  cairo_rectangle(cr, 0, 0, w, h);
-  cairo_fill(cr);
+  cairo_set_source_rgb (cr, color.red, color.green, color.blue);
+  cairo_rectangle (cr, 0, 0, w, h);
+  cairo_fill (cr);
   // cairo_set_source_surface(cr, data->surface, 30, 30);
-  cairo_scale(cr, ratio,ratio);  
+  cairo_scale (cr, ratio,ratio);  
   poppler_page_render (pPage, cr);  
   cairo_destroy (cr);
   gtk_widget_set_size_request (canvas, w, h);
   gtk_widget_queue_draw (canvas);
-  g_object_unref(pPage);
-  if(data->pdfSearch)/* special for Manjaro ;-) */
-     search_draw_selection_current_page(data->curPDFpage, data, data->surface); 
+  g_object_unref (pPage);
+  if(data->pdfSearch) {/* special for Manjaro ;-) */
+     search_draw_selection_current_page (data->curPDFpage, data, data->surface); 
+  }
 }
 
 /*******************************
@@ -157,15 +159,16 @@ void PDF_moveUp (GtkWidget *parentWindow, APP_data *data)
   if(!data->doc)
      return;
 
-  verticalAdjust = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data->PDFScrollable));
-  adj_value=gtk_adjustment_get_value(verticalAdjust);
-  upper = gtk_adjustment_get_upper(verticalAdjust);
-  page_size = gtk_adjustment_get_page_size(verticalAdjust);
-  if(adj_value>0)
-     gtk_adjustment_set_value (verticalAdjust,adj_value-PDF_SCROLL_STEP);
+  verticalAdjust = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
+  adj_value = gtk_adjustment_get_value (verticalAdjust);
+  upper     = gtk_adjustment_get_upper (verticalAdjust);
+  page_size = gtk_adjustment_get_page_size (verticalAdjust);
+  if(adj_value>0) {
+     gtk_adjustment_set_value (verticalAdjust,adj_value - PDF_SCROLL_STEP);
+  }
   else {
-    if(data->curPDFpage>0) {
-      gtk_adjustment_set_value (verticalAdjust,upper-PDF_SCROLL_STEP);
+    if(data->curPDFpage > 0) {
+      gtk_adjustment_set_value (verticalAdjust, upper - PDF_SCROLL_STEP);
       PDF_moveBackward (parentWindow, data);
     }
   }
@@ -187,17 +190,17 @@ void PDF_moveDown (GtkWidget *parentWindow, APP_data *data)
   if(!data->doc)
      return;
 
-  verticalAdjust = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data->PDFScrollable));
-  upper = gtk_adjustment_get_upper(verticalAdjust);
-  adj_value = gtk_adjustment_get_value( verticalAdjust);
-  page_size = gtk_adjustment_get_page_size(verticalAdjust);
+  verticalAdjust = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
+  upper     = gtk_adjustment_get_upper (verticalAdjust);
+  adj_value = gtk_adjustment_get_value (verticalAdjust);
+  page_size = gtk_adjustment_get_page_size (verticalAdjust);
 
-  if (adj_value < upper - page_size) {
-          gtk_adjustment_set_value (verticalAdjust,gtk_adjustment_get_value(verticalAdjust)+PDF_SCROLL_STEP);
+  if(adj_value < upper - page_size) {
+          gtk_adjustment_set_value (verticalAdjust, gtk_adjustment_get_value (verticalAdjust) + PDF_SCROLL_STEP);
   } 
   else {
     if(data->curPDFpage != (data->totalPDFpages) - 1) {
-       gtk_adjustment_set_value (verticalAdjust,0);
+       gtk_adjustment_set_value (verticalAdjust, 0);
        PDF_moveForward (parentWindow, data);
     }
   }
@@ -208,11 +211,11 @@ void PDF_moveBackward (GtkWidget *parentWindow, APP_data *data)
 {
   if(!data->doc)
      return;
-  if( data->curPDFpage != 0) {
+  if(data->curPDFpage != 0) {
     data->curPDFpage--;
   }
-  update_statusbarPDF(data);
-  PDF_display_page(parentWindow, data->curPDFpage, data->doc, data);
+  update_statusbarPDF (data);
+  PDF_display_page (parentWindow, data->curPDFpage, data->doc, data);
 //  if(data->pdfSearch)
   //   search_draw_selection_current_page(data->curPDFpage, data, data->surface); 
 
@@ -224,11 +227,11 @@ void PDF_moveForward (GtkWidget *parentWindow, APP_data    *data)
   if(!data->doc)
      return;
 
-  if( data->curPDFpage != (data->totalPDFpages) - 1){
+  if(data->curPDFpage != (data->totalPDFpages) - 1){
     data->curPDFpage++;
   }
-  update_statusbarPDF(data);
-  PDF_display_page(parentWindow, data->curPDFpage, data->doc, data);
+  update_statusbarPDF (data);
+  PDF_display_page (parentWindow, data->curPDFpage, data->doc, data);
 //  if(data->pdfSearch)
   //   search_draw_selection_current_page(data->curPDFpage, data, data->surface); 
 }
@@ -240,8 +243,8 @@ void PDF_moveHome (GtkWidget *parentWindow, APP_data *data)
      return;
 
   data->curPDFpage = 0;
-  update_statusbarPDF(data);
-  PDF_display_page(parentWindow, 0, data->doc, data);
+  update_statusbarPDF (data);
+  PDF_display_page (parentWindow, 0, data->doc, data);
 //  if(data->pdfSearch)
   //   search_draw_selection_current_page(data->curPDFpage, data, data->surface); 
 
@@ -253,19 +256,19 @@ void PDF_moveEnd (GtkWidget *parentWindow, APP_data *data)
   if(!data->doc)
      return;
 
-  data->curPDFpage = data->totalPDFpages-1;
-  update_statusbarPDF(data);
-  PDF_display_page(parentWindow, data->curPDFpage, data->doc, data);
+  data->curPDFpage = data->totalPDFpages - 1;
+  update_statusbarPDF (data);
+  PDF_display_page (parentWindow, data->curPDFpage, data->doc, data);
 //  if(data->pdfSearch)
   //   search_draw_selection_current_page(data->curPDFpage, data, data->surface); 
 
 }
 
-void PDF_goto(GtkWidget *parentWindow, APP_data *data, gint pg)
+void PDF_goto (GtkWidget *parentWindow, APP_data *data, gint pg)
 {
   data->curPDFpage = pg;
-  update_statusbarPDF(data);
-  PDF_display_page(parentWindow, data->curPDFpage, data->doc, data);
+  update_statusbarPDF (data);
+  PDF_display_page (parentWindow, data->curPDFpage, data->doc, data);
 //  if(data->pdfSearch)
   //   search_draw_selection_current_page(data->curPDFpage, data, data->surface); 
 
@@ -287,56 +290,57 @@ void PDF_set_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page
   GtkWidget *pBtnColor;   
     
   /* we get the current RGBA color */
-  pBtnColor=lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+  pBtnColor = lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
   /* we read current adjustments on scrollable window */
-  GtkAdjustment *v_adj= gtk_scrolled_window_get_vadjustment (sw);
-  GtkAdjustment *h_adj= gtk_scrolled_window_get_hadjustment (sw);
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(sw));
   v_v_adj = gtk_adjustment_get_value (v_adj);
   v_h_adj = gtk_adjustment_get_value (h_adj);
   /* we get a pointer on the current page */
-  page = poppler_document_get_page(doc, pdf_page);
+  page = poppler_document_get_page (doc, pdf_page);
   /* we convert surface/Gdk scaled coordinates to PDF coordinates */
   poppler_page_get_size (page, &width, &height);
   ratio = data->PDFratio;/* don't use other computed value !!! 2 aug 2018 */
   /* we translate to PDF coordinates */
-  selection.x1= (gdouble) (x+v_h_adj)/ratio;
-  selection.y1= (gdouble) (y+v_v_adj)/ratio;
-  selection.x2= (gdouble) w+(x+v_h_adj)/ratio;
-  selection.y2= (gdouble) h+(y+v_v_adj)/ratio;
+  selection.x1 = (gdouble) (x+v_h_adj) / ratio;
+  selection.y1 = (gdouble) (y+v_v_adj) / ratio;
+  selection.x2 = (gdouble) w+(x+v_h_adj) / ratio;
+  selection.y2 = (gdouble) h+(y+v_v_adj) / ratio;
   
-  rect_annot.x1=selection.x1;
-  rect_annot.y1=height-selection.y1;
-  rect_annot.x2=selection.x2;
-  rect_annot.y2=height-selection.y2;
+  rect_annot.x1 = selection.x1;
+  rect_annot.y1 = height - selection.y1;
+  rect_annot.x2 = selection.x2;
+  rect_annot.y2 = height - selection.y2;
   /* a nice dialog to set-tup the note */
-  tmpStr=dialog_add_text_annotation(data->appWindow, "", data);
+  tmpStr = dialog_add_text_annotation (data->appWindow, "", data);
   if(tmpStr!=NULL) {
-    if(data->undo.annotStr!=NULL)
-           g_free(data->undo.annotStr);
+    if(data->undo.annotStr != NULL) {
+           g_free (data->undo.annotStr);
+    }
     PopplerAnnot *my_annot= poppler_annot_text_new (doc, &rect_annot);
     /* change background color of the annotation icon */
-    PopplerColor *my_color=poppler_color_new();
-    my_color->red=65535*color.red;
-    my_color->green=65535*color.green;
-    my_color->blue=65535*color.blue;
-    poppler_annot_set_color (my_annot,my_color);
-    poppler_annot_set_contents (my_annot,tmpStr);
+    PopplerColor *my_color = poppler_color_new ();
+    my_color->red   = 65535*color.red;
+    my_color->green = 65535*color.green;
+    my_color->blue  = 65535*color.blue;
+    poppler_annot_set_color (my_annot, my_color);
+    poppler_annot_set_contents (my_annot, tmpStr);
 
     /* POPPLER_ANNOT_TEXT_ICON_COMMENT = bubble  */
     poppler_annot_text_set_icon (POPPLER_ANNOT_TEXT(my_annot), POPPLER_ANNOT_TEXT_ICON_COMMENT);
-    poppler_annot_text_set_is_open (POPPLER_ANNOT_TEXT(my_annot),FALSE);
+    poppler_annot_text_set_is_open (POPPLER_ANNOT_TEXT(my_annot), FALSE);
    
     poppler_page_add_annot (page,my_annot);
     poppler_color_free (my_color);
     /* undo datas */
-    data->undo.annot=my_annot;
-    data->undo.PDFpage=data->curPDFpage;
-    data->undo.curStack=CURRENT_STACK_PDF;
-    undo_push(data->currentStack, OP_SET_TEXT_ANNOT, data);
+    data->undo.annot    = my_annot;
+    data->undo.PDFpage  = data->curPDFpage;
+    data->undo.curStack = CURRENT_STACK_PDF;
+    undo_push (data->currentStack, OP_SET_TEXT_ANNOT, data);
    }
-  g_free(tmpStr);
-  g_object_unref(page);
+  g_free (tmpStr);
+  g_object_unref (page);
   /* we redraw the page  */
   PDF_display_page (win, pdf_page, doc, data);
  
@@ -349,59 +353,59 @@ void PDF_set_free_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf
   gdouble width, height, ratio, v_v_adj, v_h_adj;
   GdkRGBA color;   
   GtkWidget *pBtnColor;  
-/* attempt to recode */
-gchar *appearanceString; 
+  /* attempt to recode */
+  gchar *appearanceString; 
 // AnnotFreeTextQuadding quadding; 
     
   /* we get the current RGBA color */
-  pBtnColor=lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+  pBtnColor = lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
 
   /* we read current adjustments on scrollable window */
-  GtkAdjustment *v_adj= gtk_scrolled_window_get_vadjustment (sw);
-  GtkAdjustment *h_adj= gtk_scrolled_window_get_hadjustment (sw);
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(sw));
   v_v_adj = gtk_adjustment_get_value (v_adj);
   v_h_adj = gtk_adjustment_get_value (h_adj);
   printf("h-adj=%.2f  v-adj=%.2f\n", v_h_adj, v_v_adj);
   /* we get a pointer on the current page */
-  page = poppler_document_get_page(doc, pdf_page);
+  page = poppler_document_get_page (doc, pdf_page);
   /* we convert surface/Gdk scaled coordinates to PDF coordinates */
   poppler_page_get_size (page, &width, &height);
   ratio = misc_get_PDF_ratio(width,  gtk_widget_get_allocated_width (sw));
   /* we translate to PDF coordinates */
-  selection.x1= (gdouble) (x+v_h_adj)/ratio;
-  selection.y1= (gdouble) (y+v_v_adj)/ratio;
-  selection.x2= (gdouble) (x+v_h_adj+w)/ratio;
-  selection.y2= (gdouble) (y+v_v_adj+h)/ratio;
+  selection.x1 = (gdouble) (x+v_h_adj)/ratio;
+  selection.y1 = (gdouble) (y+v_v_adj)/ratio;
+  selection.x2 = (gdouble) (x+v_h_adj+w)/ratio;
+  selection.y2 = (gdouble) (y+v_v_adj+h)/ratio;
 printf("coord width=%.2f height pdf=%.2f x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", width, height,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
 
-  rect_annot.x1=selection.x1;
-  rect_annot.y1=height-selection.y1;
-  rect_annot.x2=selection.x2;
-  rect_annot.y2=height-selection.y2;
+  rect_annot.x1 = selection.x1;
+  rect_annot.y1 = height-selection.y1;
+  rect_annot.x2 = selection.x2;
+  rect_annot.y2 = height-selection.y2;
 
   PopplerAnnot *my_annot = poppler_annot_square_new (doc, &rect_annot);
  /* we read object values */
  
-  PopplerColor *my_color=poppler_color_new();
-  PopplerColor *my_colorFg=poppler_color_new();
+  PopplerColor *my_color   = poppler_color_new();
+  PopplerColor *my_colorFg = poppler_color_new();
   /* color */
-    my_color->red=65535*color.red;
-    my_color->green=65535*color.green;
-    my_color->blue=65535*color.blue;
-    /* external rectangle */
-    my_colorFg->red=0;
-    my_colorFg->green=65535*color.green;
-    my_colorFg->blue=65535*color.blue;
+  my_color->red   = 65535*color.red;
+  my_color->green = 65535*color.green;
+  my_color->blue  = 65535*color.blue;
+  /* external rectangle */
+  my_colorFg->red   = 0;
+  my_colorFg->green = 65535*color.green;
+  my_colorFg->blue  = 65535*color.blue;
   poppler_annot_set_color (my_annot,my_color);  
 //  poppler_annot_square_set_interior_color(my_annot, my_color);
-poppler_annot_set_contents (my_annot,"Essais");
-  poppler_annot_markup_set_label (my_annot,"Author");
+  poppler_annot_set_contents (my_annot,"Essais");
+  poppler_annot_markup_set_label (POPPLER_ANNOT_MARKUP(my_annot),"Author");
   
   poppler_page_add_annot (page,my_annot);
   poppler_color_free (my_color);
   poppler_color_free (my_colorFg);
-  g_object_unref(page);
+  g_object_unref (page);
   /* we redraw the page  */
   PDF_display_page (win, pdf_page, doc, data);
 }
@@ -421,53 +425,54 @@ void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   GtkWidget *pBtnColor;  
     
   /* we get the current RGBA color */
-  pBtnColor=lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+  pBtnColor = lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
 
   /* we read current adjustments on scrollable window */
-  GtkAdjustment *v_adj= gtk_scrolled_window_get_vadjustment (sw);
-  GtkAdjustment *h_adj= gtk_scrolled_window_get_hadjustment (sw);
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(sw));
   v_v_adj = gtk_adjustment_get_value (v_adj);
   v_h_adj = gtk_adjustment_get_value (h_adj);
 
   /* we get a pointer on the current page */
-  page = poppler_document_get_page(doc, pdf_page);
+  page = poppler_document_get_page (doc, pdf_page);
   /* we convert surface/Gdk scaled coordinates to PDF coordinates */
   poppler_page_get_size (page, &width, &height);
   ratio = data->PDFratio;/* don't use other computed value !!! 2 aug 2018 */
   /* we translate to PDF coordinates */
-  selection.x1= (gdouble) (x+v_h_adj)/ratio;
-  selection.y1= (gdouble) (y+v_v_adj)/ratio;
-  selection.x2= (gdouble) (x+v_h_adj+w)/ratio;
-  selection.y2= (gdouble) (y+v_v_adj+h)/ratio;
+  selection.x1 = (gdouble) (x+v_h_adj) / ratio;
+  selection.y1 = (gdouble) (y+v_v_adj) / ratio;
+  selection.x2 = (gdouble) (x+v_h_adj+w) / ratio;
+  selection.y2 = (gdouble) (y+v_v_adj+h) / ratio;
 //printf("coord width=%.2f height pdf=%.2f x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", width, height,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
 
-  rect_annot.x1=selection.x1;
-  rect_annot.y1=height-selection.y1;
-  rect_annot.x2=selection.x2;
-  rect_annot.y2=height-selection.y2;
+  rect_annot.x1 = selection.x1;
+  rect_annot.y1 = height - selection.y1;
+  rect_annot.x2 = selection.x2;
+  rect_annot.y2 = height - selection.y2;
 
   quads_array = pgd_annots_create_quads_array_for_rectangle (&rect_annot);
   PopplerAnnot *my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
   g_array_free (quads_array, TRUE);
-  PopplerColor *my_color=poppler_color_new();
+  PopplerColor *my_color = poppler_color_new ();
   /* color */
-    my_color->red=65535*color.red;
-    my_color->green=65535*color.green;
-    my_color->blue=65535*color.blue;
-  poppler_annot_set_color (my_annot,my_color);  
-  poppler_page_add_annot (page,my_annot);
+  my_color->red   = 65535*color.red;
+  my_color->green = 65535*color.green;
+  my_color->blue  = 65535*color.blue;
+  poppler_annot_set_color (my_annot, my_color);  
+  poppler_page_add_annot (page, my_annot);
   poppler_color_free (my_color);
-  g_object_unref(page);
+  g_object_unref (page);
   /* we redraw the page  */
   PDF_display_page (win, pdf_page, doc, data);
   /* undo datas */
-  data->undo.annot=my_annot;
-  data->undo.PDFpage=data->curPDFpage;
-  data->undo.curStack=CURRENT_STACK_PDF;
-  if(data->undo.annotStr!=NULL)
-           g_free(data->undo.annotStr);
-  undo_push(data->currentStack, OP_SET_HIGHLIGHT_ANNOT, data);
+  data->undo.annot    = my_annot;
+  data->undo.PDFpage  = data->curPDFpage;
+  data->undo.curStack = CURRENT_STACK_PDF;
+  if(data->undo.annotStr != NULL) {
+           g_free (data->undo.annotStr);
+  }
+  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, data);
 }
 
 /*******************************************************
@@ -488,8 +493,8 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   GtkWidget *labelClipBoard = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelClipBoard"));
  
   /* we read current adjustments on scrollable window */
-  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (sw);
-  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (sw);
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(sw));
   v_v_adj = gtk_adjustment_get_value (v_adj);
   v_h_adj = gtk_adjustment_get_value (h_adj);
   /* we get a pointer on the current page */
@@ -497,31 +502,42 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   /* we convert surface/Gdk scaled coordinates to PDF coordinates */
   ratio = data->PDFratio;/* don't use other computed value !!! 2 aug 2018 */
   /* we translate to PDF coordinates */
-  selection.x1 = (gdouble) (x+v_h_adj)/ratio;
-  selection.y1 = (gdouble) (y+v_v_adj)/ratio;
-  selection.x2 = (gdouble) (x+v_h_adj+w)/ratio;
-  selection.y2 = (gdouble) (y+v_v_adj+h)/ratio;
-//printf("coord width=%.2f height pdf=%.2f x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", width, height,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
+  selection.x1 = (gdouble) (x + v_h_adj) / ratio;
+  selection.y1 = (gdouble) (y + v_v_adj) / ratio;
+  selection.x2 = (gdouble) (x + v_h_adj + w) / ratio;
+  selection.y2 = (gdouble) (y + v_v_adj + h) / ratio;
+  
+printf("coord width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", w, h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
+
   tmpStr = poppler_page_get_selected_text (page, POPPLER_SELECTION_GLYPH, &selection);
 
   /* copy text to ClipBoard */
 
   if(tmpStr) {
-	if(strlen(tmpStr)>0) {
-		// GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-		gtk_clipboard_set_text (data->clipboard, tmpStr, -1);
+	if(strlen (tmpStr) > 0) {
+	     /*  Sets the contents of the clipboard to the given UTF-8 string. 
+	      * GTK+ will make a copy of the text and take responsibility for 
+	      * responding for requests for the text, and for converting the text 
+	      * into the requested format.*/
+	     
+	     gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), tmpStr, -1);// GDK_SELECTION_PRIMARY in order to avoid gtk_hash_table issues when Redac quits
+	     misc_display_clipboard_text_info ((const gchar *) tmpStr, data);
+	     g_free (tmpStr);/* OK, extracted text can be freed */
 	}
+	else {
+	  /* length of string == 0 */	
+	  gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), "", -1);
+	  gtk_label_set_text (GTK_LABEL(labelClipBoard), _("---"));
+    }
+
+  }
+  else {
+	/* selection empty */
+	gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), "", -1);
+	gtk_label_set_text (GTK_LABEL(labelClipBoard), _("---"));
   }
   g_object_unref (page);
-  /* we test if selected area if empty of text */
-  if(tmpStr) {
-    misc_display_clipboard_text_info ((const gchar *) tmpStr, data);
-    g_free (tmpStr);
-  }	  
-  else {
-	printf ("PDF sélection vide ! \n");
-	gtk_label_set_text (GTK_LABEL(labelClipBoard), _("---"));
-  }	  
+	  
 
 }
 
@@ -532,12 +548,12 @@ void on_PDF_zoom_in_clicked (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
 
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
   if(data->doc) {
-     data->PDFratio = data->PDFratio*1.1;
-     if(data->PDFratio*data->PDFWidth > PDF_VIEW_MAX_WIDTH)
-         data->PDFratio = PDF_VIEW_MAX_WIDTH/data->PDFWidth;
+     data->PDFratio = data->PDFratio * 1.1;
+     if(data->PDFratio * data->PDFWidth > PDF_VIEW_MAX_WIDTH)
+         data->PDFratio = PDF_VIEW_MAX_WIDTH / data->PDFWidth;
      PDF_display_page (data->appWindow, data->curPDFpage, data->doc, data);
      g_key_file_set_double (keyString, "reference-document", "zoom", data->PDFratio);
   }
@@ -550,14 +566,14 @@ void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
 
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
   if(data->doc) {
-     data->PDFratio=data->PDFratio*0.9;
-     if(data->PDFratio<0.5)
-         data->PDFratio=0.5;
-     PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
-     g_key_file_set_double(keyString, "reference-document", "zoom", data->PDFratio);
+     data->PDFratio = data->PDFratio * 0.9;
+     if(data->PDFratio < 0.5)
+         data->PDFratio = 0.5;
+     PDF_display_page (data->appWindow, data->curPDFpage, data->doc, data);
+     g_key_file_set_double (keyString, "reference-document", "zoom", data->PDFratio);
   }
 }
 
@@ -569,12 +585,12 @@ GtkWidget *PDF_prepare_drawable()
 {
   GtkWidget *crPDF;
 
-  crPDF= gtk_drawing_area_new();
-  gtk_widget_show ( crPDF);
+  crPDF = gtk_drawing_area_new ();
+  gtk_widget_show (crPDF);
 
   gtk_widget_set_size_request (crPDF, PDF_VIEW_MAX_WIDTH, PDF_VIEW_MAX_HEIGHT);
-  gtk_widget_set_hexpand(crPDF, TRUE);
-  gtk_widget_set_vexpand(crPDF, TRUE);
+  gtk_widget_set_hexpand (crPDF, TRUE);
+  gtk_widget_set_vexpand (crPDF, TRUE);
   /* mandatoty : add new events management to gtk_drawing_area ! */
       gtk_widget_set_events (crPDF, gtk_widget_get_events (crPDF)
       | GDK_BUTTON_PRESS_MASK

@@ -35,6 +35,22 @@ static void redac_startup (APP_data *data)
 
 }
 
+
+/*********************************
+  shutdown for a standard
+  g_application called always by
+  * g_application_quit()
+**********************************/
+static void
+redac_shutdown (GApplication *app, APP_data *data)
+{
+	printf ("* Redac : clearing clipboard *\n");
+	gtk_clipboard_clear (
+	                      gtk_clipboard_get (GDK_SELECTION_CLIPBOARD)/* in order to avoid issues hash_table and sometimes segfaults */
+	                    );
+}	
+
+
 /*********************************
   activation for a standard
   g_application
@@ -93,6 +109,7 @@ int main (int argc, char *argv[]) {
   app_data.app = G_APPLICATION (app);
   g_signal_connect (app_data.app, "startup", G_CALLBACK (redac_startup), &app_data);
   g_signal_connect (app_data.app, "activate", G_CALLBACK (redac_activate), &app_data);
+  g_signal_connect (app_data.app, "shutdown", G_CALLBACK (redac_shutdown), &app_data);
   /* main loop */
   status = g_application_run (G_APPLICATION (app_data.app), argc, argv);
 

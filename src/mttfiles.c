@@ -718,7 +718,7 @@ on_quit_clicked (GtkWidget *window1, GdkEvent *event, APP_data *data_app)
       }
       gtk_widget_destroy (GTK_WIDGET(dialog));
   }
-  if(flag) {
+  if(flag) { 
      buffer = data_app->buffer;
      /* default dump in current folder ! */
      path_to_file = g_key_file_get_string (keyString, "application", "current-file", NULL);

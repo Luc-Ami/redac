@@ -492,21 +492,30 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
 
   gtk_widget_destroy (GTK_WIDGET(data->window));
  
+
+ 
+ 
   data->button_pressed = FALSE;
   /* get absolute screen coordinates */
   gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
 
+ printf ("entrée PDF relase avec x1 = %d y1=%d w= %d et h =%d \n", 
+                 (gint) (data->x1-root_xs), (gint) (data->y1-root_ys),
+                 data->w,  data->h );
+ 
+
+
   switch(data->clipboardMode) {
      case PDF_SEL_MODE_TEXT: { /*clip mode text */
        /* voir : poppler_page_get_crop_box ()*/
-       if( data->w>0 && data->h>0) {
+       if(data->w > 0 && data->h > 0) { printf ("appel clip PDF txt \n");
            PDF_get_text_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->PDFScrollable, data);
        }
        break;
      }
      case PDF_SEL_MODE_PICT: { /* clip mode picture */
-       if( data->w>0 && data->h>0) {
+       if(data->w > 0 && data->h > 0) {
          pPixDatas = gdk_pixbuf_get_from_window (gtk_widget_get_window (data->PDFScrollable),
                              data->x1-root_xs, data->y1-root_ys,
                              data->w, data->h);
@@ -514,11 +523,11 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
          /* save pixbuf to ClipBoard */
          if(pPixDatas) {
 			// GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-			 gtk_clipboard_set_image (data->clipboard, pPixDatas);
+			 gtk_clipboard_set_image (gtk_clipboard_get (GDK_NONE), pPixDatas);
 			 g_object_unref (pPixDatas);
 			 misc_display_clipboard_image_info (data);
 		 }
-
+         
        }
        break;
      }
@@ -624,42 +633,42 @@ static GtkWidget *create_select_window (void)
   by a click event on PDF drawing area !
 
 ******************************************/
-gboolean on_PDF_draw_button_press_callback(GtkWidget *widget, GdkEvent *event, APP_data *data)
+gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 {  
   if(!data->doc)
     return TRUE;
   /* grab focus */
-  gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
+  gtk_widget_grab_focus (GTK_WIDGET(data->PDFScrollable));
   if (gdk_event_get_event_type(event) == GDK_BUTTON_PRESS)  {
-   if(event->button.button==3) {
-       data->button_pressed=FALSE;/* yes, to avoid mistakes on drawings */
+   if(event->button.button == 3) {
+       data->button_pressed = FALSE;/* yes, to avoid mistakes on drawings */
        GtkMenu *menu;
        GtkWidget *window1 = data->appWindow;
        /* we must free any existing maping ! */
        if(data->pdfAnnotMapping) {
           poppler_page_free_annot_mapping (data->pdfAnnotMapping);// supprimer pour permettre annulation couleurs
-          data->pdfAnnotMapping=NULL;
+          data->pdfAnnotMapping = NULL;
        }
        /* we must get the annot mapping for current page */
-       data->pdfAnnotMapping=PDF_get_annot_mapping(data);
+       data->pdfAnnotMapping = PDF_get_annot_mapping (data);
        /* now the PopUp becomes smart since it's now if there is a mapping */
        gint root_xs, root_ys;
        /* get absolute screen coordinates */
        gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs,&root_ys);
-       PopplerAnnot *current_annot=NULL;
-       current_annot = PDF_find_annot_at_position((gint)event->button.x_root-root_xs, (gint)event->button.y_root-root_ys, data);
-       data->current_annot=current_annot;
-       menu = create_menu_PDF(window1, data);
-       gtk_menu_popup(GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
+       PopplerAnnot *current_annot = NULL;
+       current_annot = PDF_find_annot_at_position ((gint)event->button.x_root-root_xs, (gint)event->button.y_root-root_ys, data);
+       data->current_annot = current_annot;
+       menu = create_menu_PDF (window1, data);
+       gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
 
    }
    else {
-        data->x1=(gint)event->button.x_root;
-        data->y1=(gint)event->button.y_root;
-        data->w=0;
-        data->h=0;
-        data->button_pressed=TRUE;
-        data->window = create_select_window();
+        data->x1 = (gint)event->button.x_root;
+        data->y1 = (gint)event->button.y_root;
+        data->w  = 0;
+        data->h  = 0;
+        data->button_pressed = TRUE;
+        data->window = create_select_window ();
    }
   }
 
@@ -672,11 +681,11 @@ gboolean on_PDF_draw_button_press_callback(GtkWidget *widget, GdkEvent *event, A
   code bprrowed and adapted from stuff
   of Gnome team (Gtk2) : gnome-screenshot
 ********************************************/
-gboolean on_PDF_draw_motion_event_callback(GtkWidget *widget, GdkEvent  *event, APP_data *data)
+gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event, APP_data *data)
 {
-  GtkWidget *window=data->window;
+  GtkWidget *window = data->window;
   /* grab focus */
-  gtk_widget_grab_focus(GTK_WIDGET(data->PDFScrollable));
+  gtk_widget_grab_focus (GTK_WIDGET(data->PDFScrollable));
   if(!data->button_pressed || !data->doc)
     return TRUE;
 
@@ -1105,24 +1114,24 @@ void set_alignment_button(GtkWidget *win, gint alignment)
 {
   switch(alignment) {
     case KW_ALIGNMENT_LEFT: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonLeft")) , TRUE);
+      gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonLeft")) , TRUE);
       break;
     }
     case KW_ALIGNMENT_CENTER: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonCenter")) , TRUE);
+      gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonCenter")) , TRUE);
       break;
     }
     case KW_ALIGNMENT_RIGHT: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonRight")) , TRUE);
+      gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonRight")) , TRUE);
       break;
     }
     case KW_ALIGNMENT_FILL: {
-      gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonFill")) , TRUE);
+      gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonFill")) , TRUE);
       break;
     }
    default:{
-     printf ("* error on setting alignment button - set to Left *\n");
-     gtk_toggle_tool_button_set_active(GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonLeft")) , TRUE);
+     printf ("* Redac :  error on setting alignment button - set to Left *\n");
+     gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(lookup_widget(GTK_WIDGET(win), "pRadioButtonLeft")), TRUE);
    }  
   }/* end switch */
 }
@@ -2885,7 +2894,9 @@ on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
   GtkTextIter iter;
 
 
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, 
+                                     gtk_text_buffer_get_insert (buffer)
+                                   );
   
   GtkWidget *statusbar = user_data->statusbar1; /* main statusbar */
   tmpStr = gtk_stack_get_visible_child_name (GTK_STACK(gobject));
@@ -2901,19 +2912,19 @@ on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
      }
   }
   /* we change widgets state according to current stack */
-  if(g_ascii_strncasecmp ((gchar*)  tmpStr,"Note",4* sizeof(gchar))  ==  0 ) {
+  if(g_ascii_strncasecmp ((gchar*)  tmpStr, "Note", 4* sizeof(gchar))  ==  0 ) {
      update_statusbar (user_data->buffer, user_data);
      user_data->currentStack = CURRENT_STACK_EDITOR;
      misc_set_gui_in_editor_mode (user_data->appWindow, prevStack);   
      gtk_widget_grab_focus (GTK_WIDGET(user_data->view));
   }
-  else if(g_ascii_strncasecmp ((gchar*)  tmpStr,"Refe",4* sizeof(gchar))  ==  0 ) {
+  else if(g_ascii_strncasecmp ((gchar*)  tmpStr, "Refe", 4* sizeof(gchar))  ==  0 ) {
          update_statusbarPDF (user_data); 
          user_data->currentStack = CURRENT_STACK_PDF;
          misc_set_gui_in_PDF_mode (user_data->appWindow, prevStack, user_data);
          gtk_widget_grab_focus (GTK_WIDGET(user_data->PDFScrollable));
        }
-       else if(g_ascii_strncasecmp ((gchar*)  tmpStr,"Sket",4* sizeof(gchar))  ==  0 ) {
+       else if(g_ascii_strncasecmp ((gchar*)  tmpStr, "Sket", 4* sizeof(gchar))  ==  0 ) {
                   update_statusbarSketch (user_data);
                   user_data->currentStack = CURRENT_STACK_SKETCH;
                   misc_set_gui_in_sketch_mode (user_data->appWindow, prevStack);// tempo until sketch built !!!!
@@ -2950,14 +2961,14 @@ void
   
   gtk_widget_set_sensitive (savePDF, data_app->fPdfLoaded);
   gtk_widget_set_sensitive (AudioCloseFile, data_app->fAudioLoaded);
-  if(data_app->currentStack==CURRENT_STACK_SKETCH) 
+  if(data_app->currentStack == CURRENT_STACK_SKETCH) 
      gtk_widget_set_sensitive (clearSketch, TRUE);
   else
      gtk_widget_set_sensitive (clearSketch, FALSE); 
      
   /* we update summary of current file */
   keyString = data_app->keystring;
-  if(keyString==NULL) {
+  if(keyString == NULL) {
      printf ("* INTERNAL ERROR in module interface.c *\n");
      return;
   }  
@@ -2968,11 +2979,11 @@ void
 
 
 
-void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu, APP_data *data_app)
+void on_doc_show_menu (GtkMenuToolButton *button, GtkMenu *menu, APP_data *data_app)
 {
   GtkWidget *window1;
 
-  gtk_menu_popup(GTK_MENU (menu), NULL, NULL,  (GtkMenuPositionFunc) set_position, GTK_WIDGET(button),
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL,  (GtkMenuPositionFunc) set_position, GTK_WIDGET(button),
                  1, gtk_get_current_event_time()); 
 }
 
@@ -2982,7 +2993,7 @@ void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu, APP_data *data_a
 void on_PDF_size_changed (GtkWidget *widget, GdkRectangle *allocation, APP_data *data_app)
 {
   if(data_app->doc) {
-     PDF_display_page(data_app->appWindow, data_app->curPDFpage, data_app->doc, data_app);
+     PDF_display_page (data_app->appWindow, data_app->curPDFpage, data_app->doc, data_app);
   }
 }
 
@@ -2997,8 +3008,10 @@ void on_PDF_zoom_fit_best_clicked  (GtkButton *button, APP_data *data)
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
   if(data->doc) {
-     data->PDFratio=misc_get_PDF_ratio(data->PDFWidth,  gtk_widget_get_allocated_width (data->appWindow));
-     PDF_display_page(data->appWindow, data->curPDFpage, data->doc, data);
+     data->PDFratio = misc_get_PDF_ratio (data->PDFWidth,
+                                          gtk_widget_get_allocated_width (data->appWindow)
+                                          );
+     PDF_display_page (data->appWindow, data->curPDFpage, data->doc, data);
      g_key_file_set_double (keyString, "reference-document", "zoom", data->PDFratio);
   }
 }
@@ -3042,7 +3055,7 @@ void on_menuPasteSketch (GtkMenuItem *menuitem, APP_data *user_data)
   CB : called by paste in sketch menu
   here it's the 'centered' pasting
 **************************************/
-void on_menuCenteredPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
+void on_menuCenteredPasteSketch (GtkMenuItem *menuitem, APP_data *user_data)
 {
   if(clipboard_paste_image (user_data, TRUE) !=0)
                printf ("* Redac critical : can't paste inside sketch *\n"); 
@@ -3052,7 +3065,7 @@ void on_menuCenteredPasteSketch(GtkMenuItem *menuitem, APP_data *user_data)
   CB : called by edit annotation in 
   PDF popup menu
 **************************************/
-void on_menuPDFEditAnnot(GtkMenuItem *menuitem, APP_data *user_data)
+void on_menuPDFEditAnnot (GtkMenuItem *menuitem, APP_data *user_data)
 {
   gchar *tmpStr = NULL;
 
@@ -3091,38 +3104,39 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
   GdkRGBA color, cp;
   PopplerColor *current_color;
 
-  current_color=  poppler_annot_get_color ( user_data->current_annot);
+  current_color=  poppler_annot_get_color (user_data->current_annot);
   cp.red = (gdouble)current_color->red/65535;
   cp.green = (gdouble)current_color->green/65535;
   cp.blue = (gdouble)current_color->blue/65535;
   /* undo engine */
-  user_data->undo.curStack=CURRENT_STACK_PDF;
-  user_data->undo.opCode=OP_SET_ANNOT_COLOR;
-  user_data->undo.color=cp;
-  user_data->undo.annot=user_data->current_annot;
-  user_data->undo.x1=user_data->x1;
-  user_data->undo.y1=user_data->y1;
-  user_data->undo.x2=user_data->x2;
-  user_data->undo.y2=user_data->y2;
-  user_data->undo.PDFpage=user_data->curPDFpage;
-  user_data->undo.pix=NULL;
-  if(user_data->undo.annotStr!=NULL)
+  user_data->undo.curStack = CURRENT_STACK_PDF;
+  user_data->undo.opCode   = OP_SET_ANNOT_COLOR;
+  user_data->undo.color    = cp;
+  user_data->undo.annot    = user_data->current_annot;
+  user_data->undo.x1       = user_data->x1;
+  user_data->undo.y1       = user_data->y1;
+  user_data->undo.x2       = user_data->x2;
+  user_data->undo.y2       = user_data->y2;
+  user_data->undo.PDFpage  = user_data->curPDFpage;
+  user_data->undo.pix      = NULL;
+  if(user_data->undo.annotStr != NULL) {
            g_free (user_data->undo.annotStr);
+  }
   GtkColorChooserDialog *dialog = create_annotationColourDialog (user_data, _("Choose annotation color ..."));
-  gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(dialog), &cp);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(dialog), &cp);
   g_free (current_color);
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
-        gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(dialog), &color);
-        current_color=poppler_color_new();
-        current_color->red=65535*color.red;
-        current_color->green=65535*color.green;
-        current_color->blue=65535*color.blue;
+        gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(dialog), &color);
+        current_color = poppler_color_new ();
+        current_color->red = 65535*color.red;
+        current_color->green = 65535*color.green;
+        current_color->blue = 65535*color.blue;
         poppler_annot_set_color (user_data->current_annot, current_color);
-        poppler_color_free(current_color);
-        undo_push(user_data->currentStack, OP_SET_ANNOT_COLOR, user_data);
+        poppler_color_free (current_color);
+        undo_push (user_data->currentStack, OP_SET_ANNOT_COLOR, user_data);
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
-  PDF_display_page(user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
+  PDF_display_page (user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
 }
 
 /************************************
@@ -3135,27 +3149,27 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
   GdkRGBA cp;
   PopplerColor *current_color;
 
-  current_color =  poppler_annot_get_color ( user_data->current_annot);
-  cp.red = (gdouble)current_color->red/65535;
-  cp.green = (gdouble)current_color->green/65535;
-  cp.blue = (gdouble)current_color->blue/65535;
+  current_color =  poppler_annot_get_color (user_data->current_annot);
+  cp.red = (gdouble)current_color->red / 65535;
+  cp.green = (gdouble)current_color->green / 65535;
+  cp.blue = (gdouble)current_color->blue / 65535;
   g_free (current_color);
-  user_data->undo.curStack=CURRENT_STACK_PDF;
-  user_data->undo.opCode=OP_REMOVE_ANNOT;
-  user_data->undo.color=cp;
-     user_data->undo.x1=user_data->x1;
-     user_data->undo.y1=user_data->y1;
-     user_data->undo.x2=user_data->x2;
-     user_data->undo.y2=user_data->y2;
-     user_data->undo.pix=NULL;
-     user_data->undo.PDFpage=user_data->curPDFpage;
-     if(user_data->undo.annotStr!=NULL)
+  user_data->undo.curStack = CURRENT_STACK_PDF;
+  user_data->undo.opCode   = OP_REMOVE_ANNOT;
+  user_data->undo.color    = cp;
+     user_data->undo.x1 = user_data->x1;
+     user_data->undo.y1 = user_data->y1;
+     user_data->undo.x2 = user_data->x2;
+     user_data->undo.y2 = user_data->y2;
+     user_data->undo.pix = NULL;
+     user_data->undo.PDFpage = user_data->curPDFpage;
+     if(user_data->undo.annotStr != NULL)
            g_free (user_data->undo.annotStr);
-     user_data->undo.annotStr=g_strdup_printf ("%s", poppler_annot_get_contents ( user_data->current_annot));
-     user_data->undo.annotType=poppler_annot_get_annot_type (user_data->current_annot);
-     undo_push(user_data->currentStack, OP_REMOVE_ANNOT, user_data);
+     user_data->undo.annotStr = g_strdup_printf ("%s", poppler_annot_get_contents ( user_data->current_annot));
+     user_data->undo.annotType = poppler_annot_get_annot_type (user_data->current_annot);
+     undo_push (user_data->currentStack, OP_REMOVE_ANNOT, user_data);
   /* Popplerrectangle for simple text annotation, PopplerQuads for others ! */
-  if(user_data->undo.annotType!=POPPLER_ANNOT_TEXT && user_data->undo.annotType!=POPPLER_ANNOT_HIGHLIGHT) {
+  if(user_data->undo.annotType != POPPLER_ANNOT_TEXT && user_data->undo.annotType != POPPLER_ANNOT_HIGHLIGHT) {
      GtkWidget *dialog;
      GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
      dialog = gtk_message_dialog_new (GTK_WINDOW(user_data->appWindow),
@@ -3163,14 +3177,16 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
                                       GTK_MESSAGE_QUESTION,
                                       GTK_BUTTONS_OK_CANCEL,
                                       _("Warning !\nI can't, for now, *undo* removing for\nthis kind of annotation !\nProceed aniway ?"));
-     if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_CANCEL) 
-        ret=-1;
+     if(gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_CANCEL) {
+        ret = -1;
+     }
      gtk_widget_destroy (GTK_WIDGET(dialog));
   }
-  if(ret==0)
+  if(ret == 0) {
       poppler_page_remove_annot (poppler_document_get_page (user_data->doc, user_data->curPDFpage),
                            user_data->current_annot);
-  PDF_display_page(user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
+  }
+  PDF_display_page (user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
 }
 
 /*****************************
@@ -3182,25 +3198,25 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
 void
 on_play_pause_clicked (GtkButton *button, APP_data *data)
 {
-  gboolean ret=FALSE;
+  gboolean ret = FALSE;
   gint64 pos;
   GKeyFile *keyString;
   gint64 step;
 
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
-  step=(gint64)g_key_file_get_double(keyString, "application", "audio-file-rewind-step", NULL);
+  step= (gint64) g_key_file_get_double (keyString, "application", "audio-file-rewind-step", NULL);
 
   if(data->fAudioPlaying)  {
     /* thus we must pause playing */
-    data->fAudioPlaying=FALSE;
+    data->fAudioPlaying = FALSE;
     gst_element_set_state (data->pipeline, GST_STATE_PAUSED);
     /* we change the icon to pause || */
     gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")), 
                        GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPlayAudio")));
     /* and we do a backward jump */
-    audio_get_position(data->pipeline, &pos );
-    data->audio_current_position=pos;
-    audio_seek_backward(data->pipeline, step, pos, data->audio_total_duration);
+    audio_get_position (data->pipeline, &pos);
+    data->audio_current_position = pos;
+    audio_seek_backward (data->pipeline, step, pos, data->audio_total_duration);
   }
   else {
    /* we change the icon to pause || */
@@ -3211,7 +3227,7 @@ on_play_pause_clicked (GtkButton *button, APP_data *data)
     gst_element_set_state (data->pipeline, GST_STATE_PLAYING);
   }
   /*  display current position */
-  ret=FALSE;
+  ret = FALSE;
   audio_get_position (data->pipeline, &pos);
   data->audio_current_position = pos;
   /* we change the position display */
@@ -3231,7 +3247,7 @@ void on_jump_prev_clicked (GtkButton *button, APP_data *data)
   gint64 step;
  
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
-  step = (gint64)g_key_file_get_double (keyString, "application", "audio-file-marks-step", NULL);
+  step = (gint64) g_key_file_get_double (keyString, "application", "audio-file-marks-step", NULL);
 
   audio_get_position (data->pipeline, &pos);
   audio_seek_backward (data->pipeline, step, pos, data->audio_total_duration);
@@ -3254,7 +3270,7 @@ void on_jump_next_clicked (GtkButton *button, APP_data *data)
   gint64 step;
 
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
-  step = (gint64) g_key_file_get_double(keyString, "application", "audio-file-marks-step", NULL);
+  step = (gint64) g_key_file_get_double (keyString, "application", "audio-file-marks-step", NULL);
 
   audio_get_position (data->pipeline, &pos);
   audio_seek_forward (data->pipeline, step, pos, data->audio_total_duration);
@@ -3314,7 +3330,7 @@ void on_go_jump_clicked (GtkButton *button, APP_data *data)
  schedulling - of course, the
  quick saving is controlled by a flag, but timout runs aniway
 ***************************************************************/
-gboolean timeout_audio_display_position ( APP_data *data)
+gboolean timeout_audio_display_position (APP_data *data)
 {
   GKeyFile *keyString;
   gint64 pos, len;
@@ -3324,25 +3340,25 @@ gboolean timeout_audio_display_position ( APP_data *data)
 
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config"); 
 
-  error=FALSE;
+  error = FALSE;
   if(data->fAudioPlaying && data->fAudioLoaded) {
     /* refresh current position */
-    audio_get_position(data->pipeline, &pos );
-    data->audio_current_position=pos;
+    audio_get_position (data->pipeline, &pos);
+    data->audio_current_position = pos;
     bus = gst_element_get_bus (data->pipeline);
-    msg=gst_bus_timed_pop_filtered (bus, 0, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
-    if(msg!=NULL) {
-       error=TRUE; 
-         printf ("* Gstreamer : Bus error message ! \n");
+    msg = gst_bus_timed_pop_filtered (bus, 0, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
+    if(msg != NULL) {
+       error = TRUE; 
+       printf ("* Gstreamer : Bus error message ! \n");
        gst_message_unref (msg);
     } 
-    if(pos>=data->audio_total_duration || error) {
+    if(pos >= data->audio_total_duration || error) {
         data->fAudioPlaying = FALSE;
         gst_element_set_state (data->pipeline, GST_STATE_PAUSED);
         /* we change button icon */
         gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON( lookup_widget(GTK_WIDGET(data->appWindow), "pRadioButtonPlayPauseAudio")  ), 
                        GTK_WIDGET(lookup_widget(GTK_WIDGET(data->appWindow), "iconButtonPlayAudio")));
-        data->audio_current_position=data->audio_total_duration;
+        data->audio_current_position = data->audio_total_duration;
         /* if option checked, we rewind to audio's start */
         if(g_key_file_get_boolean (keyString, "application", "audio-auto-rewind",NULL)) {
            audio_seek_to_time (data->pipeline, 
@@ -3418,7 +3434,7 @@ on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
 {
   GtkWidget *aboutDialog = create_aboutRedac(data);
   
-  gtk_dialog_run(GTK_DIALOG (aboutDialog));  
+  gtk_dialog_run (GTK_DIALOG (aboutDialog));  
   gtk_widget_destroy (GTK_WIDGET (aboutDialog));
   return;
 }
@@ -3433,14 +3449,14 @@ void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data)
 
  // g_type_init();
 
-  ret = g_app_info_launch_default_for_uri("https://github.com/Luc-Ami/redac/wiki", NULL, &error);
-  if (!ret) {
+  ret = g_app_info_launch_default_for_uri ("https://github.com/Luc-Ami/redac/wiki", NULL, &error);
+  if(!ret) {
       alertDlg = gtk_message_dialog_new_with_markup (GTK_WINDOW(data->appWindow),
                           flags,
                           GTK_MESSAGE_ERROR,
                           GTK_BUTTONS_OK,NULL,
                           _("<big><b>Can't access to online wiki !</b></big>\nPlease, check your Internet connection\n and/or you desfault desktop file browser parameters."));
-      rep=gtk_dialog_run(GTK_DIALOG(alertDlg));
+      rep = gtk_dialog_run (GTK_DIALOG(alertDlg));
       gtk_widget_destroy  (GTK_WIDGET(alertDlg));
   }
 }
@@ -3480,7 +3496,7 @@ gboolean on_close_window_clicked (GtkWidget *widget,
                               APP_data   *data)
 {
 	
-	printf ("signal delete window \n");
+	printf ("* Redac : signal delete window *\n");
 	on_quit_clicked (data->appWindow, event, data);
 	return TRUE;
 }

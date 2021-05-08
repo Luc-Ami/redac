@@ -144,7 +144,6 @@ we also use fPdfLoaded field contained in APP_data structure
 **************************************************************/
 void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *data)
 {
-  GtkTextIter iter;
   GtkWidget *pSearchEntry = GTK_WIDGET(gtk_builder_get_object (data->builder, "search_entry"));
   GtkWidget *pNext = GTK_WIDGET(gtk_builder_get_object (data->builder, "buttonNextOccurrence"));
   GtkWidget *pPrev = GTK_WIDGET(gtk_builder_get_object (data->builder, "buttonPrevOccurrence"));   
@@ -709,7 +708,7 @@ void misc_init_vars (APP_data *data )
   data->pipeline = NULL;/* GStreamer element */
   data->audio_total_duration = 0;
   data->audio_current_position = 0;
-  data->clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+
 }
 
 /************************
