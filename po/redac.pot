@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-07 17:10+0200\n"
+"POT-Creation-Date: 2021-05-08 08:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,12 +21,12 @@ msgstr ""
 msgid "   "
 msgstr ""
 
-#: ../src/mttfiles.c:100 ../src/mttfiles.c:154
+#: ../src/mttfiles.c:101 ../src/mttfiles.c:155
 #, c-format
 msgid " %s settings auto-generated - Do not edit!"
 msgstr ""
 
-#: ../src/misc.c:657
+#: ../src/misc.c:659
 #, c-format
 msgid ""
 " <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></"
@@ -34,18 +34,18 @@ msgid ""
 "</b></span>"
 msgstr ""
 
-#: ../src/callbacks.c:2084 ../src/callbacks.c:2151
+#: ../src/callbacks.c:2089 ../src/callbacks.c:2157
 #, c-format
 msgid "%d hits"
 msgstr ""
 
 #. now we set-up a new default filename
-#: ../src/callbacks.c:207 ../src/callbacks.c:2806
+#: ../src/callbacks.c:209 ../src/callbacks.c:2815
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: ../src/misc.c:912 ../src/pdf.c:518 ui/main.ui:675
+#: ../src/misc.c:915 ../src/pdf.c:523 ui/main.ui:675
 msgid "---"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "<b><big>Application</big></b>"
 msgstr ""
 
-#: ../src/mttfiles.c:976
+#: ../src/mttfiles.c:992
 #, c-format
 msgid ""
 "<b><big>Can't proceeed !</big></b>\n"
@@ -114,7 +114,7 @@ msgid ""
 "<i>Minimum : 1sec, maximum 10 secs.</i>"
 msgstr ""
 
-#: ../src/callbacks.c:3433
+#: ../src/callbacks.c:3442
 msgid ""
 "<big><b>Can't access to online wiki !</b></big>\n"
 "Please, check your Internet connection\n"
@@ -175,22 +175,22 @@ msgid ""
 "</i>"
 msgstr ""
 
-#: ../src/mttfiles.c:768 ../src/mttfiles.c:842
+#: ../src/mttfiles.c:787 ../src/mttfiles.c:858
 #, c-format
 msgid "<small><b>%s-<span foreground=\"green\">saved</span></b></small>"
 msgstr ""
 
-#: ../src/callbacks.c:209
+#: ../src/callbacks.c:211
 #, c-format
 msgid "<small><b>%s-<span foreground=\"red\">modified</span></b></small>"
 msgstr ""
 
-#: ../src/mttfiles.c:672 ../src/mttfiles.c:1361 ../src/interface.c:1990
+#: ../src/mttfiles.c:685 ../src/mttfiles.c:1381 ../src/interface.c:1990
 #, c-format
 msgid "<small><b>%s</b></small>"
 msgstr ""
 
-#: ../src/mttfiles.c:598
+#: ../src/mttfiles.c:611
 #, c-format
 msgid "<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"
 msgstr ""
@@ -258,7 +258,7 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-#: ../src/mttfiles.c:956
+#: ../src/mttfiles.c:972
 msgid "Audio files"
 msgstr ""
 
@@ -303,7 +303,7 @@ msgstr ""
 msgid "Center"
 msgstr ""
 
-#: ../src/callbacks.c:3102
+#: ../src/callbacks.c:3111
 msgid "Choose annotation color ..."
 msgstr ""
 
@@ -394,13 +394,13 @@ msgstr ""
 msgid "Define global settings for Redac!."
 msgstr ""
 
-#: ../src/callbacks.c:891
+#: ../src/callbacks.c:896
 msgid ""
 "Do you really want to erase your sketch ?\n"
 "This operation can't be cancelled once done ! "
 msgstr ""
 
-#: ../src/mttfiles.c:700
+#: ../src/mttfiles.c:714
 msgid ""
 "Do you really want to quit this program ?\n"
 "Take it easy, your work\n"
@@ -415,7 +415,7 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
-#: ../src/mttfiles.c:468
+#: ../src/mttfiles.c:478
 #, c-format
 msgid "Error saving %s: %s\n"
 msgstr ""
@@ -475,7 +475,7 @@ msgstr ""
 msgid "Hour :"
 msgstr ""
 
-#: ../src/callbacks.c:2493
+#: ../src/callbacks.c:2499
 msgid "I save you work ... wait a moment, please. "
 msgstr ""
 
@@ -486,7 +486,7 @@ msgid ""
 " reload when the programm starts."
 msgstr ""
 
-#: ../src/misc.c:927
+#: ../src/misc.c:930
 msgid "Image copied"
 msgstr ""
 
@@ -567,7 +567,7 @@ msgstr ""
 msgid "New note"
 msgstr ""
 
-#: ../src/misc.c:442
+#: ../src/misc.c:443
 msgid "No PDF Document"
 msgstr ""
 
@@ -594,11 +594,11 @@ msgstr ""
 msgid "Online _Wiki ..."
 msgstr ""
 
-#: ../src/mttfiles.c:1092
+#: ../src/mttfiles.c:1109
 msgid "Open PDF file ..."
 msgstr ""
 
-#: ../src/mttfiles.c:651 ../src/mttimport.c:469
+#: ../src/mttfiles.c:664 ../src/mttimport.c:469
 msgid "Open Redac file ..."
 msgstr ""
 
@@ -610,7 +610,7 @@ msgstr ""
 msgid "Open a previous note ..."
 msgstr ""
 
-#: ../src/mttfiles.c:957
+#: ../src/mttfiles.c:973
 msgid "Open audio file ..."
 msgstr ""
 
@@ -618,7 +618,7 @@ msgstr ""
 msgid "PDF"
 msgstr ""
 
-#: ../src/misc.c:438
+#: ../src/misc.c:439
 #, c-format
 msgid "PDF : %s"
 msgstr ""
@@ -656,11 +656,11 @@ msgstr ""
 msgid "PDF document"
 msgstr ""
 
-#: ../src/mttfiles.c:1091 ../src/mttfiles.c:1187
+#: ../src/mttfiles.c:1108 ../src/mttfiles.c:1205
 msgid "PDF files"
 msgstr ""
 
-#: ../src/mttfiles.c:1267
+#: ../src/mttfiles.c:1287
 msgid "PNG Image files"
 msgstr ""
 
@@ -668,7 +668,7 @@ msgstr ""
 msgid "Paper color : "
 msgstr ""
 
-#: ../src/callbacks.c:76
+#: ../src/callbacks.c:78
 #, c-format
 msgid "Paragraph: %d/%d  %d Chars  %d Words"
 msgstr ""
@@ -685,7 +685,7 @@ msgstr ""
 msgid "Pen width in pixels :"
 msgstr ""
 
-#: ../src/misc.c:455
+#: ../src/misc.c:457
 #, c-format
 msgid "Pen width:  %.2f"
 msgstr ""
@@ -719,7 +719,7 @@ msgstr ""
 msgid "Position within current audio file"
 msgstr ""
 
-#: ../src/mttfiles.c:761
+#: ../src/mttfiles.c:780
 #, c-format
 msgid ""
 "Problem during quick save of :\n"
@@ -746,7 +746,7 @@ msgstr ""
 msgid "Recent notes ..."
 msgstr ""
 
-#: ../src/mttfiles.c:645
+#: ../src/mttfiles.c:658
 msgid "Redac files"
 msgstr ""
 
@@ -894,7 +894,7 @@ msgstr ""
 msgid "Text background color:"
 msgstr ""
 
-#: ../src/misc.c:909
+#: ../src/misc.c:912
 msgid "Text copied"
 msgstr ""
 
@@ -906,7 +906,7 @@ msgstr ""
 msgid "Text foreground color:"
 msgstr ""
 
-#: ../src/mttfiles.c:1215
+#: ../src/mttfiles.c:1233
 #, c-format
 msgid ""
 "The file :\n"
@@ -914,14 +914,14 @@ msgid ""
 "Do you really want to Overwrite an existing PDF file ?"
 msgstr ""
 
-#: ../src/mttfiles.c:828 ../src/mttfiles.c:1293
+#: ../src/mttfiles.c:844 ../src/mttfiles.c:1313
 #, c-format
 msgid ""
 "The file :%s exists !\n"
 "Overwrite existing file ?"
 msgstr ""
 
-#: ../src/mttfiles.c:506
+#: ../src/mttfiles.c:517
 #, c-format
 msgid ""
 "The file :%s isn't a correct file\n"
@@ -1133,7 +1133,7 @@ msgstr ""
 msgid "Undo set text to underline"
 msgstr ""
 
-#: ../src/callbacks.c:3156
+#: ../src/callbacks.c:3165
 msgid ""
 "Warning !\n"
 "I can't, for now, *undo* removing for\n"
@@ -1145,8 +1145,16 @@ msgstr ""
 msgid "Word processor files"
 msgstr ""
 
+#: ../src/interface.c:1047
+msgid "_Cancel"
+msgstr ""
+
 #: ../src/interface.c:250
 msgid "_Edit annotation ... "
+msgstr ""
+
+#: ../src/interface.c:1048
+msgid "_Open"
 msgstr ""
 
 #: ../src/interface.c:317
@@ -1162,11 +1170,11 @@ msgid "from a RTF file ..."
 msgstr ""
 
 #. we must extract a short filename
-#: ../src/mttfiles.c:1275
+#: ../src/mttfiles.c:1295
 msgid "noname"
 msgstr ""
 
-#: ../src/misc.c:426
+#: ../src/misc.c:427
 #, c-format
 msgid "of %d"
 msgstr ""
