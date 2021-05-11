@@ -88,7 +88,7 @@ void set_up_view (GtkWidget *window1, APP_data *data_app)
 "  Label#PDF_modified_label { border-top-left-radius: 6px; border-bottom-left-radius: 6px;border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-style: solid; border-width: 6px; }\n";
   gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
  /*----- css *****/
-  GdkScreen* screen = gdk_screen_get_default();
+  GdkScreen* screen = gdk_screen_get_default ();
   gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
@@ -101,7 +101,7 @@ void check_up_theme (GtkWidget *window1, APP_data *data_app)
   GdkRGBA fg, bg;
   gdouble textAvg, bgAvg;
  
-  GdkScreen* screen = gdk_screen_get_default();
+  GdkScreen* screen = gdk_screen_get_default ();
   GtkStyleContext* style_context = gtk_widget_get_style_context (window1);
 
  /* check if we have a drak or light theme idea from : 
@@ -114,14 +114,14 @@ https://lzone.de/blog/Detecting%20a%20Dark%20Theme%20in%20GTK
   textAvg = fg.red+fg.green+fg.blue;
   bgAvg = bg.red+bg.green+bg.blue;
 
-printf ("test couleurs avant =%.2f arrière =%.2f \n", textAvg, bgAvg);
+// printf ("test couleurs avant =%.2f arrière =%.2f \n", textAvg, bgAvg);
 
   if (textAvg > bgAvg)  {
-     data_app->fDarkTheme=TRUE;
+     data_app->fDarkTheme = TRUE;
      printf ("thème sombre \n");
   }
   else {
-     data_app->fDarkTheme=FALSE;
+     data_app->fDarkTheme = FALSE;
      printf ("thème clair \n");
   }
 }
@@ -138,8 +138,8 @@ void get_theme_selection_color (GtkWidget *widget)
   GtkStyleContext* style_context = gtk_widget_get_style_context(widget);
 
   gtk_style_context_get (style_context, GTK_STATE_FLAG_SELECTED,
-                       "background-color", &color1,
-                       NULL);
+                         "background-color", &color1,
+                         NULL);
 
   gtk_style_context_lookup_color (style_context, "focus_color", &color2);
   
@@ -153,15 +153,15 @@ static gboolean widget_is_dark (GtkWidget *widget)
   GdkRGBA fg, bg;
   gdouble textAvg;
  
-  GdkScreen* screen = gdk_screen_get_default();
-  GtkStyleContext* style_context = gtk_widget_get_style_context(widget);
+  GdkScreen* screen = gdk_screen_get_default ();
+  GtkStyleContext* style_context = gtk_widget_get_style_context (widget);
 
   /* check the TEXT color is the best way, since a background can be an image, not a text !*/
   gtk_style_context_get_color (style_context, GTK_STATE_FLAG_NORMAL, &fg);
   
   textAvg = fg.red + fg.green + fg.blue;
 
-  if (textAvg >1.5)  
+  if (textAvg > 1.5)  
      return TRUE;
   else 
      return FALSE;
@@ -886,7 +886,7 @@ GtkWidget *UI_main_window (GApplication *app, APP_data *data)
  // win=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
 /* version Glade */
-  win = GTK_WIDGET(gtk_builder_get_object (data->builder, "window_main"));
+  win = GTK_WIDGET (gtk_builder_get_object (data->builder, "window_main"));
   data->appWindow = win;
   gtk_window_set_application (GTK_WINDOW(win), GTK_APPLICATION(app));
   gtk_builder_connect_signals (data->builder, data);/* now all calls will get data structure as first parameter */
@@ -1064,8 +1064,8 @@ GtkWidget *create_loadFileDialog (APP_data *data, gchar *sFileType) {
   save to file dialog 
 *********************************/
 GtkWidget *create_saveFileDialog (APP_data *data) {
-  GtkWidget *saveFileDialog, *dialog_vbox6, *dialog_action_area6;
-  GtkWidget *button43, *image43, *button44, *image44;
+  GtkWidget *saveFileDialog;
+;
 
   saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), 
                                     GTK_WINDOW(data->appWindow),
@@ -1628,10 +1628,7 @@ GtkWidget*
 create_annotationColourDialog (APP_data *data_app, gchar *msg)
 {
   GtkWidget *highlightColourDialog;
-  GtkWidget *ok_button1;
-  GtkWidget *cancel_button1;
-  GtkWidget *help_button1;
-  GtkWidget *color_selection1;
+
 
   highlightColourDialog = gtk_color_chooser_dialog_new (msg,GTK_WINDOW(data_app->appWindow));
   gtk_container_set_border_width (GTK_CONTAINER (highlightColourDialog), 5);
@@ -1807,23 +1804,24 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
       g_object_unref(G_OBJECT(aboutRedac_icon_pixbuf ));
   }
   //gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
-  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"");
-  gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 
+  gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(dialog), "");
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), "2021-05");
+  gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(dialog), 
      _("Note  utility written in GTK+ and licensed under GPL v.3"));
-  gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
+  gtk_about_dialog_set_website (GTK_ABOUT_DIALOG(dialog), 
       "https://github.com/Luc-Ami/redac/wiki");
   gtk_about_dialog_set_license_type (GTK_ABOUT_DIALOG(dialog), GTK_LICENSE_GPL_3_0);
+  gtk_about_dialog_set_license (GTK_ABOUT_DIALOG(dialog),"GPL V3.0");  
 
   gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG(dialog), authors);
   gtk_about_dialog_set_artists (GTK_ABOUT_DIALOG(dialog), artists);
-  gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(dialog), _("Translators credits"));
+  gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG(dialog), _("Translators credits"));
 
-  gtk_window_set_transient_for (GTK_WINDOW (dialog),
-                               GTK_WINDOW(data_app->appWindow));                               
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW(data_app->appWindow));                               
   gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
   gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-  gtk_widget_show_all( dialog );
+  gtk_widget_show_all (dialog);
   return dialog;
 }
 
