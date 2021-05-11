@@ -1135,8 +1135,9 @@ void
     g_key_file_set_string (keyString, "application", "current-PDF-file", filename);
     g_key_file_set_string (keyString, "application", "current-PDF-file-basename", 
                       g_filename_display_basename (filename));
- if(data->doc)
-    g_object_unref (data->doc);
+    if(data->doc) {
+      g_object_unref (data->doc);
+    }
     undo_free_all_PDF_ops (data);
     data->doc            = doc;
     data->curPDFpage     = 0;
@@ -1152,8 +1153,8 @@ void
     ratio = misc_get_PDF_ratio (width, gtk_widget_get_allocated_width (window1));
     data->PDFratio      = ratio;
 
-    w = (gint) (width*ratio);
-    h = (gint) (height*ratio);
+    w = (gint) (width * ratio);
+    h = (gint) (height * ratio);
 
     cairo_surface_destroy (data->surface);
     /* some stuff to zoom */

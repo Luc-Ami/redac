@@ -2,6 +2,7 @@
 #  include <config.h>
 #endif
 #include <stdlib.h>
+#include <string.h>
 /* translations */
 #include <libintl.h>
 #include <locale.h>
@@ -153,8 +154,8 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   /* redio tool buttons upper toolbar */
   GtkWidget *pButtonText = lookup_widget(window1, "pRadioButtonTextSelect");
   GtkWidget *pButtonPict = lookup_widget(window1, "pRadioButtonPictureSelect");
-  GtkWidget *pButtonHigh = lookup_widget(window1,"pRadioButtonHiglightSelect");
-  GtkWidget *pButtonAnnot = lookup_widget(window1,"pRadioButtonHiAnnotSelect");
+  GtkWidget *pButtonHigh = lookup_widget(window1, "pRadioButtonHiglightSelect");
+  GtkWidget *pButtonAnnot = lookup_widget(window1, "pRadioButtonHiAnnotSelect");
   
   GtkWidget *pButtonZoomIn = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomIn"));
   GtkWidget *pButtonZoomOut = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomOut"));
@@ -180,7 +181,12 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   /* de-active widgets */
   gtk_widget_set_sensitive (pg_frame, data->fPdfLoaded);  
   gtk_widget_set_sensitive (pSearchEntry, data->fPdfLoaded);
-  gtk_widget_set_sensitive (pButtonText, data->fPdfLoaded);
+  if(data->currentStack == CURRENT_STACK_PDF) {
+	gtk_widget_set_sensitive (pButtonText, data->fPdfLoaded);
+  }
+  else {
+	gtk_widget_set_sensitive (pButtonText, FALSE);
+  }	  
   gtk_widget_set_sensitive (pButtonPict, data->fPdfLoaded);
   gtk_widget_set_sensitive (pButtonHigh, data->fPdfLoaded);
   gtk_widget_set_sensitive (pButtonAnnot, data->fPdfLoaded);
