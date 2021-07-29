@@ -733,7 +733,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   /* copy current position */
   pRadioButtonCopyPosAudio = gtk_tool_button_new (iconButtonCopyPos, NULL);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonCopyPosAudio, -1);  
-  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonCopyPosAudio), _("Copy current position in audio file to clipboard"));
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonCopyPosAudio), _("Copy current position in audio file to editor"));
   gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonCopyPosAudio), FALSE); 
 
   gtk_widget_show_all (toolbar);
