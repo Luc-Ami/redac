@@ -403,7 +403,8 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   GtkToolItem *pRadioButtonRewindAudio;
   GtkToolItem *pRadioButtonGotoAudio;
   GtkToolItem *pRadioButtonGoJumpAudio;
-  GtkWidget *AudioDisplayCounter, *iconButtonPlayAudio;
+  GtkToolItem *pRadioButtonCopyPosAudio;
+  GtkWidget *AudioDisplayCounter, *iconButtonPlayAudio, *iconButtonCopyPos;
   GtkWidget *iconButtonPauseAudio, *iconButtonHomeAudio;
   GtkWidget *iconButtonGotoAudio, *iconButtonGoJumpAudio;
 
@@ -686,6 +687,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   gtk_widget_set_sensitive (GTK_WIDGET(audioPlaySpeed), FALSE);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), audioPlaySpeedContainer, -1);  
 
+  iconButtonCopyPos = gtk_image_new_from_icon_name ("document-open-recent-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   iconButtonPlayAudio = gtk_image_new_from_icon_name ("media-playback-start-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   iconButtonPauseAudio = gtk_image_new_from_icon_name ("media-playback-pause-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show (iconButtonPauseAudio);
@@ -724,11 +726,15 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonGotoAudio), _("Jump forward in current audio file.\nJump's length is defined in 'audio' settings."));
   gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonGotoAudio), FALSE);
   /* jump to ... */
-  pRadioButtonGoJumpAudio = gtk_tool_button_new (iconButtonGoJumpAudio,NULL);
+  pRadioButtonGoJumpAudio = gtk_tool_button_new (iconButtonGoJumpAudio, NULL);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonGoJumpAudio, -1);  
   gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonGoJumpAudio), _("Jump to a specifed position within current audio file."));
   gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonGoJumpAudio), FALSE); 
-  
+  /* copy current position */
+  pRadioButtonCopyPosAudio = gtk_tool_button_new (iconButtonCopyPos, NULL);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonCopyPosAudio, -1);  
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonCopyPosAudio), _("Copy current position in audio file to clipboard"));
+  gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonCopyPosAudio), FALSE); 
 
   gtk_widget_show_all (toolbar);
   /* set cSS states */
@@ -812,6 +818,9 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   g_signal_connect (G_OBJECT(pRadioButtonGoJumpAudio), "clicked", 
         G_CALLBACK(on_go_jump_clicked), data_app);
 
+  g_signal_connect (G_OBJECT(pRadioButtonCopyPosAudio), "clicked", 
+        G_CALLBACK(on_copy_pos_audio_clicked), data_app);
+
   g_signal_connect ((gpointer) audioPlaySpeed, "changed",
                     G_CALLBACK (on_audioPlaySpeed_changed),
                     data_app);
@@ -858,6 +867,9 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   GLADE_HOOKUP_OBJECT (window, button_pencil, "button_pencil");
   GLADE_HOOKUP_OBJECT (window, color_button, "color_button");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonPlayPauseAudio, "pRadioButtonPlayPauseAudio");
+  GLADE_HOOKUP_OBJECT (window, pRadioButtonCopyPosAudio, "pRadioButtonCopyPosAudio");
+
+
   GLADE_HOOKUP_OBJECT (window, pRadioButtonRewindAudio, "pRadioButtonRewindAudio");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonGotoAudio, "pRadioButtonGotoAudio");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonGoJumpAudio, "pRadioButtonGoJumpAudio");
@@ -1805,7 +1817,9 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   }
   //gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(dialog), "");
-  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), "2021-05");
+
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), g_strdup_printf("%s\n%s", PACKAGE_VERSION, "2021-08"));/* PACKAGE version from config.h */  
+  
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(dialog), 
      _("Note  utility written in GTK+ and licensed under GPL v.3"));
   gtk_about_dialog_set_website (GTK_ABOUT_DIALOG(dialog), 

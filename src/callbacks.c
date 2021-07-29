@@ -2151,7 +2151,7 @@ on_replace_clicked  (GtkButton *button, APP_data *data)
          gtk_text_buffer_delete (buffer, &start, &end);
          gtk_text_buffer_insert (buffer, &start, tmpStr, -1);
          gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
-         mark2=gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
+         mark2 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
          data->undo.undoMark   = mark2;
          data->undo.beforeMark = mark1;
          /* update for remaining hits */
@@ -2182,67 +2182,67 @@ gint clipboard_paste_image(APP_data *data, gboolean center)
  gint x2,y2, root_xs, root_ys;
  cairo_t *cr;
  
- GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+ GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
  pixbuf = gtk_clipboard_wait_for_image (clipboard);
  if(pixbuf) {
-    if(data->currentStack==CURRENT_STACK_EDITOR) {
+    if(data->currentStack == CURRENT_STACK_EDITOR) {
      /* TODO we resize PIXbuf since the PDF can be rescaled ! */
-     gtk_text_buffer_get_iter_at_mark(data->buffer, &iter, gtk_text_buffer_get_insert(data->buffer));
-     pixbuf2= gdk_pixbuf_scale_simple (pixbuf,
+     gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, gtk_text_buffer_get_insert (data->buffer));
+     pixbuf2 = gdk_pixbuf_scale_simple (pixbuf,
                          (gint) gdk_pixbuf_get_width (pixbuf),
                          (gint) gdk_pixbuf_get_height (pixbuf),
                           GDK_INTERP_BILINEAR );
      /* undo engine */
      
-     mark2=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
-     mark1=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
-     data->undo.serialized_buffer=NULL;
-     data->undo.annotStr=NULL;
-     data->undo.pix=NULL;
-     data->undo.undoMark=mark2;
-     data->undo.beforeMark=mark1;
-     undo_push(data->currentStack, OP_INS_IMG, data);
+     mark2 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
+     mark1 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
+     data->undo.serialized_buffer = NULL;
+     data->undo.annotStr = NULL;
+     data->undo.pix = NULL;
+     data->undo.undoMark = mark2;
+     data->undo.beforeMark = mark1;
+     undo_push (data->currentStack, OP_INS_IMG, data);
 
-     gtk_text_buffer_insert_pixbuf(data->buffer, &iter, pixbuf2);
-     g_object_unref(pixbuf2);
+     gtk_text_buffer_insert_pixbuf (data->buffer, &iter, pixbuf2);
+     g_object_unref (pixbuf2);
     }/* endif stack editor */
-    if(data->currentStack==CURRENT_STACK_SKETCH) {
+    if(data->currentStack == CURRENT_STACK_SKETCH) {
        cr = cairo_create (data->Sketchsurface);
-       gtk_widget_grab_focus(GTK_WIDGET(data->appWindow));
-       g_usleep(400000);/* required : we must wait until the rc-intersect has done is job after popup closing ! */
+       gtk_widget_grab_focus (GTK_WIDGET(data->appWindow));
+       g_usleep (400000);/* required : we must wait until the rc-intersect has done is job after popup closing ! */
        /* if center flag we compute the correct x and y positions */
        if(!center) {
          /* all datas are relatve to upper left quadrant in absolute mode = entire screen */
          /* in absolute coordinates FOR the drawable, not the entire window negative coordinates are possible 
             if the window is in outer position from screen - coordinates are relatives to the reference Window 
              if it isn't the entire screen ! Please note the pause in order to allow the screen to refresh before screenshot*/
-         data->undo.pix=gdk_pixbuf_get_from_window (gdk_get_default_root_window (),
+         data->undo.pix = gdk_pixbuf_get_from_window (gdk_get_default_root_window (),
                              data->x1_event_root, data->y1_event_root,
                              (gint) gdk_pixbuf_get_width (pixbuf)+2, (gint) gdk_pixbuf_get_height (pixbuf)+2);
-         data->undo.x1=data->x1;
-         data->undo.y1=data->y1;
-         gdk_cairo_set_source_pixbuf(cr, pixbuf, data->x1, data->y1);
+         data->undo.x1 = data->x1;
+         data->undo.y1 = data->y1;
+         gdk_cairo_set_source_pixbuf (cr, pixbuf, data->x1, data->y1);
        }
        else {/* TODO : switch to drawables, not entire screen for undo */
           x2=(CROBAR_VIEW_MAX_WIDTH-(gint) gdk_pixbuf_get_width (pixbuf))/2;
-          if(x2<0)
-             x2=0;
-          y2=(CROBAR_VIEW_MAX_HEIGHT-(gint) gdk_pixbuf_get_height (pixbuf))/2;
-          if(y2<0)
-             y2=0;
+          if(x2 < 0)
+             x2 = 0;
+          y2 = (CROBAR_VIEW_MAX_HEIGHT-(gint) gdk_pixbuf_get_height (pixbuf))/2;
+          if(y2 < 0)
+             y2 = 0;
           gdk_window_get_origin (gtk_widget_get_window (data->SketchDrawable), &root_xs, &root_ys);
-          data->undo.pix=gdk_pixbuf_get_from_window (gdk_get_default_root_window (),
+          data->undo.pix = gdk_pixbuf_get_from_window (gdk_get_default_root_window (),
                              root_xs+x2, root_ys+y2,
                              (gint) gdk_pixbuf_get_width (pixbuf), (gint) gdk_pixbuf_get_height (pixbuf));
-          data->undo.x1=x2;
-          data->undo.y1=y2;
-          gdk_cairo_set_source_pixbuf(cr, pixbuf, x2, y2);
+          data->undo.x1 = x2;
+          data->undo.y1 = y2;
+          gdk_cairo_set_source_pixbuf (cr, pixbuf, x2, y2);
        }
        /* undo engine */
-       undo_push(data->currentStack, OP_PASTE_PIXBUF, data);
+       undo_push (data->currentStack, OP_PASTE_PIXBUF, data);
 
-       cairo_paint(cr);
-       cairo_destroy(cr);
+       cairo_paint (cr);
+       cairo_destroy (cr);
        gtk_widget_queue_draw (data->SketchDrawable);
     }
    return 0;
@@ -2282,10 +2282,9 @@ void sketch_moveDown (GtkWidget *parentWindow, APP_data *data)
   } 
 }
 
-/********************************
- handling "copy to clipboard"
- signal
- If ther isn't ONE image in 
+/****************************************************
+ handling "copy to clipboard" signal
+ If there isn't ONE image in 
  selection, propagates signal
  to Gtk
  see : https://stackoverflow.com/questions/3482570/how-to-have-gtk-controlc-to-be-handled-or-not
@@ -2333,16 +2332,19 @@ void paste_clipboard (GtkTextView *view, APP_data *data)
   GtkTextMark *mark1, *mark2;
   GtkTextIter iter, start;
 
-  gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, gtk_text_buffer_get_insert(data->buffer));
-  mark2=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
+  gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, gtk_text_buffer_get_insert (data->buffer));
+  mark2 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
 
   /* position just before insertion point */
   gboolean fbackwrd = gtk_text_iter_backward_char (&iter);
-  if(gtk_text_iter_get_offset (&iter)==0) 
+  if(gtk_text_iter_get_offset (&iter) == 0) {
      data->undo.fIsStart = TRUE;
-  else
+  }
+  else {
      data->undo.fIsStart = FALSE;
-  mark1 = gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
+  }
+  
+  mark1 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
   //TODO undo_reset_serialized_buffer(data);
   data->undo.serialized_buffer = NULL;
   data->undo.annotStr = NULL;
@@ -2385,7 +2387,7 @@ void cut_to_clipboard (GtkTextView *view, APP_data *data)
 /*****************************
   [BACKSPACE] or SHIFT+BCKSPC
 *****************************/
-void backspace(GtkTextView *view, APP_data *data)
+void backspace (GtkTextView *view, APP_data *data)
 {
   GtkTextIter start, end, iter;
   GtkTextMark *mark, *mark2;
@@ -2394,23 +2396,23 @@ void backspace(GtkTextView *view, APP_data *data)
 
   /* we check if there is a selection */
   if(gtk_text_buffer_get_has_selection (data->buffer)) {
-    fSel=gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end);
-    mark=gtk_text_buffer_create_mark (data->buffer, NULL,&start,FALSE);
+    fSel = gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end);
+    mark = gtk_text_buffer_create_mark (data->buffer, NULL, &start, FALSE);
     /* now we must preserve the richtext content and push it on undo engine */
-    data->undo.start_sel=start;
-    data->undo.end_sel=end;
+    data->undo.start_sel = start;
+    data->undo.end_sel = end;
   }
   else {
     /* we must check if we are at offset 0, then exit */
-    mark2=gtk_text_buffer_get_insert(data->buffer);
-    gtk_text_buffer_get_iter_at_mark(data->buffer, &iter, mark2);
-    if(gtk_text_iter_get_offset(&iter)>0) {     
-      end=iter;
-      data->undo.end_sel=iter;
-      gboolean fbackwrd=gtk_text_iter_backward_char (&iter);
-      data->undo.start_sel=iter;
-      start=iter;
-      mark=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
+    mark2 = gtk_text_buffer_get_insert (data->buffer);
+    gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, mark2);
+    if(gtk_text_iter_get_offset (&iter) > 0) {     
+      end = iter;
+      data->undo.end_sel = iter;
+      gboolean fbackwrd = gtk_text_iter_backward_char (&iter);
+      data->undo.start_sel = iter;
+      start = iter;
+      mark = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
     }
     else
       return;
@@ -2656,13 +2658,14 @@ key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
          }
          case GDK_KEY_f: { /* request to find a string */
            /* we check is there is already a selected area */
-           search_entry = lookup_widget(GTK_WIDGET(data->appWindow), "search_entry");
+           search_entry = lookup_widget (GTK_WIDGET(data->appWindow), "search_entry");
            if(gtk_text_buffer_get_selection_bounds (data->buffer, &start, &end)) {
               tmpStr = gtk_text_buffer_get_text (data->buffer, &start, &end, FALSE);
               gtk_entry_set_text (GTK_ENTRY(search_entry), tmpStr);
               gtk_widget_grab_focus (search_entry);
-              if(tmpStr)
+              if(tmpStr) {
 				g_free (tmpStr);
+			  }
            }                      
            break;
          }
@@ -2672,8 +2675,8 @@ key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
            return TRUE;
            }
           if(data->currentStack == CURRENT_STACK_SKETCH) {
-                 pen_width = pen_width+1;
-                 if(pen_width>20)
+                 pen_width = pen_width + 1;
+                 if(pen_width > 20)
                     pen_width = 20;
                  g_key_file_set_double (keyString, "sketch", "pen-width", pen_width);
                  update_statusbarSketch (data);
@@ -2687,8 +2690,8 @@ key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
            return TRUE;
            }
           if(data->currentStack == CURRENT_STACK_SKETCH) {
-                 pen_width = pen_width-1;
-                 if(pen_width<1)
+                 pen_width = pen_width - 1;
+                 if(pen_width <1 )
                     pen_width = 1;
                  g_key_file_set_double (keyString, "sketch", "pen-width", pen_width);
                  update_statusbarSketch (data);
@@ -2713,44 +2716,44 @@ key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
            break;
          }
          case GDK_KEY_Down:{
-           if(data->currentStack==CURRENT_STACK_PDF) {
-              PDF_moveDown(widget, data);
+           if(data->currentStack == CURRENT_STACK_PDF) {
+              PDF_moveDown (widget, data);
            }
            else {
-             if(data->currentStack==CURRENT_STACK_SKETCH) {
-              sketch_moveDown(widget, data);
+             if(data->currentStack == CURRENT_STACK_SKETCH) {
+              sketch_moveDown (widget, data);
              }
            }
            break;
          }                  
          case GDK_KEY_Up:{
-           if(data->currentStack==CURRENT_STACK_PDF) {
+           if(data->currentStack == CURRENT_STACK_PDF) {
               PDF_moveUp (widget, data);
            }
            else {
-             if(data->currentStack==CURRENT_STACK_SKETCH) {
+             if(data->currentStack == CURRENT_STACK_SKETCH) {
                sketch_moveUp (widget, data);
              }
            }
            break;
          }         
          case GDK_KEY_Page_Up:{
-           if(data->currentStack==CURRENT_STACK_PDF)
+           if(data->currentStack == CURRENT_STACK_PDF)
               PDF_moveBackward (widget, data);
            break;
          }
          case GDK_KEY_Page_Down:{
-           if(data->currentStack==CURRENT_STACK_PDF)
+           if(data->currentStack == CURRENT_STACK_PDF)
               PDF_moveForward (widget, data);
            break;
          }
          case GDK_KEY_Home:{
-           if(data->currentStack==CURRENT_STACK_PDF)
+           if(data->currentStack == CURRENT_STACK_PDF)
               PDF_moveHome (widget, data);
            break;
          }
          case GDK_KEY_End:{
-           if(data->currentStack==CURRENT_STACK_PDF)
+           if(data->currentStack == CURRENT_STACK_PDF)
               PDF_moveEnd (widget, data);
            break;
          }
@@ -2765,17 +2768,17 @@ key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
           break;
          }
          default:{/* supposed standard printable chars , be careful backspace is treated as printable by X11 !!! */
-            if(gdk_keyval_to_unicode (event->keyval)!=0) {
+            if(gdk_keyval_to_unicode (event->keyval) != 0) {
                /* we push a single char to undo engine */
-               gtk_text_buffer_get_iter_at_mark(data->buffer, &iter, gtk_text_buffer_get_insert(data->buffer));
-               mark2=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
-               mark1=gtk_text_buffer_create_mark (data->buffer, NULL,&iter,FALSE);
-               data->undo.serialized_buffer=NULL;
-               data->undo.annotStr=NULL;
-               data->undo.pix=NULL;
-               data->undo.undoMark=mark1;
-               data->undo.beforeMark=mark2;
-               undo_push(data->currentStack, OP_INS_CHAR, data);
+               gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, gtk_text_buffer_get_insert (data->buffer));
+               mark2 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
+               mark1 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
+               data->undo.serialized_buffer = NULL;
+               data->undo.annotStr = NULL;
+               data->undo.pix = NULL;
+               data->undo.undoMark = mark1;
+               data->undo.beforeMark = mark2;
+               undo_push (data->currentStack, OP_INS_CHAR, data);
             }
          }
        }/* end switch special keys */
@@ -2952,7 +2955,6 @@ void
   GtkWidget *clearSketch;
   GKeyFile *keyString;  
     	
-  printf ("activate bouton menu \n");
   /* we have to manage states for 3 sub menus */
   
   savePDF = GTK_WIDGET(gtk_builder_get_object (data_app->builder, "menuSavePDF"));
@@ -2961,10 +2963,12 @@ void
   
   gtk_widget_set_sensitive (savePDF, data_app->fPdfLoaded);
   gtk_widget_set_sensitive (AudioCloseFile, data_app->fAudioLoaded);
-  if(data_app->currentStack == CURRENT_STACK_SKETCH) 
+  if(data_app->currentStack == CURRENT_STACK_SKETCH) {
      gtk_widget_set_sensitive (clearSketch, TRUE);
-  else
+  }
+  else {
      gtk_widget_set_sensitive (clearSketch, FALSE); 
+  }
      
   /* we update summary of current file */
   keyString = data_app->keystring;
@@ -3321,6 +3325,72 @@ void on_go_jump_clicked (GtkButton *button, APP_data *data)
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
 }
+
+
+/*********************************************
+ * audio : copy current position to clipboard
+ * *******************************************/
+void on_copy_pos_audio_clicked (GtkButton *button, APP_data *data)
+{
+  GtkTextIter start, end, iter;
+  GtkTextMark *mark, *mark1, *mark2;  
+  gdouble val, hour, min, sec;
+  gint64 pos = 0;
+  gchar *tmpStr = NULL;
+  /* refresh current position */
+  audio_get_position (data->pipeline, &pos);
+  data->audio_current_position = pos;
+
+  if(gtk_text_buffer_get_has_selection (data->buffer)) {
+	  printf ("* Redac : you can't copy/paste audio position when there is text selection ! *\n");
+  }
+  else {
+	  
+	tmpStr = audio_gst_time_to_str (data->audio_current_position);
+printf ("demande copie position %s\n", tmpStr);
+
+
+ 
+    mark = gtk_text_buffer_get_insert (data->buffer);
+    gtk_text_buffer_get_iter_at_mark (data->buffer, &start, mark);
+    
+    /* position just before insertion point */
+    gboolean fbackwrd = gtk_text_iter_backward_char (&start);
+    if(gtk_text_iter_get_offset (&start) == 0) {
+       data->undo.fIsStart = TRUE;
+    }
+    else {
+       data->undo.fIsStart = FALSE;
+    }    
+    
+    
+    mark1 = gtk_text_buffer_create_mark (data->buffer, NULL, &start, FALSE);
+         
+    gtk_text_buffer_insert (data->buffer, &start,
+                           tmpStr,
+                            -1);
+                            
+                                
+    gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, gtk_text_buffer_get_insert (data->buffer));
+    mark2 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);                                
+    
+    
+                            
+   /* undo engine */
+
+  //TODO undo_reset_serialized_buffer(data);
+    data->undo.serialized_buffer = NULL;
+    data->undo.annotStr = NULL;
+    data->undo.pix = NULL;
+    data->undo.beforeMark = mark1;               	  
+    data->undo.undoMark = mark2;
+    data->undo.str_len = strlen (tmpStr); 
+    undo_push (data->currentStack, OP_INSERT_TIME, data);
+    g_free (tmpStr);   
+  }
+}
+
+
 
 /******************************
   intervalometer function

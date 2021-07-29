@@ -20,7 +20,7 @@
 
 /* Local macros */
 
-#define MAX_UNDO_OPERATIONS 20
+#define MAX_UNDO_OPERATIONS 64
 #define OP_NONE 0
 #define OP_INS_CHAR 1
 #define OP_DEL_CHAR 2
@@ -52,6 +52,8 @@
 #define OP_UNSET_QUOTE 27
 
 #define OP_TOGGLE_CASE 30
+
+#define OP_INSERT_TIME 31
 
 #define OP_SET_TEXT_ANNOT 50
 #define OP_SET_HIGHLIGHT_ANNOT 51

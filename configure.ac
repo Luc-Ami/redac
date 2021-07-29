@@ -1,7 +1,7 @@
 ### INITIALIZATION #############################################################
 # In this section we do preparations for initializing our build system.
 
-AC_INIT([redac], [0.2], [amiluc_bis@yahoo.fr])
+AC_INIT([redac], [0.2.1], [amiluc_bis@yahoo.fr])
 AC_CONFIG_SRCDIR([src/main.c])
 AM_INIT_AUTOMAKE([-W foreign])
 AM_SILENT_RULES([no])

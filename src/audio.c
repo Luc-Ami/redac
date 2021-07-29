@@ -144,7 +144,7 @@ void audio_get_duration (GstElement *pipeline, gint64 *len)
 
   gst_element_set_state (pipeline, GST_STATE_PAUSED);/* required - Playbin must be pre-rolled or playing */
   while(!ret) {
-     ret=gst_element_query_duration (pipeline, GST_FORMAT_TIME, len);
+     ret = gst_element_query_duration (pipeline, GST_FORMAT_TIME, len);
   }/* wend */
 }
 
@@ -157,11 +157,11 @@ void audio_get_duration (GstElement *pipeline, gint64 *len)
 *************************************/
 void audio_get_position (GstElement *pipeline, gint64 *pos)
 {
-  gboolean ret=FALSE;
+  gboolean ret = FALSE;
 
  // gst_element_set_state (pipeline, GST_STATE_PAUSED);/* required - Playbin must be pre-rolled or playing */
   while(!ret) {
-     ret=gst_element_query_position (pipeline, GST_FORMAT_TIME, pos);
+     ret = gst_element_query_position (pipeline, GST_FORMAT_TIME, pos);
   }/* wend */
 }
 /*************************************
@@ -174,13 +174,13 @@ void audio_gst_time_to_gdouble (gint64 time_value, gdouble *hh, gdouble *mm, gdo
 {
    gint64 hour, min, sec, total;
 
-   total=time_value/GST_SECOND; /* total duration in human seconds */
-   hour=total/3600;
-   min=(total-(hour*3600))/60;
-   sec=total-(hour*3600)-(min*60);
-   *hh=hour;
-   *mm=min;
-   *ss=sec;
+   total = time_value/GST_SECOND; /* total duration in human seconds */
+   hour  = total/3600;
+   min   = (total-(hour*3600))/60;
+   sec   = total-(hour*3600)-(min*60);
+   *hh = hour;
+   *mm = min;
+   *ss = sec;
 }
 
 /**************************************
@@ -191,12 +191,12 @@ void audio_gst_time_to_gdouble (gint64 time_value, gdouble *hh, gdouble *mm, gdo
 gchar *audio_gst_time_to_str (gint64 time_value)
 {
    gint64 hour, min, sec, total;
-   gchar *tmpStr=NULL;
+   gchar *tmpStr = NULL;
 
-   total=time_value/GST_SECOND; /* total duration in human seconds */
-   hour=total/3600;
-   min=(total-(hour*3600))/60;
-   sec=total-(hour*3600)-(min*60);
-   tmpStr=g_strdup_printf("%02u:%02u:%02u", hour, min, sec);
+   total = time_value/GST_SECOND; /* total duration in human seconds */
+   hour  = total/3600;
+   min   = (total-(hour*3600))/60;
+   sec   = total-(hour*3600)-(min*60);
+   tmpStr = g_strdup_printf ("%02u:%02u:%02u", hour, min, sec);
    return tmpStr;
 }

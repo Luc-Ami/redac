@@ -1010,15 +1010,16 @@ void on_loadAudio_clicked (GtkButton *button, APP_data *data)
     // TODO error management */
 
     /*  we unlock widgets and set dispplays */
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , TRUE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCopyPosAudio")), TRUE);    
 
     /* vars and flags */
     data->button_pressed = FALSE;
@@ -1053,20 +1054,21 @@ on_AudioCloseFile_clicked  (GtkButton *button, APP_data *data)
   gchar *uri_path, *filename;
 
   GtkWidget *window1 = data->appWindow;
-  keyString = g_object_get_data (G_OBJECT(window1),"config");
+  keyString = g_object_get_data (G_OBJECT(window1), "config");
 
   // printf ("demande libérer mémoire fichier audio ! \n");
     gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), "<tt><big>--:--:--</big></tt>");
     gtk_label_set_markup ( GTK_LABEL(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), "<tt><small>/--:--:--</small></tt>");
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")) , FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")) , FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonPlayPauseAudio")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRewindAudio")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGotoAudio")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonGoJumpAudio")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_position_label")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audio_total_label")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "audioPlaySpeed")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCopyPosAudio")), FALSE);       
    /* vars and flags */
     data->button_pressed = FALSE;
     data->fAudioLoaded   = FALSE;
