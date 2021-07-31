@@ -28,21 +28,10 @@
 #include "pdf.h"
 
 /* pixmaps */
-#include "./icons/superscript.xpm"
-#include "./icons/superscript_light.xpm"
-#include "./icons/subscript.xpm"
-#include "./icons/subscript_light.xpm"
+
+
 #include "./icons/highlight.xpm"
-#include "./icons/quotation.xpm"
-#include "./icons/quotation_light.xpm"
-#include "./icons/star_highlight.xpm"
-#include "./icons/star_highlight_light.xpm"
-#include "./icons/pencil.xpm"
-#include "./icons/pencil_light.xpm"
-#include "./icons/text_select.xpm"
-#include "./icons/text_select_light.xpm"
-#include "./icons/text_note.xpm"
-#include "./icons/text_note_light.xpm"
+
 #include "./icons/pdf.xpm"
 
 /*********************************
@@ -268,16 +257,17 @@ GtkWidget *create_menu_PDF (GtkWidget *win, APP_data *data_app)
   gtk_widget_show (menuCancelPDF);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menuCancelPDF);
 
-  if(data_app->current_annot==NULL) {
+  if(data_app->current_annot == NULL) {
     /* we deactivate menus since there isn't any annotation on current page */
     gtk_widget_set_sensitive (menu1PDFEditAnnot, FALSE);
     gtk_widget_set_sensitive (menu1PDFColorAnnot, FALSE);
     gtk_widget_set_sensitive (menu1PDFRemoveAnnot, FALSE);
   }
   else {/* we check if it's a text annot */
-    if( poppler_annot_get_annot_type (data_app->current_annot)  !=POPPLER_ANNOT_TEXT && 
-            poppler_annot_get_annot_type (data_app->current_annot)  !=POPPLER_ANNOT_FREE_TEXT)
-           gtk_widget_set_sensitive (menu1PDFEditAnnot, FALSE);
+    if( poppler_annot_get_annot_type (data_app->current_annot) != POPPLER_ANNOT_TEXT && 
+            poppler_annot_get_annot_type (data_app->current_annot)  !=POPPLER_ANNOT_FREE_TEXT) {
+                           gtk_widget_set_sensitive (menu1PDFEditAnnot, FALSE);
+    }
   }
   g_signal_connect ((gpointer) menu1PDFEditAnnot, "activate",
                     G_CALLBACK (on_menuPDFEditAnnot),
@@ -419,51 +409,18 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
 
   icon_undo = gtk_image_new_from_icon_name ("edit-undo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
-/*
-  if( fIsDark)
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)superscript_light_xpm);
-  else
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)superscript_xpm);
-  icon_superscript  =gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
-  */
   
   icon_superscript  = gtk_image_new_from_icon_name ("view-sort-descending-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR); 
   
-/*
-  if(fIsDark)
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)subscript_light_xpm);
-  else
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)subscript_xpm);
-  icon_subscript=gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
-*/
   
   icon_subscript  = gtk_image_new_from_icon_name ("view-sort-ascending-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);   
 
-/*
-  if(data_app->fDarkTheme)
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)strike_light_xpm);
-  else
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)strike_xpm);
-  icon_strike = gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
-*/
+
   icon_strike = gtk_image_new_from_icon_name ("format-text-strikethrough-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   ico = gdk_pixbuf_new_from_xpm_data ((const char **)highlight_xpm);
   icon_highlight = gtk_image_new_from_pixbuf (ico);
   g_object_unref(ico); 
-
-/*
-  if(fIsDark)
-     ico = gdk_pixbuf_new_from_xpm_data ((const char **)quotation_light_xpm);
-  else
-     ico = gdk_pixbuf_new_from_xpm_data ((const char **)quotation_xpm);
-     
-  icon_quotation = gtk_image_new_from_pixbuf(ico);
-  g_object_unref (ico); 
-*/
 
   icon_quotation = gtk_image_new_from_icon_name ("format-indent-more-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   
@@ -553,12 +510,12 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
  
   /* standard button */
 
-  button_clear_format = gtk_tool_button_new (icon_clear_format,NULL);
+  button_clear_format = gtk_tool_button_new (icon_clear_format, NULL);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_clear_format, -1);  
   gtk_widget_set_tooltip_text (GTK_WIDGET(button_clear_format), _("Remove all character \nformattings from current selection.")); 
   /* undo button */
 
-  button_undo = gtk_tool_button_new (icon_undo,NULL);
+  button_undo = gtk_tool_button_new (icon_undo, NULL);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_undo, -1);   
   gtk_widget_set_tooltip_text (GTK_WIDGET(button_undo), _("Undo last operation."));
   gtk_widget_set_sensitive (GTK_WIDGET(button_undo), FALSE);
@@ -570,14 +527,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   /* clipboard mode radiobuttons */
   pRadioButtonTextSelect = gtk_radio_tool_button_new (NULL);
 
-/*
-  if(fIsDark)
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)text_select_light_xpm);
-  else
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)text_select_xpm);
-  icon_text_select  =gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
-*/
+
 
   icon_text_select = gtk_image_new_from_icon_name ("edit-select-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
@@ -592,23 +542,8 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   icon_picture_select = gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
 
- // if(fIsDark)
-  //    ico = gdk_pixbuf_new_from_xpm_data((const char **)star_highlight_light_xpm);
- // else
-   //   ico = gdk_pixbuf_new_from_xpm_data((const char **)star_highlight_xpm);
- // icon_highlight_select=gtk_image_new_from_pixbuf(ico);
- // g_object_unref(ico);
-
   icon_highlight_select = gtk_image_new_from_icon_name ("starred-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
-/*
-  if(fIsDark)
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)text_note_light_xpm);
-  else
-      ico = gdk_pixbuf_new_from_xpm_data((const char **)text_note_xpm);
-  icon_text_annot  =gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
-*/
 
   icon_text_annot = gtk_image_new_from_icon_name ("media-view-subtitles-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
@@ -642,15 +577,9 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHiAnnotSelect), icon_text_annot);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect));
+
   /* sketch tools */
-  /*
-  if(fIsDark)
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)pencil_light_xpm);
-  else
-     ico = gdk_pixbuf_new_from_xpm_data((const char **)pencil_xpm);
-  icon_pencil=gtk_image_new_from_pixbuf(ico);
-  g_object_unref(ico); 
-  */
+
   icon_pencil = gtk_image_new_from_icon_name ("input-tablet-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);  
   
   
@@ -1077,7 +1006,6 @@ GtkWidget *create_loadFileDialog (APP_data *data, gchar *sFileType) {
 *********************************/
 GtkWidget *create_saveFileDialog (APP_data *data) {
   GtkWidget *saveFileDialog;
-;
 
   saveFileDialog = gtk_file_chooser_dialog_new (_("Save your work and export to standard Word processor file..."), 
                                     GTK_WINDOW(data->appWindow),
@@ -1615,14 +1543,14 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
  
   /* run */
   ret = gtk_dialog_run (GTK_DIALOG(annotDialog));
-  if(ret==GTK_RESPONSE_OK) {
+  if(ret == GTK_RESPONSE_OK) {
     GtkTextIter start, end;
-    gtk_text_buffer_get_start_iter (buffer,&start);
-    gtk_text_buffer_get_end_iter (buffer,&end);
-    tmpStr=gtk_text_buffer_get_text (buffer,&start, &end,FALSE);
+    gtk_text_buffer_get_start_iter (buffer, &start);
+    gtk_text_buffer_get_end_iter (buffer, &end);
+    tmpStr = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
     /* get the fonts */
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_button));
-    if(newFont!=NULL) {
+    if(newFont != NULL) {
        g_key_file_set_string (keyString, "sketch", "font",newFont);
        g_free (newFont);
     }
@@ -1990,7 +1918,7 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
   gchar *s1 = g_key_file_get_string (keyString, "application", "current-file", NULL);
   if(load_gtk_rich_text (s1, buffer, mainWindow, data)!=0) {
      misc_clear_text (buffer, "left");
-     printf ("* can't reload last work or it's the first start of this software ! *\n");
+     printf ("* Redac :  can't reload last work or it's the first start of this software ! *\n");
      /* the default filename is built inside gKeyfile if it isn"t already exists ! */
      /* then we must add a default file name for default path ; in other case, we'll get a segfault */
      /* we get the current date */
