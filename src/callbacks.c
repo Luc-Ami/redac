@@ -441,10 +441,12 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
   w=ABS((gint)x-data->x1);
   h=ABS((gint)y-data->y1);
   /* x2, y2 : coordinates, in relative mode, of upperleft quadrant */
-  if((gint)x<data->x1) 
+  if((gint)x<data->x1) {
      x2=(gint)x;
-  else
+  }
+  else {
    x2=data->x1;
+  }
 
   if((gint)y<data->y1) 
      y2=(gint)y;
@@ -491,7 +493,7 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
      return TRUE;
   }
 
-  gtk_widget_destroy (GTK_WIDGET(data->window)); 
+//  gtk_widget_destroy (GTK_WIDGET(data->window)); 
   data->button_pressed = FALSE;
   
   /* get absolute screen coordinates */
@@ -643,6 +645,7 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
 
   /* grab focus */
   gtk_widget_grab_focus (GTK_WIDGET(data->PDFScrollable));
+  
   if (gdk_event_get_event_type(event) == GDK_BUTTON_PRESS)  {
    if(event->button.button == 3) {/* right click */
        data->button_pressed = FALSE;/* yes, to avoid mistakes on drawings */
@@ -677,7 +680,7 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
         data->w  = 0;
         data->h  = 0;
         data->button_pressed = TRUE;
-        data->window = create_select_window ();
+       // data->window = create_select_window ();
         printf ("début select PDF\n");
    }
   }
@@ -760,8 +763,8 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
   data->y1 = MIN (data->y1, event->button.y_root);
 
   if(data->w <= 0 || data->h <= 0) {
-      gtk_window_move (GTK_WINDOW (window), -100, -100);
-      gtk_window_resize (GTK_WINDOW (window), 10, 10);
+     // gtk_window_move (GTK_WINDOW (window), -100, -100);
+     // gtk_window_resize (GTK_WINDOW (window), 10, 10);
       g_object_unref (page);
       cairo_destroy (cr);
       return TRUE;
@@ -778,8 +781,8 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
 
 
 
-  gtk_window_move (GTK_WINDOW (window), data->x1, data->y1);
-  gtk_window_resize (GTK_WINDOW (window), data->w, data->h);
+ // gtk_window_move (GTK_WINDOW (window), data->x1, data->y1);
+ // gtk_window_resize (GTK_WINDOW (window), data->w, data->h);
 
           /* !!!! ici il faut mettre la partie PDF */
    printf("drag width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", data->w, data->h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
