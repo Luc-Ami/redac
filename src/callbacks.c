@@ -60,7 +60,7 @@ void update_statusbar (GtkTextBuffer *buffer, APP_data *data)
   GtkTextTagTable *tagTable1;
   GKeyFile *keyString;
   GtkTextView *view;
-  GtkStatusbar  *statusbar = data->statusbar1;
+  GtkStatusbar  *statusbar = GTK_STATUSBAR (data->statusbar1);
   static gint countchange = 0;
   
   countchange++;
@@ -200,36 +200,37 @@ void update_statusbar (GtkTextBuffer *buffer, APP_data *data)
      }
   }  
 
-  if(iPendingFormat > 1)
+  if(iPendingFormat > 1) {
      iPendingFormat = 0;
+  }
   gtk_statusbar_push (statusbar, 0, msg);
   g_free (msg);
 
   keyString = g_object_get_data (G_OBJECT(window1), "config");
-  msg = g_strdup_printf (_("%s"), g_key_file_get_string(keyString, "application", "current-file", NULL));
-  gtk_label_set_markup (GTK_WIDGET(gtk_builder_get_object (data->builder, "labelMainTitle")),
+  msg = g_strdup_printf (_("%s"), g_key_file_get_string (keyString, "application", "current-file", NULL));
+  gtk_label_set_markup (GTK_LABEL (gtk_builder_get_object (data->builder, "labelMainTitle")),
                              g_strdup_printf (_("<small><b>%s-<span foreground=\"red\">modified</span></b></small>"), msg));
 //  gtk_header_bar_set_subtitle (lookup_widget(GTK_WIDGET(window1), "headBar"),
   //                           msg);
-  //gtk_window_set_title (GTK_WINDOW(window1),msg);
+
   g_free (msg);
   /* now we check which tags are used */
   fUserClickedButton = FALSE;/* in order to avoid double calls to format callbacks */
-  button = GTK_TOOL_BUTTON (lookup_widget(GTK_WIDGET(window1), "button_bold"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_bold"));
   if((get_tag_in_selection ("bold", start)) || ((iPendingFormat>0)&&(fBold))) {
      toggle_css_value (button, TRUE);
   }
   else {
     toggle_css_value (button, FALSE);
   }
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_italic"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_italic"));
   if((get_tag_in_selection ("italic", start)) || ((iPendingFormat>0)&&(fItalic) )  ) {
           toggle_css_value (button, TRUE);
   }
   else {
           toggle_css_value (button, FALSE);
   }
-  button = GTK_TOOL_BUTTON (lookup_widget(GTK_WIDGET(window1), "button_underline"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_underline"));
   if((get_tag_in_selection ("underline", start)) || ((iPendingFormat>0)&&(fUnderline) ) ) {
           toggle_css_value (button, TRUE);
   }
@@ -237,28 +238,28 @@ void update_statusbar (GtkTextBuffer *buffer, APP_data *data)
           toggle_css_value (button, FALSE);
   }
 
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_superscript"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_superscript"));
   if((get_tag_in_selection ("superscript", start)) || ((iPendingFormat>0)&&(fSuperscript) ) ) {
           toggle_css_value (button, TRUE);
   }
   else {
           toggle_css_value (button, FALSE);
   }
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_subscript"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_subscript"));
   if((get_tag_in_selection ("subscript", start)) || ((iPendingFormat>0)&&(fSubscript) ) ) {
           toggle_css_value(button, TRUE);
   }
   else {
           toggle_css_value (button, FALSE);
   }
-  button = GTK_TOOL_BUTTON (lookup_widget(GTK_WIDGET(window1), "button_highlight"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_highlight"));
   if((get_tag_in_selection ("highlight", start)) || ((iPendingFormat>0)&&(fHighlight) ) ) {
           toggle_css_value (button, TRUE);
   }
   else {
           toggle_css_value (button, FALSE);
   }
-  button = GTK_TOOL_BUTTON (lookup_widget(GTK_WIDGET(window1), "button_quotation"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_quotation"));
   if((get_tag_in_selection ("quotation", start)) || ((iPendingFormat>0)&&(fQuotation) ) ) {
           toggle_css_value (button, TRUE);
           misc_set_sensitive_format_buttons (FALSE, data);
@@ -267,7 +268,7 @@ void update_statusbar (GtkTextBuffer *buffer, APP_data *data)
           toggle_css_value (button, FALSE);
           misc_set_sensitive_format_buttons (TRUE, data);
   } 
-  button = GTK_TOOL_BUTTON (lookup_widget(GTK_WIDGET(window1), "button_strikethrough"));
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_strikethrough"));
   if((get_tag_in_selection ("strikethrough", start)) || ((iPendingFormat>0)&&(fStrikethrough) ) ) {
           toggle_css_value (button, TRUE);
   }
@@ -321,12 +322,13 @@ void on_button_button_pencil_toggled (GtkButton  *button, APP_data *user_data)
 {
   GtkToolItem *tmpButton = NULL;
 
-  tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "button_pencil"));
-  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  {
+  tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "button_pencil"));
+  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (tmpButton)))  {
       user_data->fPencilTool = TRUE;
   }
-  else
+  else {
     user_data->fPencilTool = FALSE;
+  }
 }
 
 /***************************************************
@@ -349,7 +351,7 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
   /* get absolute screen coordinates */
   gdk_window_get_origin (gtk_widget_get_window (data->SketchDrawable), &root_xs, &root_ys);  
   /* we get the current RGBA color */
-  pBtnColor = lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+  pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
   /* Paint to the surface, where we store our state */
   cr = cairo_create (data->Sketchsurface);
@@ -358,21 +360,21 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
   PangoContext* context = gtk_widget_get_pango_context  (data->SketchScrollable);
-  PangoFontDescription *desc = pango_context_get_font_description(context);    
-  newFont = g_key_file_get_string(keyString, "sketch", "font", NULL);
+  PangoFontDescription *desc = pango_context_get_font_description (context);    
+  newFont = g_key_file_get_string (keyString, "sketch", "font", NULL);
   
   if (newFont != NULL) { 
         desc = pango_font_description_from_string (newFont);
         if (desc != NULL) {
-          cairo_select_font_face(cr, pango_font_description_get_family (desc), 
+          cairo_select_font_face (cr, pango_font_description_get_family (desc), 
                                      pango_font_description_get_style(desc), 
                                      CAIRO_FONT_WEIGHT_BOLD);
-          cairo_set_font_size(cr, pango_font_description_get_size(desc)/1000 );
-          pango_font_description_free(desc);
+          cairo_set_font_size (cr, pango_font_description_get_size(desc)/1000 );
+          pango_font_description_free (desc);
         }
         else {
-            cairo_select_font_face(cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
-            cairo_set_font_size(cr, 15 );
+            cairo_select_font_face (cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+            cairo_set_font_size (cr, 15 );
         }
         g_free (newFont);
   }
@@ -380,40 +382,43 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
   /* we compute total size for undo engine */
   for( i = 0; sdata[i]; i++ ) {
     /* warning : if lign empty then extents==0 ! */
-    cairo_text_extents(cr, sdata[i], &extents);
-    if(extents.width>w)
-      w=(gint)extents.width;
-    if(extents.height>h)
-      h=(gint)extents.height;
+    cairo_text_extents (cr, sdata[i], &extents);
+    if(extents.width>w) {
+      w = (gint)extents.width;
+    }
+    if(extents.height>h) {
+      h = (gint)extents.height;
+    }
     j++;
   }
 
   /* undo engine */
-  xorg=data->x1-root_xs;
-  if(xorg<0)
-    xorg=0;
-  yorg=data->y1-root_ys-h;
-  if(yorg<0)
-    yorg=0;
-
-  data->undo.pix=gdk_pixbuf_get_from_surface (data->Sketchsurface,
+  xorg = data->x1-root_xs;
+  if(xorg<0) {
+    xorg = 0;
+  }
+  yorg = data->y1-root_ys-h;
+  if(yorg<0) {
+    yorg = 0;
+  }
+  data->undo.pix = gdk_pixbuf_get_from_surface (data->Sketchsurface,
                              xorg, yorg, w+10, (gint)(1.5*j*h)+2);
 
-  data->undo.x1=xorg;
-  data->undo.y1=yorg;
+  data->undo.x1 = xorg;
+  data->undo.y1 = yorg;
   if(w>0 && h>0) {
-     undo_push(data->currentStack,OP_SKETCH_ANNOT, data);
+     undo_push (data->currentStack,OP_SKETCH_ANNOT, data);
      /* loop until all splitted multiline text is displayed */
      cairo_move_to (cr, (gdouble)xorg, (gdouble)data->y1-root_ys);
      for( i = 0; sdata[i]; i++ ) {
-      cairo_show_text(cr, sdata[i]);
+      cairo_show_text (cr, sdata[i]);
       cairo_move_to (cr, (gdouble)xorg, (gdouble)data->y1-root_ys+(i+1)*h*1.5);
     }
   }/* endif */
-  cairo_stroke(cr);
-  cairo_destroy(cr);
+  cairo_stroke (cr);
+  cairo_destroy (cr);
   gtk_widget_queue_draw (data->SketchDrawable);
-  g_strfreev(sdata);
+  g_strfreev (sdata);
 }
 /***************************************************
   Draw a line on the screen
@@ -429,52 +434,56 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
   GtkWidget *pBtnColor; 
   cairo_t *cr = NULL;
 
-  pen_width_margin=(pen_width/2)+1;
+  pen_width_margin = (pen_width/2)+1;
   /* we get the current RGBA color */
-  pBtnColor=lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+  pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
   /* Paint to the surface, where we store our state */
   cr = cairo_create (data->Sketchsurface);
-  cairo_set_source_rgb(cr, color.red, color.green, color.blue);
+  cairo_set_source_rgb (cr, color.red, color.green, color.blue);
   cairo_set_line_width (cr, pen_width);
   /* we get a copy of underlaying rectangle for undo engine */
-  w=ABS((gint)x-data->x1);
-  h=ABS((gint)y-data->y1);
+  w = ABS((gint)x - data->x1);
+  h = ABS((gint)y - data->y1);
   /* x2, y2 : coordinates, in relative mode, of upperleft quadrant */
   if((gint)x<data->x1) {
-     x2=(gint)x;
+     x2 = (gint)x;
   }
   else {
-   x2=data->x1;
+   x2 = data->x1;
   }
 
-  if((gint)y<data->y1) 
-     y2=(gint)y;
-  else
-   y2=data->y1;
-
+  if((gint)y<data->y1) {
+     y2 = (gint)y;
+  }
+  else {
+   y2 = data->y1;
+  }
+ 
   if(x2<=0)
-   x2+pen_width_margin;
+   x2 = x2 + pen_width_margin;
   if(y2<=0)
-   y2+pen_width_margin;
+   y2 = y2 + pen_width_margin;
 
 
   if(w>0 && h>0 ) {
-    data->undo.pix=gdk_pixbuf_get_from_surface (data->Sketchsurface,
-                             x2-pen_width_margin, y2-pen_width_margin,
-                             w+(gint)2*pen_width_margin, h+(gint)2*pen_width_margin);
+    data->undo.pix = gdk_pixbuf_get_from_surface (data->Sketchsurface,
+                             x2-pen_width_margin, 
+                             y2-pen_width_margin,
+                             w+(gint)2*pen_width_margin, 
+                             h+(gint)2*pen_width_margin);
 
-    data->undo.x1=x2-pen_width_margin;
-    data->undo.y1=y2-pen_width_margin;
+    data->undo.x1 = x2-pen_width_margin;
+    data->undo.y1 = y2-pen_width_margin;
     cairo_move_to (cr, (gdouble)data->x1, (gdouble)data->y1);
     cairo_line_to (cr, x, y);
-    cairo_stroke(cr);
-    cairo_destroy(cr);
+    cairo_stroke (cr);
+    cairo_destroy (cr);
     gtk_widget_queue_draw (data->SketchDrawable);
-    data->x1=(gint)x;
-    data->y1=(gint)y;
+    data->x1 = (gint)x;
+    data->y1 = (gint)y;
     /* undo engine */
-    undo_push(data->currentStack,OP_SET_POINT, data);
+    undo_push (data->currentStack,OP_SET_POINT, data);
   }
 }
 
@@ -543,10 +552,12 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
      }
      case PDF_SEL_MODE_NOTE: { /* simple text note */
        /* bug hunt : force to a widh and height of at least 24 pixels ! */
-       if(data->w<24)
+       if(data->w<24) {
          data->w = 24;
-       if(data->h<24)
+       }
+       if(data->h<24) {
          data->h = 24;
+       }
 
        PDF_set_text_annot_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
@@ -665,7 +676,7 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
        PopplerAnnot *current_annot = NULL;
        current_annot = PDF_find_annot_at_position ((gint)event->button.x_root-root_xs, (gint)event->button.y_root-root_ys, data);
        data->current_annot = current_annot;
-       menu = create_menu_PDF (window1, data);
+       menu = GTK_MENU (create_menu_PDF (window1, data));
        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
 
    }
@@ -829,16 +840,16 @@ gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *even
 
 {
   /* we must check if it's a RIGHT click code==3, left code ==1 middle code=2 */
-  if (gdk_event_get_event_type(event) == GDK_BUTTON_PRESS)  {
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)  {
     data->x1 = (gint)event->button.x;/* common to Right click and left click in pencil mode - relative coordinates to current window, drawing area without decorations*/
     data->y1 = (gint)event->button.y;
     data->x1_event_root =  event->button.x_root;/* for undo : absolute screen coordinates */
     data->y1_event_root =  event->button.y_root;
-    if(event->button.button==3) {
+    if(event->button.button == 3) {
        data->button_pressed = FALSE;/* yes, to avoid mistakes on drawings */
        GtkMenu *menu;
        GtkWidget *window1 = data->appWindow;
-       menu = create_menu_sketch( window1, data);
+       menu = GTK_MENU(create_menu_sketch( window1, data));
        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
        return TRUE;
     }
@@ -883,13 +894,13 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
     data->button_pressed = FALSE;
     /* annotation mode _ yes I reuse PDF flag to simplify code */
     if(data->clipboardMode == PDF_SEL_MODE_NOTE) {  
-      pBtnColor = lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+      pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
       /* we get the current RGBA color */
-      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (pBtnColor), &color);
 
-      tmpStr = dialog_add_text_annotation(data->appWindow, "", data);
+      tmpStr = dialog_add_text_annotation (data->appWindow, "", data);
       if(tmpStr!=NULL) {
-        draw_text (event->button.x, event->button.y, data, tmpStr);
+         draw_text (event->button.x, event->button.y, data, tmpStr);
       }
       g_free (tmpStr);
       return TRUE;
@@ -915,9 +926,9 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *eve
   mouse move on Sketch area
 
 ******************************************/
-gboolean on_sketch_draw_motion_event_callback(GtkWidget *widget, GdkEvent *event, APP_data *data)
+gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 {
- GtkWidget *window=data->window;
+ GtkWidget *window = data->window;
  GKeyFile *keyString;
 
  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
@@ -990,29 +1001,29 @@ on_clearSketch_clicked  (GtkButton  *button, APP_data *data_app)
   GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
   gint ret;
 
-  alertDlg=gtk_message_dialog_new (data_app->appWindow,  flags,
+  alertDlg = GTK_WIDGET (gtk_message_dialog_new (GTK_WINDOW(data_app->appWindow), flags,
                      GTK_MESSAGE_WARNING,
                      GTK_BUTTONS_OK_CANCEL,"%s",
                     _("Do you really want to erase your sketch ?\nThis operation can't be cancelled once done ! ")
-                     );
+                     ));
               
-  ret =  gtk_dialog_run(GTK_DIALOG(alertDlg));
-  gtk_widget_destroy  (GTK_WIDGET(alertDlg));
-  if(ret==GTK_RESPONSE_OK) {
+  ret =  gtk_dialog_run (GTK_DIALOG(alertDlg));
+  gtk_widget_destroy (GTK_WIDGET(alertDlg));
+  if(ret == GTK_RESPONSE_OK) {
       keyString = g_object_get_data (G_OBJECT(data_app->appWindow), "config");
-      color.red=g_key_file_get_double(keyString, "sketch", "paper.color.red", NULL);
-      color.green=g_key_file_get_double(keyString, "sketch", "paper.color.green", NULL);
-      color.blue=g_key_file_get_double(keyString, "sketch", "paper.color.blue", NULL);
-      color.alpha=1;
+      color.red = g_key_file_get_double (keyString, "sketch", "paper.color.red", NULL);
+      color.green = g_key_file_get_double (keyString, "sketch", "paper.color.green", NULL);
+      color.blue = g_key_file_get_double (keyString, "sketch", "paper.color.blue", NULL);
+      color.alpha = 1;
       cairo_t *cr;
       cr = cairo_create (data_app->Sketchsurface);
-      cairo_set_source_rgb(cr, color.red, color.green, color.blue);
-      cairo_rectangle(cr, 0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
-      cairo_fill(cr);
+      cairo_set_source_rgb (cr, color.red, color.green, color.blue);
+      cairo_rectangle (cr, 0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT);
+      cairo_fill (cr);
       cairo_destroy (cr);
-      gtk_widget_queue_draw ( data_app->SketchDrawable);
+      gtk_widget_queue_draw (data_app->SketchDrawable);
       /* we must remove ALL sketch related operations from Undo stack ! */
-      undo_free_all_sketch_ops(data_app);
+      undo_free_all_sketch_ops (data_app);
   }
 }
 
@@ -1049,49 +1060,50 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
 
   if(ret == GTK_RESPONSE_OK) {
     /* we get the current RGBA color */
-    pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_fg"));
+    pBtnColor = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_fg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &text_color_fg);
 
-    pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_bg"));
+    pBtnColor = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "color_button_editor_bg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &text_color_bg);
 
-    pBtnColor = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_sketch_bg"));
+    pBtnColor = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "color_button_sketch_bg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &sketch_color_bg);
     /* we setup config file */
     keyString = g_object_get_data (G_OBJECT(data_app->appWindow), "config"); 
 
     /* global prefs */
-    g_key_file_set_boolean(keyString, "application", "interval-save",  
+    g_key_file_set_boolean (keyString, "application", "interval-save",  
                  gtk_toggle_button_get_active (
                  GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
                     data_app->tmpBuilder, "configAutoSave"))))
                 );
 
-    g_key_file_set_boolean(keyString, "application", "autoreload-PDF",  
+    g_key_file_set_boolean (keyString, "application", "autoreload-PDF",  
                  gtk_toggle_button_get_active (
                  GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
                     data_app->tmpBuilder, "configAutoReloadPDF"))))
                   );
 
-    g_key_file_set_boolean(keyString, "application", "prompt-before-quit",  
+    g_key_file_set_boolean (keyString, "application", "prompt-before-quit",  
                  gtk_toggle_button_get_active (
                  GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
                     data_app->tmpBuilder, "configPromptQuit"))))
     );
 
-    g_key_file_set_boolean(keyString, "application", "prompt-before-overwrite",  
+    g_key_file_set_boolean (keyString, "application", "prompt-before-overwrite",  
                  gtk_toggle_button_get_active (
                  GTK_TOGGLE_BUTTON (GTK_WIDGET(gtk_builder_get_object (
                     data_app->tmpBuilder, "configPromptOverwrite"))))
     );
 
 
-    if(g_key_file_get_boolean(keyString, "application", "interval-save",  NULL) ) {
-      gtk_widget_show( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_task_due"));
+    if(g_key_file_get_boolean (keyString, "application", "interval-save",  NULL) ) {
+      gtk_widget_show (lookup_widget (GTK_WIDGET(data_app->appWindow),"image_task_due"));
     }
-    else
-      gtk_widget_hide ( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_task_due"));
-
+    else {
+      gtk_widget_hide (lookup_widget (GTK_WIDGET(data_app->appWindow),"image_task_due"));
+    }
+    
     g_key_file_set_double (keyString, "editor", "text.color.red", text_color_fg.red);
     g_key_file_set_double (keyString, "editor", "text.color.green", text_color_fg.green);
     g_key_file_set_double (keyString, "editor", "text.color.blue", text_color_fg.blue);
@@ -1111,34 +1123,35 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
 
     pen_width = 
          gtk_spin_button_get_value (
-              GTK_SPIN_BUTTON(GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "pen_width_Spin"))));
+              GTK_SPIN_BUTTON(GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "pen_width_Spin"))));
 
     g_key_file_set_double (keyString, "sketch", "pen-width", pen_width);
     
     rewValue = 
          gtk_spin_button_get_value (
-              GTK_SPIN_BUTTON(GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "rewGapSpin"))));
+              GTK_SPIN_BUTTON (GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "rewGapSpin"))));
 
     g_key_file_set_double (keyString, "application", "audio-file-rewind-step", rewValue);
 
     jumpValue = gtk_spin_button_get_value (
-              GTK_SPIN_BUTTON(GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "jumpGapSpin"))));
+              GTK_SPIN_BUTTON (GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "jumpGapSpin"))));
     g_key_file_set_double (keyString, "application", "audio-file-marks-step", jumpValue);
 
     g_key_file_set_boolean (keyString, "application","audio-auto-rewind",  
                  gtk_toggle_button_get_active (
-                     GTK_TOGGLE_BUTTON(
-                       GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "configAutoRewindPlayer")))));
+                     GTK_TOGGLE_BUTTON (
+                       GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "configAutoRewindPlayer")))));
 
-    if(g_key_file_get_boolean(keyString, "application", "audio-auto-rewind",  NULL) ) {
+    if(g_key_file_get_boolean (keyString, "application", "audio-auto-rewind",  NULL) ) {
        gtk_widget_show( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
     }
-    else
-       gtk_widget_hide ( lookup_widget(GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
+    else {
+       gtk_widget_hide (lookup_widget (GTK_WIDGET(data_app->appWindow),"image_audio_jump_to_start"));
+    }
     /* get the fonts */
     newFont = gtk_font_chooser_get_font (
-                GTK_FONT_CHOOSER(
-                   GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "font_button_sketch"))
+                GTK_FONT_CHOOSER (
+                   GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "font_button_sketch"))
                 )
               );
 
@@ -1146,17 +1159,17 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
 
 // font_button_sketch
 
-    if(newFont!=NULL) {
+    if(newFont != NULL) {
        g_key_file_set_string (keyString, "sketch", "font",newFont);
        g_free (newFont);
     }
     /* modify editor's textview default font */
-    gchar *fntFamily = NULL;
+    const gchar *fntFamily = NULL;
     gint fntSize = 12;
    // PangoContext* context = gtk_widget_get_pango_context  (data_app->view);
     PangoFontDescription *desc;// = pango_context_get_font_description(context);    
     newFont = gtk_font_chooser_get_font (GTK_FONT_CHOOSER( 
-                  GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "font_button_editor"))
+                  GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "font_button_editor"))
               ));
 
 
@@ -1165,7 +1178,7 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
         desc = pango_font_description_from_string (newFont);
         if (desc != NULL) {
           fntFamily = pango_font_description_get_family (desc);
-          fntSize = pango_font_description_get_size(desc)/1000;
+          fntSize = pango_font_description_get_size (desc)/1000;
         }
         g_free (newFont);
     }
@@ -1181,9 +1194,10 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
                  fntSize,
                  (gint) (text_color_fg.red*255),(gint)( text_color_fg.green*255), (gint)(text_color_fg.blue*255),
                  (gint) (text_color_bg.red*255),(gint)( text_color_bg.green*255), (gint)(text_color_bg.blue*255));
-    if(desc)
+    if(desc) {
       pango_font_description_free (desc);
-
+    }
+    
     gtk_css_provider_load_from_data (css_provider,css,-1,NULL);
     GdkScreen* screen = gdk_screen_get_default ();
     gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -1192,7 +1206,7 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
 
   /* cleaning */
   g_object_unref (data_app->tmpBuilder);
-  gtk_widget_destroy  (GTK_WIDGET(dialog));  /* please note : with a Builder, you can only use destroy in case of the properties 'destroy with parent' isn't activated for the dualog */
+  gtk_widget_destroy (GTK_WIDGET(dialog));  /* please note : with a Builder, you can only use destroy in case of the properties 'destroy with parent' isn't activated for the dualog */
 
 }
 
@@ -1201,7 +1215,7 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
   set alignment button to
   a specific alignment
 ***************************/
-void set_alignment_button(GtkWidget *win, gint alignment)
+void set_alignment_button (GtkWidget *win, gint alignment)
 {
   switch(alignment) {
     case KW_ALIGNMENT_LEFT: {
@@ -1235,33 +1249,27 @@ void on_button_clip_mode_toggled (GtkButton *button, APP_data *user_data)
 {
   GtkToolItem *tmpButton = NULL;
 
-  tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonTextSelect"));
+  tmpButton = GTK_TOOL_ITEM (lookup_widget (GTK_WIDGET(button), "pRadioButtonTextSelect"));
 
-  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  
-  {
+  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton))) {
        user_data->clipboardMode = PDF_SEL_MODE_TEXT;
   }
-  else 
-  {
-     tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonPictureSelect"));
+  else {
+     tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonPictureSelect"));
 
-     if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  
-       {
+     if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton))) {
           user_data->clipboardMode = PDF_SEL_MODE_PICT;
-       }
-     else 
-       {
-         tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonHiglightSelect"));
-         if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  
-           {
+     }
+     else {
+         tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonHiglightSelect"));
+         if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton))) {
             user_data->clipboardMode = PDF_SEL_MODE_HIGH;
-           }
-         else 
-           {
+         }
+         else {
              user_data->clipboardMode = PDF_SEL_MODE_NOTE;
-           }
-        }
-  }/* 1er choix */
+         }
+     }/* else if */
+  }/* 1er choix else if */
 }
 
 /*********************************************
@@ -1272,30 +1280,30 @@ void on_button_clip_mode_toggled (GtkButton *button, APP_data *user_data)
 void
 on_button_alignment_toggled (GtkButton *button, APP_data *data)
 {
-  GtkToolItem *tmpButton=NULL;
+  GtkToolItem *tmpButton = NULL;
 
-  tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonLeft"));
+  tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonLeft"));
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  {
        on_left_justify_clicked (data);
        kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
        data->kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
        return;
    }
-  tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonCenter"));
+  tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonCenter"));
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  {
        on_center_justify_clicked (data);
        kw_paragraph_alignment = KW_ALIGNMENT_CENTER;
        data->kw_paragraph_alignment = KW_ALIGNMENT_CENTER;
        return;
    }
-  tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonRight"));
+  tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonRight"));
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  {
        on_right_justify_clicked (data);
        kw_paragraph_alignment = KW_ALIGNMENT_RIGHT;
        data->kw_paragraph_alignment = KW_ALIGNMENT_RIGHT;
        return;
    }
-  tmpButton = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(button), "pRadioButtonFill"));
+  tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonFill"));
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton)))  {
        on_fill_justify_clicked (data);
        kw_paragraph_alignment = KW_ALIGNMENT_FILL;
@@ -1315,8 +1323,9 @@ on_bold_clicked  (GtkButton  *button, APP_data *data)
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;  
 
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
+  }
   fIsBold = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
   tagTable1 = gtk_text_buffer_get_tag_table (buffer);
@@ -1335,28 +1344,28 @@ on_bold_clicked  (GtkButton  *button, APP_data *data)
                                       &end);
   if(fExistSelection) {
     /* now we apply the tag */
-     data->undo.serialized_buffer=NULL;
+     data->undo.serialized_buffer = NULL;
      if(fIsBold) {
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
         undo_push(data->currentStack, OP_SET_BOLD, data);
      }
      else {
-       gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-       data->undo.start_sel=start;
-       data->undo.end_sel=end;
-       undo_push(data->currentStack, OP_UNSET_BOLD, data);
+       gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+       data->undo.start_sel = start;
+       data->undo.end_sel = end;
+       undo_push (data->currentStack, OP_UNSET_BOLD, data);
      } 
   }  
 }
 
-/*
+/***************************************
   callback : button italic clicked 
 
-*/
+***************************************/
 void
-on_italic_clicked  (GtkButton  *button, APP_data *data)
+on_italic_clicked (GtkButton *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1364,19 +1373,20 @@ on_italic_clicked  (GtkButton  *button, APP_data *data)
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;
 
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
-
+  }
+  
   fIsItalic = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
   tagTable1 = gtk_text_buffer_get_tag_table (buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "italic");
+  tag = gtk_text_tag_table_lookup (tagTable1, "italic");
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
-     fItalic=!fItalic;
+     fItalic = !fItalic;
      gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
      /* we compute current char offset */
-     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     iPendingOffset = gtk_text_iter_get_offset(&iter);
      fUserClickedButton = TRUE;
      return;
   }
@@ -1390,13 +1400,13 @@ on_italic_clicked  (GtkButton  *button, APP_data *data)
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel   = end;
-        undo_push(data->currentStack, OP_SET_ITALIC, data);
+        undo_push (data->currentStack, OP_SET_ITALIC, data);
      }
      else {
-       gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-       data->undo.start_sel=start;
-       data->undo.end_sel=end;
-       undo_push(data->currentStack, OP_UNSET_ITALIC, data);
+       gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+       data->undo.start_sel = start;
+       data->undo.end_sel = end;
+       undo_push (data->currentStack, OP_UNSET_ITALIC, data);
      } 
   }  
 }
@@ -1406,7 +1416,7 @@ on_italic_clicked  (GtkButton  *button, APP_data *data)
 
 */
 void
-on_underline_clicked  (GtkButton *button, APP_data *data)
+on_underline_clicked (GtkButton *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1414,50 +1424,51 @@ on_underline_clicked  (GtkButton *button, APP_data *data)
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;
 
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
-
+  }
+  
   fIsUnderline = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "underline");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "underline");
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
      /* it's a demand to switch to insert/append mode with a specific format */
-     fUnderline=!fUnderline;
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     fUnderline = !fUnderline;
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
      /* we compute current char offset */
-     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     iPendingOffset = gtk_text_iter_get_offset (&iter);
      fUserClickedButton = TRUE;
      return;
   }
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
   if(fExistSelection) {
     /* now we apply the tag */
-     data->undo.serialized_buffer=NULL;
+     data->undo.serialized_buffer = NULL;
      if(fIsUnderline){
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
-        undo_push(data->currentStack, OP_SET_UNDERLINE, data);
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
+        undo_push (data->currentStack, OP_SET_UNDERLINE, data);
      }
      else {
-       gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
-        undo_push(data->currentStack, OP_UNSET_UNDERLINE, data);
+       gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
+        undo_push (data->currentStack, OP_UNSET_UNDERLINE, data);
      } 
   }  
 }
 
 
-/*
+/*****************************************
   callback : superscript shortcut called
   <CTRL>+<^>
 
-*/
+******************************************/
 void
-on_superscript_clicked     (GtkButton  *button, APP_data  *data)
+on_superscript_clicked (GtkButton *button, APP_data  *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1465,20 +1476,21 @@ on_superscript_clicked     (GtkButton  *button, APP_data  *data)
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;
 
-  if(!fUserClickedButton) 
+  if(!fUserClickedButton) {
      return;
+  }
   
   fIsSuperscript = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "superscript");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "superscript");
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
      /* it's a demand to switch to insert/append mode with a specific format */
-     fSuperscript=!fSuperscript;
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     fSuperscript = !fSuperscript;
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
      /* we compute current char offset */
-     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     iPendingOffset = gtk_text_iter_get_offset(&iter);
      fUserClickedButton = TRUE;
      return;
   }
@@ -1489,28 +1501,28 @@ on_superscript_clicked     (GtkButton  *button, APP_data  *data)
    //  fSuperscript=!fSuperscript;
   //fIsSuperscript = fSuperscript;
     /* now we apply the tag */
-     data->undo.serialized_buffer=NULL;
+     data->undo.serialized_buffer = NULL;
      if(fIsSuperscript){
         //gtk_text_buffer_remove_tag_by_name (buffer, "superscript", &start, &end);
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
-        undo_push(data->currentStack, OP_SET_SUPER, data);
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
+        undo_push (data->currentStack, OP_SET_SUPER, data);
      }
      else {
-       gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-       data->undo.start_sel=start;
-       data->undo.end_sel=end;
-       undo_push(data->currentStack, OP_UNSET_SUPER, data);
+       gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+       data->undo.start_sel = start;
+       data->undo.end_sel = end;
+       undo_push (data->currentStack, OP_UNSET_SUPER, data);
      } 
   }  
 }
 
-/*
+/***************************************
   callback : subscript shortcut called
   <CTRL>+<*>
 
-*/
+***************************************/
 void
 on_subscript_clicked (GtkButton *button, APP_data *data)
 {
@@ -1521,22 +1533,22 @@ on_subscript_clicked (GtkButton *button, APP_data *data)
   GtkTextTagTable *tagTable1;
   gboolean fIsSubcript = FALSE;
 
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
-
+  }
+  
   fIsSubcript = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "subscript");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "subscript");
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
-     fSubscript=!fSubscript;
+     fSubscript = !fSubscript;
 
      /* it's a demand to switch to insert/append mode with a specific format */
-
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
      /* we compute current char offset */
-     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     iPendingOffset = gtk_text_iter_get_offset (&iter);
      fUserClickedButton = TRUE;
      return;
   }
@@ -1546,28 +1558,28 @@ on_subscript_clicked (GtkButton *button, APP_data *data)
      //fSubscript=!fSubscript;
      //fIsSubcript = fSubscript;
     /* now we apply the tag */
-     data->undo.serialized_buffer=NULL;
+     data->undo.serialized_buffer = NULL;
      if(fIsSubcript){
         //gtk_text_buffer_remove_tag_by_name (buffer, "subscript", &start, &end);
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
-        undo_push(data->currentStack, OP_SET_SUB, data);
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
+        undo_push (data->currentStack, OP_SET_SUB, data);
      }
      else {
-        gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
-        undo_push(data->currentStack, OP_UNSET_SUB, data);
+        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
+        undo_push (data->currentStack, OP_UNSET_SUB, data);
      } 
   }  
 }
 
-/*
+/*****************************************
   callback : highlight shortcut called
   <CTRL>+<h>
 
-*/
+*****************************************/
 void
 on_highlight_clicked (GtkButton *button, APP_data *data)
 {
@@ -1578,21 +1590,21 @@ on_highlight_clicked (GtkButton *button, APP_data *data)
   GtkTextTagTable *tagTable1;
   gboolean fIsHighlight = FALSE;
 
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
-
+  }
+  
   fIsHighlight = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "highlight");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "highlight");
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
-     fHighlight=!fHighlight;
+     fHighlight = !fHighlight;
      /* it's a demand to switch to insert/append mode with a specific format */
-
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
      /* we compute current char offset */
-     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     iPendingOffset=gtk_text_iter_get_offset (&iter);
      fUserClickedButton = TRUE;
      return;
   }
@@ -1602,19 +1614,19 @@ on_highlight_clicked (GtkButton *button, APP_data *data)
     // fHighlight=!fHighlight;
     // fIsHighlight = fHighlight;
     /* now we apply the tag */
-     data->undo.serialized_buffer=NULL;
+     data->undo.serialized_buffer = NULL;
      if(fIsHighlight){
         //gtk_text_buffer_remove_tag_by_name (buffer, "highlight", &start, &end);
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
-        undo_push(data->currentStack, OP_SET_HIGH, data);
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
+        undo_push (data->currentStack, OP_SET_HIGH, data);
      }
      else {
-        gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-        data->undo.start_sel=start;
-        data->undo.end_sel=end;
-        undo_push(data->currentStack, OP_UNSET_HIGH, data);
+        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+        data->undo.start_sel = start;
+        data->undo.end_sel = end;
+        undo_push (data->currentStack, OP_UNSET_HIGH, data);
      } 
    /* we remove any selected area */
 //gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
@@ -1623,11 +1635,11 @@ on_highlight_clicked (GtkButton *button, APP_data *data)
   }  
 }
 
-/*
+/**********************************************
   callback : Strikethrough shortcut called
   <CTRL>+<k>
 
-*/
+**********************************************/
 void 
 on_strikethrough_clicked (GtkButton *button, APP_data *data)
 {
@@ -1638,22 +1650,22 @@ on_strikethrough_clicked (GtkButton *button, APP_data *data)
   GtkTextTagTable *tagTable1;
   gboolean fIsStrikethrough = FALSE;
 
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
-
+  }
+  
   fIsStrikethrough = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "strikethrough");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "strikethrough");
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
-     fStrikethrough=!fStrikethrough;
+     fStrikethrough = !fStrikethrough;
 
      /* it's a demand to switch to insert/append mode with a specific format */
-
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
      /* we compute current char offset */
-     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     iPendingOffset=gtk_text_iter_get_offset (&iter);
      fUserClickedButton = TRUE;
      return;
   }
@@ -1662,32 +1674,31 @@ on_strikethrough_clicked (GtkButton *button, APP_data *data)
     /* we must get a tag for the current selection */
      //fStrikethrough=!fStrikethrough;
      //fIsStrikethrough = fStrikethrough;
-     data->undo.serialized_buffer=NULL;
+     data->undo.serialized_buffer = NULL;
     /* now we apply the tag */
      if(fIsStrikethrough){
         //gtk_text_buffer_remove_tag_by_name (buffer, "strikethrough", &start, &end);
        gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
-       data->undo.start_sel=start;
-       data->undo.end_sel=end;
-       undo_push(data->currentStack, OP_SET_STRIKE, data);
+       data->undo.start_sel = start;
+       data->undo.end_sel = end;
+       undo_push (data->currentStack, OP_SET_STRIKE, data);
      }
      else {
-       gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-       data->undo.start_sel=start;
-       data->undo.end_sel=end;
-       undo_push(data->currentStack, OP_UNSET_STRIKE, data);
+       gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+       data->undo.start_sel = start;
+       data->undo.end_sel = end;
+       undo_push (data->currentStack, OP_UNSET_STRIKE, data);
      } 
   }  
 }
 
 
-
-/*
+/****************************************
   callback : quotation shortcut called
   <CTRL>+<">
 
-*/
-void on_quotation_clicked   (GtkButton  *button,  APP_data *data)
+*****************************************/
+void on_quotation_clicked (GtkButton *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1701,17 +1712,16 @@ void on_quotation_clicked   (GtkButton  *button,  APP_data *data)
 
   fIsQuotation = gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(button));
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "quotation");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "quotation");
 
   if(!gtk_text_buffer_get_has_selection (buffer)) {
-     fQuotation=!fQuotation;
+     fQuotation = !fQuotation;
 
      /* it's a request to switch to insert/append mode with a specific format */
-
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
      /* we compute current char offset */
-     iPendingOffset=gtk_text_iter_get_offset(&iter);
+     iPendingOffset = gtk_text_iter_get_offset (&iter);
      fUserClickedButton = TRUE;
      return;
   }
@@ -1723,29 +1733,28 @@ void on_quotation_clicked   (GtkButton  *button,  APP_data *data)
      //fQuotation=!fQuotation;
      //fIsQuotation = fQuotation;
     /* now we apply the tag */
-     data->undo.serialized_buffer=NULL;
+     data->undo.serialized_buffer = NULL;
      if(fIsQuotation){
         //gtk_text_buffer_remove_tag_by_name (buffer, "quotation", &start, &end);
        gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
-       data->undo.start_sel=start;
-       data->undo.end_sel=end;
-       undo_push(data->currentStack, OP_SET_QUOTE, data);
+       data->undo.start_sel = start;
+       data->undo.end_sel = end;
+       undo_push (data->currentStack, OP_SET_QUOTE, data);
      }
      else {
-       gtk_text_buffer_remove_tag(buffer, tag, &start, &end);
-       data->undo.start_sel=start;
-       data->undo.end_sel=end;
-       undo_push(data->currentStack, OP_UNSET_QUOTE, data);
+       gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+       data->undo.start_sel = start;
+       data->undo.end_sel = end;
+       undo_push (data->currentStack, OP_UNSET_QUOTE, data);
      } 
   }  
 }
 
-/*
+/*****************************************
   callback : button left justify clicked 
 
-*/
-void
-on_left_justify_clicked (APP_data *data)
+****************************************/
+void on_left_justify_clicked (APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1754,54 +1763,55 @@ on_left_justify_clicked (APP_data *data)
   gint row, col, total;
   gboolean fExistSelection;
   
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
+  }
+  
   buffer = data->buffer;
 
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "left");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "left");
   /* there is a selection ? */
   if(gtk_text_buffer_get_has_selection (buffer)) {
      fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &iter, &end);
      if(!fExistSelection) {
-        printf ("* Error : NO bounds I exit *\n");     
+        printf ("* Redac internal error : NO bounds - I exit *\n");     
         return;
      }
      /* we rewind to the start of the first selected line */
-     row = gtk_text_iter_get_line(&iter);
+     row = gtk_text_iter_get_line (&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
   else {
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     row = gtk_text_iter_get_line(&iter);
-     col = gtk_text_iter_get_line_offset(&iter);
-     total = gtk_text_buffer_get_line_count(buffer);
-     misc_append_empty_paragraph(buffer, row, total);
-     gtk_text_buffer_get_iter_at_line (buffer,&start,row);
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     row = gtk_text_iter_get_line (&iter);
+     col = gtk_text_iter_get_line_offset (&iter);
+     total = gtk_text_buffer_get_line_count (buffer);
+     misc_append_empty_paragraph (buffer, row, total);
+     gtk_text_buffer_get_iter_at_line (buffer, &start, row);
      if(total>row) {
-       gtk_text_buffer_get_iter_at_line (buffer,&end,row+1);
+       gtk_text_buffer_get_iter_at_line (buffer, &end, row+1);
      }
      else {
         gtk_text_buffer_get_end_iter (buffer, &end);
      }
   }/* elseif NO selection */
-  data->undo.serialized_buffer=NULL;
-  data->undo.prevQuadding=misc_get_paragraph_quadding(buffer, start);
-  data->undo.start_sel=start;
-  data->undo.end_sel=end;
-  undo_push(data->currentStack, OP_ALIGN_LEFT, data);
+  data->undo.serialized_buffer = NULL;
+  data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
+  data->undo.start_sel = start;
+  data->undo.end_sel = end;
+  undo_push (data->currentStack, OP_ALIGN_LEFT, data);
   /* clear all unwanted tags */
-  misc_remove_alignment_tags(buffer,start,end);
+  misc_remove_alignment_tags (buffer, start, end);
   /* now we apply the tag */
   gtk_text_buffer_apply_tag (buffer, tag, &start, &end);  
 }
 
-/*
+/*******************************************
   callback : button center justify clicked 
 
-*/
-void
-on_center_justify_clicked (APP_data *data)
+******************************************/
+void on_center_justify_clicked (APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1813,53 +1823,52 @@ on_center_justify_clicked (APP_data *data)
   if(!fUserClickedButton)
      return;
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "center");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "center");
   /* there is a selection ? */
   if(gtk_text_buffer_get_has_selection (buffer)) {
      fExistSelection = gtk_text_buffer_get_selection_bounds (buffer,
                                       &iter,
                                       &end);
      if(!fExistSelection) {
-        printf ("NOT bounds I exit \n");     
+        printf ("* Redac internal error - NO bounds, I exit \n");     
         return;
      }
      /* we rewind to the start of the first selected line */
-     row = gtk_text_iter_get_line(&iter);
-     gtk_text_buffer_get_iter_at_line (buffer,&start,row);
+     row = gtk_text_iter_get_line (&iter);
+     gtk_text_buffer_get_iter_at_line (buffer, &start, row);
   }
   else {
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     row = gtk_text_iter_get_line(&iter);
-     col = gtk_text_iter_get_line_offset(&iter);
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     row = gtk_text_iter_get_line (&iter);
+     col = gtk_text_iter_get_line_offset (&iter);
      /* we check and perhaps append an empty paragraph */
-     total = gtk_text_buffer_get_line_count(buffer);
-     misc_append_empty_paragraph(buffer, row, total);
-     gtk_text_buffer_get_iter_at_line (buffer,&start,row);
+     total = gtk_text_buffer_get_line_count (buffer);
+     misc_append_empty_paragraph (buffer, row, total);
+     gtk_text_buffer_get_iter_at_line (buffer, &start, row);
      if(total>row) {
-       gtk_text_buffer_get_iter_at_line (buffer,&end,row+1);
+       gtk_text_buffer_get_iter_at_line (buffer, &end, row+1);
      }
      else {
         gtk_text_buffer_get_end_iter (buffer, &end);
      }
   }/* elseif NO selection */
-  data->undo.serialized_buffer=NULL;
-  data->undo.prevQuadding=misc_get_paragraph_quadding(buffer, start);
-  data->undo.start_sel=start;
-  data->undo.end_sel=end;
-  undo_push(data->currentStack, OP_ALIGN_CENTER, data);
+  data->undo.serialized_buffer = NULL;
+  data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
+  data->undo.start_sel = start;
+  data->undo.end_sel = end;
+  undo_push (data->currentStack, OP_ALIGN_CENTER, data);
   /* clear all unwanted tags */
-  misc_remove_alignment_tags(buffer,start,end);
+  misc_remove_alignment_tags (buffer, start, end);
   /* now we apply the tag */
   gtk_text_buffer_apply_tag (buffer, tag, &start, &end);  
 }
 
-/*
+/******************************************
   callback : button right justify clicked 
 
-*/
-void
-on_right_justify_clicked (APP_data *data)
+*******************************************/
+void on_right_justify_clicked (APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1868,30 +1877,32 @@ on_right_justify_clicked (APP_data *data)
   gint row, col, total;
   gboolean fExistSelection;
   
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
+  }
+  
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "right");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "right");
   /* there is a selection ? */
   if(gtk_text_buffer_get_has_selection (buffer)) {
      fExistSelection = gtk_text_buffer_get_selection_bounds (buffer,
                                       &iter,
                                       &end);
      if(!fExistSelection) {
-        printf ("NOT bounds I exit \n");     
+        printf ("Redac internal error - NO bounds, I exit \n");     
         return;
      }
      /* we rewind to the start of the first selected line */
-     row = gtk_text_iter_get_line(&iter);
+     row = gtk_text_iter_get_line (&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
   else {
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     row = gtk_text_iter_get_line(&iter);
-     col = gtk_text_iter_get_line_offset(&iter);
-     total = gtk_text_buffer_get_line_count(buffer);
-     misc_append_empty_paragraph(buffer, row, total);
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     row = gtk_text_iter_get_line (&iter);
+     col = gtk_text_iter_get_line_offset (&iter);
+     total = gtk_text_buffer_get_line_count (buffer);
+     misc_append_empty_paragraph (buffer, row, total);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
      if(total>row) {
        gtk_text_buffer_get_iter_at_line (buffer,&end,row+1);
@@ -1900,23 +1911,22 @@ on_right_justify_clicked (APP_data *data)
         gtk_text_buffer_get_end_iter (buffer, &end);
      }
   }/* elseif NO selection */
-  data->undo.serialized_buffer=NULL;
-  data->undo.prevQuadding=misc_get_paragraph_quadding(buffer, start);
-  data->undo.start_sel=start;
-  data->undo.end_sel=end;
-  undo_push(data->currentStack, OP_ALIGN_RIGHT, data);
+  data->undo.serialized_buffer = NULL;
+  data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
+  data->undo.start_sel = start;
+  data->undo.end_sel = end;
+  undo_push (data->currentStack, OP_ALIGN_RIGHT, data);
   /* clear all unwanted tags */
-  misc_remove_alignment_tags(buffer,start,end);
+  misc_remove_alignment_tags (buffer,start,end);
   /* now we apply the tag */
   gtk_text_buffer_apply_tag (buffer, tag, &start, &end); 
 }
 
-/*
+/******************************************
   callback : button fill justify clicked 
 
-*/
-void
-on_fill_justify_clicked (APP_data *data)
+******************************************/
+void on_fill_justify_clicked (APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end, iter;
@@ -1925,53 +1935,54 @@ on_fill_justify_clicked (APP_data *data)
   gint row, col, total;
   gboolean fExistSelection;
   
-  if(!fUserClickedButton)
+  if(!fUserClickedButton) {
      return;
+  }
+  
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  tag = gtk_text_tag_table_lookup(tagTable1, "fill");
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tagTable1, "fill");
   /* there is a selection ? */
   if(gtk_text_buffer_get_has_selection (buffer)) {
      fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &iter, &end);
      if(!fExistSelection) {
-        printf ("NOT bounds I exit \n");     
+        printf ("* Redac internal error - NO bounds, I exit \n");     
         return;
      }
      /* we rewind to the start of the first selected line */
-     row = gtk_text_iter_get_line(&iter);
+     row = gtk_text_iter_get_line (&iter);
      gtk_text_buffer_get_iter_at_line (buffer,&start,row);
   }
   else {
-     gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
-     row = gtk_text_iter_get_line(&iter);
-     col = gtk_text_iter_get_line_offset(&iter);
-     total = gtk_text_buffer_get_line_count(buffer);
-     misc_append_empty_paragraph(buffer, row, total);
-     gtk_text_buffer_get_iter_at_line (buffer,&start,row);
+     gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
+     row = gtk_text_iter_get_line (&iter);
+     col = gtk_text_iter_get_line_offset (&iter);
+     total = gtk_text_buffer_get_line_count (buffer);
+     misc_append_empty_paragraph (buffer, row, total);
+     gtk_text_buffer_get_iter_at_line (buffer, &start, row);
      if(total>row) {
-       gtk_text_buffer_get_iter_at_line (buffer,&end,row+1);
+       gtk_text_buffer_get_iter_at_line (buffer, &end, row+1);
      }
      else {
         gtk_text_buffer_get_end_iter (buffer, &end);
      }
   }/* elseif NO selection */
-  data->undo.serialized_buffer=NULL;
-  data->undo.prevQuadding=misc_get_paragraph_quadding(buffer, start);
-  data->undo.start_sel=start;
-  data->undo.end_sel=end;
-  undo_push(data->currentStack, OP_ALIGN_FILL, data);
+  data->undo.serialized_buffer = NULL;
+  data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
+  data->undo.start_sel = start;
+  data->undo.end_sel = end;
+  undo_push (data->currentStack, OP_ALIGN_FILL, data);
   /* clear all unwanted tags */
-  misc_remove_alignment_tags(buffer,start,end);
+  misc_remove_alignment_tags (buffer,start,end);
   /* now we apply the tag */
   gtk_text_buffer_apply_tag (buffer, tag, &start, &end); 
 }
 
-/*
+/****************************************
   callback : button clear format clicked 
 
-*/
-void
-on_clear_format_clicked (GtkButton *button, APP_data *data)
+****************************************/
+void on_clear_format_clicked (GtkButton *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
@@ -1979,7 +1990,7 @@ on_clear_format_clicked (GtkButton *button, APP_data *data)
   GtkTextTagTable *tagTable1;
 
   buffer = data->buffer;
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
   
   if(!gtk_text_buffer_get_has_selection (buffer)) {
      return;
@@ -1987,7 +1998,7 @@ on_clear_format_clicked (GtkButton *button, APP_data *data)
   fExistSelection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
   if(fExistSelection) {
     /* now we apply the tag */
-     gtk_text_buffer_remove_all_tags (buffer,  &start, &end);
+     gtk_text_buffer_remove_all_tags (buffer, &start, &end);
 
   }  
 }
@@ -2001,8 +2012,8 @@ on_clear_format_clicked (GtkButton *button, APP_data *data)
 ***********************************/
 void on_undo_clicked (GtkButton *button, APP_data *data)
 { 
-  if(data->undoList!=NULL) {
-    undo_pop(data->currentStack, data);
+  if(data->undoList != NULL) {
+    undo_pop (data->currentStack, data);
   }
 }
 
@@ -2012,8 +2023,7 @@ void on_undo_clicked (GtkButton *button, APP_data *data)
   PLEASE NOTE : for PDF document, previous go backward
   to the first page with hits.
 *****************************************************/
-void
-on_find_prev_clicked (GtkButton *button, APP_data *data)
+void on_find_prev_clicked (GtkButton *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkWidget *search_entry, *tView;
@@ -2023,24 +2033,24 @@ on_find_prev_clicked (GtkButton *button, APP_data *data)
 
   GtkWidget *window1 = data->appWindow;
   buffer = data->buffer;
-  search_entry = lookup_widget(GTK_WIDGET(window1), "search_entry");
-  tView = lookup_widget(GTK_WIDGET(window1), "view");
+  search_entry = lookup_widget (GTK_WIDGET(window1), "search_entry");
+  tView = lookup_widget (GTK_WIDGET(window1), "view");
   if(search_entry) {
     tmpStr = gtk_entry_get_text (GTK_ENTRY(search_entry));
     if(tmpStr) {
       if(data->currentStack == CURRENT_STACK_EDITOR) {
         /* we get a pointer on current position */
-        gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+        gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
         gtk_text_buffer_get_start_iter (buffer, &start);
         find_previous (tView, buffer, tmpStr);
       }
       else {
-       update_statusbarPDF(data);
-       ret=search_goto_prev_PDF_page(data->curPDFpage, data);
-       if(ret<data->curPDFpage) {
-          data->curPDFpage=ret;
-          PDF_display_page (window1,data->curPDFpage, data->doc, data);
-          search_draw_selection_current_page(data->curPDFpage, data, data->surface);
+       update_statusbarPDF (data);
+       ret = search_goto_prev_PDF_page (data->curPDFpage, data);
+       if(ret < data->curPDFpage) {
+          data->curPDFpage = ret;
+          PDF_display_page (window1, data->curPDFpage, data->doc, data);
+          search_draw_selection_current_page (data->curPDFpage, data, data->surface);
        }
       }
     }
@@ -2054,8 +2064,7 @@ on_find_prev_clicked (GtkButton *button, APP_data *data)
  PLEASE NOTE : for PDF document, next go forward
   to the first page with hits.
 **************************************************/
-void
-on_find_next_clicked (GtkButton *button, APP_data *data)
+void on_find_next_clicked (GtkButton *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkWidget *search_entry, *tView;
@@ -2066,24 +2075,24 @@ on_find_next_clicked (GtkButton *button, APP_data *data)
   GtkWidget *window1 = data->appWindow;
   buffer = data->buffer;
 
-  search_entry = lookup_widget(GTK_WIDGET(window1), "search_entry");
-  tView = lookup_widget(GTK_WIDGET(window1), "view");
+  search_entry = lookup_widget (GTK_WIDGET(window1), "search_entry");
+  tView = lookup_widget (GTK_WIDGET(window1), "view");
   if(search_entry) {
     tmpStr = gtk_entry_get_text (GTK_ENTRY(search_entry));
     if(tmpStr) {
       if(data->currentStack == CURRENT_STACK_EDITOR) {
         /* we get a pointer on current position */
-        gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+        gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
         gtk_text_buffer_get_start_iter (buffer, &start);
-        find_next(tView, buffer, tmpStr);
+        find_next (tView, buffer, tmpStr);
       }
       else {
-        update_statusbarPDF(data);
-        ret=search_goto_next_PDF_page(data->curPDFpage, data);
-        if(ret>data->curPDFpage) {
-           data->curPDFpage=ret;
-           PDF_display_page (window1,data->curPDFpage, data->doc, data);
-           search_draw_selection_current_page(data->curPDFpage, data, data->surface);
+        update_statusbarPDF (data);
+        ret = search_goto_next_PDF_page (data->curPDFpage, data);
+        if(ret > data->curPDFpage) {
+           data->curPDFpage = ret;
+           PDF_display_page (window1, data->curPDFpage, data->doc, data);
+           search_draw_selection_current_page (data->curPDFpage, data, data->surface);
            
         }
       }
@@ -2094,32 +2103,31 @@ on_find_next_clicked (GtkButton *button, APP_data *data)
 /******************************
  change PDF page directly
 ******************************/
-void
-on_page_entry_changed  (GtkEntry *entry, APP_data *data)
+void on_page_entry_changed (GtkEntry *entry, APP_data *data)
 {
   /* we must check if it's a compatible numeric value */
   if(!data->doc) {
     return;
   }
-  if(strlen(gtk_entry_get_text(entry))==0) {
+  if(strlen (gtk_entry_get_text (entry)) == 0) {
      //gtk_entry_set_text(entry, g_strdup_printf ("%d", data->curPDFpage+1));
      return;
   }
-  gint i=atoi(gtk_entry_get_text(entry));
+  gint i = atoi (gtk_entry_get_text (entry));
 //  printf ("pdf page %d\n", i);
   if(i<1 || i>data->totalPDFpages) {
-     gtk_entry_set_text(entry, g_strdup_printf ("%d", data->curPDFpage+1));
+     gtk_entry_set_text (entry, g_strdup_printf ("%d", data->curPDFpage+1));
      return;
   }
-  PDF_goto(data->appWindow, data, i-1);
+  PDF_goto (data->appWindow, data, i-1);
 }
+
 /************************************************
  callback find : move selection to the FIRST hit
  PLEASE NOTE : for PDF document, jumps
   to the first page with hits.
 *************************************************/
-void
-on_find_changed (GtkSearchEntry *entry, APP_data *data)
+void on_find_changed (GtkSearchEntry *entry, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkWidget *tView, *bPrev, *bNext, *bReplace, *pReplaceEntry, *hits;
@@ -2132,12 +2140,12 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
   GtkWidget *window1 = data->appWindow;
   buffer = data->buffer;
 
-  tView = lookup_widget(GTK_WIDGET(window1), "view");
-  hits = lookup_widget(GTK_WIDGET(window1), "labelHits");
-  bPrev = lookup_widget(GTK_WIDGET(window1), "buttonNextOccurrence");
-  bNext = lookup_widget(GTK_WIDGET(window1), "buttonPrevOccurrence");
-  bReplace = lookup_widget(GTK_WIDGET(window1), "buttonReplace");
-  pReplaceEntry = lookup_widget(GTK_WIDGET(window1), "replace_entry");
+  tView = lookup_widget (GTK_WIDGET(window1), "view");
+  hits = lookup_widget (GTK_WIDGET(window1), "labelHits");
+  bPrev = lookup_widget (GTK_WIDGET(window1), "buttonNextOccurrence");
+  bNext = lookup_widget (GTK_WIDGET(window1), "buttonPrevOccurrence");
+  bReplace = lookup_widget (GTK_WIDGET(window1), "buttonReplace");
+  pReplaceEntry = lookup_widget (GTK_WIDGET(window1), "replace_entry");
 
   if(entry) {
     tmpStr = gtk_entry_get_text (GTK_ENTRY(entry));
@@ -2148,9 +2156,9 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
                fdont_care = TRUE;
            }
            else {
-             if(data->currentStack==CURRENT_STACK_PDF) {
+             if(data->currentStack == CURRENT_STACK_PDF) {
               /* we must reset the GList */
-                search_free_PDF_search_datas(data);
+                search_free_PDF_search_datas (data);
                 if(data->doc) {
                   count = 0;
                   data->pdfSearch = NULL;
@@ -2188,13 +2196,13 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
         }
         gtk_label_set_text (GTK_LABEL(hits), g_strdup_printf (_("%d hits"), i));
         /* we get a pointer on current position */
-        gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert(buffer));
+        gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
         gtk_text_buffer_get_start_iter (buffer, &start);
         if(data->currentStack == CURRENT_STACK_EDITOR) {
             find (tView, buffer, tmpStr, &start,0);
         }
         else {
-             printf ("request to find inside PDF \n");
+             printf ("* Redac trace : request to find inside PDF \n");
         }
     }
   }
@@ -2204,8 +2212,7 @@ on_find_changed (GtkSearchEntry *entry, APP_data *data)
 
  callback for replace
 ************************/
-void
-on_replace_clicked  (GtkButton *button, APP_data *data)
+void on_replace_clicked (GtkButton *button, APP_data *data)
 {
   GtkTextBuffer *buffer;
   GtkWidget *bPrev, *bNext, *bReplace, *pReplaceEntry, *hits;
@@ -2220,13 +2227,13 @@ on_replace_clicked  (GtkButton *button, APP_data *data)
   gsize length;
 
   buffer = data->buffer;
-  find_entry = lookup_widget(GTK_WIDGET(window1), "search_entry");
+  find_entry = lookup_widget (GTK_WIDGET(window1), "search_entry");
   findStr    = gtk_entry_get_text (GTK_ENTRY(find_entry));
-  replace_entry = lookup_widget(GTK_WIDGET(window1), "replace_entry");
-  bPrev         = lookup_widget(GTK_WIDGET(window1), "buttonNextOccurrence");
-  bNext         = lookup_widget(GTK_WIDGET(window1), "buttonPrevOccurrence");
-  bReplace      = lookup_widget(GTK_WIDGET(window1), "buttonReplace");
-  hits          = lookup_widget(GTK_WIDGET(window1), "labelHits");
+  replace_entry = lookup_widget (GTK_WIDGET(window1), "replace_entry");
+  bPrev         = lookup_widget (GTK_WIDGET(window1), "buttonNextOccurrence");
+  bNext         = lookup_widget (GTK_WIDGET(window1), "buttonPrevOccurrence");
+  bReplace      = lookup_widget (GTK_WIDGET(window1), "buttonReplace");
+  hits          = lookup_widget (GTK_WIDGET(window1), "labelHits");
 
   if(gtk_text_buffer_get_selection_bounds (buffer, &start, &end)) {
        tmpStr = gtk_entry_get_text (GTK_ENTRY(replace_entry));
@@ -2247,8 +2254,8 @@ on_replace_clicked  (GtkButton *button, APP_data *data)
          data->undo.beforeMark = mark1;
          /* update for remaining hits */
          remaining_hits = search_count_matches (buffer, findStr);
-         if(remaining_hits<1) {
-           sensitive = FALSE;
+         if(remaining_hits < 1) {
+            sensitive = FALSE;
          }   
          gtk_widget_set_sensitive (GTK_WIDGET(bNext),sensitive);
          gtk_widget_set_sensitive (GTK_WIDGET(bPrev),sensitive);
@@ -2265,7 +2272,7 @@ on_replace_clicked  (GtkButton *button, APP_data *data)
  For now we can paste a pixbuf
  from anywhere to Note or Sketch
 **************************************/
-gint clipboard_paste_image(APP_data *data, gboolean center)
+gint clipboard_paste_image (APP_data *data, gboolean center)
 {
  GtkTextIter start, end, iter;
  GtkTextMark *mark1, *mark2;
@@ -2315,12 +2322,14 @@ gint clipboard_paste_image(APP_data *data, gboolean center)
          gdk_cairo_set_source_pixbuf (cr, pixbuf, data->x1, data->y1);
        }
        else {/* TODO : switch to drawables, not entire screen for undo */
-          x2=(CROBAR_VIEW_MAX_WIDTH-(gint) gdk_pixbuf_get_width (pixbuf))/2;
-          if(x2 < 0)
+          x2 = (CROBAR_VIEW_MAX_WIDTH-(gint) gdk_pixbuf_get_width (pixbuf))/2;
+          if(x2 < 0) {
              x2 = 0;
+          }
           y2 = (CROBAR_VIEW_MAX_HEIGHT-(gint) gdk_pixbuf_get_height (pixbuf))/2;
-          if(y2 < 0)
+          if(y2 < 0) {
              y2 = 0;
+          }
           gdk_window_get_origin (gtk_widget_get_window (data->SketchDrawable), &root_xs, &root_ys);
           data->undo.pix = gdk_pixbuf_get_from_window (gdk_get_default_root_window (),
                              root_xs+x2, root_ys+y2,
@@ -2338,8 +2347,9 @@ gint clipboard_paste_image(APP_data *data, gboolean center)
     }
    return 0;
  }/* endif pixbuf */
- else
+ else {
    return -1;
+ }
 }
 
 /****************************
@@ -2351,8 +2361,8 @@ void sketch_moveUp (GtkWidget *parentWindow, APP_data *data)
   GtkAdjustment *verticalAdjust;
   gdouble adj_value;
 
-  verticalAdjust = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data->SketchScrollable));
-  gtk_adjustment_set_value (verticalAdjust,gtk_adjustment_get_value(verticalAdjust)-PDF_SCROLL_STEP);
+  verticalAdjust = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (data->SketchScrollable));
+  gtk_adjustment_set_value (verticalAdjust, gtk_adjustment_get_value (verticalAdjust)-PDF_SCROLL_STEP);
 }
 
 
@@ -2363,13 +2373,13 @@ void sketch_moveDown (GtkWidget *parentWindow, APP_data *data)
   gdouble page_size = 0;
   gdouble adj_value;
 
-  verticalAdjust = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data->SketchScrollable));
-  upper = gtk_adjustment_get_upper(verticalAdjust);
-  adj_value = gtk_adjustment_get_value( verticalAdjust);
-  page_size = gtk_adjustment_get_page_size(verticalAdjust);
+  verticalAdjust = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (data->SketchScrollable));
+  upper = gtk_adjustment_get_upper (verticalAdjust);
+  adj_value = gtk_adjustment_get_value (verticalAdjust);
+  page_size = gtk_adjustment_get_page_size (verticalAdjust);
 
   if (adj_value < upper - page_size) {
-          gtk_adjustment_set_value (verticalAdjust,gtk_adjustment_get_value(verticalAdjust)+PDF_SCROLL_STEP);
+          gtk_adjustment_set_value (verticalAdjust, gtk_adjustment_get_value (verticalAdjust)+PDF_SCROLL_STEP);
   } 
 }
 
@@ -2398,7 +2408,7 @@ void copy_to_clipboard (GtkTextView *view, APP_data *data)
      /* if length==1 it can be an image */
      pix = gtk_text_iter_get_pixbuf (&start);
      if(pix && (offset==1)) {/* we musr check if it's ONLY an image, not a mix */
-       printf ("* send pixbuf only to clipboard *\n");
+       printf ("* Redac trace :  send pixbuf only to clipboard *\n");
        misc_display_clipboard_image_info (data);
        GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
        gtk_clipboard_set_image (clipboard, pix);
@@ -2505,18 +2515,19 @@ void backspace (GtkTextView *view, APP_data *data)
       start = iter;
       mark = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);
     }
-    else
+    else {
       return;
+    }
   }
   /* we store datas */
-  data->undo.undoMark=mark;
-  data->undo.annotStr=NULL;
-  data->undo.pix=NULL;
+  data->undo.undoMark = mark;
+  data->undo.annotStr = NULL;
+  data->undo.pix      = NULL;
   //TODO undo_reset_serialized_buffer(data);
-  GdkAtom format = gtk_text_buffer_register_serialize_tagset(data->buffer, "application/x-gtk-text-buffer-rich-text");
-  data->undo.serialized_buffer=gtk_text_buffer_serialize(data->buffer, data->buffer, format, &start, &end, &length);
-  data->undo.buffer_length=length;
-  undo_push(data->currentStack, OP_DEL_BLOCK, data);
+  GdkAtom format = gtk_text_buffer_register_serialize_tagset (data->buffer, "application/x-gtk-text-buffer-rich-text");
+  data->undo.serialized_buffer = gtk_text_buffer_serialize (data->buffer, data->buffer, format, &start, &end, &length);
+  data->undo.buffer_length     = length;
+  undo_push (data->currentStack, OP_DEL_BLOCK, data);
 }
 
 /*********************************************
@@ -2568,11 +2579,12 @@ void delete (GtkTextView *view, GtkDeleteType type, gint count, APP_data *data)
   data->undo.serialized_buffer = gtk_text_buffer_serialize (data->buffer, data->buffer, format, &start, &end, &length);
   data->undo.buffer_length = length;
 
-  if(!fSel)
+  if(!fSel) {
      undo_push (data->currentStack, OP_DEL_CHAR, data);
-  else
+  }
+  else {
      undo_push (data->currentStack, OP_DEL_BLOCK, data);
-
+  }
 }
 /******************************
   intervalometer function
@@ -2593,7 +2605,7 @@ gboolean timeout_quick_save (APP_data *data)
   count++;
 
   /* busy mouse cursor */
-  if(g_key_file_get_boolean(keyString, "application", "interval-save", NULL)) {
+  if(g_key_file_get_boolean (keyString, "application", "interval-save", NULL)) {
        alertDlg =  gtk_message_dialog_new (GTK_WINDOW(data->appWindow),
                                       flags,
                                       GTK_MESSAGE_INFO,
@@ -3217,7 +3229,7 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
   if(user_data->undo.annotStr != NULL) {
            g_free (user_data->undo.annotStr);
   }
-  GtkColorChooserDialog *dialog = create_annotationColourDialog (user_data, _("Choose annotation color ..."));
+  GtkColorChooserDialog *dialog = GTK_COLOR_CHOOSER_DIALOG (create_annotationColourDialog (user_data, _("Choose annotation color ...")));
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(dialog), &cp);
   g_free (current_color);
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
