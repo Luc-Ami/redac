@@ -487,31 +487,31 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
   GdkPixbuf *pPixDatas = NULL;
   gint root_xs, root_ys;
 
-  if(!data->button_pressed || !data->doc)
+  if(!data->button_pressed || !data->doc) {
      return TRUE;
+  }
 
-  gtk_widget_destroy (GTK_WIDGET(data->window));
- 
-
- 
- 
+  gtk_widget_destroy (GTK_WIDGET(data->window)); 
   data->button_pressed = FALSE;
+  
   /* get absolute screen coordinates */
   gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
 
- printf ("entrée PDF relase avec x1 = %d y1=%d w= %d et h =%d \n", 
-                 (gint) (data->x1-root_xs), (gint) (data->y1-root_ys),
-                 data->w,  data->h );
+ //printf ("entrée PDF relase avec x1 = %d y1=%d w= %d et h =%d \n", 
+   //              (gint) (data->x1-root_xs), (gint) (data->y1-root_ys),
+     //            data->w,  data->h );
  
 
 
   switch(data->clipboardMode) {
      case PDF_SEL_MODE_TEXT: { /*clip mode text */
        /* voir : poppler_page_get_crop_box ()*/
-       if(data->w > 0 && data->h > 0) { printf ("appel clip PDF txt \n");
+       if(data->w > 0 && data->h > 0) { 
+		   printf ("appel clip PDF txt \n");
            PDF_get_text_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->PDFScrollable, data);
        }
+      // cairo_destroy (data->PDF_cr);
        break;
      }
      case PDF_SEL_MODE_PICT: { /* clip mode picture */
@@ -635,12 +635,16 @@ static GtkWidget *create_select_window (void)
 ******************************************/
 gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 {  
-  if(!data->doc)
+  gdouble width, height, ratio, v_v_adj, v_h_adj;	
+	
+  if (!data->doc) {
     return TRUE;
+  }
+
   /* grab focus */
   gtk_widget_grab_focus (GTK_WIDGET(data->PDFScrollable));
   if (gdk_event_get_event_type(event) == GDK_BUTTON_PRESS)  {
-   if(event->button.button == 3) {
+   if(event->button.button == 3) {/* right click */
        data->button_pressed = FALSE;/* yes, to avoid mistakes on drawings */
        GtkMenu *menu;
        GtkWidget *window1 = data->appWindow;
@@ -654,7 +658,7 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
        /* now the PopUp becomes smart since it's now if there is a mapping */
        gint root_xs, root_ys;
        /* get absolute screen coordinates */
-       gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs,&root_ys);
+       gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
        PopplerAnnot *current_annot = NULL;
        current_annot = PDF_find_annot_at_position ((gint)event->button.x_root-root_xs, (gint)event->button.y_root-root_ys, data);
        data->current_annot = current_annot;
@@ -662,13 +666,19 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
 
    }
-   else {
+   else {/* left click */
+	    /* we get a clean cairo surface */
+        ratio = data->PDFratio;
+        //data->PDF_cr = cairo_create (data->surface);
+        // cairo_scale (data->PDF_cr, ratio, ratio); /* mandatory don't remove !!!! 25 may 2022 */	    
+	    // cairo_save (data->PDF_cr); /* cairo state without selection */
         data->x1 = (gint)event->button.x_root;
         data->y1 = (gint)event->button.y_root;
         data->w  = 0;
         data->h  = 0;
         data->button_pressed = TRUE;
         data->window = create_select_window ();
+        printf ("début select PDF\n");
    }
   }
 
@@ -680,15 +690,70 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
   in order to set-tup a selection box
   code bprrowed and adapted from stuff
   of Gnome team (Gtk2) : gnome-screenshot
+  reverse movements isn't allowed : the 
+  mouse pointer can only move to south east
+  * TODO : for RTL counties
 ********************************************/
 gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event, APP_data *data)
 {
   GtkWidget *window = data->window;
+  GtkWidget *canvas;
+  GtkStyleContext *context;  
+  GdkRGBA *color, *fColor;
+  cairo_t *cr, *PDF_cr;
+    
+  gdouble width, height, ratio, v_v_adj, v_h_adj;
+  gint root_xs, root_ys;  
+  
+  PopplerPage *page;  
+  PopplerRectangle *pRects;
+  PopplerRectangle selection, sel; /* in original PDF points 4 gdouble bounding rectnagle coord*/  
+  PopplerColor glyph_color, background_color;  
+ 
+  
+        
   /* grab focus */
   gtk_widget_grab_focus (GTK_WIDGET(data->PDFScrollable));
-  if(!data->button_pressed || !data->doc)
+  if (!data->button_pressed || !data->doc) {
     return TRUE;
+  }
 
+ // cairo_restore (data->PDF_cr);
+  canvas = lookup_widget (GTK_WIDGET(data->appWindow), "crPDF");
+ // gtk_widget_queue_draw (canvas); 
+      
+  /* get current theme' selection color.      see:  https://stackoverflow.com/questions/47371967/getting-objects-out-of-a-gvalue */
+  context = gtk_widget_get_style_context (GTK_WIDGET(data->appWindow));
+  gtk_style_context_get (context, GTK_STATE_FLAG_SELECTED, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &color, GTK_STYLE_PROPERTY_COLOR, &fColor, NULL);    
+  
+  /* OK, we have a PDF page */
+  /* we get a pointer on the current page */
+  page = poppler_document_get_page (data->doc, data->curPDFpage);  
+  poppler_page_get_size (page, &width, &height);   
+  /* get cairo context in order to draw selection */
+
+  ratio = data->PDFratio;
+
+  cr = cairo_create (data->surface);
+  cairo_scale (cr, ratio, ratio); /* mandatory don't remove !!!! 25 may 2022 */
+  poppler_page_render (page, cr);
+  /* background paper */
+  glyph_color.red = (guint16)  (fColor->red*65535);
+  glyph_color.green = (guint16)  (fColor->green*65535);;
+  glyph_color.blue = (guint16)  (fColor->blue*65535);;
+
+  /* cairo color components are from 0 to 1 ; Poppler components are from 0000 to fffff */
+  background_color.red = (guint16)  (color->red*65535);
+  background_color.green = (guint16)  (color->green*65535);;
+  background_color.blue = (guint16) (color->blue*65535);;
+
+  /* we read current adjustments on scrollable window */
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
+  v_v_adj = gtk_adjustment_get_value (v_adj);
+  v_h_adj = gtk_adjustment_get_value (h_adj);
+          
+  /* we compute rectangle size */
   data->w = ABS (data->x1 - event->button.x_root);
   data->h = ABS (data->y1 - event->button.y_root);
   data->x1 = MIN (data->x1, event->button.x_root);
@@ -697,17 +762,38 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
   if(data->w <= 0 || data->h <= 0) {
       gtk_window_move (GTK_WINDOW (window), -100, -100);
       gtk_window_resize (GTK_WINDOW (window), 10, 10);
+      g_object_unref (page);
+      cairo_destroy (cr);
       return TRUE;
   }
+
+  /* get absolute screen coordinates */
+  gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
+  /* we translate to PDF coordinates */
+
+  selection.x1 = (gdouble) (data->x1 -root_xs + v_h_adj) / ratio;
+  selection.y1 = (gdouble) (data->y1 -root_ys + v_v_adj) / ratio;
+  selection.x2 = (gdouble) (data->x1 -root_xs + v_h_adj + data->w) / ratio;
+  selection.y2 = (gdouble) (data->y1 -root_ys + v_v_adj + data->h) / ratio;
+
+
 
   gtk_window_move (GTK_WINDOW (window), data->x1, data->y1);
   gtk_window_resize (GTK_WINDOW (window), data->w, data->h);
 
+          /* !!!! ici il faut mettre la partie PDF */
+   printf("drag width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", data->w, data->h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
+  /* we draw selection */
+  poppler_page_render_selection (page, cr,
+                                 &selection,
+                                 NULL,
+                                 POPPLER_SELECTION_GLYPH, &glyph_color, &background_color);
+                                 
   /* We (ab)use app-paintable to indicate if we have an RGBA window */
-  if(!gtk_widget_get_app_paintable (window)) {
-      GdkWindow *gdkwindow = gtk_widget_get_window (window);
+//  if(!gtk_widget_get_app_paintable (window)) {
+  //    GdkWindow *gdkwindow = gtk_widget_get_window (window);
       /* Shape the window to make only the outline visible */
-      if (data->w> 2 && data->h > 2) {
+    /*  if (data->w> 2 && data->h > 2) {
           cairo_region_t *region;
           cairo_rectangle_int_t region_rect = {
             0, 0,
@@ -722,13 +808,15 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
           cairo_region_subtract_rectangle (region, &region_rect);
 
           gdk_window_shape_combine_region (gdkwindow, region, 0, 0);
-
           cairo_region_destroy (region);
       }
-      else
+      else {
         gdk_window_shape_combine_region (gdkwindow, NULL, 0, 0);
-  }
-
+      }
+  }*/
+  gtk_widget_queue_draw (canvas);
+  g_object_unref (page);
+  cairo_destroy (cr);  
   return TRUE;
 }
 /************************************
