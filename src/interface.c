@@ -447,19 +447,19 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_superscript, -1); 
    gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_superscript),icon_superscript);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_superscript), _("Toggle to/from superscript either \nfor current selection\nor next typing."));
-   button_subscript=gtk_toggle_tool_button_new ();
+   button_subscript = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_subscript, -1);    
    gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_subscript),icon_subscript);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_subscript), _("Toggle to/from subscript either \nfor current selection\nor next typing."));
-   button_strikethrough=gtk_toggle_tool_button_new ();
+   button_strikethrough = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_strikethrough, -1); 
    gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_strikethrough),icon_strike);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_strikethrough), _("Toggle to/from strikethrough \nfor current selection\nor next typing."));
-   button_highlight=gtk_toggle_tool_button_new ();
+   button_highlight = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_highlight, -1); 
    gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_highlight),icon_highlight);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_highlight), _("Apply highlighting \nfor current selection\nor next typing."));
-   button_quotation=gtk_toggle_tool_button_new ();
+   button_quotation = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_quotation, -1); 
    gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_quotation),icon_quotation);
 gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quotation style either \nfor current selection\nor next typing."));
@@ -2012,6 +2012,17 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 					 G_CALLBACK(on_sketch_draw_button_release_callback), data);
   g_signal_connect (G_OBJECT(crCrobar), "motion-notify-event",
 					 G_CALLBACK(on_sketch_draw_motion_event_callback), data);
+
+  /* enter/leave mouse events for drawings */
+
+  g_signal_connect (G_OBJECT(scrolledwindowCrobar), "enter-notify-event", G_CALLBACK (on_sketch_draw_enter_event_callback), data);
+  g_signal_connect (G_OBJECT(scrolledwindowCrobar), "leave-notify-event", G_CALLBACK (on_sketch_draw_leave_event_callback), data);
+
+  /* enter/leave mouse events for PDF */
+
+  g_signal_connect (G_OBJECT(scrolledwindowPDF), "enter-notify-event", G_CALLBACK (on_PDF_enter_event_callback), data);
+  g_signal_connect (G_OBJECT(scrolledwindowPDF), "leave-notify-event", G_CALLBACK (on_PDF_leave_event_callback), data);
+
 
   misc_set_gui_in_editor_mode (data->appWindow, CURRENT_STACK_EDITOR); 
   /* add timeout for 5 minutes, 300 secs - should be improved in a next release */

@@ -134,6 +134,16 @@ gboolean on_sketch_draw_button_release_callback(GtkWidget *widget,
 gboolean on_sketch_draw_motion_event_callback(GtkWidget *widget,
                GdkEvent  *event,
                APP_data *data);
+
+gboolean on_PDF_enter_event_callback 
+                  (GtkWidget *widget, GdkEvent *event, APP_data *data);
+gboolean on_PDF_leave_event_callback 
+                  (GtkWidget *widget, GdkEvent *event, APP_data *data);               
+gboolean on_sketch_draw_leave_event_callback 
+             (GtkWidget *widget, GdkEvent *event, APP_data *data);
+gboolean on_sketch_draw_enter_event_callback 
+             (GtkWidget *widget, GdkEvent *event, APP_data *data);               
+               
 void on_button_button_pencil_toggled(GtkButton       *button,
                                           APP_data *user_data);
 void on_menuPasteSketch(GtkMenuItem *menuitem,

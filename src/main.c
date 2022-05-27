@@ -14,7 +14,7 @@
 #include "mttfiles.h"
 #include "misc.h"
 #include "undo.h"
-
+#include "cursor.h"
 
 
 /*********************************
@@ -88,6 +88,7 @@ redac_activate (GApplication *app, APP_data *data)
       /* move to something like end of text */
       scrolledwindow1 = lookup_widget (GTK_WIDGET(data->appWindow), "scrolledwindow1");
       // misc_jump_to_end_view (scrolledwindow1, data->buffer, data->view);
+      cursor_normal (data->appWindow);
     }
 }
 
@@ -102,6 +103,9 @@ int main (int argc, char *argv[]) {
   GApplicationFlags flags = G_APPLICATION_FLAGS_NONE;
   APP_data app_data;
   gint status;
+
+  /* get infos from config.h */
+  printf ("version %s \n", PACKAGE_VERSION);/* first autoge,sh then .c:confure and finally make modify config.h */  
 
   /* Initialize GStreamer */
   gst_init (&argc, &argv);

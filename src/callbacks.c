@@ -27,6 +27,7 @@
 #include "undo.h"
 #include "paving.h"
 #include "settings.h"
+#include "cursor.h"
 
 /********************
   global vars 
@@ -639,6 +640,31 @@ static GtkWidget *create_select_window (void)
   return window;
 }
 
+/****************************************
+ * cursor (mouse) enter event for
+ * PDF area
+ * *************************************/
+ gboolean on_PDF_enter_event_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
+ {
+	 GtkWidget *window = data->window;
+	 printf ("j'entre en zone PDF \n");
+	 if(data->clipboardMode ==PDF_SEL_MODE_TEXT) {
+		 cursor_text_select (data->appWindow);
+     }
+ }
+ 
+ /****************************************
+ * cursor (mouse) leave event for
+ * PDF area
+ * *************************************/
+gboolean on_PDF_leave_event_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
+ {
+	 GtkWidget *window = data->window;
+	 printf ("je quitte la zone PDF \n");
+	 cursor_normal (data->appWindow);
+ }
+ 
+
 /*****************************************
   button-press on PDF renderer
   inspired, but different, from
@@ -872,7 +898,7 @@ gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *even
  button release on sketch area
 
 *******************************************/
-gboolean on_sketch_draw_button_release_callback(GtkWidget *widget, GdkEvent *event, APP_data *data)
+gboolean on_sketch_draw_button_release_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 
 {
   GdkPixbuf *pPixDatas;
@@ -987,6 +1013,50 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
   }/* endif button pressed */
   return FALSE;
 }
+
+/**************************************
+ * mouse enter on drwaing area
+ * 
+ * **********************************/
+gboolean on_sketch_draw_enter_event_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
+{
+  GtkWidget *window = data->window;
+  GKeyFile *keyString;
+
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+
+  printf ("je rentre dans la zone de dessin ! \n");
+  if(data->fPencilTool) {
+	 cursor_dot_pencil (data->appWindow);
+  }	
+  else {
+	 if(data->clipboardMode == PDF_SEL_MODE_NOTE) {
+		 cursor_icon (data->appWindow);
+	 } 
+	 else { 
+        cursor_normal (data->appWindow);	 
+     }
+  }
+ return TRUE;
+}
+
+/**************************************
+ * mouse enter on drwaing area
+ * 
+ * **********************************/
+gboolean on_sketch_draw_leave_event_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
+{
+  GtkWidget *window = data->window;
+  GKeyFile *keyString;
+
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+
+  printf ("je quitte  la zone de dessin ! \n");
+  cursor_normal (data->appWindow);
+  return TRUE;
+}
+
+
 
 /*****************************
 
@@ -2999,7 +3069,7 @@ on_stack_changed (GObject *gobject, GParamSpec *pspec, APP_data *user_data)
   GtkTextBuffer *buffer = user_data->buffer;
   GtkTextIter iter;
 
-
+  cursor_normal (user_data->appWindow);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, 
                                      gtk_text_buffer_get_insert (buffer)
                                    );

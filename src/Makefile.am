@@ -18,7 +18,9 @@ redac_SOURCES = \
 	callbacks.c callbacks.h \
 	support.c support.h \
 	audio.c audio.h \
-	paving.c paving.h
+	paving.c paving.h \
+	cursor.c cursor.h
+	
 
 redac_LDFLAGS = \
 	-Wl,--export-dynamic
