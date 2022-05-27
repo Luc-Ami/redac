@@ -3250,7 +3250,7 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
   CB : called by remove annotation 
   in  PDF popup menu
 *************************************/
-void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
+void on_menuPDFRemoveAnnot (GtkMenuItem *menuitem, APP_data  *user_data)
 {
   gint ret=0;
   GdkRGBA cp;
@@ -3302,8 +3302,7 @@ void on_menuPDFRemoveAnnot(GtkMenuItem *menuitem, APP_data  *user_data)
 
 ****************************/
 
-void
-on_play_pause_clicked (GtkButton *button, APP_data *data)
+void on_play_pause_clicked (GtkButton *button, APP_data *data)
 {
   gboolean ret = FALSE;
   gint64 pos;
@@ -3476,9 +3475,7 @@ printf ("demande copie position %s\n", tmpStr);
                                 
     gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, gtk_text_buffer_get_insert (data->buffer));
     mark2 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter, FALSE);                                
-    
-    
-                            
+                           
    /* undo engine */
 
   //TODO undo_reset_serialized_buffer(data);
@@ -3492,7 +3489,6 @@ printf ("demande copie position %s\n", tmpStr);
     g_free (tmpStr);   
   }
 }
-
 
 
 /******************************
@@ -3602,8 +3598,11 @@ void on_audioPlaySpeed_changed (GtkComboBox *combobox, APP_data *data)
   }
 }
 
-void
-on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
+/***************************************
+ * callback for about dialog
+ * ***********************************/
+
+void on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
 {
   GtkWidget *aboutDialog = create_aboutRedac(data);
   
@@ -3611,6 +3610,10 @@ on_about1_activate (GtkMenuItem  *menuitem, APP_data *data)
   gtk_widget_destroy (GTK_WIDGET (aboutDialog));
   return;
 }
+
+/***************************************
+ * callback for wiki 
+ * ***********************************/
 
 void on_wiki1_activate (GtkMenuItem  *menuitem, APP_data *data)
 {

@@ -100,8 +100,8 @@ https://lzone.de/blog/Detecting%20a%20Dark%20Theme%20in%20GTK
  // gtk_style_context_get_background_color (style_context, GTK_STATE_FLAG_NORMAL, &bg); // deprecated
   gtk_style_context_lookup_color (style_context, "focus_color", &bg);
   
-  textAvg = fg.red+fg.green+fg.blue;
-  bgAvg = bg.red+bg.green+bg.blue;
+  textAvg = fg.red + fg.green + fg.blue;
+  bgAvg = bg.red + bg.green + bg.blue;
 
 // printf ("test couleurs avant =%.2f arrière =%.2f \n", textAvg, bgAvg);
 
@@ -240,11 +240,11 @@ GtkWidget *create_menu_PDF (GtkWidget *win, APP_data *data_app)
   gtk_widget_show (menu1PDFEditAnnot);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menu1PDFEditAnnot);
 
-  menu1PDFColorAnnot= gtk_menu_item_new_with_mnemonic (_("Annotation _color ... "));
+  menu1PDFColorAnnot = gtk_menu_item_new_with_mnemonic (_("Annotation _color ... "));
   gtk_widget_show (menu1PDFColorAnnot);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menu1PDFColorAnnot);
 
-  menu1PDFRemoveAnnot= gtk_menu_item_new_with_mnemonic (_("_Remove annotation "));
+  menu1PDFRemoveAnnot = gtk_menu_item_new_with_mnemonic (_("_Remove annotation "));
   gtk_widget_show (menu1PDFRemoveAnnot);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menu1PDFRemoveAnnot);
 
@@ -308,7 +308,7 @@ GtkWidget *create_menu_sketch (GtkWidget *win, APP_data *data_app)
   gtk_widget_show (menuPasteSketch);
   gtk_container_add (GTK_CONTAINER (menu1Sketch), menuPasteSketch);
 
-  menuCenteredPasteSketch= gtk_menu_item_new_with_mnemonic (_("Paste and _center image "));
+  menuCenteredPasteSketch = gtk_menu_item_new_with_mnemonic (_("Paste and _center image "));
   gtk_widget_show (menuCenteredPasteSketch);
   gtk_container_add (GTK_CONTAINER (menu1Sketch), menuCenteredPasteSketch);
 
@@ -527,8 +527,6 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   /* clipboard mode radiobuttons */
   pRadioButtonTextSelect = gtk_radio_tool_button_new (NULL);
 
-
-
   icon_text_select = gtk_image_new_from_icon_name ("edit-select-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
 /*
@@ -541,9 +539,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
 */
   icon_picture_select = gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
-
   icon_highlight_select = gtk_image_new_from_icon_name ("starred-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
-
 
   icon_text_annot = gtk_image_new_from_icon_name ("media-view-subtitles-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
@@ -581,7 +577,6 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   /* sketch tools */
 
   icon_pencil = gtk_image_new_from_icon_name ("input-tablet-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);  
-  
   
   button_pencil = gtk_radio_tool_button_new(group_clip);
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_pencil),icon_pencil); 
@@ -1746,7 +1741,7 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   //gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(dialog), "");
 
-  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), g_strdup_printf("%s\n%s", PACKAGE_VERSION, "2021-08"));/* PACKAGE version from config.h */  
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), g_strdup_printf("%s\n%s", PACKAGE_VERSION, "2022-05"));/* PACKAGE version from config.h */  
   
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(dialog), 
      _("Note  utility written in GTK+ and licensed under GPL v.3"));
