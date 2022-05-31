@@ -545,8 +545,12 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
      }
      case PDF_SEL_MODE_HIGH: {/* highlighting selection mode */
        if( data->w>0 && data->h>0) {
-         PDF_set_highlight_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
+		 /* proivisoire */  
+		 PDF_set_highlight_linear_selection  (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
+                        
+     //    PDF_set_highlight_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
+       //                 data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
          update_PDF_state (data, PDF_MODIF);
        }
        break;
@@ -581,8 +585,7 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
 source = https://github.com/GNOME/gnome-screenshot/blob/master/src/screenshot-area-selection.c
 ******************************************/
 
-static gboolean
-select_window_draw (GtkWidget *window, cairo_t *cr, gpointer unused)
+static gboolean select_window_draw (GtkWidget *window, cairo_t *cr, gpointer unused)
 {
   GtkStyleContext *style;
 
@@ -749,24 +752,24 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
   PopplerRectangle *pRects;
   PopplerRectangle selection, sel; /* in original PDF points 4 gdouble bounding rectnagle coord*/  
   PopplerColor glyph_color, background_color;  
- 
-  
-        
+         
   /* grab focus */
   gtk_widget_grab_focus (GTK_WIDGET(data->PDFScrollable));
   if (!data->button_pressed || !data->doc) {
     return TRUE;
   }
-
+  /* OK, we have a PDF page */
+  
  // cairo_restore (data->PDF_cr);
   canvas = lookup_widget (GTK_WIDGET(data->appWindow), "crPDF");
  // gtk_widget_queue_draw (canvas); 
       
   /* get current theme' selection color.      see:  https://stackoverflow.com/questions/47371967/getting-objects-out-of-a-gvalue */
   context = gtk_widget_get_style_context (GTK_WIDGET(data->appWindow));
-  gtk_style_context_get (context, GTK_STATE_FLAG_SELECTED, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &color, GTK_STYLE_PROPERTY_COLOR, &fColor, NULL);    
+  gtk_style_context_get (context, GTK_STATE_FLAG_SELECTED, 
+                         GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &color, GTK_STYLE_PROPERTY_COLOR, &fColor, 
+                         NULL);    
   
-  /* OK, we have a PDF page */
   /* we get a pointer on the current page */
   page = poppler_document_get_page (data->doc, data->curPDFpage);  
   poppler_page_get_size (page, &width, &height);   
@@ -779,13 +782,13 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
   poppler_page_render (page, cr);
   /* background paper */
   glyph_color.red = (guint16)  (fColor->red*65535);
-  glyph_color.green = (guint16)  (fColor->green*65535);;
-  glyph_color.blue = (guint16)  (fColor->blue*65535);;
+  glyph_color.green = (guint16)  (fColor->green*65535);
+  glyph_color.blue = (guint16)  (fColor->blue*65535);
 
   /* cairo color components are from 0 to 1 ; Poppler components are from 0000 to fffff */
   background_color.red = (guint16)  (color->red*65535);
-  background_color.green = (guint16)  (color->green*65535);;
-  background_color.blue = (guint16) (color->blue*65535);;
+  background_color.green = (guint16)  (color->green*65535);
+  background_color.blue = (guint16) (color->blue*65535);
 
   /* we read current adjustments on scrollable window */
   GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
@@ -809,14 +812,12 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
 
   /* get absolute screen coordinates */
   gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
-  /* we translate to PDF coordinates */
 
+  /* we translate to PDF coordinates */
   selection.x1 = (gdouble) (data->x1 -root_xs + v_h_adj) / ratio;
   selection.y1 = (gdouble) (data->y1 -root_ys + v_v_adj) / ratio;
   selection.x2 = (gdouble) (data->x1 -root_xs + v_h_adj + data->w) / ratio;
   selection.y2 = (gdouble) (data->y1 -root_ys + v_v_adj + data->h) / ratio;
-
-
 
  // gtk_window_move (GTK_WINDOW (window), data->x1, data->y1);
  // gtk_window_resize (GTK_WINDOW (window), data->w, data->h);

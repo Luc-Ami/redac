@@ -19,6 +19,9 @@ void PDF_moveHome (GtkWidget *parentWindow, APP_data    *data);
 void PDF_moveEnd (GtkWidget *parentWindow, APP_data    *data);
 void PDF_goto(GtkWidget *parentWindow, APP_data    *data, gint pg);
 void PDF_set_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page, PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data    *data);
+void PDF_set_highlight_linear_selection 
+                    (gint x, gint y, gint w, gint h, gint pdf_page, 
+                    PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data *data);
 void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page, PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data    *data);
 void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page, GtkWidget *sw, APP_data *data);
 GList *PDF_get_annot_mapping(APP_data    *data);

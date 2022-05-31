@@ -409,6 +409,123 @@ printf("coord width=%.2f height pdf=%.2f x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.
   /* we redraw the page  */
   PDF_display_page (win, pdf_page, doc, data);
 }
+
+/*********************************************
+  highlight selection linear 
+  on PDF page
+  requires poppler>=0.26 to highlight !
+********************************************/
+
+void PDF_set_highlight_linear_selection 
+                    (gint x, gint y, gint w, gint h, gint pdf_page, 
+                    PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data *data)
+{
+  PopplerPage *page;
+  GArray  *quads_array;
+  PopplerRectangle selection, rect_annot; /* in original PDF points 4 gdouble bounding rectnagle coord*/
+  gdouble width, height, ratio, v_v_adj, v_h_adj;
+  GdkRGBA color;   
+  GtkWidget *pBtnColor;  
+  cairo_t *cr;
+  GtkWidget *canvas;  
+  /* linear highlight */
+  PopplerRectangle *pRects, sel;
+  PopplerRectangle *tRects = NULL;
+  guint n_rects, rectCount;
+  gchar *tmpStr = NULL;
+  gint i;
+  gchar *tmpStr2 = NULL;
+;
+    
+  /* we get the current RGBA color */
+  pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
+  
+  /* we get a pointer on the current page */
+  page = poppler_document_get_page (doc, pdf_page);
+  /* we convert surface/Gdk scaled coordinates to PDF coordinates */
+  poppler_page_get_size (page, &width, &height);
+  /* get cairo context in order to draw selection */
+  canvas = lookup_widget (GTK_WIDGET(data->appWindow), "crPDF");   
+  ratio = data->PDFratio;/* don't use other computed value !!! 2 aug 2018 */
+  cr = cairo_create (data->surface);
+  cairo_scale (cr, ratio, ratio); /* mandatory don't remove !!!! 25 may 2022 */  
+  
+  /* we read current adjustments on scrollable window */
+  GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (sw));
+  GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (sw));
+  v_v_adj = gtk_adjustment_get_value (v_adj);
+  v_h_adj = gtk_adjustment_get_value (h_adj);
+  
+  printf ("linear highlight ratio =%.2f \n", ratio);
+  /* we translate to PDF coordinates */
+  selection.x1 = (gdouble) (x+v_h_adj) / ratio;
+  selection.y1 = (gdouble) (y+v_v_adj) / ratio;
+  selection.x2 = (gdouble) (x+v_h_adj+w) / ratio;
+  selection.y2 = (gdouble) (y+v_v_adj+h) / ratio;
+  
+  
+  /* new section */
+  poppler_page_get_text_layout (page, &pRects, &rectCount);  
+  printf("Rectcount = %d  width =%.2f  height = %.2f selection x1 =%.2f  y1=%.2f  x2= %.2f y2 = %.2f \n", rectCount, 
+                 width, height,  selection.x1, selection.y1, selection.x2, selection.y2 );  
+ 
+ 
+  /* we are looking for the rectangles in the selected area */
+  poppler_page_get_text_layout_for_area (page, &selection, &tRects, &n_rects);
+  printf("nbre rect selection  = %d \n", n_rects ); 
+                   
+  /* we draw all sub -rectangles of selected area  */
+  i = 0;
+  while (i<n_rects) {
+     sel = tRects[i];/* contient TOUs les rectangles de la page */
+     sel.x1 = (gdouble) (tRects[i].x1+v_h_adj) / 1;/* il ne faut pas diviser par le ratio ... peut-être parce que c'est déjà à l'échelle ? */
+     sel.y1 = (gdouble) (tRects[i].y1+v_v_adj) / 1;
+     sel.x2 = (gdouble) (tRects[i].x2+v_h_adj) / 1;
+     sel.y2 = (gdouble) (tRects[i].y2+v_v_adj) / 1;
+     
+     tmpStr = poppler_page_get_selected_text (page, POPPLER_SELECTION_GLYPH, &sel);
+     
+     printf ("rang %d  sel x1 = %.2f sel y1 = %.2f sel x2 = %.2f sel y2 = %.2f str=%s\n", i, sel.x1, sel.y1, sel.x2, sel.y2, tmpStr);
+     
+     if(tmpStr) {
+		 g_free (tmpStr);
+     }
+     
+    /*bug : si o fait scroller la page, le surlignement n'est plus à sa place alors que la sélection simple marche */    
+     rect_annot.x1 = sel.x1;
+     rect_annot.y1 = height - sel.y1;
+     rect_annot.x2 = sel.x2;
+     rect_annot.y2 = height - sel.y2;     
+
+  quads_array = pgd_annots_create_quads_array_for_rectangle (&rect_annot);
+  PopplerAnnot *my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
+  g_array_free (quads_array, TRUE);
+  PopplerColor *my_color = poppler_color_new ();
+  /* color */
+  my_color->red   = 65535*color.red;
+  my_color->green = 65535*color.green;
+  my_color->blue  = 65535*color.blue;
+  poppler_annot_set_color (my_annot, my_color);  
+  poppler_page_add_annot (page, my_annot);
+  poppler_color_free (my_color);
+
+     
+     i++;  
+  }
+  poppler_page_render (page, cr); 
+  /* we redraw the page  */
+  gtk_widget_queue_draw (canvas);
+  // gtk_widget_queue_draw (data->PDFdrawable);
+  cairo_destroy (cr);
+  g_object_unref (page);
+  g_free (pRects);
+  g_free (tRects);  
+    
+
+//  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, data);
+}
+
 /*********************************************
   highlight selection rectangle 
   on PDF page
@@ -439,11 +556,13 @@ void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   /* we convert surface/Gdk scaled coordinates to PDF coordinates */
   poppler_page_get_size (page, &width, &height);
   ratio = data->PDFratio;/* don't use other computed value !!! 2 aug 2018 */
+
   /* we translate to PDF coordinates */
   selection.x1 = (gdouble) (x+v_h_adj) / ratio;
   selection.y1 = (gdouble) (y+v_v_adj) / ratio;
   selection.x2 = (gdouble) (x+v_h_adj+w) / ratio;
-  selection.y2 = (gdouble) (y+v_v_adj+h) / ratio;
+  selection.y2 = (gdouble) (y+v_v_adj+h) / ratio;  
+    
 //printf("coord width=%.2f height pdf=%.2f x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", width, height,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
 
   rect_annot.x1 = selection.x1;
@@ -491,8 +610,7 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   PopplerRectangle selection, sel; /* in original PDF points 4 gdouble bounding rectnagle coord*/
   /* for page text layouts */ 
   PopplerRectangle *pRects;
-  PopplerColor glyph_color, background_color;
-  //gint wi, he;
+
   guint rectCount;
   gdouble width, height, ratio, v_v_adj, v_h_adj;  
 
@@ -502,8 +620,7 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   GtkStyleContext *context;
   GdkRGBA *color, *fColor;
   
-  /* get current theme' selection color.
-     see:  https://stackoverflow.com/questions/47371967/getting-objects-out-of-a-gvalue */
+  /* get current theme' selection color. see:  https://stackoverflow.com/questions/47371967/getting-objects-out-of-a-gvalue */
   context = gtk_widget_get_style_context (GTK_WIDGET(data->appWindow));
   gtk_style_context_get (context, GTK_STATE_FLAG_SELECTED, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &color, GTK_STYLE_PROPERTY_COLOR, &fColor, NULL);  
 
@@ -514,26 +631,10 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   /* get cairo context in order to draw selection */
   canvas = lookup_widget (GTK_WIDGET(data->appWindow), "crPDF");
   ratio = data->PDFratio;
- // wi = (gint) (width*ratio);
-//  he = (gint) (height*ratio);
-
- //cairo_surface_destroy (data->surface);
- // data->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, wi, he);
 
   cr = cairo_create (data->surface);
   cairo_scale (cr, ratio, ratio); /* mandatory don't remove !!!! 25 may 2022 */
-  /* background paper */
-  glyph_color.red = (guint16)  (fColor->red*65535);
-  glyph_color.green = (guint16)  (fColor->green*65535);;
-  glyph_color.blue = (guint16)  (fColor->blue*65535);;
-
-  /* cairo color components are from 0 to 1 ; Poppler components are from 0000 to fffff */
-  background_color.red = (guint16)  (color->red*65535);
-  background_color.green = (guint16)  (color->green*65535);;
-  background_color.blue = (guint16) (color->blue*65535);;
-
-  GtkWidget *labelClipBoard = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelClipBoard"));
- 
+  
   /* we read current adjustments on scrollable window */
   GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
   GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(sw));
@@ -550,53 +651,22 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   
 printf("coord width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", w, h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
 
-  /* we draw selection */
-  poppler_page_render_selection (page, cr,
-                                 &selection,
-                                 NULL,
-                                 POPPLER_SELECTION_GLYPH, &glyph_color, &background_color);
-
+  GtkWidget *labelClipBoard = GTK_WIDGET (gtk_builder_get_object (data->builder, "labelClipBoard"));
   tmpStr = poppler_page_get_selected_text (page, POPPLER_SELECTION_GLYPH, &selection);
 
   /* we remove any selection from page */
-  poppler_page_render (page, cr);
-
+  cairo_region_t *region =  poppler_page_get_selected_region (page,
+                                  ratio,
+                                  POPPLER_SELECTION_GLYPH,
+                                  &selection);
+                                  
+  cairo_region_destroy (region); 
+  PDF_display_page (data->appWindow, pdf_page, data->doc, data); /* mandatory in order to update display of removed selection */                  
+                               
   /* remove cairo context */
- //  cairo_destroy (cr);
-  /* layouts */
-//  poppler_page_get_text_layout (page, &pRects, &rectCount);
-  //  printf("Nombre caractères sur page : %d\n", rectCount);  // en fait, il compte le nombre exact de caractères qui sont autant de petits rectangles ; les retours chariots invisibles sont comptés également
-/*
-gint i;
-gint ref1, ref2; /* the upper and lower position in selection table used to extract chars from linear user selection */
-/*gchar *tmpStr2;
+  cairo_destroy (cr);
+  g_object_unref (page);
 
-ref1 = -1;
-ref2 = -1;
-*
-for(i=0; i < rectCount; i++) {
-  sel = pRects[i];/* contient TOUs les rectangles de la page */
- /* tmpStr2 = poppler_page_get_selected_text (page, POPPLER_SELECTION_GLYPH, &sel);/* ici on sélectiuonne provisoirement TOUT le texte */
-/*  if((ref1 < 0) && (sel.x1 >= selection.x1) && (sel.y1 >= selection.y1)) {
-    ref1 = 0;
-    printf ("bingo \n");
-  }
-
-  if(ref1>=0 && sel.x1>=selection.x2) {
-    ref2 = 0;
-   // printf ("touché fin \n");
-  }
-
-  if(ref1>-2 && ref2<0) {
-   // printf("caractère %d  x1=%.2f  y1=%.2f car=%s\n", i, sel.x1, sel.y1, tmpStr2);
-  }
-
-  if(tmpStr2) {
-    g_free (tmpStr2);
-  }
-
-}/* next i */
-//  g_free (pRects);
   /* copy text to ClipBoard */
 
   if(tmpStr) {
@@ -622,13 +692,7 @@ for(i=0; i < rectCount; i++) {
 	gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), "", -1);
 	gtk_label_set_text (GTK_LABEL(labelClipBoard), _("---"));
   }
-
-  gtk_widget_queue_draw (canvas);
-  // gtk_widget_queue_draw (data->PDFdrawable);
-  cairo_destroy (cr);
-  g_object_unref (page);
-	  
-
+  
 }
 
 /******************
