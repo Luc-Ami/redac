@@ -424,18 +424,18 @@ void PDF_set_highlight_linear_selection
   GArray  *quads_array;
   PopplerRectangle selection, rect_annot; /* in original PDF points 4 gdouble bounding rectnagle coord*/
   gdouble width, height, ratio, v_v_adj, v_h_adj;
+  gint i, j;
+  guint n_rects, rectCount;  
   GdkRGBA color;   
-  GtkWidget *pBtnColor;  
+  GtkWidget *pBtnColor, *canvas;  
+
   cairo_t *cr;
-  GtkWidget *canvas;  
+  
   /* linear highlight */
-  PopplerRectangle *pRects, sel;
+  PopplerRectangle *pRects, sel, rectMem;
   PopplerRectangle *tRects = NULL;
-  guint n_rects, rectCount;
-  gchar *tmpStr = NULL;
-  gint i;
-  gchar *tmpStr2 = NULL;
-;
+
+
     
   /* we get the current RGBA color */
   pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
@@ -464,66 +464,89 @@ void PDF_set_highlight_linear_selection
   selection.x2 = (gdouble) (x+v_h_adj+w) / ratio;
   selection.y2 = (gdouble) (y+v_v_adj+h) / ratio;
   
+  /* we remove any selection from page */
+  cairo_region_t *region =  poppler_page_get_selected_region (page,
+                                  ratio,
+                                  POPPLER_SELECTION_GLYPH,
+                                  &selection);
+                                  
+  cairo_region_destroy (region); 
+ // PDF_display_page (data->appWindow, pdf_page, data->doc, data); /* mandatory in order to update display of removed selection */
+ // gtk_widget_queue_draw (canvas);
   
-  /* new section */
-  poppler_page_get_text_layout (page, &pRects, &rectCount);  
-  printf("Rectcount = %d  width =%.2f  height = %.2f selection x1 =%.2f  y1=%.2f  x2= %.2f y2 = %.2f \n", rectCount, 
-                 width, height,  selection.x1, selection.y1, selection.x2, selection.y2 );  
- 
- 
   /* we are looking for the rectangles in the selected area */
   poppler_page_get_text_layout_for_area (page, &selection, &tRects, &n_rects);
   printf("nbre rect selection  = %d \n", n_rects ); 
-                   
-  /* we draw all sub -rectangles of selected area  */
-  i = 0;
-  while (i<n_rects) {
-     sel = tRects[i];/* contient TOUs les rectangles de la page */
-     sel.x1 = (gdouble) (tRects[i].x1+v_h_adj) / 1;/* il ne faut pas diviser par le ratio ... peut-être parce que c'est déjà à l'échelle ? */
-     sel.y1 = (gdouble) (tRects[i].y1+v_v_adj) / 1;
-     sel.x2 = (gdouble) (tRects[i].x2+v_h_adj) / 1;
-     sel.y2 = (gdouble) (tRects[i].y2+v_v_adj) / 1;
-     
-     tmpStr = poppler_page_get_selected_text (page, POPPLER_SELECTION_GLYPH, &sel);
-     
-     printf ("rang %d  sel x1 = %.2f sel y1 = %.2f sel x2 = %.2f sel y2 = %.2f str=%s\n", i, sel.x1, sel.y1, sel.x2, sel.y2, tmpStr);
-     
-     if(tmpStr) {
-		 g_free (tmpStr);
-     }
-     
-    /*bug : si o fait scroller la page, le surlignement n'est plus à sa place alors que la sélection simple marche */    
-     rect_annot.x1 = sel.x1;
-     rect_annot.y1 = height - sel.y1;
-     rect_annot.x2 = sel.x2;
-     rect_annot.y2 = height - sel.y2;     
+  
+  if(n_rects>0) {
+	  /* we store useful values for first popplerrectangle */
+	  rectMem = tRects[0];
+	  printf ("mémorisé position 0 x1 = %.2f y1 =%.2f x2= %.2f y2=%.2f \n", rectMem.x1, rectMem.y1, rectMem.x2, rectMem.y2);
+	                   
+	  /* we draw all sub -rectangles of selected area  */
+	  i = 0;
+	  while (i<n_rects) {
+		 sel = tRects[i];/* contient TOUs les rectangles de la page */
+		 sel.x1 = tRects[i].x1;/* datas are ALREADY scaled and shift, don't modify values ! 31/5/2022 */
+		 sel.y1 = tRects[i].y1;
+		 sel.x2 = tRects[i].x2;
+		 sel.y2 = tRects[i].y2;	 
+		/*bug : si o fait scroller la page, le surlignement n'est plus à sa place alors que la sélection simple marche */ 
+         if(sel.y1>rectMem.y1) {
+				  
+			  rect_annot.x1 = rectMem.x1;
+			  rect_annot.y1 = height - rectMem.y1;
+			  rect_annot.x2 = sel.x2;
+			  rect_annot.y2 = height - rectMem.y2;     
 
-  quads_array = pgd_annots_create_quads_array_for_rectangle (&rect_annot);
-  PopplerAnnot *my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
-  g_array_free (quads_array, TRUE);
-  PopplerColor *my_color = poppler_color_new ();
-  /* color */
-  my_color->red   = 65535*color.red;
-  my_color->green = 65535*color.green;
-  my_color->blue  = 65535*color.blue;
-  poppler_annot_set_color (my_annot, my_color);  
-  poppler_page_add_annot (page, my_annot);
-  poppler_color_free (my_color);
+			  quads_array = pgd_annots_create_quads_array_for_rectangle (&rect_annot);
+			  PopplerAnnot *my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
+			  g_array_free (quads_array, TRUE);
+			  PopplerColor *my_color = poppler_color_new ();
+			  /* color */
+			  my_color->red   = 65535*color.red;
+			  my_color->green = 65535*color.green;
+			  my_color->blue  = 65535*color.blue;
+			  poppler_annot_set_color (my_annot, my_color);  
+			  poppler_page_add_annot (page, my_annot);
+			  poppler_color_free (my_color);
+			  /* we store useful values */
+			  rectMem = tRects[i];
+         }/* endif EOL change*/
+		 i++;
+		 if(i>=n_rects) {/* there is probably a line pending, so we flush the line */
+			  rect_annot.x1 = rectMem.x1;
+			  rect_annot.y1 = height - rectMem.y1;
+			  rect_annot.x2 = sel.x2;
+			  rect_annot.y2 = height - rectMem.y2;     
 
-     
-     i++;  
-  }
-  poppler_page_render (page, cr); 
-  /* we redraw the page  */
-  gtk_widget_queue_draw (canvas);
-  // gtk_widget_queue_draw (data->PDFdrawable);
-  cairo_destroy (cr);
-  g_object_unref (page);
-  g_free (pRects);
-  g_free (tRects);  
-    
+			  quads_array = pgd_annots_create_quads_array_for_rectangle (&rect_annot);
+			  PopplerAnnot *my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
+			  g_array_free (quads_array, TRUE);
+			  PopplerColor *my_color = poppler_color_new ();
+			  /* color */
+			  my_color->red   = 65535*color.red;
+			  my_color->green = 65535*color.green;
+			  my_color->blue  = 65535*color.blue;
+			  poppler_annot_set_color (my_annot, my_color);  
+			  poppler_page_add_annot (page, my_annot);
+			  poppler_color_free (my_color);			 
+		 }     
+	  }/* wend */
+	  
+	  
+	  PDF_display_page (data->appWindow, pdf_page, data->doc, data); /* mandatory in order to update display of removed selection */
+	  /* we redraw the page  */
+	  gtk_widget_queue_draw (canvas);
+	  // gtk_widget_queue_draw (data->PDFdrawable);
+	  cairo_destroy (cr);
+	  g_object_unref (page);
+	  g_free (pRects);
+	  g_free (tRects);  
+		
 
-//  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, data);
+	//  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, data);
+  }/* endif n_rects */
 }
 
 /*********************************************
@@ -648,6 +671,7 @@ void PDF_get_text_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   selection.x2 = (gdouble) (x + v_h_adj + w) / ratio;
   selection.y2 = (gdouble) (y + v_v_adj + h) / ratio;
    
+   /* reste un bug : si tu sélectionnes hors-zone, il choisit le texte le plus proche !!! 31/5/2022 */
   
 printf("coord width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", w, h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
 

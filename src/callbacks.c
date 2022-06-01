@@ -518,6 +518,7 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
   switch(data->clipboardMode) {
      case PDF_SEL_MODE_TEXT: { /*clip mode text */
        /* voir : poppler_page_get_crop_box ()*/
+       /* requires removing of text selection if linear selection actuivated */
        if(data->w > 0 && data->h > 0) { 
 		   printf ("appel clip PDF txt \n");
            PDF_get_text_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
@@ -544,6 +545,7 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
        break;
      }
      case PDF_SEL_MODE_HIGH: {/* highlighting selection mode */
+     /*  requires removing of text selection if linear selection actuivated */		 
        if( data->w>0 && data->h>0) {
 		 /* proivisoire */  
 		 PDF_set_highlight_linear_selection  (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
@@ -679,7 +681,7 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
 {  
   gdouble width, height, ratio, v_v_adj, v_h_adj;	
 	
-  if (!data->doc) {
+  if(!data->doc) {
     return TRUE;
   }
 
@@ -739,8 +741,7 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
 ********************************************/
 gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event, APP_data *data)
 {
-  GtkWidget *window = data->window;
-  GtkWidget *canvas;
+  GtkWidget *window = data->window, *canvas;
   GtkStyleContext *context;  
   GdkRGBA *color, *fColor;
   cairo_t *cr, *PDF_cr;
@@ -823,41 +824,16 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
  // gtk_window_resize (GTK_WINDOW (window), data->w, data->h);
 
           /* !!!! ici il faut mettre la partie PDF */
-   printf("drag width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", data->w, data->h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
-  /* we draw selection */
-  poppler_page_render_selection (page, cr,
+ //  printf("drag width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", data->w, data->h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
+   /* we draw selection */
+   poppler_page_render_selection (page, cr,
                                  &selection,
                                  NULL,
                                  POPPLER_SELECTION_GLYPH, &glyph_color, &background_color);
                                  
-  /* We (ab)use app-paintable to indicate if we have an RGBA window */
-//  if(!gtk_widget_get_app_paintable (window)) {
-  //    GdkWindow *gdkwindow = gtk_widget_get_window (window);
-      /* Shape the window to make only the outline visible */
-    /*  if (data->w> 2 && data->h > 2) {
-          cairo_region_t *region;
-          cairo_rectangle_int_t region_rect = {
-            0, 0,
-            data->w, data->h
-          };
-
-          region = cairo_region_create_rectangle (&region_rect);
-          region_rect.x++;
-          region_rect.y++;
-          region_rect.width -= 2;
-          region_rect.height -= 2;
-          cairo_region_subtract_rectangle (region, &region_rect);
-
-          gdk_window_shape_combine_region (gdkwindow, region, 0, 0);
-          cairo_region_destroy (region);
-      }
-      else {
-        gdk_window_shape_combine_region (gdkwindow, NULL, 0, 0);
-      }
-  }*/
-  gtk_widget_queue_draw (canvas);
-  g_object_unref (page);
-  cairo_destroy (cr);  
+   gtk_widget_queue_draw (canvas);
+   g_object_unref (page);
+   cairo_destroy (cr);  
   return TRUE;
 }
 /************************************
