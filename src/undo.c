@@ -12,12 +12,36 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gstdio.h> /* g_fopen, etc */
+#include <poppler.h>
 
 #include "interface.h" /* glade requirement */
 #include "support.h" /* glade requirement */
 #include "misc.h"
 #include "pdf.h"
 #include "undo.h"
+
+
+static void undo_free_last_data (APP_data *data)
+{
+   GList *l = g_list_last (data->undoList);
+   undo_datas *tmp_undo_datas;
+   tmp_undo_datas = (undo_datas *)l->data;
+//printf("avant annot dans free last \n");
+   if(tmp_undo_datas->annotStr != NULL)
+         g_free (tmp_undo_datas->annotStr);
+//printf("apres annot dans free last et avant serial\n");
+   if(tmp_undo_datas->serialized_buffer != NULL) {
+     g_free (tmp_undo_datas->serialized_buffer);
+     tmp_undo_datas->serialized_buffer = NULL;
+   }
+   if(tmp_undo_datas->pix != NULL)
+         g_object_unref (tmp_undo_datas->pix);  
+
+//printf("apres serial dans free last \n");
+   g_free (tmp_undo_datas);
+   data->undoList = g_list_delete_link (data->undoList, l);  
+}
+
 
 static gint get_undo_current_op_code(APP_data *data)
 {
@@ -212,7 +236,7 @@ static void undo_free_first_data(APP_data *data)
 }
 
 
-static void undo_push_editor( gint op, APP_data *data)
+static void undo_push_editor (gint op, APP_data *data)
 {
   gint undo_list_len = g_list_length (data->undoList);
 
@@ -239,17 +263,19 @@ static void undo_push_editor( gint op, APP_data *data)
 
 }
 
-static void undo_push_PDF (gint op, APP_data *data)
+static void undo_push_PDF (gint op, PopplerAnnot *tmpAnnot, APP_data *data)
 {
+//  PopplerAnnot my_annot;	
   gint undo_list_len = g_list_length (data->undoList);
 
   /* if current list's length==max allowed length for undo buffer, we delete 
      the first element */
-  if( undo_list_len >= MAX_UNDO_OPERATIONS) {
+  if (undo_list_len >= MAX_UNDO_OPERATIONS) {
     printf("* Redac : Undo buffer is full, I delete the first element *\n");
     // remove first element 
-    if(data->undoList != NULL)
+    if(data->undoList != NULL) {
        undo_free_first_data (data);
+    }
   }
 
   data->undo.opCode = op;
@@ -259,6 +285,8 @@ static void undo_push_PDF (gint op, APP_data *data)
   /* store values from quasi global var */
   *tmp_undo_datas = data->undo;
   tmp_undo_datas->annotStr = g_strdup_printf("%s", data->undo.annotStr);
+//  my_annot = g_malloc(sizeof(PopplerAnnot));
+  tmp_undo_datas->annot = tmpAnnot;
   data->undoList = g_list_append (data->undoList, tmp_undo_datas);
   update_undo_tooltip (op, data);
 }
@@ -269,7 +297,7 @@ static void undo_push_sketch (gint op, APP_data *data)
 
   /* if current list's length==max allowed length for undo buffer, we delete 
      the first element */
-  if( undo_list_len >= MAX_UNDO_OPERATIONS) {
+  if (undo_list_len >= MAX_UNDO_OPERATIONS) {
     printf("* Redac : Undo buffer is full, I delete the first element *\n");
     // remove first element 
     if(data->undoList != NULL)
@@ -292,7 +320,7 @@ static void undo_push_sketch (gint op, APP_data *data)
  call undo engine
 
 *******************************/
-void undo_push (gint current_stack, gint op, APP_data *data)
+void undo_push (gint current_stack, gint op, PopplerAnnot *annot, APP_data *data)
 {
   gtk_widget_set_sensitive (data->pBtnUndo, TRUE);
   switch(current_stack) {
@@ -301,7 +329,7 @@ void undo_push (gint current_stack, gint op, APP_data *data)
       break;
     }
     case CURRENT_STACK_PDF: {
-      undo_push_PDF (op, data);
+      undo_push_PDF (op, annot, data);
       break;
     }
     case CURRENT_STACK_SKETCH: {
@@ -324,7 +352,7 @@ static void undo_pop_editor (gint op, APP_data *data)
   gsize length;
   gboolean flag;
 
-  GList *l = g_list_last(data->undoList);
+  GList *l = g_list_last (data->undoList);
   tmp_undo_datas = (undo_datas *)l->data;
 
   tagTable1 = gtk_text_buffer_get_tag_table (data->buffer);
@@ -418,10 +446,10 @@ static void undo_pop_editor (gint op, APP_data *data)
           flag = gtk_text_iter_backward_chars (&start, tmp_undo_datas->str_len);
           gtk_text_buffer_delete (data->buffer, &start, &end);
           /* paste previous rich text */
-          GdkAtom format = gtk_text_buffer_register_deserialize_tagset(data->buffer, "application/x-gtk-text-buffer-rich-text");
-          gtk_text_buffer_get_iter_at_mark (data->buffer,&start,tmp_undo_datas->beforeMark);
-          flag = gtk_text_buffer_deserialize(data->buffer, data->buffer, format, &start, 
-                                                  tmp_undo_datas->serialized_buffer,tmp_undo_datas->buffer_length, NULL);
+          GdkAtom format = gtk_text_buffer_register_deserialize_tagset (data->buffer, "application/x-gtk-text-buffer-rich-text");
+          gtk_text_buffer_get_iter_at_mark (data->buffer,&start, tmp_undo_datas->beforeMark);
+          flag = gtk_text_buffer_deserialize (data->buffer, data->buffer, format, &start, 
+                                                  tmp_undo_datas->serialized_buffer, tmp_undo_datas->buffer_length, NULL);
           /* clear some datas */
           gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->undoMark); 
           gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->beforeMark); 
@@ -479,10 +507,12 @@ static void undo_pop_editor (gint op, APP_data *data)
         case OP_DEL_CHAR:{
           GdkAtom format = gtk_text_buffer_register_deserialize_tagset (data->buffer, "application/x-gtk-text-buffer-rich-text");
           gtk_text_buffer_get_iter_at_mark (data->buffer, &iter, tmp_undo_datas->undoMark); 
-          if(!tmp_undo_datas->fIsStart)
+          if(!tmp_undo_datas->fIsStart) {
              flag = gtk_text_iter_forward_char (&iter);
-          else
+          }
+          else {
              gtk_text_buffer_get_start_iter (data->buffer, &iter);
+          }
           gtk_text_buffer_place_cursor (data->buffer,&iter);
           flag = gtk_text_buffer_deserialize (data->buffer, data->buffer, format, &iter, 
                                                   tmp_undo_datas->serialized_buffer, tmp_undo_datas->buffer_length, NULL);
@@ -493,8 +523,9 @@ static void undo_pop_editor (gint op, APP_data *data)
           gtk_text_buffer_get_iter_at_mark (data->buffer, &end, tmp_undo_datas->undoMark);
           gtk_text_buffer_get_iter_at_mark (data->buffer, &start, tmp_undo_datas->beforeMark);
           flag = gtk_text_iter_forward_char (&start);
-          if(tmp_undo_datas->fIsStart)
+          if(tmp_undo_datas->fIsStart) {
                 gtk_text_buffer_get_start_iter (data->buffer, &start);
+          }
           gtk_text_buffer_delete (data->buffer, &start, &end);
           gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->beforeMark); 
           gtk_text_buffer_delete_mark (data->buffer, tmp_undo_datas->undoMark); 
@@ -510,7 +541,7 @@ static void undo_pop_editor (gint op, APP_data *data)
 //printf("apr \n");
           break;
         }
-        default:printf("* Redac : Unmanaged UNDO operation request for editor *\n");
+        default: printf ("* Redac : Unknown UNDO operation request for editor *\n");
      }/* end switch */
   }
 }
@@ -584,28 +615,54 @@ static void undo_remove_text_annot (APP_data *data_user, undo_datas *data)
   poppler_color_free (my_color);
 }
 
-static void undo_pop_PDF(gint op,  APP_data *data)
+/********************************
+ * local function to 'pop' i.e.
+ * undo an operation in PDF
+ * document
+ * *****************************/
+static void undo_pop_PDF (gint op, APP_data *data)
 {
+  gint index;
   PopplerPage *pPage;
   undo_datas *tmp_undo_datas;
-  GList *PDFmap;
+  GList *PDFmap, *l;
   PopplerAnnot *current_annot = NULL;
 
-  if(data->doc == NULL)
+  if(data->doc == NULL) {
     return;
-  GList *l = g_list_last (data->undoList);
+  }
+  
+  
+printf ("lg liste undo =%d \n", g_list_length (data->undoList));  
+
+  l = g_list_last (data->undoList);
   tmp_undo_datas = (undo_datas *)l->data;
+
   if(op>49 && op<100) {
      switch(op) {
-        case OP_SET_TEXT_ANNOT:
-        case OP_SET_HIGHLIGHT_ANNOT:{
+        case OP_SET_TEXT_ANNOT: {
           poppler_page_remove_annot (poppler_document_get_page (data->doc, tmp_undo_datas->PDFpage),
                            tmp_undo_datas->annot);
+          break;			
+			
+	    }
+	    case OP_SET_HIGHLIGHT_RECTANGLE_ANNOT:
+        case OP_SET_HIGHLIGHT_ANNOT: {
+		  index = tmp_undo_datas->undo_index;
+		  printf ("annul undo index = %d\n", index);
+		//  while(index>0) {
+             poppler_page_remove_annot (poppler_document_get_page (data->doc, tmp_undo_datas->PDFpage),
+                           tmp_undo_datas->annot);
+                        //   undo_free_last_data (data);
+           //  l = g_list_last (data->undoList);
+           //  tmp_undo_datas = (undo_datas *)l->data;              
+           //  index--;
+          
           break;
         }
         case OP_SET_ANNOT_COLOR:{
           PopplerColor *color;
-          color = poppler_color_new();
+          color = poppler_color_new ();
           pPage = poppler_document_get_page (data->doc, data->undo.PDFpage);
           PDFmap = poppler_page_get_annot_mapping (pPage);
           if(PDFmap) {
@@ -613,9 +670,10 @@ static void undo_pop_PDF(gint op,  APP_data *data)
             color->green = 65535*tmp_undo_datas->color.green;
             color->blue  = 65535*tmp_undo_datas->color.blue;
             current_annot = find_annot_at_coordinates (tmp_undo_datas->x1, tmp_undo_datas->y1, 
-                                                tmp_undo_datas->x2, tmp_undo_datas->y2, PDFmap);
-            if(current_annot)
+                                                       tmp_undo_datas->x2, tmp_undo_datas->y2, PDFmap);
+            if(current_annot) {
                  poppler_annot_set_color (current_annot, color);
+            }
             poppler_color_free (color);
             poppler_page_free_annot_mapping (PDFmap);
           }
@@ -627,16 +685,17 @@ static void undo_pop_PDF(gint op,  APP_data *data)
           PDFmap = poppler_page_get_annot_mapping (pPage);
           if(PDFmap) {
              current_annot = find_annot_at_coordinates (tmp_undo_datas->x1, tmp_undo_datas->y1, 
-                                                tmp_undo_datas->x2, tmp_undo_datas->y2, PDFmap);
-             if(current_annot)
+                                                        tmp_undo_datas->x2, tmp_undo_datas->y2, PDFmap);
+             if(current_annot) {
                  poppler_annot_set_contents (current_annot,tmp_undo_datas->annotStr);
+             }
              poppler_page_free_annot_mapping (PDFmap);
           }
           g_object_unref (pPage);
           break;
         }
         case OP_REMOVE_ANNOT: {          
-          switch(tmp_undo_datas->annotType ) {
+          switch (tmp_undo_datas->annotType ) {
             case POPPLER_ANNOT_TEXT:{
                // printf("* ask to undo remove annot type text=%d\n", tmp_undo_datas->annotType);
                undo_remove_text_annot (data, tmp_undo_datas);
@@ -692,26 +751,7 @@ static void undo_pop_sketch (gint op, APP_data *data)
 
 }
 
-static void undo_free_last_data (APP_data *data)
-{
-   GList *l = g_list_last (data->undoList);
-   undo_datas *tmp_undo_datas;
-   tmp_undo_datas = (undo_datas *)l->data;
-//printf("avant annot dans free last \n");
-   if(tmp_undo_datas->annotStr != NULL)
-         g_free (tmp_undo_datas->annotStr);
-//printf("apres annot dans free last et avant serial\n");
-   if(tmp_undo_datas->serialized_buffer != NULL) {
-     g_free (tmp_undo_datas->serialized_buffer);
-     tmp_undo_datas->serialized_buffer = NULL;
-   }
-   if(tmp_undo_datas->pix != NULL)
-         g_object_unref (tmp_undo_datas->pix);  
 
-//printf("apres serial dans free last \n");
-   g_free (tmp_undo_datas);
-   data->undoList = g_list_delete_link (data->undoList, l);  
-}
 /*******************************
  main function to 'POP' i.e.
  cancel last operation
@@ -731,22 +771,21 @@ void undo_pop (gint current_stack, APP_data *data)
   }
   if(op>49 && op<100) {
      undo_pop_PDF (op, data);
-     return;
   }
   if(op>99) {
      undo_pop_sketch (op, data);
   }
+  
   data->undo.opCode = OP_NONE;
+  
   /* we must free last data on undo list */
-  if(data->undoList != NULL) {
-//printf("lg avant=%d\n", g_list_length ( data->undoList ));
-    undo_free_last_data (data);
-//printf("lg apres=%d\n", g_list_length ( data->undoList ));
+  if (data->undoList != NULL) {
+     undo_free_last_data (data);
   }
   /* if #elements ==0 then lock button */
-  if( g_list_length (data->undoList) == 0) {
-    gtk_widget_set_sensitive (data->pBtnUndo, FALSE);  
-    gtk_widget_set_tooltip_text (data->pBtnUndo, _("There is nothing to undo."));
+  if (g_list_length (data->undoList) == 0) {
+     gtk_widget_set_sensitive (data->pBtnUndo, FALSE);  
+     gtk_widget_set_tooltip_text (data->pBtnUndo, _("There is nothing to undo."));
   }
   else {
     GList *l = g_list_last (data->undoList);

@@ -62,6 +62,7 @@
 #define OP_SET_ANNOT_FREE_TEXT 54
 #define OP_SET_ANNOT_BOX 55
 #define OP_REMOVE_ANNOT 56
+#define OP_SET_HIGHLIGHT_RECTANGLE_ANNOT 57
 
 #define OP_SET_POINT 100
 #define OP_PASTE_PIXBUF 101
@@ -69,10 +70,10 @@
 
 
 
-void undo_push(gint current_stack,  gint op, APP_data *data);
-void undo_pop(gint current_stack, APP_data *data);
-void undo_free_all(APP_data *data);
-void undo_free_all_PDF_ops(APP_data *data);
-void undo_free_all_sketch_ops(APP_data *data);
-void undo_reset_serialized_buffer(APP_data *data);
+void undo_push (gint current_stack, gint op, PopplerAnnot *annot, APP_data *data);
+void undo_pop (gint current_stack, APP_data *data);
+void undo_free_all (APP_data *data);
+void undo_free_all_PDF_ops (APP_data *data);
+void undo_free_all_sketch_ops (APP_data *data);
+void undo_reset_serialized_buffer (APP_data *data);
 #endif /* UNDO_H */

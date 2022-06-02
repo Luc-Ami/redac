@@ -30,15 +30,16 @@
 ********************************/
 PopplerAnnot *PDF_find_annot_at_position (gint x, gint y, APP_data *data)
 {
-  PopplerRectangle selection; /* in original PDF points 4 gdouble bounding rectangle coord*/
   gdouble ratio, v_v_adj, v_h_adj;
   gint i=0, x1, y1, x2, y2;
-  GList *l = NULL;
+  GList *l = NULL;	
+  PopplerRectangle selection; /* in original PDF points 4 gdouble bounding rectangle coord*/
   PopplerAnnotMapping *current_annot_map;
   PopplerAnnot *current_annot = NULL;
 
-  if(data->pdfAnnotMapping == NULL)
+  if(data->pdfAnnotMapping == NULL) {
     return current_annot;
+  }
   /* we read current adjustments on scrollable window */
   GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
   GtkAdjustment *h_adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
@@ -70,30 +71,30 @@ PopplerAnnot *PDF_find_annot_at_position (gint x, gint y, APP_data *data)
   return current_annot;
 }
 
-/**********************************
-  get the annot mapping for the
-  current page
+/*************************************************
+  get the annot mapping for the current page
   when this function is called,
   the 'data" structure contains 
   all necessary datas : current page,
   a pointer on PDF, doc, and so son
-************************************/
+*************************************************/
 GList *PDF_get_annot_mapping (APP_data *data)
 {
   PopplerPage *pPage;
 
-  if(data->doc == NULL)
+  if(data->doc == NULL) {
     return NULL;
+  }
   pPage = poppler_document_get_page (data->doc, data->curPDFpage);
-  if(pPage == NULL)
-    return NULL;  
+  if(pPage == NULL) {
+    return NULL;
+  }  
   return poppler_page_get_annot_mapping (pPage);
 }
 
 /*****************************************
   display a PDF, autosized to allow 
-  scrolling
- of gtk_drawing_area
+  scrolling of gtk_drawing_area
 ******************************************/
 void PDF_display_page (GtkWidget *window1, gint page, PopplerDocument *pdoc, APP_data *data)
 {
@@ -114,9 +115,7 @@ void PDF_display_page (GtkWidget *window1, gint page, PopplerDocument *pdoc, APP
   canvas = lookup_widget(GTK_WIDGET(window1), "crPDF");
   pPage = poppler_document_get_page (pdoc, page);
   poppler_page_get_size (pPage, &width, &height);
-  //ratio = misc_get_PDF_ratio(width,  gtk_widget_get_allocated_width (window1));
-  //data->PDFratio=ratio;
-
+ 
   //g_key_file_set_double(keyString, "reference-document ", "zoom", data->PDFratio);
   ratio = data->PDFratio;
   w = (gint) (width*ratio);
@@ -147,7 +146,7 @@ void PDF_display_page (GtkWidget *window1, gint page, PopplerDocument *pdoc, APP
 
 /*******************************
   various functions to navigate
-  the PDF doc
+  the PDF document
 *********************************/
 void PDF_moveUp (GtkWidget *parentWindow, APP_data *data)
 {
@@ -156,9 +155,9 @@ void PDF_moveUp (GtkWidget *parentWindow, APP_data *data)
   gdouble upper = 0;
   gdouble page_size = 0;
 
-  if(!data->doc)
+  if(!data->doc) {
      return;
-
+  }
   verticalAdjust = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
   adj_value = gtk_adjustment_get_value (verticalAdjust);
   upper     = gtk_adjustment_get_upper (verticalAdjust);
@@ -174,11 +173,11 @@ void PDF_moveUp (GtkWidget *parentWindow, APP_data *data)
   }
 }
 
-/* 
+/* ********************************
 
 see : https://stackoverflow.com/questions/11353184/gtk-programmatically-scroll-back-a-single-line-in-scrolled-window-containing-a 
 
-*/
+***********************************/
 
 void PDF_moveDown (GtkWidget *parentWindow, APP_data *data)
 {
@@ -187,9 +186,9 @@ void PDF_moveDown (GtkWidget *parentWindow, APP_data *data)
   gdouble page_size = 0;
   gdouble adj_value;
 
-  if(!data->doc)
+  if(!data->doc) {
      return;
-
+  }
   verticalAdjust = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(data->PDFScrollable));
   upper     = gtk_adjustment_get_upper (verticalAdjust);
   adj_value = gtk_adjustment_get_value (verticalAdjust);
@@ -209,8 +208,9 @@ void PDF_moveDown (GtkWidget *parentWindow, APP_data *data)
 
 void PDF_moveBackward (GtkWidget *parentWindow, APP_data *data)
 {
-  if(!data->doc)
+  if(!data->doc) {
      return;
+  }
   if(data->curPDFpage != 0) {
     data->curPDFpage--;
   }
@@ -224,9 +224,9 @@ void PDF_moveBackward (GtkWidget *parentWindow, APP_data *data)
 
 void PDF_moveForward (GtkWidget *parentWindow, APP_data    *data)
 {
-  if(!data->doc)
+  if(!data->doc) {
      return;
-
+  }
   if(data->curPDFpage != (data->totalPDFpages) - 1){
     data->curPDFpage++;
   }
@@ -239,9 +239,9 @@ void PDF_moveForward (GtkWidget *parentWindow, APP_data    *data)
 
 void PDF_moveHome (GtkWidget *parentWindow, APP_data *data)
 {
-  if(!data->doc)
+  if(!data->doc) {
      return;
-
+  }
   data->curPDFpage = 0;
   update_statusbarPDF (data);
   PDF_display_page (parentWindow, 0, data->doc, data);
@@ -253,9 +253,9 @@ void PDF_moveHome (GtkWidget *parentWindow, APP_data *data)
 
 void PDF_moveEnd (GtkWidget *parentWindow, APP_data *data)
 {
-  if(!data->doc)
+  if(!data->doc) {
      return;
-
+  }
   data->curPDFpage = data->totalPDFpages - 1;
   update_statusbarPDF (data);
   PDF_display_page (parentWindow, data->curPDFpage, data->doc, data);
@@ -273,24 +273,27 @@ void PDF_goto (GtkWidget *parentWindow, APP_data *data, gint pg)
   //   search_draw_selection_current_page(data->curPDFpage, data, data->surface); 
 
 }
-/*
+
+/*********************************
 
   Poppler add text annotation
-  requires 0.24+ Poppler
+  requires 0.24+ of Poppler lib
 
-*/
+********************************/
 
-void PDF_set_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page, PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data *data)
+void PDF_set_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page, 
+                                   PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, 
+                                   APP_data *data)
 {
   PopplerPage *page;
   PopplerRectangle selection, rect_annot; /* in original PDF points 4 gdouble bounding rectnagle coord*/
   gdouble width, height, ratio, v_v_adj, v_h_adj;
-  gchar *tmpStr;
+  gchar *tmpStr = NULL;
   GdkRGBA color;   
   GtkWidget *pBtnColor;   
     
   /* we get the current RGBA color */
-  pBtnColor = lookup_widget(GTK_WIDGET(data->appWindow), "color_button");
+  pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
   /* we read current adjustments on scrollable window */
   GtkAdjustment *v_adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
@@ -333,11 +336,11 @@ void PDF_set_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page
    
     poppler_page_add_annot (page,my_annot);
     poppler_color_free (my_color);
+
     /* undo datas */
-    data->undo.annot    = my_annot;
     data->undo.PDFpage  = data->curPDFpage;
     data->undo.curStack = CURRENT_STACK_PDF;
-    undo_push (data->currentStack, OP_SET_TEXT_ANNOT, data);
+    undo_push (data->currentStack, OP_SET_TEXT_ANNOT, my_annot, data);
    }
   g_free (tmpStr);
   g_object_unref (page);
@@ -346,6 +349,11 @@ void PDF_set_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page
  
 }
 
+/**********************************************
+ * never officially implemented despite job
+ * done by a student at GSOC :(
+ * 
+ * ******************************************/
 void PDF_set_free_text_annot_selection (gint x, gint y, gint w, gint h, gint pdf_page, PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data *data)
 {
   PopplerPage *page;
@@ -411,8 +419,7 @@ printf("coord width=%.2f height pdf=%.2f x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.
 }
 
 /*********************************************
-  highlight selection linear 
-  on PDF page
+  highlight linear selection   on PDF page
   requires poppler>=0.26 to highlight !
 ********************************************/
 
@@ -424,7 +431,7 @@ void PDF_set_highlight_linear_selection
   GArray  *quads_array;
   PopplerRectangle selection, rect_annot; /* in original PDF points 4 gdouble bounding rectnagle coord*/
   gdouble width, height, ratio, v_v_adj, v_h_adj;
-  gint i, j;
+  gint i, undo_index;
   guint n_rects, rectCount;  
   GdkRGBA color;   
   GtkWidget *pBtnColor, *canvas;  
@@ -434,7 +441,7 @@ void PDF_set_highlight_linear_selection
   /* linear highlight */
   PopplerRectangle *pRects, sel, rectMem;
   PopplerRectangle *tRects = NULL;
-
+  PopplerAnnot *my_annot;
 
     
   /* we get the current RGBA color */
@@ -485,6 +492,7 @@ void PDF_set_highlight_linear_selection
 	                   
 	  /* we draw all sub -rectangles of selected area  */
 	  i = 0;
+	  undo_index = 0;
 	  while (i<n_rects) {
 		 sel = tRects[i];/* contient TOUs les rectangles de la page */
 		 sel.x1 = tRects[i].x1;/* datas are ALREADY scaled and shift, don't modify values ! 31/5/2022 */
@@ -500,7 +508,7 @@ void PDF_set_highlight_linear_selection
 			  rect_annot.y2 = height - rectMem.y2;     
 
 			  quads_array = pgd_annots_create_quads_array_for_rectangle (&rect_annot);
-			  PopplerAnnot *my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
+			  my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
 			  g_array_free (quads_array, TRUE);
 			  PopplerColor *my_color = poppler_color_new ();
 			  /* color */
@@ -512,16 +520,28 @@ void PDF_set_highlight_linear_selection
 			  poppler_color_free (my_color);
 			  /* we store useful values */
 			  rectMem = tRects[i];
+			  printf ("tintin \n");
+			  /* undo datas */
+			  undo_index++;			   
+			  data->undo.undo_index = undo_index;
+			  data->undo.PDFpage  = data->curPDFpage;
+			  data->undo.curStack = CURRENT_STACK_PDF;
+			  if(data->undo.annotStr != NULL) {
+					   g_free (data->undo.annotStr);
+			  }
+			  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, my_annot, data);
+			  
          }/* endif EOL change*/
 		 i++;
 		 if(i>=n_rects) {/* there is probably a line pending, so we flush the line */
+			 printf ("coucou \n");
 			  rect_annot.x1 = rectMem.x1;
 			  rect_annot.y1 = height - rectMem.y1;
 			  rect_annot.x2 = sel.x2;
 			  rect_annot.y2 = height - rectMem.y2;     
 
 			  quads_array = pgd_annots_create_quads_array_for_rectangle (&rect_annot);
-			  PopplerAnnot *my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
+			  my_annot = poppler_annot_text_markup_new_highlight (doc, &rect_annot, quads_array);
 			  g_array_free (quads_array, TRUE);
 			  PopplerColor *my_color = poppler_color_new ();
 			  /* color */
@@ -530,10 +550,23 @@ void PDF_set_highlight_linear_selection
 			  my_color->blue  = 65535*color.blue;
 			  poppler_annot_set_color (my_annot, my_color);  
 			  poppler_page_add_annot (page, my_annot);
-			  poppler_color_free (my_color);			 
+			  poppler_color_free (my_color);	
+			  
+			  /* undo datas */
+			  if(undo_index<1) {
+				  undo_index = 1;
+			  }
+			  data->undo.undo_index = undo_index;			  
+			  data->undo.PDFpage  = data->curPDFpage;
+			  data->undo.curStack = CURRENT_STACK_PDF;
+			  if(data->undo.annotStr != NULL) {
+					   g_free (data->undo.annotStr);
+			  }
+			  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, my_annot, data);
+			  	printf ("j'ai empîlé avec un index de :%d\n", undo_index);		  		 
 		 }     
 	  }/* wend */
-	  
+	printf ("undo index vaut : %d \n", undo_index);  
 	  
 	  PDF_display_page (data->appWindow, pdf_page, data->doc, data); /* mandatory in order to update display of removed selection */
 	  /* we redraw the page  */
@@ -543,19 +576,19 @@ void PDF_set_highlight_linear_selection
 	  g_object_unref (page);
 	  g_free (pRects);
 	  g_free (tRects);  
-		
 
 	//  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, data);
   }/* endif n_rects */
 }
 
 /*********************************************
-  highlight selection rectangle 
-  on PDF page
+  highlight selection rectangle on PDF page
   requires poppler>=0.26 to highlight !
 ********************************************/
 
-void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page, PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, APP_data *data)
+void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page, 
+                                  PopplerDocument *doc, GtkWidget *win, GtkWidget *sw, 
+                                  APP_data *data)
 {
   PopplerPage *page;
   GArray  *quads_array;
@@ -607,6 +640,7 @@ void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   g_object_unref (page);
   /* we redraw the page  */
   PDF_display_page (win, pdf_page, doc, data);
+  
   /* undo datas */
   data->undo.annot    = my_annot;
   data->undo.PDFpage  = data->curPDFpage;
@@ -614,11 +648,10 @@ void PDF_set_highlight_selection (gint x, gint y, gint w, gint h, gint pdf_page,
   if(data->undo.annotStr != NULL) {
            g_free (data->undo.annotStr);
   }
-  undo_push (data->currentStack, OP_SET_HIGHLIGHT_ANNOT, data);
+  undo_push (data->currentStack, OP_SET_HIGHLIGHT_RECTANGLE_ANNOT, my_annot, data);
 }
 
 /*******************************************************
-
   get text for selection - full local
   entry parameters : x,y,w,h = bounding selection box
   win = application's window
@@ -719,9 +752,11 @@ printf("coord width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n"
   
 }
 
-/******************
+/***************************************
+  
   zoom IN PDF
-******************/
+  
+***************************************/
 void on_PDF_zoom_in_clicked (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
@@ -730,16 +765,19 @@ void on_PDF_zoom_in_clicked (GtkButton *button, APP_data *data)
 
   if(data->doc) {
      data->PDFratio = data->PDFratio * 1.1;
-     if(data->PDFratio * data->PDFWidth > PDF_VIEW_MAX_WIDTH)
+     if(data->PDFratio * data->PDFWidth > PDF_VIEW_MAX_WIDTH) {
          data->PDFratio = PDF_VIEW_MAX_WIDTH / data->PDFWidth;
+     }
      PDF_display_page (data->appWindow, data->curPDFpage, data->doc, data);
      g_key_file_set_double (keyString, "reference-document", "zoom", data->PDFratio);
   }
 }
 
-/**************
+/*************************
+ 
   zoom OUT PDF
-***************/
+ 
+*************************/
 void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data)
 {
   GKeyFile *keyString;
@@ -748,18 +786,20 @@ void on_PDF_zoom_out_clicked  (GtkButton *button, APP_data *data)
 
   if(data->doc) {
      data->PDFratio = data->PDFratio * 0.9;
-     if(data->PDFratio < 0.5)
+     if(data->PDFratio < 0.5) {
          data->PDFratio = 0.5;
+     }
      PDF_display_page (data->appWindow, data->curPDFpage, data->doc, data);
      g_key_file_set_double (keyString, "reference-document", "zoom", data->PDFratio);
   }
 }
 
 /*********************************
+ 
   prepare PDF drawable
 
 *********************************/
-GtkWidget *PDF_prepare_drawable()
+GtkWidget *PDF_prepare_drawable ()
 {
   GtkWidget *crPDF;
 

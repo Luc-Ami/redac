@@ -408,7 +408,7 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
   data->undo.x1 = xorg;
   data->undo.y1 = yorg;
   if(w>0 && h>0) {
-     undo_push (data->currentStack,OP_SKETCH_ANNOT, data);
+     undo_push (data->currentStack, OP_SKETCH_ANNOT, NULL, data);
      /* loop until all splitted multiline text is displayed */
      cairo_move_to (cr, (gdouble)xorg, (gdouble)data->y1-root_ys);
      for( i = 0; sdata[i]; i++ ) {
@@ -435,7 +435,7 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
   GtkWidget *pBtnColor; 
   cairo_t *cr = NULL;
 
-  pen_width_margin = (pen_width/2)+1;
+  pen_width_margin = (pen_width/2) + 1;
   /* we get the current RGBA color */
   pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
@@ -444,8 +444,8 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
   cairo_set_source_rgb (cr, color.red, color.green, color.blue);
   cairo_set_line_width (cr, pen_width);
   /* we get a copy of underlaying rectangle for undo engine */
-  w = ABS((gint)x - data->x1);
-  h = ABS((gint)y - data->y1);
+  w = ABS ((gint)x - data->x1);
+  h = ABS ((gint)y - data->y1);
   /* x2, y2 : coordinates, in relative mode, of upperleft quadrant */
   if((gint)x<data->x1) {
      x2 = (gint)x;
@@ -461,11 +461,12 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
    y2 = data->y1;
   }
  
-  if(x2<=0)
+  if(x2<=0) {
    x2 = x2 + pen_width_margin;
-  if(y2<=0)
+  }
+  if(y2<=0) {
    y2 = y2 + pen_width_margin;
-
+  }
 
   if(w>0 && h>0 ) {
     data->undo.pix = gdk_pixbuf_get_from_surface (data->Sketchsurface,
@@ -484,7 +485,7 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
     data->x1 = (gint)x;
     data->y1 = (gint)y;
     /* undo engine */
-    undo_push (data->currentStack,OP_SET_POINT, data);
+    undo_push (data->currentStack, OP_SET_POINT, NULL, data);
   }
 }
 
@@ -1396,13 +1397,13 @@ on_bold_clicked  (GtkButton  *button, APP_data *data)
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push(data->currentStack, OP_SET_BOLD, data);
+        undo_push (data->currentStack, OP_SET_BOLD, NULL, data);
      }
      else {
        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
        data->undo.start_sel = start;
        data->undo.end_sel = end;
-       undo_push (data->currentStack, OP_UNSET_BOLD, data);
+       undo_push (data->currentStack, OP_UNSET_BOLD, NULL, data);
      } 
   }  
 }
@@ -1447,13 +1448,13 @@ on_italic_clicked (GtkButton *button, APP_data *data)
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel   = end;
-        undo_push (data->currentStack, OP_SET_ITALIC, data);
+        undo_push (data->currentStack, OP_SET_ITALIC, NULL, data);
      }
      else {
        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
        data->undo.start_sel = start;
        data->undo.end_sel = end;
-       undo_push (data->currentStack, OP_UNSET_ITALIC, data);
+       undo_push (data->currentStack, OP_UNSET_ITALIC, NULL, data);
      } 
   }  
 }
@@ -1497,13 +1498,13 @@ on_underline_clicked (GtkButton *button, APP_data *data)
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push (data->currentStack, OP_SET_UNDERLINE, data);
+        undo_push (data->currentStack, OP_SET_UNDERLINE, NULL, data);
      }
      else {
        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push (data->currentStack, OP_UNSET_UNDERLINE, data);
+        undo_push (data->currentStack, OP_UNSET_UNDERLINE, NULL, data);
      } 
   }  
 }
@@ -1554,13 +1555,13 @@ on_superscript_clicked (GtkButton *button, APP_data  *data)
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push (data->currentStack, OP_SET_SUPER, data);
+        undo_push (data->currentStack, OP_SET_SUPER, NULL, data);
      }
      else {
        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
        data->undo.start_sel = start;
        data->undo.end_sel = end;
-       undo_push (data->currentStack, OP_UNSET_SUPER, data);
+       undo_push (data->currentStack, OP_UNSET_SUPER, NULL, data);
      } 
   }  
 }
@@ -1611,13 +1612,13 @@ on_subscript_clicked (GtkButton *button, APP_data *data)
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push (data->currentStack, OP_SET_SUB, data);
+        undo_push (data->currentStack, OP_SET_SUB, NULL, data);
      }
      else {
         gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push (data->currentStack, OP_UNSET_SUB, data);
+        undo_push (data->currentStack, OP_UNSET_SUB, NULL, data);
      } 
   }  
 }
@@ -1667,13 +1668,13 @@ on_highlight_clicked (GtkButton *button, APP_data *data)
         gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push (data->currentStack, OP_SET_HIGH, data);
+        undo_push (data->currentStack, OP_SET_HIGH, NULL, data);
      }
      else {
         gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
         data->undo.start_sel = start;
         data->undo.end_sel = end;
-        undo_push (data->currentStack, OP_UNSET_HIGH, data);
+        undo_push (data->currentStack, OP_UNSET_HIGH, NULL, data);
      } 
    /* we remove any selected area */
 //gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
@@ -1728,13 +1729,13 @@ on_strikethrough_clicked (GtkButton *button, APP_data *data)
        gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
        data->undo.start_sel = start;
        data->undo.end_sel = end;
-       undo_push (data->currentStack, OP_SET_STRIKE, data);
+       undo_push (data->currentStack, OP_SET_STRIKE, NULL, data);
      }
      else {
        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
        data->undo.start_sel = start;
        data->undo.end_sel = end;
-       undo_push (data->currentStack, OP_UNSET_STRIKE, data);
+       undo_push (data->currentStack, OP_UNSET_STRIKE, NULL, data);
      } 
   }  
 }
@@ -1786,13 +1787,13 @@ void on_quotation_clicked (GtkButton *button, APP_data *data)
        gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
        data->undo.start_sel = start;
        data->undo.end_sel = end;
-       undo_push (data->currentStack, OP_SET_QUOTE, data);
+       undo_push (data->currentStack, OP_SET_QUOTE, NULL, data);
      }
      else {
        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
        data->undo.start_sel = start;
        data->undo.end_sel = end;
-       undo_push (data->currentStack, OP_UNSET_QUOTE, data);
+       undo_push (data->currentStack, OP_UNSET_QUOTE, NULL, data);
      } 
   }  
 }
@@ -1847,7 +1848,7 @@ void on_left_justify_clicked (APP_data *data)
   data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
   data->undo.start_sel = start;
   data->undo.end_sel = end;
-  undo_push (data->currentStack, OP_ALIGN_LEFT, data);
+  undo_push (data->currentStack, OP_ALIGN_LEFT, NULL, data);
   /* clear all unwanted tags */
   misc_remove_alignment_tags (buffer, start, end);
   /* now we apply the tag */
@@ -1904,7 +1905,7 @@ void on_center_justify_clicked (APP_data *data)
   data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
   data->undo.start_sel = start;
   data->undo.end_sel = end;
-  undo_push (data->currentStack, OP_ALIGN_CENTER, data);
+  undo_push (data->currentStack, OP_ALIGN_CENTER, NULL, data);
   /* clear all unwanted tags */
   misc_remove_alignment_tags (buffer, start, end);
   /* now we apply the tag */
@@ -1962,7 +1963,7 @@ void on_right_justify_clicked (APP_data *data)
   data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
   data->undo.start_sel = start;
   data->undo.end_sel = end;
-  undo_push (data->currentStack, OP_ALIGN_RIGHT, data);
+  undo_push (data->currentStack, OP_ALIGN_RIGHT, NULL, data);
   /* clear all unwanted tags */
   misc_remove_alignment_tags (buffer,start,end);
   /* now we apply the tag */
@@ -2018,7 +2019,7 @@ void on_fill_justify_clicked (APP_data *data)
   data->undo.prevQuadding = misc_get_paragraph_quadding (buffer, start);
   data->undo.start_sel = start;
   data->undo.end_sel = end;
-  undo_push (data->currentStack, OP_ALIGN_FILL, data);
+  undo_push (data->currentStack, OP_ALIGN_FILL, NULL, data);
   /* clear all unwanted tags */
   misc_remove_alignment_tags (buffer,start,end);
   /* now we apply the tag */
@@ -2310,7 +2311,7 @@ void on_replace_clicked (GtkButton *button, APP_data *data)
          gtk_widget_set_sensitive (GTK_WIDGET(replace_entry),sensitive);
          gtk_label_set_text (GTK_LABEL(hits), g_strdup_printf (_("%d hits"), remaining_hits)); 
        }
-       undo_push (data->currentStack, OP_REPLACE_TEXT, data);
+       undo_push (data->currentStack, OP_REPLACE_TEXT, NULL, data);
   } 
 }
 
@@ -2346,7 +2347,7 @@ gint clipboard_paste_image (APP_data *data, gboolean center)
      data->undo.pix = NULL;
      data->undo.undoMark = mark2;
      data->undo.beforeMark = mark1;
-     undo_push (data->currentStack, OP_INS_IMG, data);
+     undo_push (data->currentStack, OP_INS_IMG, NULL, data);
 
      gtk_text_buffer_insert_pixbuf (data->buffer, &iter, pixbuf2);
      g_object_unref (pixbuf2);
@@ -2386,7 +2387,7 @@ gint clipboard_paste_image (APP_data *data, gboolean center)
           gdk_cairo_set_source_pixbuf (cr, pixbuf, x2, y2);
        }
        /* undo engine */
-       undo_push (data->currentStack, OP_PASTE_PIXBUF, data);
+       undo_push (data->currentStack, OP_PASTE_PIXBUF, NULL, data);
 
        cairo_paint (cr);
        cairo_destroy (cr);
@@ -2499,7 +2500,7 @@ void paste_clipboard (GtkTextView *view, APP_data *data)
   data->undo.pix = NULL;
   data->undo.undoMark   = mark2;
   data->undo.beforeMark = mark1;
-  undo_push (data->currentStack, OP_INS_BLOCK, data);
+  undo_push (data->currentStack, OP_INS_BLOCK, NULL, data);
 }
 /******************************
  CTRL+X ; works even if
@@ -2528,7 +2529,7 @@ void cut_to_clipboard (GtkTextView *view, APP_data *data)
     data->undo.buffer_length = length;
     data->undo.annotStr = NULL;
     data->undo.pix      = NULL;
-    undo_push (data->currentStack, OP_DEL_BLOCK, data);
+    undo_push (data->currentStack, OP_DEL_BLOCK, NULL, data);
     misc_display_clipboard_text_info ((const gchar *) "-", data);
   }
 }
@@ -2574,7 +2575,7 @@ void backspace (GtkTextView *view, APP_data *data)
   GdkAtom format = gtk_text_buffer_register_serialize_tagset (data->buffer, "application/x-gtk-text-buffer-rich-text");
   data->undo.serialized_buffer = gtk_text_buffer_serialize (data->buffer, data->buffer, format, &start, &end, &length);
   data->undo.buffer_length     = length;
-  undo_push (data->currentStack, OP_DEL_BLOCK, data);
+  undo_push (data->currentStack, OP_DEL_BLOCK, NULL, data);
 }
 
 /*********************************************
@@ -2627,10 +2628,10 @@ void delete (GtkTextView *view, GtkDeleteType type, gint count, APP_data *data)
   data->undo.buffer_length = length;
 
   if(!fSel) {
-     undo_push (data->currentStack, OP_DEL_CHAR, data);
+     undo_push (data->currentStack, OP_DEL_CHAR, NULL, data);
   }
   else {
-     undo_push (data->currentStack, OP_DEL_BLOCK, data);
+     undo_push (data->currentStack, OP_DEL_BLOCK, NULL, data);
   }
 }
 /******************************
@@ -2785,7 +2786,7 @@ key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
 				mark2 = gtk_text_buffer_create_mark (data->buffer, NULL, &iter,FALSE);
 				data->undo.beforeMark = mark1;
 				data->undo.undoMark   = mark2;
-				undo_push (data->currentStack, OP_TOGGLE_CASE, data);
+				undo_push (data->currentStack, OP_TOGGLE_CASE, NULL, data);
 				/* we go back to previous mode */
 				if(newStr)
 					g_free (newStr);
@@ -2928,7 +2929,7 @@ key_event (GtkWidget *widget, GdkEventKey *event, APP_data *data)
                data->undo.pix = NULL;
                data->undo.undoMark = mark1;
                data->undo.beforeMark = mark2;
-               undo_push (data->currentStack, OP_INS_CHAR, data);
+               undo_push (data->currentStack, OP_INS_CHAR, NULL, data);
             }
          }
        }/* end switch special keys */
@@ -3238,7 +3239,7 @@ void on_menuPDFEditAnnot (GtkMenuItem *menuitem, APP_data *user_data)
      user_data->undo.x2       = user_data->x2;
      user_data->undo.y2       = user_data->y2;
      user_data->undo.PDFpage  = user_data->curPDFpage;
-     undo_push (user_data->currentStack, OP_SET_ANNOT_STR, user_data);
+     undo_push (user_data->currentStack, OP_SET_ANNOT_STR, NULL, user_data);
      poppler_annot_set_contents (user_data->current_annot,tmpStr);
   }
   else { 
@@ -3287,7 +3288,7 @@ void on_menuPDFColorAnnot(GtkMenuItem *menuitem, APP_data *user_data)
         current_color->blue = 65535*color.blue;
         poppler_annot_set_color (user_data->current_annot, current_color);
         poppler_color_free (current_color);
-        undo_push (user_data->currentStack, OP_SET_ANNOT_COLOR, user_data);
+        undo_push (user_data->currentStack, OP_SET_ANNOT_COLOR, NULL, user_data);
   }
   gtk_widget_destroy (GTK_WIDGET(dialog));
   PDF_display_page (user_data->PDFScrollable, user_data->curPDFpage, user_data->doc, user_data);
@@ -3321,7 +3322,7 @@ void on_menuPDFRemoveAnnot (GtkMenuItem *menuitem, APP_data  *user_data)
            g_free (user_data->undo.annotStr);
      user_data->undo.annotStr = g_strdup_printf ("%s", poppler_annot_get_contents ( user_data->current_annot));
      user_data->undo.annotType = poppler_annot_get_annot_type (user_data->current_annot);
-     undo_push (user_data->currentStack, OP_REMOVE_ANNOT, user_data);
+     undo_push (user_data->currentStack, OP_REMOVE_ANNOT, NULL, user_data);
   /* Popplerrectangle for simple text annotation, PopplerQuads for others ! */
   if(user_data->undo.annotType != POPPLER_ANNOT_TEXT && user_data->undo.annotType != POPPLER_ANNOT_HIGHLIGHT) {
      GtkWidget *dialog;
@@ -3532,7 +3533,7 @@ printf ("demande copie position %s\n", tmpStr);
     data->undo.beforeMark = mark1;               	  
     data->undo.undoMark = mark2;
     data->undo.str_len = strlen (tmpStr); 
-    undo_push (data->currentStack, OP_INSERT_TIME, data);
+    undo_push (data->currentStack, OP_INSERT_TIME, NULL, data);
     g_free (tmpStr);   
   }
 }

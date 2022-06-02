@@ -28,6 +28,7 @@
 #define PDF_SEL_MODE_PICT 1
 #define PDF_SEL_MODE_HIGH 2
 #define PDF_SEL_MODE_NOTE 3
+#define PDF_SEL_MODE_HREC 4
 
 #define PDF_SCROLL_STEP 10
 
@@ -49,6 +50,7 @@ typedef struct  {
   gint opCode;
   gint prevQuadding;
   gint offset;
+  gint undo_index;/* for linear highlighting */
   GtkTextIter start_sel, end_sel;
   guint8 *serialized_buffer;
   gsize buffer_length;
