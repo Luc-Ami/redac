@@ -155,6 +155,9 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   GtkWidget *pButtonText = lookup_widget(window1, "pRadioButtonTextSelect");
   GtkWidget *pButtonPict = lookup_widget(window1, "pRadioButtonPictureSelect");
   GtkWidget *pButtonHigh = lookup_widget(window1, "pRadioButtonHiglightSelect");
+  
+  GtkWidget *pButtonHighRect = lookup_widget(window1, "pRadioButtonHighlightRect");  
+   
   GtkWidget *pButtonAnnot = lookup_widget(window1, "pRadioButtonHiAnnotSelect");
   
   GtkWidget *pButtonZoomIn = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomIn"));
@@ -190,6 +193,9 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   gtk_widget_set_sensitive (pButtonPict, data->fPdfLoaded);
   gtk_widget_set_sensitive (pButtonHigh, data->fPdfLoaded);
   gtk_widget_set_sensitive (pButtonAnnot, data->fPdfLoaded);
+  
+  gtk_widget_set_sensitive (pButtonHighRect, data->fPdfLoaded);  
+    
   gtk_widget_set_sensitive (pButtonReplace, FALSE);
   gtk_widget_set_sensitive (pReplaceEntry, FALSE);
   gtk_widget_set_sensitive (pButtonZoomIn, data->fPdfLoaded);
@@ -213,7 +219,10 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
 	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
 	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
   }
-  
+
+  gtk_widget_show (pButtonHighRect);
+  gtk_widget_show (pButtonHigh);
+    
   gtk_widget_show (pg_frame);
   gtk_widget_show (pg_title);
   gtk_widget_show (pg_entry);
@@ -247,6 +256,10 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonText = lookup_widget(window1, "pRadioButtonTextSelect");
   GtkWidget *pButtonPict = lookup_widget(window1, "pRadioButtonPictureSelect");
   GtkWidget *pButtonHigh = lookup_widget(window1,"pRadioButtonHiglightSelect");
+  
+  GtkWidget *pButtonHighRect = lookup_widget(window1,"pRadioButtonHighlightRect");  
+  
+  
   GtkWidget *pButtonAnnot = lookup_widget(window1,"pRadioButtonHiAnnotSelect");
   GtkWidget *pButtonZoomIn = lookup_widget(window1,"buttonZoomIn");
   GtkWidget *pButtonZoomOut = lookup_widget(window1,"buttonZoomOut");
@@ -270,6 +283,8 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonText, FALSE);
   gtk_widget_set_sensitive (pButtonPict, FALSE);
   gtk_widget_set_sensitive (pButtonHigh, FALSE);
+  gtk_widget_set_sensitive (pButtonHighRect, FALSE);
+  
   gtk_widget_set_sensitive (pButtonAnnot, FALSE);
   gtk_widget_set_sensitive (pButtonReplace, FALSE);
   gtk_widget_set_sensitive (pReplaceEntry, FALSE);
@@ -322,6 +337,9 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonText= lookup_widget(window1, "pRadioButtonTextSelect");
   GtkWidget *pButtonPict= lookup_widget(window1, "pRadioButtonPictureSelect");
   GtkWidget *pButtonHigh= lookup_widget(window1,"pRadioButtonHiglightSelect");
+  
+  GtkWidget *pButtonHighRect = lookup_widget(window1, "pRadioButtonHighlightRect");  
+    
   GtkWidget *pButtonAnnot= lookup_widget(window1,"pRadioButtonHiAnnotSelect");
   GtkWidget *pButtonZoomIn=lookup_widget(window1,"buttonZoomIn");
   GtkWidget *pButtonZoomOut=lookup_widget(window1,"buttonZoomOut");
@@ -336,7 +354,7 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
 
   GtkWidget *pLabelHits=lookup_widget(GTK_WIDGET(window1), "labelHits"); 
   /* find and change buttons, statusbar */
-  GtkWidget *pButtonReplace= lookup_widget(window1, "buttonReplace");
+  GtkWidget *pButtonReplace = lookup_widget(window1, "buttonReplace");
   GtkWidget *pReplaceEntry = lookup_widget(window1, "replace_entry");
   /* remove searchentry and remove all found and highlighted text */
   gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
@@ -346,6 +364,9 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonText, FALSE);
   gtk_widget_set_sensitive (pButtonPict, TRUE);
   gtk_widget_set_sensitive (pButtonHigh, FALSE);
+  
+  gtk_widget_set_sensitive (pButtonHighRect, FALSE);
+    
   gtk_widget_set_sensitive (pButtonAnnot, TRUE);/* to allow text notes inside sketch */
   gtk_widget_set_sensitive (pButtonReplace, FALSE);
   gtk_widget_set_sensitive (pReplaceEntry, FALSE);
@@ -370,6 +391,8 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight") );
   gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
 
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonHighlightRect") );
+  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonHiglightSelect") );
 
   gtk_widget_hide (pg_label);
   gtk_widget_hide (pg_frame);
@@ -420,7 +443,7 @@ void update_statusbarPDF (APP_data *data)
   gchar *msg, *filename, *tmpStr = NULL;
   GtkWidget *window1 = data->appWindow;
   GKeyFile *keyString = data->keystring;
-  GtkWidget *statusbar = GTK_STATUSBAR(data->statusbar1);
+  GtkWidget *statusbar = GTK_STATUSBAR (data->statusbar1);
 
   GtkWidget *pg_entry = lookup_widget(GTK_WIDGET(window1), "page_entry"); 
   GtkWidget *pg_label = lookup_widget(GTK_WIDGET(window1), "page_label"); 
@@ -433,9 +456,9 @@ void update_statusbarPDF (APP_data *data)
 
   //gtk_label_set_markup (GTK_LABEL (pg_label),g_strdup_printf(_("of %d"),data->totalPDFpages));
 
-  filename = g_key_file_get_string(keyString, "application", "current-PDF-file-basename", NULL);
+  filename = g_key_file_get_string (keyString, "application", "current-PDF-file-basename", NULL);
   if(strlen (filename) > 36) {
-     tmpStr = g_strdup_printf("%s...", g_strndup (filename,36));
+     tmpStr = g_strdup_printf ("%s...", g_strndup (filename,36));
      g_free (filename);
      filename = tmpStr;
   }
@@ -453,15 +476,15 @@ void update_statusbarPDF (APP_data *data)
 
 void update_statusbarSketch (APP_data *data) 
 {
-  GtkStatusbar  *statusbar;
+  GtkStatusbar *statusbar;
   gchar *msg;
-  GKeyFile *keyString=data->keystring;
+  GKeyFile *keyString = data->keystring;
 
-  statusbar = GTK_STATUSBAR(data->statusbar1);
-  gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0); 
-  msg=g_strdup_printf(_("Pen width:  %.2f"),g_key_file_get_double(keyString, "sketch", "pen-width", NULL));
-  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, msg);
-  g_free(msg);
+  statusbar = GTK_STATUSBAR (data->statusbar1);
+  gtk_statusbar_pop (GTK_STATUSBAR(statusbar), 0); 
+  msg=g_strdup_printf (_("Pen width:  %.2f"), g_key_file_get_double(keyString, "sketch", "pen-width", NULL));
+  gtk_statusbar_push ( (statusbar), 0, msg);
+  g_free (msg);
 }
 
 /***************************************
@@ -538,7 +561,7 @@ void misc_setup_text_buffer_tags(GtkTextBuffer *buffer)
  original PDF's size
 TODO : add a zoom factor !
 ********************************/
-gdouble misc_get_PDF_ratio(gdouble pdf_width, gdouble draw_width)
+gdouble misc_get_PDF_ratio (gdouble pdf_width, gdouble draw_width)
 {
   return draw_width/pdf_width;
 }
@@ -546,12 +569,12 @@ gdouble misc_get_PDF_ratio(gdouble pdf_width, gdouble draw_width)
 /*******************************
  clear text in memory
 *******************************/
-void misc_clear_text(GtkTextBuffer *buffer, const gchar  *tag)
+void misc_clear_text (GtkTextBuffer *buffer, const gchar  *tag)
 {
   GtkTextIter start, end;
 
-  gtk_text_buffer_set_text(buffer, "", 0); /* Clear text! */
-  gtk_text_buffer_get_start_iter(buffer, &start);
+  gtk_text_buffer_set_text (buffer, "", 0); /* Clear text! */
+  gtk_text_buffer_get_start_iter (buffer, &start);
   gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_apply_tag_by_name (buffer,tag, &start, &end);
 
@@ -560,16 +583,16 @@ void misc_clear_text(GtkTextBuffer *buffer, const gchar  *tag)
   add en empty paragraph at the
   end of the buffer
 ******************************/
-void misc_append_empty_paragraph(GtkTextBuffer *buffer, gint row, gint total)
+void misc_append_empty_paragraph (GtkTextBuffer *buffer, gint row, gint total)
 {
   GtkTextIter end_of_buffer;
 
   /* if we are at the last line, we must append an empty paragraph */
-  if((row==total-1)||(total==0)) {
+  if((row == total-1) || (total == 0)) {
        gtk_text_buffer_get_end_iter (buffer, &end_of_buffer);
        gtk_text_buffer_insert (buffer,
-                         &end_of_buffer,
-                        "\n",-1);
+                               &end_of_buffer,
+                               "\n", -1);
   }
 }
 
@@ -594,25 +617,25 @@ GtkTextTag *misc_get_tag_from_code(GtkTextBuffer *buffer, gint code)
   GtkTextTag *tag;
   GtkTextTagTable *tagTable1;
 
-  tagTable1 = gtk_text_buffer_get_tag_table(buffer);
-  switch(code) {
+  tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+  switch (code) {
     case LEFT_QUADDING:{
-       tag=gtk_text_tag_table_lookup(tagTable1, "left");
+       tag = gtk_text_tag_table_lookup (tagTable1, "left");
        break;
     }
     case CENTER_QUADDING:{
-       tag=gtk_text_tag_table_lookup(tagTable1, "center");
+       tag = gtk_text_tag_table_lookup (tagTable1, "center");
        break;
     }
     case RIGHT_QUADDING:{
-       tag=gtk_text_tag_table_lookup(tagTable1, "right");
+       tag = gtk_text_tag_table_lookup (tagTable1, "right");
        break;
     }
     case FILL_QUADDING:{
-       tag=gtk_text_tag_table_lookup(tagTable1, "fill");
+       tag = gtk_text_tag_table_lookup (tagTable1, "fill");
        break;
     }
-   default:tag=gtk_text_tag_table_lookup(tagTable1, "left");
+   default: tag = gtk_text_tag_table_lookup (tagTable1, "left");
   }
   return tag;
 }
@@ -622,23 +645,27 @@ GtkTextTag *misc_get_tag_from_code(GtkTextBuffer *buffer, gint code)
   0=left, 1=center, 2=right 3= fill
  see misc.h file
 ***********************************/
-gint misc_get_paragraph_quadding(GtkTextBuffer *buffer, GtkTextIter iter)
+gint misc_get_paragraph_quadding (GtkTextBuffer *buffer, GtkTextIter iter)
 {
-  GtkTextTag *tag;
-  GtkTextTagTable *tagTable1;
+   GtkTextTag *tag;
+   GtkTextTagTable *tagTable1;
 
- tagTable1 = gtk_text_buffer_get_tag_table(buffer);
- tag = gtk_text_tag_table_lookup(tagTable1, "center");
- if(gtk_text_iter_has_tag (&iter, tag))
-    return CENTER_QUADDING;
+	 tagTable1 = gtk_text_buffer_get_tag_table (buffer);
+	 
+	 tag = gtk_text_tag_table_lookup (tagTable1, "center");
+	 if (gtk_text_iter_has_tag (&iter, tag)) {
+		return CENTER_QUADDING;
+	 }
 
- tag = gtk_text_tag_table_lookup(tagTable1, "right");
- if(gtk_text_iter_has_tag (&iter, tag))
-    return RIGHT_QUADDING;
+	 tag = gtk_text_tag_table_lookup (tagTable1, "right");
+	 if (gtk_text_iter_has_tag (&iter, tag)) {
+		return RIGHT_QUADDING;
+	 }
 
- tag = gtk_text_tag_table_lookup(tagTable1, "fill");
- if(gtk_text_iter_has_tag (&iter, tag))
-    return FILL_QUADDING;
+	 tag = gtk_text_tag_table_lookup (tagTable1, "fill");
+	 if (gtk_text_iter_has_tag (&iter, tag)) {
+		return FILL_QUADDING;
+	 }
 
  return LEFT_QUADDING;
 }
@@ -649,19 +676,19 @@ gint misc_get_paragraph_quadding(GtkTextBuffer *buffer, GtkTextIter iter)
   modifier : NONE =0
   1=CTRL, 2=SHIFT
 ********************************/
-gchar *misc_get_pango_string(const gchar *key, const gint modifier)
+gchar *misc_get_pango_string (const gchar *key, const gint modifier)
 {
   switch(modifier) {
     case 0:{
-     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>", key);
+     return g_strdup_printf (" <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>", key);
      break;
     }
     case 1:{
-     return g_strdup_printf(" <span font=\"11\" foreground=\"white\" background=\"#6F7DC8\"><b>CTRL</b></span> + <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>", key);
+     return g_strdup_printf (" <span font=\"11\" foreground=\"white\" background=\"#6F7DC8\"><b>CTRL</b></span> + <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>", key);
      break;
     }
    case 2:{
-     return g_strdup_printf(_(" <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></span> + <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>"), key);
+     return g_strdup_printf (_(" <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></span> + <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s </b></span>"), key);
      break;
     }
    default:;
@@ -693,7 +720,7 @@ void misc_init_vars (APP_data *data )
   data->fAudioLoaded   = FALSE;
   data->fAudioPlaying  = FALSE;
   data->PDFratio       = 1;
-  data->clipboardMode  = 0; /* default : copy to clipboard the text datas */
+  data->clipboardMode  = PDF_SEL_MODE_TEXT; /* default : copy to clipboard the text datas */
   data->curPDFpage     = 0;
   data->totalPDFpages  = 0;
   data->doc = NULL;
@@ -762,61 +789,74 @@ void misc_jump_to_end_view (GtkWidget *sw, GtkTextBuffer *buffer, GtkTextView *v
   GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW(sw));
   gtk_adjustment_set_value (GTK_ADJUSTMENT (adj), gtk_adjustment_get_upper (adj));
 }
+
 /*************************************
  convenience functino to set
  (un)sensitive formatting buttons
  according to current tag is, or not,
  'quotation'
 **************************************/
-void misc_set_sensitive_format_buttons(gboolean state, APP_data *data)
+void misc_set_sensitive_format_buttons (gboolean state, APP_data *data)
 {
-  GtkWidget *window1=NULL, *button;
+  GtkWidget *window1 = NULL, *button;
   window1 = data->appWindow;
 
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_bold"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_italic"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_underline"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_superscript"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_subscript"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_strikethrough"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "button_highlight"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight"));
-  gtk_widget_set_sensitive ( button, state);
-  button = GTK_TOOL_BUTTON(lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill"));
-  gtk_widget_set_sensitive ( button, state);
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_bold"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_italic"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_underline"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_superscript"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_subscript"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_strikethrough"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "button_highlight"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "pRadioButtonLeft"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "pRadioButtonCenter"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "pRadioButtonRight"));
+  gtk_widget_set_sensitive (button, state);
+  
+  button = GTK_WIDGET (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill"));
+  gtk_widget_set_sensitive (button, state);
 }
 
 /**********************************
   prepare timeouts
 
 **********************************/
-void misc_prepare_timeouts(APP_data *data )
+void misc_prepare_timeouts (APP_data *data )
 {
-  if(g_key_file_get_boolean(data->keystring, "application", "interval-save",  NULL) ) {
-      gtk_widget_show ( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
+  if (g_key_file_get_boolean (data->keystring, "application", "interval-save", NULL) ) {
+      gtk_widget_show (lookup_widget(GTK_WIDGET(data->appWindow), "image_task_due"));
     }
-    else
-      gtk_widget_hide ( lookup_widget(GTK_WIDGET(data->appWindow),"image_task_due"));
-  g_timeout_add_seconds(300, timeout_quick_save, data);/* yes, it's an intelligent call, keep as it */
+    else {
+      gtk_widget_hide (lookup_widget(GTK_WIDGET(data->appWindow), "image_task_due"));
+    }
+  g_timeout_add_seconds (300, timeout_quick_save, data);/* yes, it's an intelligent call, keep as it */
   /* timer for audio display */
-  g_timeout_add_seconds(1, timeout_audio_display_position, data);/* yes, it's an intelligent call, keep as it */
+  g_timeout_add_seconds (1, timeout_audio_display_position, data);/* yes, it's an intelligent call, keep as it */
   /* display auto-repeat indicator ? */
-  if(g_key_file_get_boolean(data->keystring, "application", "audio-auto-rewind",  NULL) ) {
-      gtk_widget_show ( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
+  if (g_key_file_get_boolean (data->keystring, "application", "audio-auto-rewind", NULL) ) {
+      gtk_widget_show (lookup_widget(GTK_WIDGET(data->appWindow), "image_audio_jump_to_start"));
     }
-    else
-      gtk_widget_hide ( lookup_widget(GTK_WIDGET(data->appWindow),"image_audio_jump_to_start"));
+    else {
+      gtk_widget_hide (lookup_widget(GTK_WIDGET(data->appWindow), "image_audio_jump_to_start"));
+    }
 }
 
 /**********************************
@@ -824,49 +864,53 @@ void misc_prepare_timeouts(APP_data *data )
   color settings
 
 **********************************/
-void misc_set_font_color_settings(APP_data *data )
+void misc_set_font_color_settings (APP_data *data )
 {
   GKeyFile *keyString;
   GdkRGBA color, b_color;
 
-  keyString = g_object_get_data(G_OBJECT(data->appWindow), "config");
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
   /* set-up default value only with CSS */
-  gchar *fntFamily=NULL;
-  gint fntSize=12;
+  const gchar *fntFamily = NULL;
+  gint fntSize = 12;
  // PangoContext* context = gtk_widget_get_pango_context  (GTK_WIDGET(app_data.view));
   PangoFontDescription *desc;// = pango_context_get_font_description(context);   
   desc = pango_font_description_from_string (g_key_file_get_string(keyString, "editor", "font", NULL));
   if (desc != NULL) {
-          fntFamily= pango_font_description_get_family (desc);
-          fntSize=pango_font_description_get_size(desc)/1000;
+          fntFamily = pango_font_description_get_family (desc);
+          fntSize = pango_font_description_get_size(desc)/1000;
   }
   
   /* change gtktextview colors compliant with Gtk 3.16+ pLease note : re-change seleted state is mandatory, even if defned in interface*/
-  color.red=g_key_file_get_double(keyString, "editor", "text.color.red", NULL);
-  color.green=g_key_file_get_double(keyString, "editor", "text.color.green", NULL);
-  color.blue=g_key_file_get_double(keyString, "editor", "text.color.blue", NULL);
-  color.alpha=1;
+  color.red = g_key_file_get_double (keyString, "editor", "text.color.red", NULL);
+  color.green = g_key_file_get_double (keyString, "editor", "text.color.green", NULL);
+  color.blue = g_key_file_get_double (keyString, "editor", "text.color.blue", NULL);
+  color.alpha = 1;
   /* paper color */
-  b_color.red=g_key_file_get_double(keyString, "editor", "paper.color.red", NULL);
-  b_color.green=g_key_file_get_double(keyString, "editor", "paper.color.green", NULL);
-  b_color.blue=g_key_file_get_double(keyString, "editor", "paper.color.blue", NULL);
-  b_color.alpha=1;
+  b_color.red = g_key_file_get_double (keyString, "editor", "paper.color.red", NULL);
+  b_color.green = g_key_file_get_double (keyString, "editor", "paper.color.green", NULL);
+  b_color.blue = g_key_file_get_double (keyString, "editor", "paper.color.blue", NULL);
+  b_color.alpha = 1;
 
-  GtkCssProvider* css_provider = gtk_css_provider_new();
+  GtkCssProvider* css_provider = gtk_css_provider_new ();
   gchar *css;
-  css = g_strdup_printf("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: @selected_bg_color; color:@selected_fg_color; }\n",
+  css = g_strdup_printf ("  #view  { font-family:%s; font-size:%dpx; color: #%.2x%.2x%.2x; background-color: #%.2x%.2x%.2x; }\n  #view:selected, #view:selected:focus { background-color: @selected_bg_color; color:@selected_fg_color; }\n",
                  fntFamily,
                  fntSize,
-                 (gint)( color.red*255),(gint)( color.green*255), (gint)(color.blue*255),
-                (gint)( b_color.red*255),(gint)( b_color.green*255), (gint)(b_color.blue*255));
+                 (gint) (color.red*255), 
+                 (gint) (color.green*255), 
+                 (gint) (color.blue*255),
+                 (gint) (b_color.red*255), (gint) (b_color.green*255), (gint) (b_color.blue*255));
 
-  if(desc)
-      pango_font_description_free(desc);
+  if(desc) {
+      pango_font_description_free (desc);
+  }
 
-  gtk_css_provider_load_from_data(css_provider,css,-1,NULL);
-  GdkScreen* screen = gdk_screen_get_default();
-  gtk_style_context_add_provider_for_screen (screen,GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_css_provider_load_from_data (css_provider, css, -1, NULL);
+  GdkScreen* screen = gdk_screen_get_default ();
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER(css_provider), 
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_free(css);
 
 }
@@ -912,7 +956,7 @@ void misc_display_clipboard_text_info (const gchar *tmpStr, APP_data *data)
   	
 	printf ("PDF : sélection non vide = long = %d\n", strlen (tmpStr)); 
 	gint i =  strlen (tmpStr);
-	if(i>0) {
+	if (i > 0) {
 		printf ("contenu:\n%s\n", tmpStr);
 		gtk_label_set_text (GTK_LABEL(labelClipBoard), _("Text copied"));
 	}

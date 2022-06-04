@@ -500,27 +500,25 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
   GdkPixbuf *pPixDatas = NULL;
   gint root_xs, root_ys;
 
-  if(!data->button_pressed || !data->doc) {
+  if ((!data->button_pressed) || (!data->doc)) {
      return TRUE;
   }
 
-//  gtk_widget_destroy (GTK_WIDGET(data->window)); 
+  if ((data->clipboardMode == PDF_SEL_MODE_HREC) || (data->clipboardMode == PDF_SEL_MODE_PICT)) {
+      gtk_widget_destroy (GTK_WIDGET(data->window)); 
+  }
+ 
   data->button_pressed = FALSE;
   
   /* get absolute screen coordinates */
   gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
 
- //printf ("entrée PDF relase avec x1 = %d y1=%d w= %d et h =%d \n", 
-   //              (gint) (data->x1-root_xs), (gint) (data->y1-root_ys),
-     //            data->w,  data->h );
- 
 
-
-  switch(data->clipboardMode) {
+  switch (data->clipboardMode) {
      case PDF_SEL_MODE_TEXT: { /*clip mode text */
        /* voir : poppler_page_get_crop_box ()*/
        /* requires removing of text selection if linear selection actuivated */
-       if(data->w > 0 && data->h > 0) { 
+       if ((data->w > 0) && (data->h > 0)) { 
 		   printf ("appel clip PDF txt \n");
            PDF_get_text_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
                         data->curPDFpage, data->PDFScrollable, data);
@@ -529,13 +527,13 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
        break;
      }
      case PDF_SEL_MODE_PICT: { /* clip mode picture */
-       if(data->w > 0 && data->h > 0) {
+       if ((data->w > 0) && (data->h > 0)) {
          pPixDatas = gdk_pixbuf_get_from_window (gtk_widget_get_window (data->PDFScrollable),
-                             data->x1-root_xs, data->y1-root_ys,
-                             data->w, data->h);
+                                                 data->x1-root_xs, data->y1-root_ys,
+                                                 data->w, data->h);
    
          /* save pixbuf to ClipBoard */
-         if(pPixDatas) {
+         if (pPixDatas) {
 			// GtkClipboard* clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
 			 gtk_clipboard_set_image (gtk_clipboard_get (GDK_NONE), pPixDatas);
 			 g_object_unref (pPixDatas);
@@ -547,28 +545,41 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
      }
      case PDF_SEL_MODE_HIGH: {/* highlighting selection mode */
      /*  requires removing of text selection if linear selection actuivated */		 
-       if( data->w>0 && data->h>0) {
-		 /* proivisoire */  
-		 PDF_set_highlight_linear_selection  (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
-                        data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
-                        
-     //    PDF_set_highlight_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
-       //                 data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
-         update_PDF_state (data, PDF_MODIF);
+       if ((data->w>0) && (data->h>0)) {
+		   /* linear selection */  
+		   PDF_set_highlight_linear_selection  (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
+                                                data->curPDFpage, data->doc, 
+                                                data->appWindow, data->PDFScrollable, 
+                                                data);
+           update_PDF_state (data, PDF_MODIF);
        }
        break;
      }
+     
+     case PDF_SEL_MODE_HREC: {/* rectangular highlighting selection mode */ 
+       if ((data->w>0) && (data->h>0)) {
+		   /* rectangular selection */  
+		  PDF_set_highlight_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
+                                       data->curPDFpage, data->doc, data->appWindow, 
+                                       data->PDFScrollable, 
+                                       data);
+          update_PDF_state (data, PDF_MODIF);
+       }
+       break;
+     }     
      case PDF_SEL_MODE_NOTE: { /* simple text note */
        /* bug hunt : force to a widh and height of at least 24 pixels ! */
-       if(data->w<24) {
+       if (data->w < 24) {
          data->w = 24;
        }
-       if(data->h<24) {
+       if (data->h < 24) {
          data->h = 24;
        }
 
        PDF_set_text_annot_selection (data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
-                        data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
+                                     data->curPDFpage, data->doc, 
+                                     data->appWindow, data->PDFScrollable, 
+                                     data);
        update_PDF_state (data, PDF_MODIF);
 //TODO in 2037 ? PDF_set_free_text_annot_selection(data->x1-root_xs, data->y1-root_ys, data->w, data->h, 
   //                     data->curPDFpage, data->doc, data->appWindow, data->PDFScrollable, data);
@@ -691,7 +702,7 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
   
   if (gdk_event_get_event_type(event) == GDK_BUTTON_PRESS)  {
    if(event->button.button == 3) {/* right click */
-       data->button_pressed = FALSE;/* yes, to avoid mistakes on drawings */
+       data->button_pressed = FALSE;/* yes, in order to avoid mistakes on drawings */
        GtkMenu *menu;
        GtkWidget *window1 = data->appWindow;
        /* we must free any existing maping ! */
@@ -723,7 +734,9 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
         data->w  = 0;
         data->h  = 0;
         data->button_pressed = TRUE;
-       // data->window = create_select_window ();
+        if((data->clipboardMode == PDF_SEL_MODE_HREC) || (data->clipboardMode == PDF_SEL_MODE_PICT)) {
+             data->window = create_select_window ();
+	    }
         printf ("début select PDF\n");
    }
   }
@@ -739,6 +752,9 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
   reverse movements isn't allowed : the 
   mouse pointer can only move to south east
   * TODO : for RTL counties
+  * We have to use 2 local (static) sub
+  * routines because of linear or non-
+  * linear selection modes
 ********************************************/
 gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event, APP_data *data)
 {
@@ -761,6 +777,7 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
     return TRUE;
   }
   /* OK, we have a PDF page */
+  /* if we are in linear selection mode, we follow one way  other with flag data->clipboardMode == PDF_SEL_MODE_HREC */
   
  // cairo_restore (data->PDF_cr);
   canvas = lookup_widget (GTK_WIDGET(data->appWindow), "crPDF");
@@ -821,16 +838,33 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
   selection.x2 = (gdouble) (data->x1 -root_xs + v_h_adj + data->w) / ratio;
   selection.y2 = (gdouble) (data->y1 -root_ys + v_v_adj + data->h) / ratio;
 
+  switch(data->clipboardMode) {
+	  case PDF_SEL_MODE_TEXT:
+	  case PDF_SEL_MODE_HIGH: {
+		 poppler_page_render_selection (page, cr,
+                                 &selection,
+                                 NULL,
+                                 POPPLER_SELECTION_GLYPH, &glyph_color, &background_color); 
+	     break;
+	  }
+	  case PDF_SEL_MODE_PICT:
+	  case PDF_SEL_MODE_HREC: {
+		 gtk_window_move (GTK_WINDOW (window), data->x1, data->y1);
+         gtk_window_resize (GTK_WINDOW (window), data->w, data->h); 
+	     break;
+	  }
+	  default: {
+		  printf ("* Redac : something is wrong en selectiuon motion fort PDF !*\n");
+      }
+	  
+  }/* end switch */
  // gtk_window_move (GTK_WINDOW (window), data->x1, data->y1);
  // gtk_window_resize (GTK_WINDOW (window), data->w, data->h);
 
           /* !!!! ici il faut mettre la partie PDF */
  //  printf("drag width=%d height =%.d x1=%2f y1=%.2f x2=%.2f y2=%.2f ratio=%.2f \n", data->w, data->h,selection.x1, selection.y1, selection.x2, selection.y2, ratio);
    /* we draw selection */
-   poppler_page_render_selection (page, cr,
-                                 &selection,
-                                 NULL,
-                                 POPPLER_SELECTION_GLYPH, &glyph_color, &background_color);
+
                                  
    gtk_widget_queue_draw (canvas);
    g_object_unref (page);
@@ -1309,12 +1343,20 @@ void on_button_clip_mode_toggled (GtkButton *button, APP_data *user_data)
           user_data->clipboardMode = PDF_SEL_MODE_PICT;
      }
      else {
+		 /* we have to choose between linear and rectangular highlighting mode */
          tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonHiglightSelect"));
          if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton))) {
             user_data->clipboardMode = PDF_SEL_MODE_HIGH;
          }
-         else {
-             user_data->clipboardMode = PDF_SEL_MODE_NOTE;
+         else {			 
+			 tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "pRadioButtonHighlightRect"));
+			 if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON(tmpButton))) {
+				 printf ("mode rectangle \n");
+                 user_data->clipboardMode = PDF_SEL_MODE_HREC;
+             }
+             else {     
+                user_data->clipboardMode = PDF_SEL_MODE_NOTE;
+             }
          }
      }/* else if */
   }/* 1er choix else if */

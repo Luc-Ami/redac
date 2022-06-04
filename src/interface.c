@@ -378,9 +378,10 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   GtkToolItem *pRadioButtonTextSelect;
   GtkToolItem *pRadioButtonPictureSelect;
   GtkToolItem *pRadioButtonHiglightSelect;
+  GtkToolItem *pRadioButtonHighlightRect;   
   GtkToolItem *pRadioButtonHiAnnotSelect;
   GtkWidget *icon_text_select, *icon_picture_select;
-  GtkWidget *icon_highlight_select, *icon_text_annot;
+  GtkWidget *icon_highlight_select, *icon_text_annot, *icon_highlight_rectangle;
   GtkWidget *icon_pencil;
   GtkToolItem *button_pencil;
   GtkToolItem *color_button_item;
@@ -409,12 +410,9 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
 
   icon_undo = gtk_image_new_from_icon_name ("edit-undo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
-  
   icon_superscript  = gtk_image_new_from_icon_name ("view-sort-descending-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR); 
-  
-  
+    
   icon_subscript  = gtk_image_new_from_icon_name ("view-sort-ascending-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);   
-
 
   icon_strike = gtk_image_new_from_icon_name ("format-text-strikethrough-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
@@ -424,8 +422,7 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
 
   icon_quotation = gtk_image_new_from_icon_name ("format-indent-more-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   
-  /* edition buttons */
-  /* formatting buttons */
+  /* note editor buttons : formatting buttons */
 
   button_bold = gtk_toggle_tool_button_new ();
   gtk_toolbar_insert  (GTK_TOOLBAR(toolbar), button_bold, -1);  
@@ -540,6 +537,8 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   icon_picture_select = gtk_image_new_from_icon_name ("camera-photo-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   icon_highlight_select = gtk_image_new_from_icon_name ("starred-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  
+  icon_highlight_rectangle = gtk_image_new_from_icon_name ("edit-select-all-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   icon_text_annot = gtk_image_new_from_icon_name ("media-view-subtitles-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
@@ -562,10 +561,18 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
 
   pRadioButtonHiglightSelect = gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonHiglightSelect, -1);
-  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiglightSelect), _("Highlight selected area inside PDF document. \nPlease don't forget to save your PDF document !"));
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiglightSelect), _("Highlight selected text inside PDF document. \nPlease don't forget to save your PDF document !"));
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHiglightSelect), icon_highlight_select);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect));
+
+
+  pRadioButtonHighlightRect = gtk_radio_tool_button_new(group_clip);
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonHighlightRect, -1);
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHighlightRect), _("Highlight selected area inside PDF document. \nPlease don't forget to save your PDF document !"));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHighlightRect), icon_highlight_rectangle);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHighlightRect), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHighlightRect));    
 
   pRadioButtonHiAnnotSelect = gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(pRadioButtonHiAnnotSelect), -1);
@@ -765,6 +772,10 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
   g_signal_connect (G_OBJECT(pRadioButtonHiglightSelect), "toggled", 
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
+        
+  g_signal_connect (G_OBJECT(pRadioButtonHighlightRect), "toggled", 
+        G_CALLBACK(on_button_clip_mode_toggled), data_app);        
+        
   g_signal_connect (G_OBJECT(pRadioButtonHiAnnotSelect), "toggled", 
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
   g_signal_connect (G_OBJECT(button_pencil), "toggled", 
@@ -784,9 +795,14 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   GLADE_HOOKUP_OBJECT (window, pRadioButtonCenter, "pRadioButtonCenter");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonRight, "pRadioButtonRight");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonFill, "pRadioButtonFill");
+  
+  
   GLADE_HOOKUP_OBJECT (window, pRadioButtonTextSelect, "pRadioButtonTextSelect");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonPictureSelect, "pRadioButtonPictureSelect");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonHiglightSelect, "pRadioButtonHiglightSelect");
+  GLADE_HOOKUP_OBJECT (window, pRadioButtonHighlightRect, "pRadioButtonHighlightRect");  
+  
+  
   GLADE_HOOKUP_OBJECT (window, pRadioButtonHiAnnotSelect, "pRadioButtonHiAnnotSelect");
   GLADE_HOOKUP_OBJECT (window, button_pencil, "button_pencil");
   GLADE_HOOKUP_OBJECT (window, color_button, "color_button");
