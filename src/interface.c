@@ -538,7 +538,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
 
   icon_highlight_select = gtk_image_new_from_icon_name ("starred-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   
-  icon_highlight_rectangle = gtk_image_new_from_icon_name ("edit-select-all-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  icon_highlight_rectangle = gtk_image_new_from_icon_name ("rectangular_highlighting-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   icon_text_annot = gtk_image_new_from_icon_name ("media-view-subtitles-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
