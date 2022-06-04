@@ -14,5 +14,6 @@ EXTRA_DIST = \
 	text_note.xpm \
 	text_note_light.xpm \
 	text_select.xpm \
+	rectangular_highlighting-symbolic.svg \
 	text_select_light.xpm
 
