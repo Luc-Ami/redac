@@ -107,11 +107,11 @@ https://lzone.de/blog/Detecting%20a%20Dark%20Theme%20in%20GTK
 
   if (textAvg > bgAvg)  {
      data_app->fDarkTheme = TRUE;
-     printf ("thème sombre \n");
+     printf ("* Redac : Dark theme\n");
   }
   else {
      data_app->fDarkTheme = FALSE;
-     printf ("thème clair \n");
+     printf ("* Redac : Light theme\n");
   }
 }
 
@@ -150,10 +150,12 @@ static gboolean widget_is_dark (GtkWidget *widget)
   
   textAvg = fg.red + fg.green + fg.blue;
 
-  if (textAvg > 1.5)  
+  if (textAvg > 1.5) { 
      return TRUE;
-  else 
+  }
+  else {
      return FALSE;
+  }
 }
 
 
@@ -257,7 +259,7 @@ GtkWidget *create_menu_PDF (GtkWidget *win, APP_data *data_app)
   gtk_widget_show (menuCancelPDF);
   gtk_container_add (GTK_CONTAINER (menu1PDF), menuCancelPDF);
 
-  if(data_app->current_annot == NULL) {
+  if (data_app->current_annot == NULL) {
     /* we deactivate menus since there isn't any annotation on current page */
     gtk_widget_set_sensitive (menu1PDFEditAnnot, FALSE);
     gtk_widget_set_sensitive (menu1PDFColorAnnot, FALSE);
@@ -538,7 +540,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
 
   icon_highlight_select = gtk_image_new_from_icon_name ("starred-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   // edit-select-all-symbolic
-  icon_highlight_rectangle = gtk_image_new_from_icon_name ("edit-select-all-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  icon_highlight_rectangle = gtk_image_new_from_icon_name ("insert-object-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   icon_text_annot = gtk_image_new_from_icon_name ("media-view-subtitles-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
@@ -546,13 +548,15 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   GSList *group_clip = NULL; 
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonTextSelect), icon_text_select);
   gtk_toolbar_insert  (GTK_TOOLBAR(toolbar), pRadioButtonTextSelect, -1);
-  gtk_widget_set_tooltip_text  (GTK_WIDGET(pRadioButtonTextSelect), _("Copy selected area inside PDF files\nto clipboard as pure text.")); 
+  gtk_widget_set_tooltip_text  (GTK_WIDGET(pRadioButtonTextSelect),
+                   _("Copy selected area inside PDF files\nto clipboard as pure text.")); 
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonTextSelect));
 
   pRadioButtonPictureSelect = gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonPictureSelect, -1);
-  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonPictureSelect), _("Copy selected area inside PDF files or sketches \nto clipboard as pure image.")); 
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonPictureSelect),
+                 _("Copy selected area inside PDF files or sketches \nto clipboard as pure image.")); 
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonPictureSelect), icon_picture_select);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonPictureSelect));
@@ -561,7 +565,8 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
 
   pRadioButtonHiglightSelect = gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonHiglightSelect, -1);
-  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiglightSelect), _("Highlight selected text inside PDF document. \nPlease don't forget to save your PDF document !"));
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiglightSelect),
+                   _("Highlight selected text inside PDF document. \nPlease don't forget to save your PDF document !"));
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHiglightSelect), icon_highlight_select);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiglightSelect));
@@ -569,14 +574,16 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
 
   pRadioButtonHighlightRect = gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), pRadioButtonHighlightRect, -1);
-  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHighlightRect), _("Highlight selected area inside PDF document. \nPlease don't forget to save your PDF document !"));
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHighlightRect),
+                      _("Highlight selected area inside PDF document. \nPlease don't forget to save your PDF document !"));
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHighlightRect), icon_highlight_rectangle);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHighlightRect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHighlightRect));    
 
   pRadioButtonHiAnnotSelect = gtk_radio_tool_button_new(group_clip);
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(pRadioButtonHiAnnotSelect), -1);
-  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiAnnotSelect), _("Set-up text annotation inside \nselected area on PDF or sketch document. \nPlease don't forget to save your PDF/sketch document to keep \nyour changes !"));
+  gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonHiAnnotSelect), 
+                _("Set-up text annotation inside \nselected area on PDF or sketch document. \nPlease don't forget to save your PDF/sketch document to keep \nyour changes !"));
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(pRadioButtonHiAnnotSelect), icon_text_annot);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(pRadioButtonHiAnnotSelect));
@@ -595,7 +602,8 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   /* color button */
   color_button_item = gtk_tool_item_new();
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(color_button_item), -1);
-  gtk_widget_set_tooltip_text (GTK_WIDGET(color_button_item), _("Click here to choose color for :\n- highlighting of PDF areas.\n-annotation color for PDF and sketches documents.\n-pencil color for sketches."));
+  gtk_widget_set_tooltip_text (GTK_WIDGET(color_button_item),
+                              _("Click here to choose color for :\n- highlighting of PDF areas.\n-annotation color for PDF and sketches documents.\n-pencil color for sketches."));
   color_button = gtk_color_button_new (); 
   gtk_container_add (GTK_CONTAINER(color_button_item), color_button);
   
@@ -606,17 +614,18 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
  /* playing speed combobox */
   GtkToolItem *audioPlaySpeedContainer = gtk_tool_item_new ();
   GtkWidget *audioPlaySpeed = gtk_combo_box_text_new ();
-  gtk_widget_set_tooltip_text (GTK_WIDGET(audioPlaySpeed), _("Choose here the playing speed. 1 for a normal speed,\nover 1 for a faster speed,\nunder 1 for a slower speed."));
+  gtk_widget_set_tooltip_text (GTK_WIDGET(audioPlaySpeed),
+                             _("Choose here the playing speed. 1 for a normal speed,\nover 1 for a faster speed,\nunder 1 for a slower speed."));
  // gtk_widget_show (audioPlaySpeed);
   gtk_container_add (GTK_CONTAINER(audioPlaySpeedContainer), audioPlaySpeed);
-  gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.5"));
-  gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.2"));
-  gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.0"));
-  gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.8"));
-  gtk_combo_box_text_append_text  (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.5"));
-  gtk_combo_box_set_active (GTK_COMBO_BOX(audioPlaySpeed), 2);
-  gtk_widget_set_sensitive (GTK_WIDGET(audioPlaySpeed), FALSE);
-  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), audioPlaySpeedContainer, -1);  
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.5"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.2"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×1.0"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.8"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (audioPlaySpeed), _("×0.5"));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (audioPlaySpeed), 2);
+  gtk_widget_set_sensitive (GTK_WIDGET (audioPlaySpeed), FALSE);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), audioPlaySpeedContainer, -1);  
 
   iconButtonCopyPos = gtk_image_new_from_icon_name ("document-open-recent-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
   iconButtonPlayAudio = gtk_image_new_from_icon_name ("media-playback-start-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -667,6 +676,8 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   gtk_widget_set_tooltip_text (GTK_WIDGET(pRadioButtonCopyPosAudio), _("Copy current position in audio file to editor"));
   gtk_widget_set_sensitive (GTK_WIDGET(pRadioButtonCopyPosAudio), FALSE); 
 
+  /* since we start with ediror, we hide some widgets */
+  
   gtk_widget_show_all (toolbar);
   /* set cSS states */
   toggle_css_value (GTK_WIDGET(button_bold), FALSE);
@@ -934,47 +945,14 @@ void UI_pdf_page_widget (GtkWidget *window, GtkWidget *grid, APP_data *data)
   GtkWidget *page_label;
 
   page_frame = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_frame")); 
-//  gtk_frame_set_shadow_type (GTK_FRAME(page_frame), GTK_SHADOW_OUT);
-//  gtk_widget_set_name(page_frame, "page_frame" );
-//  g_object_set (page_frame, "margin-start", 6, NULL);
-//  g_object_set (page_frame, "margin-end", 6, NULL);
-//  gtk_widget_set_hexpand (page_frame, FALSE);
-//  gtk_grid_attach (GTK_GRID(grid), page_frame,2,0,1,1);
-  
   
   page_grid = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_grid")); 
- // gtk_box_set_homogeneous(GTK_BOX(page_grid), FALSE);
- // gtk_container_add ( GTK_CONTAINER(page_frame), page_grid);
 
   page_title = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_title")); 
   
- // gtk_entry_set_text(GTK_ENTRY(page_title), _("Pg:"));
-//  gtk_widget_set_name(page_title, "page_title" );
-//  gtk_entry_set_max_length (GTK_ENTRY (page_title), 3);
-//  gtk_entry_set_width_chars (GTK_ENTRY (page_title), 3);
-//  gtk_widget_set_sensitive (GTK_WIDGET(page_title), FALSE);
-//  gtk_widget_set_hexpand (page_title, TRUE);
-//  gtk_entry_set_has_frame(GTK_ENTRY(page_title), FALSE );
-//  gtk_box_pack_start(GTK_BOX(page_grid), page_title, TRUE, FALSE, 0);
-
   page_entry = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_entry")); 
   
-//  gtk_entry_set_has_frame(GTK_ENTRY(page_entry), TRUE );
-//  gtk_widget_set_name(page_entry, "page_entry" );
-//  gtk_entry_set_max_length (GTK_ENTRY (page_entry), 4);
- // gtk_entry_set_width_chars (GTK_ENTRY (page_entry), 3);
-//  gtk_widget_set_hexpand (page_entry, TRUE);
-//  gtk_box_pack_start(GTK_BOX(page_grid), page_entry, TRUE, FALSE, 0);
- // gtk_widget_set_tooltip_text (page_entry, _("Type here the #of PDF page where you want to jump."));
-
   page_label = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_label")); 
-//  gtk_entry_set_width_chars (GTK_ENTRY (page_label), 5);
-//  gtk_entry_set_text(GTK_ENTRY(page_label), _("of--"));
-//  gtk_widget_set_sensitive (GTK_WIDGET(page_label), FALSE);
- // gtk_widget_set_hexpand (page_label, TRUE);
- // gtk_box_pack_start(GTK_BOX(page_grid), page_label, TRUE, FALSE, 0);
- // gtk_widget_set_name(page_label, "page_label");
-  // gtk_editable_set_editable(GTK_EDITABLE(page_label), FALSE);
 
   /* callbacks are in main.ui file */
 
@@ -1544,7 +1522,7 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
   gtk_grid_attach (GTK_GRID(gridDialog),font_button, 1, 2 , 1, 1);
   gtk_font_chooser_set_font (GTK_FONT_CHOOSER(font_button), 
                  g_key_file_get_string (keyString, "sketch", "font", NULL));
-  if(data->currentStack==CURRENT_STACK_SKETCH) {
+  if (data->currentStack==CURRENT_STACK_SKETCH) {
     gtk_widget_set_sensitive (GTK_WIDGET(labelFont), TRUE);
     gtk_widget_set_sensitive (GTK_WIDGET(font_button), TRUE);
   } else {
@@ -1554,14 +1532,14 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
  
   /* run */
   ret = gtk_dialog_run (GTK_DIALOG(annotDialog));
-  if(ret == GTK_RESPONSE_OK) {
+  if (ret == GTK_RESPONSE_OK) {
     GtkTextIter start, end;
     gtk_text_buffer_get_start_iter (buffer, &start);
     gtk_text_buffer_get_end_iter (buffer, &end);
     tmpStr = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
     /* get the fonts */
     newFont = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_button));
-    if(newFont != NULL) {
+    if (newFont != NULL) {
        g_key_file_set_string (keyString, "sketch", "font",newFont);
        g_free (newFont);
     }
@@ -1575,8 +1553,7 @@ gchar *dialog_add_text_annotation (GtkWidget *win, gchar *current_str, APP_data 
 /********************************
   choose color for Annotations
 ********************************/
-GtkWidget*
-create_annotationColourDialog (APP_data *data_app, gchar *msg)
+GtkWidget *create_annotationColourDialog (APP_data *data_app, gchar *msg)
 {
   GtkWidget *highlightColourDialog;
 
@@ -1811,8 +1788,8 @@ void redac_prepare_GUI (GApplication *app, APP_data *data)
 
   /* gtkstack definitions and building */
 
-  stack = GTK_STACK(GTK_WIDGET(gtk_builder_get_object (data->builder, "stack")));
-  switcher = GTK_STACK_SWITCHER(GTK_WIDGET(gtk_builder_get_object (data->builder, "switcher")));  
+  stack = GTK_STACK(GTK_WIDGET (gtk_builder_get_object (data->builder, "stack")));
+  switcher = GTK_STACK_SWITCHER (GTK_WIDGET(gtk_builder_get_object (data->builder, "switcher")));  
   gtk_stack_switcher_set_stack (switcher, stack);
   
   /* toolbar */

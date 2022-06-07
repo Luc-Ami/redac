@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 08:34+0200\n"
+"POT-Creation-Date: 2022-06-07 09:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ui/main.ui:325
+msgid "   "
+msgstr ""
+
 #: mttfiles.c:101 mttfiles.c:155
 #, c-format
 msgid " %s settings auto-generated - Do not edit!"
 msgstr ""
 
-#: misc.c:691
+#: misc.c:710
 #, c-format
 msgid ""
 " <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></"
@@ -40,19 +44,35 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: misc.c:964 pdf.c:743 pdf.c:750
+#: misc.c:983 pdf.c:743 pdf.c:750 ui/main.ui:675
 msgid "---"
 msgstr ""
 
-#: misc.c:183 misc.c:280 misc.c:361
+#: ui/main.ui:441
+msgid "--hits"
+msgstr ""
+
+#: misc.c:183 misc.c:286 misc.c:376
 msgid "0 hits"
 msgstr ""
 
-#: interface.c:1129
+#: ui/settings.ui:806
+msgid "1"
+msgstr ""
+
+#: ui/settings.ui:791
+msgid "2"
+msgstr ""
+
+#: ui/settings.ui:629
+msgid "25"
+msgstr ""
+
+#: interface.c:1107
 msgid "<b><big>Alignment</big></b>"
 msgstr ""
 
-#: interface.c:1147
+#: interface.c:1125
 msgid "<b><big>Application</big></b>"
 msgstr ""
 
@@ -67,16 +87,28 @@ msgid ""
 "isn't a valid audio file !"
 msgstr ""
 
-#: interface.c:1120
+#: interface.c:1098
 msgid "<b><big>Format</big></b>"
 msgstr ""
 
-#: interface.c:1138
+#: interface.c:1116
 msgid "<b><big>PDF-Sketch</big></b>"
 msgstr ""
 
-#: interface.c:1669
+#: ui/settings.ui:775
+msgid ""
+"<b>Back or forward jump in seconds.</b>\n"
+"<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"
+msgstr ""
+
+#: interface.c:1646
 msgid "<b>Current position :</b>"
+msgstr ""
+
+#: ui/settings.ui:761
+msgid ""
+"<b>Play/pause rewind jump in seconds.</b>\n"
+"<i>Minimum : 1sec, maximum 10 secs.</i>"
 msgstr ""
 
 #: callbacks.c:3724
@@ -86,12 +118,20 @@ msgid ""
 " and/or you desfault desktop file browser parameters."
 msgstr ""
 
-#: interface.c:1676
+#: interface.c:1653
 #, c-format
 msgid "<i> %s of %s</i>"
 msgstr ""
 
-#: interface.c:1685
+#: ui/settings.ui:488
+msgid "<i>(Please reload PDF document to complete operation)</i>"
+msgstr ""
+
+#: ui/settings.ui:643
+msgid "<i>(Remain unchanged until you clear sketch)</i>"
+msgstr ""
+
+#: interface.c:1662
 msgid ""
 "<i><b>\n"
 "New position : </b></i>"
@@ -112,14 +152,14 @@ msgid ""
 "Click on a note to reload it ...</i>"
 msgstr ""
 
-#: interface.c:1104
+#: interface.c:1082
 msgid ""
 "<i>Here is the various keys to set-up formatings and so on.\n"
 "When 2 keys are displayed, please keep in mind that\n"
 "you must press the 2 keys in the same time.</i>"
 msgstr ""
 
-#: interface.c:1661
+#: interface.c:1638
 msgid ""
 "<i>Please choose a time location within the audio file.\n"
 "</i>"
@@ -135,7 +175,7 @@ msgstr ""
 msgid "<small><b>%s-<span foreground=\"red\">modified</span></b></small>"
 msgstr ""
 
-#: interface.c:1941 mttfiles.c:685 mttfiles.c:1384
+#: interface.c:1918 mttfiles.c:685 mttfiles.c:1384
 #, c-format
 msgid "<small><b>%s</b></small>"
 msgstr ""
@@ -145,56 +185,106 @@ msgstr ""
 msgid "<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"
 msgstr ""
 
-#: interface.c:486
+#: ui/main.ui:731
+msgid "<small><b>noname</b></small>"
+msgstr ""
+
+#: ui/main.ui:246
+msgid "About Redac ..."
+msgstr ""
+
+#: interface.c:488
 msgid ""
 "Align to center \n"
 "the whole current paragraph."
 msgstr ""
 
-#: interface.c:480
+#: interface.c:482
 msgid ""
 "Align to left \n"
 "the whole current paragraph."
 msgstr ""
 
-#: interface.c:493
+#: interface.c:495
 msgid ""
 "Align to right \n"
 "the whole current paragraph."
 msgstr ""
 
-#: interface.c:243
+#: interface.c:245
 msgid "Annotation _color ... "
 msgstr ""
 
-#: interface.c:458
+#: ui/settings.ui:587
+msgid "Annotation text font:"
+msgstr ""
+
+#: ui/main.ui:776
+msgid ""
+"Application main menu.\n"
+"Shortkey <CTRL>+<M>"
+msgstr ""
+
+#: ui/main.ui:745
+msgid "Application settings."
+msgstr ""
+
+#: interface.c:460
 msgid ""
 "Apply highlighting \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
+#: ui/settings.ui:185
+msgid "Ask before overwriting files"
+msgstr ""
+
+#: ui/settings.ui:224
+msgid "Ask before quit program"
+msgstr ""
+
+#: ui/main.ui:179 ui/settings.ui:890
+msgid "Audio"
+msgstr ""
+
 #: mttfiles.c:972
 msgid "Audio files"
 msgstr ""
 
-#: interface.c:1156
+#: ui/settings.ui:839
+msgid "Auto rewind to start after playing completed."
+msgstr ""
+
+#: ui/main.ui:627
+msgid ""
+"Automatic background saving of your work (editor part)\n"
+"is activated."
+msgstr ""
+
+#: ui/main.ui:642
+msgid ""
+"Automatic rewind to start of media after playing\n"
+"is activated."
+msgstr ""
+
+#: interface.c:1134
 msgid "Bold"
 msgstr ""
 
-#: interface.c:256 interface.c:320
+#: interface.c:258 interface.c:322
 msgid "C_ancel"
 msgstr ""
 
-#: interface.c:1387
+#: interface.c:1365
 msgid "Call main menu"
 msgstr ""
 
-#: interface.c:1501 interface.c:1619 paving.c:351 settings.c:69
+#: interface.c:1479 interface.c:1596 paving.c:351 settings.c:69
 msgid "Cancel"
 msgstr ""
 
-#: interface.c:1254
+#: interface.c:1232
 msgid "Center"
 msgstr ""
 
@@ -202,14 +292,22 @@ msgstr ""
 msgid "Choose annotation color ..."
 msgstr ""
 
-#: interface.c:609
+#: interface.c:618
 msgid ""
 "Choose here the playing speed. 1 for a normal speed,\n"
 "over 1 for a faster speed,\n"
 "under 1 for a slower speed."
 msgstr ""
 
-#: interface.c:598
+#: ui/main.ui:166
+msgid "Clear current sketch"
+msgstr ""
+
+#: ui/settings.ui:354 ui/settings.ui:612
+msgid "Click here to choose a font"
+msgstr ""
+
+#: interface.c:606
 msgid ""
 "Click here to choose color for :\n"
 "- highlighting of PDF areas.\n"
@@ -217,17 +315,55 @@ msgid ""
 "-pencil color for sketches."
 msgstr ""
 
-#: interface.c:667
+#: ui/main.ui:481
+msgid ""
+"Click here to go to the next hit.\n"
+"With PDF documents we jump to next PAGE with hits"
+msgstr ""
+
+#: ui/main.ui:524
+msgid ""
+"Click here to replace text.\n"
+"You can't change text inside PDF documents."
+msgstr ""
+
+#: ui/main.ui:455
+msgid ""
+"Click here to to go to the previous hit.\n"
+"With PDF documents we jump to previous PAGE with hits"
+msgstr ""
+
+#: ui/settings.ui:322 ui/settings.ui:387 ui/settings.ui:503 ui/settings.ui:671
+msgid "Click here yo choose a color"
+msgstr ""
+
+#: ui/main.ui:606
+msgid "Click to Zoom in the PDF document."
+msgstr ""
+
+#: ui/main.ui:566
+msgid "Click to Zoom out the PDF document."
+msgstr ""
+
+#: ui/main.ui:583
+msgid "Click to display the PDF document at its best size."
+msgstr ""
+
+#: ui/main.ui:198
+msgid "Close current Audio file"
+msgstr ""
+
+#: interface.c:676
 msgid "Copy current position in audio file to editor"
 msgstr ""
 
-#: interface.c:549
+#: interface.c:552
 msgid ""
 "Copy selected area inside PDF files\n"
 "to clipboard as pure text."
 msgstr ""
 
-#: interface.c:555
+#: interface.c:559
 msgid ""
 "Copy selected area inside PDF files or sketches \n"
 "to clipboard as pure image."
@@ -238,7 +374,7 @@ msgstr ""
 msgid "Couldn't find pixmap file: %s"
 msgstr ""
 
-#: interface.c:1539
+#: interface.c:1517
 msgid "Current font : "
 msgstr ""
 
@@ -259,52 +395,75 @@ msgid ""
 "will be automatically saved."
 msgstr ""
 
+#: ui/settings.ui:472
+msgid "Document paper color : "
+msgstr ""
+
+#: ui/settings.ui:441
+msgid "Editor"
+msgstr ""
+
 #: mttfiles.c:478
 #, c-format
 msgid "Error saving %s: %s\n"
 msgstr ""
 
-#: interface.c:1262
+#: ui/settings.ui:276
+msgid "File management"
+msgstr ""
+
+#: interface.c:1240
 msgid "Fill"
 msgstr ""
 
-#: interface.c:1415
+#: interface.c:1393
 msgid "Find for selected text"
 msgstr ""
 
-#: interface.c:590
+#: ui/settings.ui:199
+msgid "Force a prompt before any files are overwrote"
+msgstr ""
+
+#: ui/settings.ui:161
+msgid ""
+"Force a prompt before quit program. Take it easy, your work will be "
+"automatically saved\n"
+"whatever you check or not this option."
+msgstr ""
+
+#: interface.c:597
 msgid "Freehand drawing tool"
 msgstr ""
 
-#: interface.c:1369
+#: interface.c:1347 ui/main.ui:218
 msgid "Help"
 msgstr ""
 
-#: interface.c:1064
+#: interface.c:1042
 msgid "Help..."
 msgstr ""
 
-#: interface.c:1424
+#: interface.c:1402
 msgid "Hide/show main toolbar"
 msgstr ""
 
-#: interface.c:1186
+#: interface.c:1164
 msgid "Highlight"
 msgstr ""
 
-#: interface.c:572
+#: interface.c:578
 msgid ""
 "Highlight selected area inside PDF document. \n"
 "Please don't forget to save your PDF document !"
 msgstr ""
 
-#: interface.c:564
+#: interface.c:569
 msgid ""
 "Highlight selected text inside PDF document. \n"
 "Please don't forget to save your PDF document !"
 msgstr ""
 
-#: interface.c:1693
+#: interface.c:1670
 msgid "Hour :"
 msgstr ""
 
@@ -312,69 +471,100 @@ msgstr ""
 msgid "I save you work ... wait a moment, please. "
 msgstr ""
 
-#: misc.c:979
+#: ui/settings.ui:139
+msgid ""
+"If available in your system, the last PDF document used will be "
+"automatically\n"
+" reload when the programm starts."
+msgstr ""
+
+#: misc.c:998
 msgid "Image copied"
 msgstr ""
 
-#: interface.c:1161
+#: ui/main.ui:83
+msgid "Insert text from a file "
+msgstr ""
+
+#: interface.c:1139
 msgid "Italic"
 msgstr ""
 
-#: interface.c:652
+#: interface.c:661
 msgid ""
 "Jump backward in current audio file.\n"
 "Jump's length is defined in 'audio' settings."
 msgstr ""
 
-#: interface.c:657
+#: interface.c:666
 msgid ""
 "Jump forward in current audio file.\n"
 "Jump's length is defined in 'audio' settings."
 msgstr ""
 
-#: interface.c:662
+#: interface.c:671
 msgid "Jump to a specifed position within current audio file."
 msgstr ""
 
-#: interface.c:1616
+#: interface.c:1593
 msgid "Jump to..."
 msgstr ""
 
-#: interface.c:500
+#: interface.c:502
 msgid ""
 "Justify left AND right \n"
 "the whole current paragraph."
 msgstr ""
 
-#: interface.c:1073
+#: interface.c:1051
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: interface.c:1250
+#: ui/main.ui:228
+msgid "Keyboard shortcuts ..."
+msgstr ""
+
+#: interface.c:1228
 msgid "Left"
 msgstr ""
 
-#: interface.c:1405
+#: ui/main.ui:189
+msgid "Load Audio file ..."
+msgstr ""
+
+#: interface.c:1383
 msgid "Load PDF file "
 msgstr ""
 
-#: interface.c:1699
+#: ui/main.ui:125
+msgid "Load _PDF file ..."
+msgstr ""
+
+#: ui/main.ui:102
+msgid "Merge with a _note ..."
+msgstr ""
+
+#: interface.c:1676
 msgid "Minute :"
 msgstr ""
 
-#: interface.c:1498
+#: interface.c:1476
 msgid "New Annotation ..."
 msgstr ""
 
-#: misc.c:471
+#: ui/main.ui:32
+msgid "New note"
+msgstr ""
+
+#: misc.c:490
 msgid "No PDF Document"
 msgstr ""
 
-#: interface.c:1763
+#: interface.c:1740
 msgid "Note  utility written in GTK+ and licensed under GPL v.3"
 msgstr ""
 
-#: interface.c:1852
+#: interface.c:1829
 msgid "Notes"
 msgstr ""
 
@@ -382,57 +572,73 @@ msgstr ""
 msgid "Nothing to undo"
 msgstr ""
 
-#: interface.c:1067 interface.c:1503 interface.c:1621 settings.c:71
+#: interface.c:1045 interface.c:1481 interface.c:1598 settings.c:71
 msgid "Ok"
+msgstr ""
+
+#: ui/main.ui:237
+msgid "Online _Wiki ..."
 msgstr ""
 
 #: mttfiles.c:1111
 msgid "Open PDF file ..."
 msgstr ""
 
-#: mttfiles.c:664 mttimport.c:469
+#: mttfiles.c:664 mttimport.c:491
 msgid "Open Redac file ..."
 msgstr ""
 
-#: mttimport.c:534
+#: mttimport.c:559
 msgid "Open Rich Text Format file ..."
+msgstr ""
+
+#: ui/main.ui:48
+msgid "Open a previous note ..."
 msgstr ""
 
 #: mttfiles.c:973
 msgid "Open audio file ..."
 msgstr ""
 
-#: misc.c:467
+#: ui/main.ui:115
+msgid "PDF"
+msgstr ""
+
+#: misc.c:486
 #, c-format
 msgid "PDF : %s"
 msgstr ""
 
-#: interface.c:1305
+#: interface.c:1283
 msgid "PDF : go first page"
 msgstr ""
 
-#: interface.c:1314
+#: interface.c:1292
 msgid "PDF : go last page"
 msgstr ""
 
-#: interface.c:1287
+#: interface.c:1265
 msgid "PDF : go next page"
 msgstr ""
 
-#: interface.c:1296
+#: interface.c:1274
 msgid "PDF : go previous page"
 msgstr ""
 
-#: interface.c:1323
+#: interface.c:1301
 msgid "PDF : search"
 msgstr ""
 
-#: interface.c:1332
+#: interface.c:1310
 msgid "PDF : zoom in"
 msgstr ""
 
-#: interface.c:1342
+#: interface.c:1320
 msgid "PDF : zoom out"
+msgstr ""
+
+#: ui/settings.ui:564
+msgid "PDF document"
 msgstr ""
 
 #: mttfiles.c:1110 mttfiles.c:1208
@@ -443,39 +649,57 @@ msgstr ""
 msgid "PNG Image files"
 msgstr ""
 
+#: ui/settings.ui:658
+msgid "Paper color : "
+msgstr ""
+
 #: callbacks.c:79
 #, c-format
 msgid "Paragraph: %d/%d  %d Chars  %d Words"
 msgstr ""
 
-#: interface.c:311
+#: interface.c:313
 msgid "Paste and _center image "
 msgstr ""
 
-#: interface.c:1378
+#: interface.c:1356
 msgid "Paste image"
 msgstr ""
 
-#: misc.c:485
+#: ui/settings.ui:599
+msgid "Pen width in pixels :"
+msgstr ""
+
+#: misc.c:504
 #, c-format
 msgid "Pen width:  %.2f"
 msgstr ""
 
-#: interface.c:1291
+#: ui/main.ui:356
+msgid "Pg:"
+msgstr ""
+
+#: interface.c:1269
 msgid "PgDown"
 msgstr ""
 
-#: interface.c:1300
+#: interface.c:1278
 msgid "PgUp"
 msgstr ""
 
-#: interface.c:631
+#: interface.c:640
 msgid ""
 "Play or pause-rewind current audio file.\n"
 "Rewind's length is defined in 'audio' settings."
 msgstr ""
 
-#: interface.c:635
+#: ui/main.ui:656
+msgid ""
+"Please, notice that that the current PDF is modifyed\n"
+"and should be saved"
+msgstr ""
+
+#: interface.c:644
 msgid "Position within current audio file"
 msgstr ""
 
@@ -486,23 +710,23 @@ msgid ""
 "%s"
 msgstr ""
 
-#: interface.c:1747
+#: interface.c:1724
 msgid "Project Manager:"
 msgstr ""
 
-#: interface.c:1396
+#: interface.c:1374
 msgid "Quick save"
 msgstr ""
 
-#: interface.c:1460
+#: interface.c:1438
 msgid "Quit application"
 msgstr ""
 
-#: interface.c:1191
+#: interface.c:1169
 msgid "Quotation"
 msgstr ""
 
-#: paving.c:267
+#: paving.c:267 ui/main.ui:65
 msgid "Recent notes ..."
 msgstr ""
 
@@ -510,11 +734,11 @@ msgstr ""
 msgid "Redac files"
 msgstr ""
 
-#: interface.c:1748
+#: interface.c:1725
 msgid "Redac logos + main icon :"
 msgstr ""
 
-#: mttimport.c:461
+#: mttimport.c:483
 msgid "Redac notes"
 msgstr ""
 
@@ -550,33 +774,53 @@ msgstr ""
 msgid "Redo set text to underline"
 msgstr ""
 
-#: interface.c:1853
+#: interface.c:1830
 msgid "Reference"
 msgstr ""
 
-#: interface.c:512
+#: ui/settings.ui:126
+msgid "Reload last used PDF at program's start "
+msgstr ""
+
+#: interface.c:514
 msgid ""
 "Remove all character \n"
 "formattings from current selection."
 msgstr ""
 
-#: interface.c:1258
+#: interface.c:1236
 msgid "Right"
 msgstr ""
 
-#: interface.c:1021
+#: ui/main.ui:134
+msgid "Save _modifyed PDF file .."
+msgstr ""
+
+#: ui/settings.ui:90
+msgid "Save current editor document every 5 minutes"
+msgstr ""
+
+#: ui/main.ui:157
+msgid "Save current sketch ..."
+msgstr ""
+
+#: ui/main.ui:40
+msgid "Save the note as ...  "
+msgstr ""
+
+#: interface.c:999
 msgid "Save your work and export to standard Word processor file..."
 msgstr ""
 
-#: interface.c:1705
+#: interface.c:1682
 msgid "Second :"
 msgstr ""
 
-#: interface.c:1627
+#: interface.c:1604
 msgid "Select a new time position"
 msgstr ""
 
-#: interface.c:579
+#: interface.c:586
 msgid ""
 "Set-up text annotation inside \n"
 "selected area on PDF or sketch document. \n"
@@ -588,44 +832,60 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: interface.c:1854
+#: interface.c:1831 ui/settings.ui:729
 msgid "Sketch"
 msgstr ""
 
-#: interface.c:1351
+#: interface.c:1329
 msgid "Sketch : larger pen"
 msgstr ""
 
-#: interface.c:1360
+#: interface.c:1338
 msgid "Sketch : leaner pen"
 msgstr ""
 
-#: interface.c:1181
+#: ui/main.ui:147
+msgid "Sketches"
+msgstr ""
+
+#: interface.c:1159
 msgid "Strikethrough"
 msgstr ""
 
-#: interface.c:1176
+#: interface.c:1154
 msgid "Subscript"
 msgstr ""
 
-#: interface.c:1171
+#: interface.c:1149
 msgid "Superscript"
 msgstr ""
 
-#: interface.c:1442
+#: interface.c:1420
 msgid "Switch to PDF pane"
 msgstr ""
 
-#: interface.c:1433
+#: interface.c:1411
 msgid "Switch to editor pane"
 msgstr ""
 
-#: interface.c:1451
+#: interface.c:1429
 msgid "Switch to sketch pane"
 msgstr ""
 
-#: misc.c:961
+#: ui/settings.ui:373
+msgid "Text background color:"
+msgstr ""
+
+#: misc.c:980
 msgid "Text copied"
+msgstr ""
+
+#: ui/settings.ui:340
+msgid "Text font:"
+msgstr ""
+
+#: ui/settings.ui:308
+msgid "Text foreground color:"
 msgstr ""
 
 #: mttfiles.c:1236
@@ -654,72 +914,84 @@ msgstr ""
 msgid "There is nothing to undo."
 msgstr ""
 
-#: interface.c:430
+#: interface.c:432
 msgid ""
 "Toggle to/from bold either \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
-#: interface.c:436
+#: interface.c:438
 msgid ""
 "Toggle to/from italic either \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
-#: interface.c:462
+#: interface.c:464
 msgid ""
 "Toggle to/from quotation style either \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
-#: interface.c:454
+#: interface.c:456
 msgid ""
 "Toggle to/from strikethrough \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
-#: interface.c:450
+#: interface.c:452
 msgid ""
 "Toggle to/from subscript either \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
-#: interface.c:446
+#: interface.c:448
 msgid ""
 "Toggle to/from superscript either \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
-#: interface.c:441
+#: interface.c:443
 msgid ""
 "Toggle to/from underline either \n"
 "for current selection\n"
 "or next typing."
 msgstr ""
 
-#: interface.c:1196
+#: interface.c:1174
 msgid "Toggle up/lower case"
 msgstr ""
 
-#: interface.c:643
+#: interface.c:652
 msgid "Total duration of current audio file"
 msgstr ""
 
-#: interface.c:1771
+#: interface.c:1748
 msgid "Translators credits"
 msgstr ""
 
-#: interface.c:1510
+#: interface.c:1488
 msgid "Type here annotation text"
 msgstr ""
 
-#: interface.c:1166
+#: ui/main.ui:368
+msgid "Type here the #of PDF page where you want to jump."
+msgstr ""
+
+#: ui/main.ui:424
+msgid "Type here the expression to find."
+msgstr ""
+
+#: ui/main.ui:547
+msgid "Type here the replacing expression."
+msgstr ""
+
+#: interface.c:1144
 msgid "Underline"
 msgstr ""
 
@@ -755,7 +1027,7 @@ msgstr ""
 msgid "Undo last image pasting inside sketch"
 msgstr ""
 
-#: interface.c:517
+#: interface.c:519
 msgid "Undo last operation."
 msgstr ""
 
@@ -851,59 +1123,67 @@ msgid ""
 "Proceed aniway ?"
 msgstr ""
 
-#: mttimport.c:527
+#: mttimport.c:552
 msgid "Word processor files"
 msgstr ""
 
-#: interface.c:999
+#: interface.c:977
 msgid "_Cancel"
 msgstr ""
 
-#: interface.c:239
+#: interface.c:241
 msgid "_Edit annotation ... "
 msgstr ""
 
-#: interface.c:1000
+#: interface.c:978
 msgid "_Open"
 msgstr ""
 
-#: interface.c:307
+#: interface.c:309
 msgid "_Paste image in place "
 msgstr ""
 
-#: interface.c:247
+#: interface.c:249
 msgid "_Remove annotation "
+msgstr ""
+
+#: ui/main.ui:93
+msgid "from a RTF file ..."
 msgstr ""
 
 #: mttfiles.c:1298
 msgid "noname"
 msgstr ""
 
-#: misc.c:455
+#: misc.c:474
 #, c-format
 msgid "of %d"
+msgstr ""
+
+#: ui/main.ui:388
+msgid "of--"
 msgstr ""
 
 #: undo.c:204
 msgid "undo last text annot paste inside sketch - TODO"
 msgstr ""
 
-#: interface.c:616
+#: interface.c:625
 msgid "×0.5"
 msgstr ""
 
-#: interface.c:615
+#: interface.c:624
 msgid "×0.8"
 msgstr ""
 
-#: interface.c:614
+#: interface.c:623
 msgid "×1.0"
 msgstr ""
 
-#: interface.c:613
+#: interface.c:622
 msgid "×1.2"
 msgstr ""
 
-#: interface.c:612
+#: interface.c:621
 msgid "×1.5"
 msgstr ""

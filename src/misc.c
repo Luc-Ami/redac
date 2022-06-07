@@ -220,8 +220,14 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
 	  gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "pRadioButtonFill") );
   }
 
+ /* hide PDF specific buttons */
+  gtk_widget_show (pButtonText);
+  gtk_widget_show (pButtonPict);
   gtk_widget_show (pButtonHighRect);
   gtk_widget_show (pButtonHigh);
+  gtk_widget_show (pButtonAnnot);
+
+  gtk_widget_hide (pButtonPencil);
     
   gtk_widget_show (pg_frame);
   gtk_widget_show (pg_title);
@@ -253,10 +259,10 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   GtkWidget *pSearchEntry = lookup_widget(window1, "search_entry"); 
   GtkWidget *pNext = lookup_widget(window1, "buttonNextOccurrence");   
   GtkWidget *pPrev = lookup_widget(window1, "buttonPrevOccurrence");
+  
   GtkWidget *pButtonText = lookup_widget(window1, "pRadioButtonTextSelect");
   GtkWidget *pButtonPict = lookup_widget(window1, "pRadioButtonPictureSelect");
-  GtkWidget *pButtonHigh = lookup_widget(window1,"pRadioButtonHiglightSelect");
-  
+  GtkWidget *pButtonHigh = lookup_widget(window1,"pRadioButtonHiglightSelect");  
   GtkWidget *pButtonHighRect = lookup_widget(window1,"pRadioButtonHighlightRect");  
   
   
@@ -280,6 +286,7 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   gtk_label_set_text (GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
   gtk_widget_set_sensitive (pSearchEntry, TRUE);
+  
   gtk_widget_set_sensitive (pButtonText, FALSE);
   gtk_widget_set_sensitive (pButtonPict, FALSE);
   gtk_widget_set_sensitive (pButtonHigh, FALSE);
@@ -321,6 +328,14 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_show (pSearchEntry);
   gtk_widget_show (pNext);
   gtk_widget_show (pPrev);
+  
+  /* hide PDF specific buttons */
+  gtk_widget_hide (pButtonText);
+  gtk_widget_hide (pButtonPict);
+  gtk_widget_hide (pButtonHigh);
+  gtk_widget_hide (pButtonHighRect); 
+  gtk_widget_hide (pButtonAnnot);
+  gtk_widget_hide (pButtonPencil);
 }
 
 /*
@@ -331,34 +346,34 @@ entry : window1 == mainWindow
 void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
 {
   GtkWidget *pSearchEntry=lookup_widget(window1, "search_entry"); 
-  GtkWidget *pNext=lookup_widget(window1, "buttonNextOccurrence");   
-  GtkWidget *pPrev=lookup_widget(window1, "buttonPrevOccurrence");
+  GtkWidget *pNext = lookup_widget(window1, "buttonNextOccurrence");   
+  GtkWidget *pPrev = lookup_widget(window1, "buttonPrevOccurrence");
   /* redio tool buttons upper toolbar */
-  GtkWidget *pButtonText= lookup_widget(window1, "pRadioButtonTextSelect");
-  GtkWidget *pButtonPict= lookup_widget(window1, "pRadioButtonPictureSelect");
-  GtkWidget *pButtonHigh= lookup_widget(window1,"pRadioButtonHiglightSelect");
+  GtkWidget *pButtonText = lookup_widget(window1, "pRadioButtonTextSelect");
+  GtkWidget *pButtonPict = lookup_widget(window1, "pRadioButtonPictureSelect");
+  GtkWidget *pButtonHigh = lookup_widget(window1,"pRadioButtonHiglightSelect");
   
   GtkWidget *pButtonHighRect = lookup_widget(window1, "pRadioButtonHighlightRect");  
     
-  GtkWidget *pButtonAnnot= lookup_widget(window1,"pRadioButtonHiAnnotSelect");
-  GtkWidget *pButtonZoomIn=lookup_widget(window1,"buttonZoomIn");
-  GtkWidget *pButtonZoomOut=lookup_widget(window1,"buttonZoomOut");
-  GtkWidget *pbuttonZoomFitBest=lookup_widget(window1,"buttonZoomFitBest");
-  GtkWidget *pButtonPencil=lookup_widget(window1,"button_pencil");
-  GtkWidget *pLabelPDFMod=lookup_widget(window1,"PDF_modified_label");
-  GtkWidget *pg_frame= lookup_widget(GTK_WIDGET(window1), "page_frame"); 
-  GtkWidget *pg_title= lookup_widget(GTK_WIDGET(window1), "page_title"); 
-  GtkWidget *pg_entry= lookup_widget(GTK_WIDGET(window1), "page_entry"); 
-  GtkWidget *pg_label= lookup_widget(GTK_WIDGET(window1), "page_label"); 
-  GtkWidget *pg_labelHitsFrame= lookup_widget(GTK_WIDGET(window1), "labelHitsFrame"); 
+  GtkWidget *pButtonAnnot = lookup_widget(window1,"pRadioButtonHiAnnotSelect");
+  GtkWidget *pButtonZoomIn = lookup_widget(window1,"buttonZoomIn");
+  GtkWidget *pButtonZoomOut = lookup_widget(window1,"buttonZoomOut");
+  GtkWidget *pbuttonZoomFitBest = lookup_widget(window1,"buttonZoomFitBest");
+  GtkWidget *pButtonPencil = lookup_widget(window1,"button_pencil");
+  GtkWidget *pLabelPDFMod = lookup_widget(window1,"PDF_modified_label");
+  GtkWidget *pg_frame = lookup_widget(GTK_WIDGET(window1), "page_frame"); 
+  GtkWidget *pg_title = lookup_widget(GTK_WIDGET(window1), "page_title"); 
+  GtkWidget *pg_entry = lookup_widget(GTK_WIDGET(window1), "page_entry"); 
+  GtkWidget *pg_label = lookup_widget(GTK_WIDGET(window1), "page_label"); 
+  GtkWidget *pg_labelHitsFrame = lookup_widget(GTK_WIDGET(window1), "labelHitsFrame"); 
 
-  GtkWidget *pLabelHits=lookup_widget(GTK_WIDGET(window1), "labelHits"); 
+  GtkWidget *pLabelHits = lookup_widget(GTK_WIDGET(window1), "labelHits"); 
   /* find and change buttons, statusbar */
   GtkWidget *pButtonReplace = lookup_widget(window1, "buttonReplace");
   GtkWidget *pReplaceEntry = lookup_widget(window1, "replace_entry");
   /* remove searchentry and remove all found and highlighted text */
-  gtk_entry_set_text(GTK_ENTRY(pSearchEntry),"");
-  gtk_label_set_text(GTK_LABEL(pLabelHits), _("0 hits"));
+  gtk_entry_set_text (GTK_ENTRY(pSearchEntry),"");
+  gtk_label_set_text (GTK_LABEL(pLabelHits), _("0 hits"));
   /* de-active widgets */
   gtk_widget_set_sensitive (pSearchEntry, FALSE);
   gtk_widget_set_sensitive (pButtonText, FALSE);
@@ -374,7 +389,11 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonZoomOut, FALSE);
   gtk_widget_set_sensitive (pButtonPencil, TRUE);
   gtk_widget_set_sensitive (pg_entry, FALSE);
-
+  
+  /* show useful widgets */
+  gtk_widget_show (pButtonAnnot);
+  gtk_widget_show (pButtonPict);
+  gtk_widget_show (pButtonPencil);  
   /* we hide only if current stack is Sketch */
   
   gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_bold") );
