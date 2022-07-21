@@ -163,10 +163,9 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   GtkWidget *pButtonZoomIn = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomIn"));
   GtkWidget *pButtonZoomOut = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomOut"));
   GtkWidget *pbuttonZoomFitBest = GTK_WIDGET (gtk_builder_get_object (data->builder, "buttonZoomFitBest"));
-  
-  
 
   GtkWidget *pButtonPencil = lookup_widget(window1,"button_pencil");
+  GtkWidget *pButtonArrow = lookup_widget(window1,"button_arrow");
   
   GtkWidget *pLabelPDFMod = GTK_WIDGET (gtk_builder_get_object (data->builder, "PDF_modified_label"));
   GtkWidget *pg_frame = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_frame"));
@@ -228,6 +227,7 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   gtk_widget_show (pButtonAnnot);
 
   gtk_widget_hide (pButtonPencil);
+  gtk_widget_hide (pButtonArrow);  
     
   gtk_widget_show (pg_frame);
   gtk_widget_show (pg_title);
@@ -271,6 +271,7 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonZoomOut = lookup_widget(window1,"buttonZoomOut");
   GtkWidget *pbuttonZoomFitBest = lookup_widget(window1,"buttonZoomFitBest");
   GtkWidget *pButtonPencil = lookup_widget(window1,"button_pencil");
+  GtkWidget *pButtonArrow = lookup_widget(window1,"button_arrow");
   GtkWidget *pLabelPDFMod = lookup_widget(window1,"PDF_modified_label");
   GtkWidget *pg_frame = lookup_widget(GTK_WIDGET(window1), "page_frame"); 
   GtkWidget *pg_title = lookup_widget(GTK_WIDGET(window1), "page_title"); 
@@ -298,6 +299,8 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonZoomIn, FALSE);
   gtk_widget_set_sensitive (pButtonZoomOut, FALSE);
   gtk_widget_set_sensitive (pButtonPencil, FALSE);
+  gtk_widget_set_sensitive (pButtonArrow, FALSE);
+  
   //gtk_widget_set_sensitive (pg_entry, FALSE);
   gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_bold") );
   gtk_widget_show (lookup_widget(GTK_WIDGET(window1), "button_italic") );
@@ -336,6 +339,8 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_hide (pButtonHighRect); 
   gtk_widget_hide (pButtonAnnot);
   gtk_widget_hide (pButtonPencil);
+  gtk_widget_hide (pButtonArrow);
+  
 }
 
 /*
@@ -360,6 +365,7 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonZoomOut = lookup_widget(window1,"buttonZoomOut");
   GtkWidget *pbuttonZoomFitBest = lookup_widget(window1,"buttonZoomFitBest");
   GtkWidget *pButtonPencil = lookup_widget(window1,"button_pencil");
+  GtkWidget *pButtonArrow = lookup_widget(window1,"button_arrow");  
   GtkWidget *pLabelPDFMod = lookup_widget(window1,"PDF_modified_label");
   GtkWidget *pg_frame = lookup_widget(GTK_WIDGET(window1), "page_frame"); 
   GtkWidget *pg_title = lookup_widget(GTK_WIDGET(window1), "page_title"); 
@@ -388,12 +394,14 @@ void misc_set_gui_in_sketch_mode(GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonZoomIn, FALSE);
   gtk_widget_set_sensitive (pButtonZoomOut, FALSE);
   gtk_widget_set_sensitive (pButtonPencil, TRUE);
+  gtk_widget_set_sensitive (pButtonArrow, TRUE);  
   gtk_widget_set_sensitive (pg_entry, FALSE);
   
   /* show useful widgets */
   gtk_widget_show (pButtonAnnot);
   gtk_widget_show (pButtonPict);
   gtk_widget_show (pButtonPencil);  
+  gtk_widget_show (pButtonArrow);  
   /* we hide only if current stack is Sketch */
   
   gtk_widget_hide (lookup_widget(GTK_WIDGET(window1), "button_bold") );
@@ -746,7 +754,9 @@ void misc_init_vars (APP_data *data )
   data->pdfSearch = NULL;
   data->pdfAnnotMapping = NULL;
   data->kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
+  /* sketch tools */
   data->fPencilTool = FALSE;
+  data->fLineTool = FALSE;
   data->currentStack = CURRENT_STACK_EDITOR;
   /* we prepare Sketch area display */
   data->Sketchsurface = NULL;
@@ -766,10 +776,10 @@ void misc_init_vars (APP_data *data )
 /************************
  initalize spell checker
 *************************/
-void misc_init_spell_checker(APP_data *data )
+void misc_init_spell_checker (APP_data *data )
 {
   GtkSpellChecker* spell = gtk_spell_checker_new ();
-  data->spell=spell;
+  data->spell = spell;
   gtk_spell_checker_set_language (spell, pango_language_to_string (pango_language_get_default()), NULL);
   gboolean fAttachSpell = gtk_spell_checker_attach (spell, GTK_TEXT_VIEW (data->view));
 }
@@ -780,7 +790,7 @@ void misc_init_spell_checker(APP_data *data )
  input : pointer on structure APP_data *data
  output : *gchar
 **********************************/
-gchar *misc_get_extract_from_document(APP_data *data )
+gchar *misc_get_extract_from_document (APP_data *data )
 {
   GtkTextBuffer *buffer;
   GtkTextIter start, end;

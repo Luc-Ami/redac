@@ -1,5 +1,6 @@
 EXTRA_DIST = \
 	highlight.xpm \
+	lines.xpm \
 	pdf.xpm \
 	pencil.xpm \
 	pencil_light.xpm \

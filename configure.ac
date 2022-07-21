@@ -1,7 +1,7 @@
 ### INITIALIZATION #############################################################
 # In this section we do preparations for initializing our build system.
 
-AC_INIT([redac], [0.2.2], [amiluc_bis@yahoo.fr])
+AC_INIT([redac], [0.2.3], [amiluc_bis@yahoo.fr])
 AC_CONFIG_SRCDIR([src/main.c])
 AM_INIT_AUTOMAKE([-W foreign])
 AM_SILENT_RULES([no])
@@ -14,6 +14,9 @@ PKG_PROG_PKG_CONFIG
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 IT_PROG_INTLTOOL([0.40])
+
+AC_SEARCH_LIBS([sqrt], [m])
+
 
 ### LIBRARIES ##################################################################
 # In this section we use pkg-config to configure the libraries we are using.

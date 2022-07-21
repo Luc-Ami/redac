@@ -34,6 +34,8 @@
 
 #include "./icons/pdf.xpm"
 
+#include "./icons/lines.xpm"
+
 /*********************************
   setup default values for display
 for paddings and removing inner border from entries, many thanks to them : https://github.com/jy2wong/luakit/commit/6dfffb296f562b26c1eb6020c94b1d3e0bde336b
@@ -385,7 +387,9 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   GtkWidget *icon_text_select, *icon_picture_select;
   GtkWidget *icon_highlight_select, *icon_text_annot, *icon_highlight_rectangle;
   GtkWidget *icon_pencil;
+  GtkWidget *icon_arrow;
   GtkToolItem *button_pencil;
+  GtkToolItem *button_arrow;  
   GtkToolItem *color_button_item;
   GtkWidget *color_button;
   GtkAccelGroup *accel_group;
@@ -428,39 +432,39 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
 
   button_bold = gtk_toggle_tool_button_new ();
   gtk_toolbar_insert  (GTK_TOOLBAR(toolbar), button_bold, -1);  
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_bold),icon_bold);
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_bold), icon_bold);
   gtk_widget_set_tooltip_text (GTK_WIDGET(button_bold), _("Toggle to/from bold either \nfor current selection\nor next typing."));
 
   button_italic = gtk_toggle_tool_button_new ();
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_italic, -1);  
 
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_italic),icon_italic);
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_italic), icon_italic);
   gtk_widget_set_tooltip_text (GTK_WIDGET(button_italic), _("Toggle to/from italic either \nfor current selection\nor next typing."));
   button_underline = gtk_toggle_tool_button_new ();
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_underline, -1); 
 
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_underline),icon_underline);
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_underline), icon_underline);
   gtk_widget_set_tooltip_text (GTK_WIDGET(button_underline), _("Toggle to/from underline either \nfor current selection\nor next typing."));
   /* other formattings */
    button_superscript = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_superscript, -1); 
-   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_superscript),icon_superscript);
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_superscript), icon_superscript);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_superscript), _("Toggle to/from superscript either \nfor current selection\nor next typing."));
    button_subscript = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_subscript, -1);    
-   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_subscript),icon_subscript);
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_subscript), icon_subscript);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_subscript), _("Toggle to/from subscript either \nfor current selection\nor next typing."));
    button_strikethrough = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_strikethrough, -1); 
-   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_strikethrough),icon_strike);
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_strikethrough), icon_strike);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_strikethrough), _("Toggle to/from strikethrough \nfor current selection\nor next typing."));
    button_highlight = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_highlight, -1); 
-   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_highlight),icon_highlight);
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_highlight), icon_highlight);
  gtk_widget_set_tooltip_text (GTK_WIDGET(button_highlight), _("Apply highlighting \nfor current selection\nor next typing."));
    button_quotation = gtk_toggle_tool_button_new ();
    gtk_toolbar_insert (GTK_TOOLBAR(toolbar), button_quotation, -1); 
-   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_quotation),icon_quotation);
+   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_quotation), icon_quotation);
 gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quotation style either \nfor current selection\nor next typing."));
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_bold), FALSE);
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON(button_italic), FALSE);
@@ -598,7 +602,22 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(button_pencil), -1);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(button_pencil), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON(button_pencil));
+
+  /* arrow line button */
+  ico = gdk_pixbuf_new_from_xpm_data ((const char **)lines_xpm);
+  icon_arrow = gtk_image_new_from_pixbuf (ico);
+  g_object_unref(ico);
   
+  
+  
+//  icon_arrow = gtk_image_new_from_icon_name ("edit-clear-all-symbolic", GTK_ICON_SIZE_LARGE_TOOLBAR);    
+  button_arrow = gtk_radio_tool_button_new (group_clip);  
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_arrow), icon_arrow); 
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_arrow), _("line/arrow tool"));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM (button_arrow), -1);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(button_arrow), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (button_arrow));
+    
   /* color button */
   color_button_item = gtk_tool_item_new();
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM(color_button_item), -1);
@@ -791,6 +810,10 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
         G_CALLBACK(on_button_clip_mode_toggled), data_app);
   g_signal_connect (G_OBJECT(button_pencil), "toggled", 
         G_CALLBACK(on_button_button_pencil_toggled), data_app);
+        
+ g_signal_connect (G_OBJECT(button_arrow), "toggled", 
+        G_CALLBACK(on_button_button_arrow_toggled), data_app);        
+        
 
   /* register objects */
   GLADE_HOOKUP_OBJECT (window, button_bold, "button_bold");
@@ -816,6 +839,9 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   
   GLADE_HOOKUP_OBJECT (window, pRadioButtonHiAnnotSelect, "pRadioButtonHiAnnotSelect");
   GLADE_HOOKUP_OBJECT (window, button_pencil, "button_pencil");
+  GLADE_HOOKUP_OBJECT (window, button_arrow, "button_arrow");  
+   
+  
   GLADE_HOOKUP_OBJECT (window, color_button, "color_button");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonPlayPauseAudio, "pRadioButtonPlayPauseAudio");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonCopyPosAudio, "pRadioButtonCopyPosAudio");
@@ -1734,7 +1760,7 @@ GtkWidget *create_aboutRedac (APP_data *data_app)
   //gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog),"");
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(dialog), "");
 
-  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), g_strdup_printf("%s\n%s", PACKAGE_VERSION, "2022-05"));/* PACKAGE version from config.h */  
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), g_strdup_printf("%s\n%s", PACKAGE_VERSION, "2022-06"));/* PACKAGE version from config.h , from configure.ac*/  
   
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(dialog), 
      _("Note  utility written in GTK+ and licensed under GPL v.3"));

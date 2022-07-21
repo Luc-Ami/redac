@@ -14,6 +14,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include <poppler.h>
+#include <math.h>
 #include "support.h"
 #include "interface.h"
 #include "callbacks.h"
@@ -47,6 +48,15 @@ static gboolean fUserClickedButton = FALSE;
 static gint iPendingFormat = 0; /* a flag to report a formatting to the next call */
 static gint iPendingOffset = 0, iCurrentOffset = 0;
 static gint kw_paragraph_alignment = KW_ALIGNMENT_LEFT;
+
+
+static gint x2_xor_last;
+static gint y2_xor_last;
+
+static gint x1_mem_pix;
+static gint y1_mem_pix;
+static gint w_mem_pix;
+static gint h_mem_pix;
 
 /****************************************
   callback : updade infos on statusbar 
@@ -326,11 +336,34 @@ void on_button_button_pencil_toggled (GtkButton  *button, APP_data *user_data)
   tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "button_pencil"));
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (tmpButton)))  {
       user_data->fPencilTool = TRUE;
+      user_data->fLineTool = FALSE;
   }
   else {
     user_data->fPencilTool = FALSE;
+    user_data->fLineTool = FALSE;
   }
 }
+
+/****************************
+ arrow button toggled
+***************************/
+void on_button_button_arrow_toggled (GtkButton  *button, APP_data *user_data)
+{
+  GtkToolItem *tmpButton = NULL;
+
+  tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "button_arrow"));
+  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (tmpButton)))  {
+      user_data->fPencilTool = FALSE;
+      user_data->fLineTool = TRUE;
+      printf ("passe en arrow \n");
+  }
+  else {
+    user_data->fPencilTool = FALSE;
+    user_data->fLineTool = FALSE;
+  }
+}
+
+
 
 /***************************************************
   Draw a text on the screen
@@ -427,7 +460,7 @@ static void draw_text (gdouble x, gdouble y, APP_data *data, gchar *str )
   mouse left-click
  x, y : relative coordinates
 ****************************************************/
-static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width )
+static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
 {
   gint x2,y2, w, h;
   gdouble pen_width_margin;
@@ -443,28 +476,30 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
   cr = cairo_create (data->Sketchsurface);
   cairo_set_source_rgb (cr, color.red, color.green, color.blue);
   cairo_set_line_width (cr, pen_width);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
+  
   /* we get a copy of underlaying rectangle for undo engine */
   w = ABS ((gint)x - data->x1);
   h = ABS ((gint)y - data->y1);
   /* x2, y2 : coordinates, in relative mode, of upperleft quadrant */
-  if((gint)x<data->x1) {
+  if((gint)x < data->x1) {
      x2 = (gint)x;
   }
   else {
    x2 = data->x1;
   }
 
-  if((gint)y<data->y1) {
+  if((gint)y < data->y1) {
      y2 = (gint)y;
   }
   else {
    y2 = data->y1;
   }
  
-  if(x2<=0) {
+  if(x2 <= 0) {
    x2 = x2 + pen_width_margin;
   }
-  if(y2<=0) {
+  if(y2 <= 0) {
    y2 = y2 + pen_width_margin;
   }
 
@@ -477,6 +512,7 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
 
     data->undo.x1 = x2-pen_width_margin;
     data->undo.y1 = y2-pen_width_margin;
+//    printf ("ds brush x1=%.2f y1= %.2f \n", data->x1, data->y1);
     cairo_move_to (cr, (gdouble)data->x1, (gdouble)data->y1);
     cairo_line_to (cr, x, y);
     cairo_stroke (cr);
@@ -488,6 +524,71 @@ static void draw_brush (gdouble x, gdouble y, APP_data *data, gdouble pen_width 
     undo_push (data->currentStack, OP_SET_POINT, NULL, data);
   }
 }
+
+
+/********************************************************************
+ * draw arrow for a line
+ * tnanks to :
+ * https://github.com/gwenp/Cairo_arrows/blob/master/src/Arrows.cpp 
+ * *****************************************************************/
+static void draw_arrowHead_open (cairo_t *cr, gint x1, gint y1, gint x2, gint y2)
+{
+   gdouble angle = atan2 ((gdouble)(y2 - y1), (gdouble) (x2 - x1)) + M_PI;
+   
+
+   
+	gdouble arrow_degrees = 0.5;
+	gint arrow_length = 25;
+
+	gint xA, yA, xB, yB;
+
+	xA = x2 + arrow_length * cos(angle - arrow_degrees);
+	yA = y2 + arrow_length * sin(angle - arrow_degrees);
+	xB = x2 + arrow_length * cos(angle + arrow_degrees);
+	yB = y2 + arrow_length * sin(angle + arrow_degrees);
+
+	cairo_move_to (cr, x2, y2);
+	cairo_line_to (cr, xA, yA);
+	cairo_move_to (cr, x2, y2);
+	cairo_line_to (cr, xB, yB);
+
+	cairo_stroke (cr);	
+}
+
+/***************************************************
+  Draw a line on the screen
+  the origin of the line was stored during the LAST
+  mouse left-click
+ x, y : relative coordinates
+ * flag : remove or not current arrow (xor mode)
+****************************************************/
+static void draw_arrow (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
+{
+  GdkRGBA color;   
+  GtkWidget *pBtnColor; 
+  cairo_t *cr = NULL;
+
+   /* we get the current RGBA color */
+   pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
+   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
+   
+   /* Paint to the surface, where we store our state */
+   cr = cairo_create (data->Sketchsurface);
+   cairo_set_source_rgb (cr, color.red, color.green, color.blue);
+   cairo_set_line_width (cr, pen_width);
+   cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);        
+
+  
+   cairo_move_to (cr, (gdouble) x1_mem_pix, (gdouble) y1_mem_pix);
+   cairo_line_to (cr, x, y);
+   cairo_stroke (cr);
+   /* here we draw arrow end  */
+   draw_arrowHead_open (cr, x1_mem_pix, y1_mem_pix, x, y);
+   cairo_destroy (cr);
+   gtk_widget_queue_draw (data->SketchDrawable); 
+
+}
+
 
 /********************************
   button-release on PDF renderer
@@ -509,7 +610,7 @@ gboolean on_PDF_draw_button_release_callback (GtkWidget *widget, GdkEvent *event
   }
  
   data->button_pressed = FALSE;
-  
+  cursor_normal (data->appWindow);  
   /* get absolute screen coordinates */
   gdk_window_get_origin (gtk_widget_get_window (data->PDFScrollable), &root_xs, &root_ys);
 
@@ -734,9 +835,12 @@ gboolean on_PDF_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, 
         data->w  = 0;
         data->h  = 0;
         data->button_pressed = TRUE;
-        if((data->clipboardMode == PDF_SEL_MODE_HREC) || (data->clipboardMode == PDF_SEL_MODE_PICT)) {
+        if ((data->clipboardMode == PDF_SEL_MODE_HREC) || (data->clipboardMode == PDF_SEL_MODE_PICT)) {
              data->window = create_select_window ();
 	    }
+	    if ((data->clipboardMode ==PDF_SEL_MODE_TEXT)  || (data->clipboardMode ==PDF_SEL_MODE_HIGH)) {
+		 cursor_text_select (data->appWindow);
+        }
         printf ("début select PDF\n");
    }
   }
@@ -877,12 +981,19 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
 gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 
 {
+  gint root_xs, root_ys;
+  GtkWidget *scroll_win;
+  GtkAdjustment* vAdj, *hAdj;
+  gdouble page_size_v, page_size_h;
+
+  
   /* we must check if it's a RIGHT click code==3, left code ==1 middle code=2 */
   if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)  {
-    data->x1 = (gint)event->button.x;/* common to Right click and left click in pencil mode - relative coordinates to current window, drawing area without decorations*/
-    data->y1 = (gint)event->button.y;
-    data->x1_event_root =  event->button.x_root;/* for undo : absolute screen coordinates */
-    data->y1_event_root =  event->button.y_root;
+      data->x1 = (gint)event->button.x;/* common to Right click and left click in pencil mode - relative coordinates to current window, drawing area without decorations*/
+      data->y1 = (gint)event->button.y;
+      data->x1_event_root =  event->button.x_root;/* for undo : absolute screen coordinates */
+      data->y1_event_root =  event->button.y_root;
+ 
     if(event->button.button == 3) {
        data->button_pressed = FALSE;/* yes, to avoid mistakes on drawings */
        GtkMenu *menu;
@@ -891,15 +1002,24 @@ gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *even
        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
        return TRUE;
     }
-    if(data->fPencilTool) {
+    if ((data->fPencilTool) || (data->fLineTool)) {
         data->button_pressed = TRUE;
+        /* for arrows we use a clean pixbuf */        
+        x1_mem_pix = event->button.x;
+        y1_mem_pix = event->button.y;
+        w_mem_pix = 1;  /* default for first click */
+        h_mem_pix = 1;      
+
+        if(data->fLineTool) {
+           data->undo.pix = gdk_pixbuf_get_from_surface (data->Sketchsurface,
+                                                         0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT );	    
+        }           
     }
-    else /* are we  in screenshot mode or annotation mode ? */
-      {
-           data->x1 = (gint)event->button.x_root;
-           data->y1 = (gint)event->button.y_root;
-           data->button_pressed = TRUE;
-           data->window = create_select_window();
+    else { /* are we  in screenshot mode or annotation mode ? */
+       data->x1 = (gint)event->button.x_root;
+       data->y1 = (gint)event->button.y_root;
+       data->button_pressed = TRUE;
+       data->window = create_select_window ();
     }
     return TRUE;
   }/* button pressed */
@@ -923,29 +1043,36 @@ gboolean on_sketch_draw_button_release_callback (GtkWidget *widget, GdkEvent *ev
   data->x1_event_root = MIN (data->x1_event_root, event->button.x_root);
   data->y1_event_root = MIN (data->y1_event_root, event->button.y_root);
 
-  if(data->button_pressed) {    
-    if(data->fPencilTool) {
+  if(data->button_pressed) {  // différencier points et fl-=èches pour le undo  
+	  
+	    // undo_push (data->currentStack, OP_SET_ARROW, NULL, data);
+    if((data->fPencilTool) || (data->fLineTool)) {
       data->button_pressed = FALSE;
+      /* if we are in 'line' mode, we have to push for undo line draw */
+      if(data->fLineTool) {
+		  undo_push (data->currentStack, OP_SKETCH_LINE, NULL, data);
+      }
+      
       return TRUE;
     }
     gtk_widget_destroy (GTK_WIDGET(data->window));
     data->button_pressed = FALSE;
     /* annotation mode _ yes I reuse PDF flag to simplify code */
     if(data->clipboardMode == PDF_SEL_MODE_NOTE) {  
-      pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
-      /* we get the current RGBA color */
-      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (pBtnColor), &color);
+		  pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
+		  /* we get the current RGBA color */
+		  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (pBtnColor), &color);
 
-      tmpStr = dialog_add_text_annotation (data->appWindow, "", data);
-      if(tmpStr!=NULL) {
-         draw_text (event->button.x, event->button.y, data, tmpStr);
-      }
-      g_free (tmpStr);
-      return TRUE;
+		  tmpStr = dialog_add_text_annotation (data->appWindow, "", data);
+		  if(tmpStr!=NULL) {
+			 draw_text (event->button.x, event->button.y, data, tmpStr);
+		  }
+		  g_free (tmpStr);
+		  return TRUE;
     }/* endif sel note */
 
     /* we quit if it's a mistake click without any selection */
-    if( data->w>0 && data->h>0) {
+    if (data->w>0 && data->h>0) {
       /* get absolute screen coordinates , it's a request to copy selected area to clipboard */
       gdk_window_get_origin (gtk_widget_get_window (data->SketchScrollable), &root_xs, &root_ys);
       pPixDatas = gdk_pixbuf_get_from_window (gtk_widget_get_window (data->SketchScrollable),
@@ -966,18 +1093,58 @@ gboolean on_sketch_draw_button_release_callback (GtkWidget *widget, GdkEvent *ev
 ******************************************/
 gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 {
- GtkWidget *window = data->window;
- GKeyFile *keyString;
+  gint root_xs, root_ys, x1, y1;
+  cairo_t *cr = NULL;  		
+  GtkWidget *window = data->window;
+  GKeyFile *keyString;
 
- keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
- if(data->button_pressed) {
+  if (data->button_pressed) {
    data->x1_event_root = MIN (data->x1_event_root, event->button.x_root);
    data->y1_event_root = MIN (data->y1_event_root, event->button.y_root);
 
-   if(data->fPencilTool) {
+
+   if ((data->fPencilTool) || (data->fLineTool)) {
         if (data->button_pressed)  {
-          draw_brush (event->button.x, event->button.y, data, g_key_file_get_double(keyString, "sketch", "pen-width", NULL));
+		  if (data->fPencilTool) {printf ("pencil \n");
+              draw_brush (event->button.x, event->button.y, data, g_key_file_get_double (keyString, "sketch", "pen-width", NULL));
+          }
+		  if (data->fLineTool) { 
+			  /* prepare restore background */ 
+			  if(w_mem_pix < 0) {
+				x1 = x1_mem_pix - w_mem_pix;
+			  }
+              else {
+				  x1 = x1_mem_pix;
+			  }
+			  
+			  if(h_mem_pix < 0) {
+				y1 = y1_mem_pix - h_mem_pix;
+		      }
+		      else {
+				y1 = y1_mem_pix;
+			  }
+			  			  
+		  //    printf ("arropw paste précédent  widfth %d  hih =%d \n", w_mem_pix, h_mem_pix);
+		      
+		      /* Paint to the surface, where we store our state */
+              cr = cairo_create (data->Sketchsurface);
+			  /*  paste previous "clean" background image */           
+	          gdk_cairo_set_source_pixbuf (cr, data->undo.pix, 0, 0);
+	          cairo_paint (cr);
+	          cairo_destroy (cr);
+			  gtk_widget_queue_draw (data->SketchDrawable);
+		   			  
+			  /* we get cleaned background, but with new dimensions */
+			  /* we have to compute various values */
+			  x2_xor_last = event->button.x;
+			  y2_xor_last = event->button.y;
+			  w_mem_pix = x2_xor_last - x1_mem_pix; /* more easy with negative values */
+              h_mem_pix = y2_xor_last - y1_mem_pix;                       			  
+			//  printf ("avant arrow width =%d  high =%d \n", w_mem_pix, h_mem_pix);
+              draw_arrow (x2_xor_last, y2_xor_last, data, g_key_file_get_double (keyString, "sketch", "pen-width", NULL));
+          }          
           return TRUE;
         } 
    }
@@ -993,7 +1160,7 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
       if (data->w <= 0 || data->h <= 0) {
          gtk_window_move (GTK_WINDOW (window), -100, -100);
          gtk_window_resize (GTK_WINDOW (window), 10, 10);
-        return TRUE;
+         return TRUE;
       }
       gtk_window_move (GTK_WINDOW (window), data->x1, data->y1);
       gtk_window_resize (GTK_WINDOW (window), data->w, data->h);
@@ -1003,8 +1170,8 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
          if (data->w> 2 && data->h > 2) {
              cairo_region_t *region;
              cairo_rectangle_int_t region_rect = {
-               0, 0,
-               data->w, data->h
+                                            0, 0,
+                                            data->w, data->h
              };
 
              region = cairo_region_create_rectangle (&region_rect);
@@ -1017,8 +1184,9 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
              gdk_window_shape_combine_region (gdkwindow, region, 0, 0);
              cairo_region_destroy (region);
          }
-         else
+         else {
            gdk_window_shape_combine_region (gdkwindow, NULL, 0, 0);
+         }
       }/* if paintable */
     return TRUE;
     }/* screenshot mode */
@@ -1038,7 +1206,7 @@ gboolean on_sketch_draw_enter_event_callback (GtkWidget *widget, GdkEvent *event
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
   printf ("je rentre dans la zone de dessin ! \n");
-  if(data->fPencilTool) {
+  if(data->fPencilTool  || data->fLineTool) {
 	 cursor_dot_pencil (data->appWindow);
   }	
   else {

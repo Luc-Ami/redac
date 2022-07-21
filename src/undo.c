@@ -43,7 +43,7 @@ static void undo_free_last_data (APP_data *data)
 }
 
 
-static gint get_undo_current_op_code(APP_data *data)
+static gint get_undo_current_op_code (APP_data *data)
 {
   gint ret=OP_NONE;
   undo_datas *tmp_undo_datas;
@@ -55,7 +55,7 @@ static gint get_undo_current_op_code(APP_data *data)
 }
 
 
-static void update_undo_tooltip( gint op, APP_data *data)
+static void update_undo_tooltip (gint op, APP_data *data)
 {
  if(g_list_length (data->undoList) > 0) {
   /* we change the [undo] button tooltip text according to the current "push" */
@@ -196,6 +196,10 @@ static void update_undo_tooltip( gint op, APP_data *data)
       gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last drawing inside sketch"));
       break;
     }
+    case OP_SKETCH_LINE: {
+      gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last line drawing inside sketch"));
+      break;
+    }
     case OP_PASTE_PIXBUF: {
       gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last image pasting inside sketch"));
       break;
@@ -214,22 +218,25 @@ static void update_undo_tooltip( gint op, APP_data *data)
  }
 }
 
-static void undo_free_first_data(APP_data *data)
+static void undo_free_first_data (APP_data *data)
 {
    GList *l= g_list_first (data->undoList);
    undo_datas *tmp_undo_datas;
    tmp_undo_datas = (undo_datas *)l->data;
 // printf("avant annot dans free first \n");
+
    if(tmp_undo_datas->annotStr != NULL)
          g_free (tmp_undo_datas->annotStr);
 // printf("apres annot dans free first et avant serial\n");
+
    if(tmp_undo_datas->serialized_buffer != NULL) {
      g_free (tmp_undo_datas->serialized_buffer);
      tmp_undo_datas->serialized_buffer = NULL;
    }
-   if(tmp_undo_datas->pix != NULL)
+   
+   if(tmp_undo_datas->pix != NULL)  {
          g_object_unref (tmp_undo_datas->pix);  
-
+   }
 // printf("apres serial dans free first \n");
    g_free (tmp_undo_datas);
    data->undoList = g_list_delete_link (data->undoList, l);  
@@ -284,7 +291,7 @@ static void undo_push_PDF (gint op, PopplerAnnot *tmpAnnot, APP_data *data)
   tmp_undo_datas = g_malloc (sizeof(undo_datas));
   /* store values from quasi global var */
   *tmp_undo_datas = data->undo;
-  tmp_undo_datas->annotStr = g_strdup_printf("%s", data->undo.annotStr);
+  tmp_undo_datas->annotStr = g_strdup_printf ("%s", data->undo.annotStr);
 //  my_annot = g_malloc(sizeof(PopplerAnnot));
   tmp_undo_datas->annot = tmpAnnot;
   data->undoList = g_list_append (data->undoList, tmp_undo_datas);
@@ -300,8 +307,9 @@ static void undo_push_sketch (gint op, APP_data *data)
   if (undo_list_len >= MAX_UNDO_OPERATIONS) {
     printf("* Redac : Undo buffer is full, I delete the first element *\n");
     // remove first element 
-    if(data->undoList != NULL)
+    if(data->undoList != NULL) {
        undo_free_first_data (data);
+    }
   }
 
   data->undo.opCode = op;
@@ -739,7 +747,11 @@ static void undo_pop_sketch (gint op, APP_data *data)
       gdk_cairo_set_source_pixbuf (cr, tmp_undo_datas->pix, tmp_undo_datas->x1, tmp_undo_datas->y1);
       break;
     }
-    default:{
+    case OP_SKETCH_LINE: {
+	  gdk_cairo_set_source_pixbuf (cr, tmp_undo_datas->pix, 0, 0);	
+      break;
+    }
+    default: {
       printf("* Redac : Something is wrong with Sketch UNDO engine *\n");
     }   
 

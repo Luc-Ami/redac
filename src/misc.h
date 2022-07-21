@@ -74,7 +74,8 @@ typedef struct {
   GtkBuilder  *builder;
   GtkBuilder  *tmpBuilder;
   gboolean    button_pressed;
-  gboolean    fPencilTool;
+  gboolean    fPencilTool; /* for sketch */
+  gboolean    fLineTool; /* for sketch line and arrow */
   gboolean    fDarkTheme;
   gboolean    fPdfLoaded;
   gboolean    fAudioLoaded;
