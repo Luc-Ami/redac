@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 
+<!-- Generated with glade 3.18.3 
 
 Copyright (C) 
 
@@ -26,238 +26,225 @@ along with .  If not, see <http://www.gnu.org/licenses/>.
     <property name="lower">1</property>
     <property name="upper">10</property>
     <property name="value">5</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjRunTimer">
     <property name="lower">1</property>
     <property name="upper">50</property>
     <property name="value">25</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPort">
     <property name="upper">1000</property>
     <property name="value">465</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="jumpGap_adj">
     <property name="lower">1</property>
     <property name="upper">600</property>
     <property name="value">10</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="pen_width_adj">
     <property name="lower">1</property>
     <property name="upper">20</property>
     <property name="value">1</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="rewGap_adj">
     <property name="lower">2</property>
     <property name="upper">10</property>
     <property name="value">2</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkNotebook" id="notebook1">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
-    <property name="margin-left">4</property>
-    <property name="margin-right">4</property>
-    <property name="margin-top">4</property>
-    <property name="margin-bottom">4</property>
+    <property name="can_focus">True</property>
+    <property name="margin_left">4</property>
+    <property name="margin_right">4</property>
+    <property name="margin_top">4</property>
+    <property name="margin_bottom">4</property>
     <child>
-      <!-- n-columns=3 n-rows=4 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="margin-left">6</property>
-        <property name="margin-right">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
+        <property name="margin_right">6</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">6</property>
         <child>
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Save current editor document every 5 minutes</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="configAutoSave">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="xalign">0</property>
-            <property name="draw-indicator">True</property>
+            <property name="draw_indicator">True</property>
             <child>
               <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label8">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Reload last used PDF at program's start </property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="configAutoReloadPDF">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="tooltip-text" translatable="yes">If available in your system, the last PDF document used will be automatically
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">If available in your system, the last PDF document used will be automatically
  reload when the programm starts.</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="xalign">0.029999999329447746</property>
-            <property name="draw-indicator">True</property>
+            <property name="draw_indicator">True</property>
             <child>
               <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="configPromptQuit">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="tooltip-text" translatable="yes">Force a prompt before quit program. Take it easy, your work will be automatically saved
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">Force a prompt before quit program. Take it easy, your work will be automatically saved
 whatever you check or not this option.</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="xalign">0</property>
-            <property name="draw-indicator">True</property>
+            <property name="draw_indicator">True</property>
             <child>
               <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="has-tooltip">True</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Ask before overwriting files</property>
-            <property name="use-markup">True</property>
+            <property name="use_markup">True</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="configPromptOverwrite">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="tooltip-text" translatable="yes">Force a prompt before any files are overwrote</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">Force a prompt before any files are overwrote</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="xalign">0</property>
-            <property name="draw-indicator">True</property>
+            <property name="draw_indicator">True</property>
             <child>
               <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label10">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="has-tooltip">True</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Ask before quit program</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
     <child type="tab">
       <object class="GtkBox" id="box3">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkImage" id="image3">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">4</property>
-            <property name="margin-bottom">4</property>
-            <property name="icon-name">document-save</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">4</property>
+            <property name="margin_bottom">4</property>
+            <property name="icon_name">document-save</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -268,13 +255,13 @@ whatever you check or not this option.</property>
         <child>
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">2</property>
-            <property name="margin-right">2</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">File management</property>
-            <property name="single-line-mode">True</property>
+            <property name="single_line_mode">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -284,124 +271,114 @@ whatever you check or not this option.</property>
         </child>
       </object>
       <packing>
-        <property name="tab-fill">False</property>
+        <property name="tab_fill">False</property>
       </packing>
     </child>
     <child>
-      <!-- n-columns=3 n-rows=3 -->
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="has-tooltip">True</property>
-        <property name="margin-left">4</property>
-        <property name="margin-right">4</property>
-        <property name="margin-top">4</property>
-        <property name="margin-bottom">4</property>
+        <property name="can_focus">False</property>
+        <property name="has_tooltip">True</property>
+        <property name="margin_left">4</property>
+        <property name="margin_right">4</property>
+        <property name="margin_top">4</property>
+        <property name="margin_bottom">4</property>
         <child>
           <object class="GtkLabel" id="label7">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Text foreground color:</property>
             <property name="ellipsize">end</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkColorButton" id="color_button_editor_fg">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Click here yo choose a color</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Click here yo choose a color</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="rgba">rgb(0,0,0)</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label9">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Text font:</property>
             <property name="ellipsize">end</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkFontButton" id="font_button_editor">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Click here to choose a font</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Click here to choose a font</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="font">Sans 12</property>
-            <property name="preview-text"/>
+            <property name="preview_text"/>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Text background color:</property>
             <property name="ellipsize">end</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkColorButton" id="color_button_editor_bg">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Click here yo choose a color</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Click here yo choose a color</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="rgba">rgb(0,0,0)</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>
@@ -411,18 +388,18 @@ whatever you check or not this option.</property>
     <child type="tab">
       <object class="GtkBox" id="box4">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkImage" id="image4">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">4</property>
-            <property name="margin-bottom">4</property>
-            <property name="icon-name">accessories-text-editor</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">4</property>
+            <property name="margin_bottom">4</property>
+            <property name="icon_name">accessories-text-editor</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -433,11 +410,11 @@ whatever you check or not this option.</property>
         <child>
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">2</property>
-            <property name="margin-right">2</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Editor</property>
           </object>
           <packing>
@@ -449,81 +426,65 @@ whatever you check or not this option.</property>
       </object>
       <packing>
         <property name="position">1</property>
-        <property name="tab-fill">False</property>
+        <property name="tab_fill">False</property>
       </packing>
     </child>
     <child>
-      <!-- n-columns=3 n-rows=3 -->
       <object class="GtkGrid" id="grid4">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="margin-left">4</property>
-        <property name="margin-right">4</property>
-        <property name="margin-top">4</property>
-        <property name="margin-bottom">4</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">4</property>
+        <property name="margin_right">4</property>
+        <property name="margin_top">4</property>
+        <property name="margin_bottom">4</property>
         <child>
           <object class="GtkLabel" id="label23">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Document paper color : </property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label24">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">&lt;i&gt;(Please reload PDF document to complete operation)&lt;/i&gt;</property>
-            <property name="use-markup">True</property>
+            <property name="use_markup">True</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
             <property name="width">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkColorButton" id="color_button_PDF_bg">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Click here yo choose a color</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Click here yo choose a color</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="rgba">rgb(0,0,0)</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>
@@ -533,19 +494,19 @@ whatever you check or not this option.</property>
     <child type="tab">
       <object class="GtkBox" id="box5">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="has-tooltip">True</property>
+        <property name="can_focus">False</property>
+        <property name="has_tooltip">True</property>
         <property name="orientation">vertical</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkImage" id="image5">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">4</property>
-            <property name="margin-bottom">4</property>
-            <property name="icon-name">application-pdf</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">4</property>
+            <property name="margin_bottom">4</property>
+            <property name="icon_name">application-pdf</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -556,11 +517,11 @@ whatever you check or not this option.</property>
         <child>
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">2</property>
-            <property name="margin-right">2</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">PDF document</property>
           </object>
           <packing>
@@ -572,123 +533,171 @@ whatever you check or not this option.</property>
       </object>
       <packing>
         <property name="position">2</property>
-        <property name="tab-fill">False</property>
+        <property name="tab_fill">False</property>
       </packing>
     </child>
     <child>
-      <!-- n-columns=3 n-rows=4 -->
       <object class="GtkGrid" id="grid3">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">4</property>
+        <property name="margin_right">4</property>
+        <property name="margin_top">4</property>
+        <property name="margin_bottom">4</property>
         <child>
           <object class="GtkLabel" id="label14">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Annotation text font:</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label15">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Pen width in pixels :</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkFontButton" id="font_button_sketch">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Click here to choose a font</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Click here to choose a font</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="font">Sans 12</property>
-            <property name="preview-text"/>
+            <property name="preview_text"/>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkSpinButton" id="pen_width_Spin">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="text" translatable="yes">25</property>
             <property name="adjustment">pen_width_adj</property>
             <property name="digits">1</property>
             <property name="value">1</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can_focus">False</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">&lt;i&gt;(Remain unchanged until you clear sketch)&lt;/i&gt;</property>
-            <property name="use-markup">True</property>
+            <property name="use_markup">True</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
             <property name="width">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label13">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Paper color : </property>
+            <property name="ellipsize">end</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkColorButton" id="color_button_sketch_bg">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Click here yo choose a color</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Click here yo choose a color</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="rgba">rgb(0,0,0)</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkLabel" id="label18">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
+            <property name="label" translatable="yes">Lines have final arrow :</property>
+            <property name="xalign">1</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
+          <object class="GtkCheckButton" id="checkbuttonFinalArrow">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">If checked, an arrow will end lines</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
+            <property name="xalign">0.019999999552965164</property>
+            <property name="active">True</property>
+            <property name="draw_indicator">True</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+          </packing>
         </child>
       </object>
       <packing>
@@ -698,19 +707,19 @@ whatever you check or not this option.</property>
     <child type="tab">
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="has-tooltip">True</property>
+        <property name="can_focus">False</property>
+        <property name="has_tooltip">True</property>
         <property name="orientation">vertical</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkImage" id="image1">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">4</property>
-            <property name="margin-bottom">4</property>
-            <property name="icon-name">applications-graphics</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">4</property>
+            <property name="margin_bottom">4</property>
+            <property name="icon_name">applications-graphics</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -721,11 +730,11 @@ whatever you check or not this option.</property>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">2</property>
-            <property name="margin-right">2</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Sketch</property>
           </object>
           <packing>
@@ -737,95 +746,79 @@ whatever you check or not this option.</property>
       </object>
       <packing>
         <property name="position">3</property>
-        <property name="tab-fill">False</property>
+        <property name="tab_fill">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="box8">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="margin-left">4</property>
-        <property name="margin-right">4</property>
-        <property name="margin-top">4</property>
-        <property name="margin-bottom">4</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">4</property>
+        <property name="margin_right">4</property>
+        <property name="margin_top">4</property>
+        <property name="margin_bottom">4</property>
         <property name="orientation">vertical</property>
         <child>
-          <!-- n-columns=3 n-rows=3 -->
           <object class="GtkGrid" id="grid5">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkLabel" id="label16">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can_focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;Play/pause rewind jump in seconds.&lt;/b&gt;
 &lt;i&gt;Minimum : 1sec, maximum 10 secs.&lt;/i&gt;</property>
-                <property name="use-markup">True</property>
+                <property name="use_markup">True</property>
                 <property name="xalign">1</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label17">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can_focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;Back or forward jump in seconds.&lt;/b&gt;
 &lt;i&gt;Minimum : 10sec, maximum 600 secs (10 minutes).&lt;/i&gt;</property>
-                <property name="use-markup">True</property>
+                <property name="use_markup">True</property>
                 <property name="xalign">1</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="rewGapSpin">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-top">2</property>
-                <property name="margin-bottom">2</property>
+                <property name="can_focus">True</property>
+                <property name="margin_top">2</property>
+                <property name="margin_bottom">2</property>
                 <property name="text" translatable="yes">2</property>
                 <property name="adjustment">rewGap_adj</property>
                 <property name="value">2</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="jumpGapSpin">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-top">2</property>
-                <property name="margin-bottom">2</property>
+                <property name="can_focus">True</property>
+                <property name="margin_top">2</property>
+                <property name="margin_bottom">2</property>
                 <property name="text" translatable="yes">1</property>
                 <property name="adjustment">jumpGap_adj</property>
                 <property name="value">1</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
@@ -838,12 +831,12 @@ whatever you check or not this option.</property>
           <object class="GtkCheckButton" id="configAutoRewindPlayer">
             <property name="label" translatable="yes">Auto rewind to start after playing completed.</property>
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="xalign">0</property>
-            <property name="draw-indicator">True</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -859,19 +852,19 @@ whatever you check or not this option.</property>
     <child type="tab">
       <object class="GtkBox" id="box7">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="has-tooltip">True</property>
+        <property name="can_focus">False</property>
+        <property name="has_tooltip">True</property>
         <property name="orientation">vertical</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkImage" id="imagetimer">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">4</property>
-            <property name="margin-right">4</property>
-            <property name="margin-top">4</property>
-            <property name="margin-bottom">4</property>
-            <property name="icon-name">audio-x-generic</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_top">4</property>
+            <property name="margin_bottom">4</property>
+            <property name="icon_name">audio-x-generic</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -882,11 +875,11 @@ whatever you check or not this option.</property>
         <child>
           <object class="GtkLabel" id="label29">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-left">2</property>
-            <property name="margin-right">2</property>
-            <property name="margin-top">2</property>
-            <property name="margin-bottom">2</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">2</property>
+            <property name="margin_right">2</property>
+            <property name="margin_top">2</property>
+            <property name="margin_bottom">2</property>
             <property name="label" translatable="yes">Audio</property>
           </object>
           <packing>
@@ -898,7 +891,7 @@ whatever you check or not this option.</property>
       </object>
       <packing>
         <property name="position">4</property>
-        <property name="tab-fill">False</property>
+        <property name="tab_fill">False</property>
       </packing>
     </child>
   </object>

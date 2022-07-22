@@ -567,7 +567,13 @@ static void draw_arrow (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
   GdkRGBA color;   
   GtkWidget *pBtnColor; 
   cairo_t *cr = NULL;
-
+  GKeyFile *keyString;
+  gint line_end_val;
+     
+   /* current values */
+   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+   line_end_val = g_key_file_get_integer (keyString, "sketch", "line-end", NULL);
+        
    /* we get the current RGBA color */
    pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
    gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
@@ -583,7 +589,9 @@ static void draw_arrow (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
    cairo_line_to (cr, x, y);
    cairo_stroke (cr);
    /* here we draw arrow end  */
-   draw_arrowHead_open (cr, x1_mem_pix, y1_mem_pix, x, y);
+   if(line_end_val == SKETCH_LINE_END_ARROW_OPEN) {
+      draw_arrowHead_open (cr, x1_mem_pix, y1_mem_pix, x, y);
+   }
    cairo_destroy (cr);
    gtk_widget_queue_draw (data->SketchDrawable); 
 
@@ -981,11 +989,7 @@ gboolean on_PDF_draw_motion_event_callback (GtkWidget *widget, GdkEvent  *event,
 gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 
 {
-  gint root_xs, root_ys;
-  GtkWidget *scroll_win;
-  GtkAdjustment* vAdj, *hAdj;
-  gdouble page_size_v, page_size_h;
-
+  gint root_xs, root_ys;    
   
   /* we must check if it's a RIGHT click code==3, left code ==1 middle code=2 */
   if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)  {
@@ -1294,15 +1298,16 @@ callback : button "prefs" clicked
 **************************************/
 
 void
-on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
+on_prefs_clicked (GtkButton  *button, APP_data *data_app)
 {
   GtkWidget *dialog;
   GdkRGBA text_color_bg, text_color_fg, sketch_color_bg;   
-  GtkWidget *pBtnColor; 
+  GtkWidget *pBtnColor, *end_line_sketch; 
   GKeyFile *keyString;
   gchar *newFont;
   gdouble rewValue, jumpValue, pen_width;
-  gint ret;
+  gint ret, line_end_val;
+  gboolean fLineEnd = FALSE;
 
   dialog = create_prefs_dialog (data_app->appWindow, data_app);
   ret = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -1318,6 +1323,10 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
 
     pBtnColor = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "color_button_sketch_bg"));
     gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &sketch_color_bg);
+    /* line end for sketches */
+    end_line_sketch = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "checkbuttonFinalArrow"));
+    fLineEnd = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (end_line_sketch));
+
     /* we setup config file */
     keyString = g_object_get_data (G_OBJECT(data_app->appWindow), "config"); 
 
@@ -1370,6 +1379,12 @@ on_prefs_clicked  (GtkButton  *button, APP_data *data_app)
     g_key_file_set_double (keyString, "sketch", "paper.color.green", sketch_color_bg.green);
     g_key_file_set_double (keyString, "sketch", "paper.color.blue", sketch_color_bg.blue);
 
+    if(fLineEnd) {
+		g_key_file_set_integer (keyString, "sketch", "line-end", SKETCH_LINE_END_ARROW_OPEN);
+    }
+    else {
+		g_key_file_set_integer (keyString, "sketch", "line-end", SKETCH_LINE_END_NONE);
+    }
 
     pen_width = 
          gtk_spin_button_get_value (

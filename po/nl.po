@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Redac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 08:34+0200\n"
+"POT-Creation-Date: 2022-07-22 14:19+0200\n"
 "PO-Revision-Date: 2021-05-13 13:33+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: nl\n"
@@ -18,12 +18,16 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ui/main.ui:325
+msgid "   "
+msgstr "   "
+
 #: mttfiles.c:101 mttfiles.c:155
 #, c-format
 msgid " %s settings auto-generated - Do not edit!"
 msgstr " %s-instellingen zijn automatisch gegenereerd - bewerk ze niet!"
 
-#: misc.c:691
+#: misc.c:718
 #, c-format
 msgid ""
 " <span font=\"11\" foreground=\"white\" background=\"#2C8A3C\"><b>SHIFT</b></"
@@ -34,35 +38,51 @@ msgstr ""
 "span> + <span font=\"11\" foreground=\"white\" background=\"#15142B\"><b> %s "
 "</b></span>"
 
-#: callbacks.c:2287 callbacks.c:2354
+#: callbacks.c:2470 callbacks.c:2537
 #, c-format
 msgid "%d hits"
 msgstr "%d treffers"
 
-#: callbacks.c:211 callbacks.c:3020
+#: callbacks.c:221 callbacks.c:3203
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: misc.c:964 pdf.c:743 pdf.c:750
+#: misc.c:993 pdf.c:743 pdf.c:750 ui/main.ui:675
 msgid "---"
 msgstr "---"
 
-#: misc.c:183 misc.c:280 misc.c:361
+#: ui/main.ui:441
+msgid "--hits"
+msgstr "--hits"
+
+#: misc.c:182 misc.c:287 misc.c:382
 msgid "0 hits"
 msgstr "0 treffers"
 
-#: interface.c:1129
+#: ui/settings1.ui:806 ui/settings.ui:814
+msgid "1"
+msgstr "1"
+
+#: ui/settings1.ui:791 ui/settings.ui:799
+msgid "2"
+msgstr "2"
+
+#: ui/settings1.ui:629 ui/settings.ui:605
+msgid "25"
+msgstr "25"
+
+#: interface.c:1133
 #, fuzzy
 msgid "<b><big>Alignment</big></b>"
 msgstr "<b><big>Uitlijning</big></b>"
 
-#: interface.c:1147
+#: interface.c:1151
 #, fuzzy
 msgid "<b><big>Application</big></b>"
 msgstr "<b><big>Toepassing</big></b>"
 
-#: mttfiles.c:992
+#: mttfiles.c:999
 #, c-format
 msgid ""
 "<b><big>Can't proceeed !</big></b>\n"
@@ -79,20 +99,36 @@ msgstr ""
 "\n"
 "is geen geldig audiobestand!"
 
-#: interface.c:1120
+#: interface.c:1124
 #, fuzzy
 msgid "<b><big>Format</big></b>"
 msgstr "<b><big>Formaat</big></b>"
 
-#: interface.c:1138
+#: interface.c:1142
 msgid "<b><big>PDF-Sketch</big></b>"
 msgstr "<b><big>PDF-schets</big></b>"
 
-#: interface.c:1669
+#: ui/settings1.ui:775 ui/settings.ui:783
+msgid ""
+"<b>Back or forward jump in seconds.</b>\n"
+"<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"
+msgstr ""
+"<b>De terug-/vooruitspoelduur, in seconden.</b>\n"
+"<i>Minimaal 10 sec. - Maximaal 600 sec. (10 minuten).</i>"
+
+#: interface.c:1672
 msgid "<b>Current position :</b>"
 msgstr "<b>Huidige positie:</b>"
 
-#: callbacks.c:3724
+#: ui/settings1.ui:761 ui/settings.ui:769
+msgid ""
+"<b>Play/pause rewind jump in seconds.</b>\n"
+"<i>Minimum : 1sec, maximum 10 secs.</i>"
+msgstr ""
+"<b>De afspeel-/pauzeerterugspoelduur, in seconden.</b>\n"
+"<i>Minimaal 1 sec. - Maximaal 10 sec.</i>"
+
+#: callbacks.c:3907
 msgid ""
 "<big><b>Can't access to online wiki !</b></big>\n"
 "Please, check your Internet connection\n"
@@ -102,12 +138,22 @@ msgstr ""
 "Controleer uw internetverbinding\n"
 " en/of de opstartopties van uw webbrowser."
 
-#: interface.c:1676
+#: interface.c:1679
 #, c-format
 msgid "<i> %s of %s</i>"
 msgstr "<i> %s van %s</i>"
 
-#: interface.c:1685
+#: ui/settings1.ui:488 ui/settings.ui:464
+#, fuzzy
+msgid "<i>(Please reload PDF document to complete operation)</i>"
+msgstr "<i>(herlaad het pdf-bestand om de handeling af te ronden)</i>"
+
+#: ui/settings1.ui:643 ui/settings.ui:621
+#, fuzzy
+msgid "<i>(Remain unchanged until you clear sketch)</i>"
+msgstr "<i>(blijft ongewijzigd totdat u uw schets wist)</i>"
+
+#: interface.c:1688
 msgid ""
 "<i><b>\n"
 "New position : </b></i>"
@@ -136,7 +182,7 @@ msgstr ""
 "locatie en eerste woorden worden getoond.\n"
 "Klik op de aantekening om deze te herladen…</i>"
 
-#: interface.c:1104
+#: interface.c:1108
 msgid ""
 "<i>Here is the various keys to set-up formatings and so on.\n"
 "When 2 keys are displayed, please keep in mind that\n"
@@ -146,7 +192,7 @@ msgstr ""
 "Als er twee toetsen worden getoond, dan dient u ze\n"
 "tegelijk in te drukken.</i>"
 
-#: interface.c:1661
+#: interface.c:1664
 #, fuzzy
 msgid ""
 "<i>Please choose a time location within the audio file.\n"
@@ -155,27 +201,35 @@ msgstr ""
 "<i>Kies een tijdstempel binnen het audiobestand.\n"
 "</i>"
 
-#: mttfiles.c:787 mttfiles.c:858
+#: mttfiles.c:794 mttfiles.c:865
 #, c-format
 msgid "<small><b>%s-<span foreground=\"green\">saved</span></b></small>"
 msgstr "<small><b>%s-<span foreground=\"green\">opgeslagen</span></b></small>"
 
-#: callbacks.c:213
+#: callbacks.c:223
 #, c-format
 msgid "<small><b>%s-<span foreground=\"red\">modified</span></b></small>"
 msgstr "<small><b>%s-<span foreground=\"red\">bewerkt</span></b></small>"
 
-#: interface.c:1941 mttfiles.c:685 mttfiles.c:1384
+#: interface.c:1944 mttfiles.c:692 mttfiles.c:1391
 #, c-format
 msgid "<small><b>%s</b></small>"
 msgstr "<small><b>%s</b></small>"
 
-#: mttfiles.c:611
+#: mttfiles.c:618
 #, c-format
 msgid "<small><b><span foreground=\"green\">Loaded</span>-%s</b></small>"
 msgstr "<small><b><span foreground=\"green\">Geladen</span>-%s</b></small>"
 
-#: interface.c:486
+#: ui/main.ui:731
+msgid "<small><b>noname</b></small>"
+msgstr "<small><b>naamloos</b></small>"
+
+#: ui/main.ui:246
+msgid "About Redac ..."
+msgstr "Over Redac…"
+
+#: interface.c:492
 msgid ""
 "Align to center \n"
 "the whole current paragraph."
@@ -183,7 +237,7 @@ msgstr ""
 "Centreer de \n"
 "gehele paragraaf."
 
-#: interface.c:480
+#: interface.c:486
 msgid ""
 "Align to left \n"
 "the whole current paragraph."
@@ -191,7 +245,7 @@ msgstr ""
 "Lijn de gehele \n"
 "paragraaf links uit."
 
-#: interface.c:493
+#: interface.c:499
 msgid ""
 "Align to right \n"
 "the whole current paragraph."
@@ -199,11 +253,27 @@ msgstr ""
 "Lijn de gehele \n"
 "paragraaf rechts uit."
 
-#: interface.c:243
+#: interface.c:247
 msgid "Annotation _color ... "
 msgstr "Aantekeningskleur… "
 
-#: interface.c:458
+#: ui/settings1.ui:587 ui/settings.ui:555
+msgid "Annotation text font:"
+msgstr "Aantekeningslettertype:"
+
+#: ui/main.ui:776
+msgid ""
+"Application main menu.\n"
+"Shortkey <CTRL>+<M>"
+msgstr ""
+"Hoofdmenu.\n"
+"Sneltoets <CTRL>+<M>"
+
+#: ui/main.ui:745
+msgid "Application settings."
+msgstr "Toepassingsinstellingen."
+
+#: interface.c:464
 msgid ""
 "Apply highlighting \n"
 "for current selection\n"
@@ -213,37 +283,69 @@ msgstr ""
 "huidige selectie\n"
 "of nieuw ingevoerde tekst."
 
-#: mttfiles.c:972
+#: ui/settings1.ui:185 ui/settings.ui:184
+msgid "Ask before overwriting files"
+msgstr "Vragen alvorens bestanden te overschrijven"
+
+#: ui/settings1.ui:224 ui/settings.ui:223
+msgid "Ask before quit program"
+msgstr "Vragen alvorens af te sluiten"
+
+#: ui/main.ui:179 ui/settings1.ui:890 ui/settings.ui:883
+msgid "Audio"
+msgstr "Audio"
+
+#: mttfiles.c:979
 msgid "Audio files"
 msgstr "Audiobestanden"
 
-#: interface.c:1156
+#: ui/settings1.ui:839 ui/settings.ui:832
+msgid "Auto rewind to start after playing completed."
+msgstr "Spoel automatisch terug naar het begin als het afspelen is afgerond."
+
+#: ui/main.ui:627
+msgid ""
+"Automatic background saving of your work (editor part)\n"
+"is activated."
+msgstr ""
+"Automatisch opslaan van de achtergrond (in de bewerker)\n"
+"is ingeschakeld."
+
+#: ui/main.ui:642
+msgid ""
+"Automatic rewind to start of media after playing\n"
+"is activated."
+msgstr ""
+"Automatisch terugspoelen als het afspelen is afgerond\n"
+"is ingeschakeld."
+
+#: interface.c:1160
 msgid "Bold"
 msgstr "Vetgedrukt"
 
-#: interface.c:256 interface.c:320
+#: interface.c:260 interface.c:324
 msgid "C_ancel"
 msgstr "_Annuleren"
 
-#: interface.c:1387
+#: interface.c:1391
 #, fuzzy
 msgid "Call main menu"
 msgstr "Hoofdmenu openen"
 
-#: interface.c:1501 interface.c:1619 paving.c:351 settings.c:69
+#: interface.c:1505 interface.c:1622 paving.c:351 settings.c:70
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: interface.c:1254
+#: interface.c:1258
 #, fuzzy
 msgid "Center"
 msgstr "Centreren"
 
-#: callbacks.c:3322
+#: callbacks.c:3505
 msgid "Choose annotation color ..."
 msgstr "Kies een aantekeningskleur…"
 
-#: interface.c:609
+#: interface.c:637
 msgid ""
 "Choose here the playing speed. 1 for a normal speed,\n"
 "over 1 for a faster speed,\n"
@@ -253,7 +355,16 @@ msgstr ""
 "hoger dan 1 = sneller;\n"
 "lager dan 1 = langzamer."
 
-#: interface.c:598
+#: ui/main.ui:166
+msgid "Clear current sketch"
+msgstr "Huidige schets wissen"
+
+#: ui/settings1.ui:354 ui/settings1.ui:612 ui/settings.ui:340
+#: ui/settings.ui:584
+msgid "Click here to choose a font"
+msgstr "Klik hier om een lettertype te kiezen"
+
+#: interface.c:625
 msgid ""
 "Click here to choose color for :\n"
 "- highlighting of PDF areas.\n"
@@ -265,11 +376,60 @@ msgstr ""
 "-Aantekeningen bij de pdf en schetsen;\n"
 "-De potloodkleur van schetsen."
 
-#: interface.c:667
+#: ui/main.ui:481
+msgid ""
+"Click here to go to the next hit.\n"
+"With PDF documents we jump to next PAGE with hits"
+msgstr ""
+"Klik hier om de volgende treffer te tonen.\n"
+"Binnen pdf-bestanden wordt er naar de volgende pagina met treffers\n"
+"geschakeld."
+
+#: ui/main.ui:524
+msgid ""
+"Click here to replace text.\n"
+"You can't change text inside PDF documents."
+msgstr ""
+"Klik hier om tekst te vervangen.\n"
+"PDF-bestanden kunnen niet worden bewerkt."
+
+#: ui/main.ui:455
+msgid ""
+"Click here to to go to the previous hit.\n"
+"With PDF documents we jump to previous PAGE with hits"
+msgstr ""
+"Klik hier om de vorige treffer te tonen.\n"
+"Binnen pdf-bestanden wordt er naar de vorige pagina met treffers\n"
+"geschakeld."
+
+#: ui/settings1.ui:322 ui/settings1.ui:387 ui/settings1.ui:503
+#: ui/settings1.ui:671 ui/settings.ui:308 ui/settings.ui:373 ui/settings.ui:479
+#: ui/settings.ui:652
+msgid "Click here yo choose a color"
+msgstr "Klik hier om een kleur te kiezen"
+
+#: ui/main.ui:606
+msgid "Click to Zoom in the PDF document."
+msgstr "Klik om het document in te zoomen."
+
+#: ui/main.ui:566
+msgid "Click to Zoom out the PDF document."
+msgstr "Klik om het document uit te zoomen."
+
+#: ui/main.ui:583
+msgid "Click to display the PDF document at its best size."
+msgstr "Klik om het document passend te maken."
+
+#: ui/main.ui:198
+#, fuzzy
+msgid "Close current Audio file"
+msgstr "Huidig audiobestand sluiten"
+
+#: interface.c:695
 msgid "Copy current position in audio file to editor"
 msgstr ""
 
-#: interface.c:549
+#: interface.c:556
 msgid ""
 "Copy selected area inside PDF files\n"
 "to clipboard as pure text."
@@ -277,7 +437,7 @@ msgstr ""
 "Kopieer het selectiegebied naar het\n"
 "klembord als onbewerkte tekst."
 
-#: interface.c:555
+#: interface.c:563
 msgid ""
 "Copy selected area inside PDF files or sketches \n"
 "to clipboard as pure image."
@@ -290,15 +450,15 @@ msgstr ""
 msgid "Couldn't find pixmap file: %s"
 msgstr "Het pixmap-bestand is niet aangetroffen: %s"
 
-#: interface.c:1539
+#: interface.c:1543
 msgid "Current font : "
 msgstr "Huidig lettertype: "
 
-#: settings.c:79
+#: settings.c:80
 msgid "Define global settings for Redac!."
 msgstr "Stel de algemene instellingen van Redac in."
 
-#: callbacks.c:1089
+#: callbacks.c:1261
 msgid ""
 "Do you really want to erase your sketch ?\n"
 "This operation can't be cancelled once done ! "
@@ -306,7 +466,7 @@ msgstr ""
 "Weet u zeker dat u uw schets wilt wissen?\n"
 "Deze handeling kan niet ongedaan worden gemaakt! "
 
-#: mttfiles.c:714
+#: mttfiles.c:721
 msgid ""
 "Do you really want to quit this program ?\n"
 "Take it easy, your work\n"
@@ -316,43 +476,69 @@ msgstr ""
 "Geen zorgen: uw werk wordt\n"
 "automatisch opgeslagen."
 
-#: mttfiles.c:478
+#: ui/settings1.ui:472 ui/settings.ui:448
+msgid "Document paper color : "
+msgstr "Papierkleur: "
+
+#: ui/settings1.ui:441 ui/settings.ui:418
+msgid "Editor"
+msgstr "Bewerker"
+
+#: mttfiles.c:485
 #, c-format
 msgid "Error saving %s: %s\n"
 msgstr "%s kan niet worden opgeslagen: %s\n"
 
-#: interface.c:1262
+#: ui/settings1.ui:276 ui/settings.ui:263
+msgid "File management"
+msgstr "Bestandsbeheer"
+
+#: interface.c:1266
 msgid "Fill"
 msgstr "Opvullen"
 
-#: interface.c:1415
+#: interface.c:1419
 #, fuzzy
 msgid "Find for selected text"
 msgstr "Zoeken naar geselecteerde tekst"
 
-#: interface.c:590
+#: ui/settings1.ui:199 ui/settings.ui:198
+msgid "Force a prompt before any files are overwrote"
+msgstr "Vraag of bestanden overschreven mogen worden"
+
+#: ui/settings1.ui:161 ui/settings.ui:160
+msgid ""
+"Force a prompt before quit program. Take it easy, your work will be "
+"automatically saved\n"
+"whatever you check or not this option."
+msgstr ""
+"Vraag of Redac moet worden afgesloten. Geen zorgen: uw werk wordt\n"
+"automatisch opgeslagen,\n"
+"ook als u deze optie niet aankruist."
+
+#: interface.c:601
 msgid "Freehand drawing tool"
 msgstr "Tekenen uit vrije hand"
 
-#: interface.c:1369
+#: interface.c:1373 ui/main.ui:218
 msgid "Help"
 msgstr "Hulp"
 
-#: interface.c:1064
+#: interface.c:1068
 msgid "Help..."
 msgstr "Hulp…"
 
-#: interface.c:1424
+#: interface.c:1428
 #, fuzzy
 msgid "Hide/show main toolbar"
 msgstr "Hoofdwerkbalk tonen/verbergen"
 
-#: interface.c:1186
+#: interface.c:1190
 #, fuzzy
 msgid "Highlight"
 msgstr "Markeren"
 
-#: interface.c:572
+#: interface.c:582
 msgid ""
 "Highlight selected area inside PDF document. \n"
 "Please don't forget to save your PDF document !"
@@ -360,7 +546,7 @@ msgstr ""
 "Markeer het geselecteerde gebied.\n"
 "Vergeet niet uw document op te slaan!"
 
-#: interface.c:564
+#: interface.c:573
 #, fuzzy
 msgid ""
 "Highlight selected text inside PDF document. \n"
@@ -369,24 +555,42 @@ msgstr ""
 "Markeer het geselecteerde gebied.\n"
 "Vergeet niet uw document op te slaan!"
 
-#: interface.c:1693
+#: interface.c:1696
 msgid "Hour :"
 msgstr "Uur:"
 
-#: callbacks.c:2703
+#: callbacks.c:2886
 msgid "I save you work ... wait a moment, please. "
 msgstr "Uw werk wordt opgeslagen… "
 
-#: misc.c:979
+#: ui/settings1.ui:139 ui/settings.ui:138
+#, fuzzy
+msgid ""
+"If available in your system, the last PDF document used will be "
+"automatically\n"
+" reload when the programm starts."
+msgstr ""
+"Indien beschikbaar wordt het recentst geopende pdf-bestand geladen\n"
+" als u de toepassing opstart."
+
+#: ui/settings.ui:685
+msgid "If checked, an arrow will end lines"
+msgstr ""
+
+#: misc.c:1008
 msgid "Image copied"
 msgstr "De afbeelding is gekopieerd"
 
-#: interface.c:1161
+#: ui/main.ui:83
+msgid "Insert text from a file "
+msgstr "Tekst invoegen uit bestand "
+
+#: interface.c:1165
 #, fuzzy
 msgid "Italic"
 msgstr "Cursief"
 
-#: interface.c:652
+#: interface.c:680
 msgid ""
 "Jump backward in current audio file.\n"
 "Jump's length is defined in 'audio' settings."
@@ -394,7 +598,7 @@ msgstr ""
 "Spoel terug in het huidige audiobestand.\n"
 "De terugspoelduur kan worden ingesteld in de audio-instellingen."
 
-#: interface.c:657
+#: interface.c:685
 msgid ""
 "Jump forward in current audio file.\n"
 "Jump's length is defined in 'audio' settings."
@@ -402,15 +606,15 @@ msgstr ""
 "Spoel vooruit in het huidige audiobestand.\n"
 "De vooruitspoelduur kan worden ingesteld in de audio-instellingen."
 
-#: interface.c:662
+#: interface.c:690
 msgid "Jump to a specifed position within current audio file."
 msgstr "Spoel door naar een opgegeven positie in het huidige audiobestand."
 
-#: interface.c:1616
+#: interface.c:1619
 msgid "Jump to..."
 msgstr "Doorspoelen naar…"
 
-#: interface.c:500
+#: interface.c:506
 msgid ""
 "Justify left AND right \n"
 "the whole current paragraph."
@@ -418,135 +622,190 @@ msgstr ""
 "Vul de gehele \n"
 "paragraaf links én rechts uit."
 
-#: interface.c:1073
+#: interface.c:1077
 msgid "Keyboard shortcuts"
 msgstr "Sneltoetsen"
 
-#: interface.c:1250
+#: ui/main.ui:228
+msgid "Keyboard shortcuts ..."
+msgstr "Sneltoetsen…"
+
+#: interface.c:1254
 msgid "Left"
 msgstr "Links"
 
-#: interface.c:1405
+#: ui/settings.ui:672
+msgid "Lines have final arrow :"
+msgstr ""
+
+#: ui/main.ui:189
+#, fuzzy
+msgid "Load Audio file ..."
+msgstr "Audiobestand openen…"
+
+#: interface.c:1409
 #, fuzzy
 msgid "Load PDF file "
 msgstr "_PDF-bestand openen…"
 
-#: interface.c:1699
+#: ui/main.ui:125
+#, fuzzy
+msgid "Load _PDF file ..."
+msgstr "_PDF-bestand openen…"
+
+#: ui/main.ui:102
+msgid "Merge with a _note ..."
+msgstr "Samenvoegen met aa_ntekening…"
+
+#: interface.c:1702
 msgid "Minute :"
 msgstr "Minuut:"
 
-#: interface.c:1498
+#: interface.c:1502
 msgid "New Annotation ..."
 msgstr "Nieuwe aantekening…"
 
-#: misc.c:471
+#: ui/main.ui:32
+msgid "New note"
+msgstr "Nieuwe aantekening"
+
+#: misc.c:498
 msgid "No PDF Document"
 msgstr "Geen pdf-document"
 
-#: interface.c:1763
+#: interface.c:1766
 msgid "Note  utility written in GTK+ and licensed under GPL v.3"
 msgstr ""
 "Een aantekeningstoepassing, gemaakt met GTK+ en uitgebracht onder de GPLv3-"
 "licentie"
 
-#: interface.c:1852
+#: interface.c:1855
 msgid "Notes"
 msgstr "Aantekeningen"
 
-#: undo.c:213
+#: undo.c:217
 msgid "Nothing to undo"
 msgstr "Er valt niks ongedaan te maken"
 
-#: interface.c:1067 interface.c:1503 interface.c:1621 settings.c:71
+#: interface.c:1071 interface.c:1507 interface.c:1624 settings.c:72
 msgid "Ok"
 msgstr "Oké"
 
-#: mttfiles.c:1111
+#: ui/main.ui:237
+msgid "Online _Wiki ..."
+msgstr "Online-_wiki…"
+
+#: mttfiles.c:1118
 #, fuzzy
 msgid "Open PDF file ..."
 msgstr "PDF-bestand openen…"
 
-#: mttfiles.c:664 mttimport.c:469
+#: mttfiles.c:671 mttimport.c:491
 msgid "Open Redac file ..."
 msgstr "Redac-bestand openen…"
 
-#: mttimport.c:534
+#: mttimport.c:559
 msgid "Open Rich Text Format file ..."
 msgstr "Rich Text Format (.rtf)-bestand openen…"
 
-#: mttfiles.c:973
+#: ui/main.ui:48
+#, fuzzy
+msgid "Open a previous note ..."
+msgstr "Oudere aantekening openen…"
+
+#: mttfiles.c:980
 msgid "Open audio file ..."
 msgstr "Audiobestand openen…"
 
-#: misc.c:467
+#: ui/main.ui:115
+msgid "PDF"
+msgstr "PDF"
+
+#: misc.c:494
 #, c-format
 msgid "PDF : %s"
 msgstr "PDF: %s"
 
-#: interface.c:1305
+#: interface.c:1309
 msgid "PDF : go first page"
 msgstr "PDF: ga naar eerste pagina"
 
-#: interface.c:1314
+#: interface.c:1318
 msgid "PDF : go last page"
 msgstr "PDF: ga naar laatste pagina"
 
-#: interface.c:1287
+#: interface.c:1291
 msgid "PDF : go next page"
 msgstr "PDF: ga naar volgende pagina"
 
-#: interface.c:1296
+#: interface.c:1300
 msgid "PDF : go previous page"
 msgstr "PDF: ga naar vorige pagina"
 
-#: interface.c:1323
+#: interface.c:1327
 msgid "PDF : search"
 msgstr "PDF: zoeken"
 
-#: interface.c:1332
+#: interface.c:1336
 msgid "PDF : zoom in"
 msgstr "PDF: inzoomen"
 
-#: interface.c:1342
+#: interface.c:1346
 msgid "PDF : zoom out"
 msgstr "PDF: uitzoomen"
 
-#: mttfiles.c:1110 mttfiles.c:1208
+#: ui/settings1.ui:564 ui/settings.ui:525
+msgid "PDF document"
+msgstr "PDF-document"
+
+#: mttfiles.c:1117 mttfiles.c:1215
 msgid "PDF files"
 msgstr "PDF-bestanden"
 
-#: mttfiles.c:1290
+#: mttfiles.c:1297
 msgid "PNG Image files"
 msgstr "PNG-bestanden"
 
-#: callbacks.c:79
+#: ui/settings1.ui:658 ui/settings.ui:638
+msgid "Paper color : "
+msgstr "Papierkleur: "
+
+#: callbacks.c:89
 #, c-format
 msgid "Paragraph: %d/%d  %d Chars  %d Words"
 msgstr "Paragraaf: %d/%d  %d tekens, %d woorden"
 
-#: interface.c:311
+#: interface.c:315
 msgid "Paste and _center image "
 msgstr "Afbeelding plakken en _centreren "
 
-#: interface.c:1378
+#: interface.c:1382
 #, fuzzy
 msgid "Paste image"
 msgstr "Afbeelding plakken"
 
-#: misc.c:485
+#: ui/settings1.ui:599 ui/settings.ui:571
+msgid "Pen width in pixels :"
+msgstr "Potlooddikte (in pixels):"
+
+#: misc.c:512
 #, c-format
 msgid "Pen width:  %.2f"
 msgstr "Potlooddikte:  %.2f"
 
-#: interface.c:1291
+#: ui/main.ui:356
+msgid "Pg:"
+msgstr "Pg:"
+
+#: interface.c:1295
 msgid "PgDown"
 msgstr "PgDown"
 
-#: interface.c:1300
+#: interface.c:1304
 msgid "PgUp"
 msgstr "PgUp"
 
-#: interface.c:631
+#: interface.c:659
 msgid ""
 "Play or pause-rewind current audio file.\n"
 "Rewind's length is defined in 'audio' settings."
@@ -554,11 +813,20 @@ msgstr ""
 "Speel het huidige audiobestand af, pauzeer het of spoel het terug.\n"
 "De terugspoelduur kan worden ingesteld in de audio-instellingen."
 
-#: interface.c:635
+#: ui/main.ui:656
+#, fuzzy
+msgid ""
+"Please, notice that that the current PDF is modifyed\n"
+"and should be saved"
+msgstr ""
+"Let op: het huidige pdf-bestand is bewerkt - wellicht\n"
+"wilt u het opslaan"
+
+#: interface.c:663
 msgid "Position within current audio file"
 msgstr "Positie in huidige audiobestand"
 
-#: mttfiles.c:780
+#: mttfiles.c:787
 #, c-format
 msgid ""
 "Problem during quick save of :\n"
@@ -567,38 +835,38 @@ msgstr ""
 "Er is een fout opgetreden tijdens het snel opslaan van\n"
 "%s"
 
-#: interface.c:1747
+#: interface.c:1750
 msgid "Project Manager:"
 msgstr "Projectbeheerder:"
 
-#: interface.c:1396
+#: interface.c:1400
 #, fuzzy
 msgid "Quick save"
 msgstr "Snel opslaan"
 
-#: interface.c:1460
+#: interface.c:1464
 #, fuzzy
 msgid "Quit application"
 msgstr "Toepassing afsluiten"
 
-#: interface.c:1191
+#: interface.c:1195
 #, fuzzy
 msgid "Quotation"
 msgstr "Citeren"
 
-#: paving.c:267
+#: paving.c:267 ui/main.ui:65
 msgid "Recent notes ..."
 msgstr "Recente aantekeningen…"
 
-#: mttfiles.c:658
+#: mttfiles.c:665
 msgid "Redac files"
 msgstr "Redac-bestanden"
 
-#: interface.c:1748
+#: interface.c:1751
 msgid "Redac logos + main icon :"
 msgstr "Redac-logo's en -hoofdpictogram:"
 
-#: mttimport.c:461
+#: mttimport.c:483
 msgid "Redac notes"
 msgstr "Redac-aantekeningen"
 
@@ -634,11 +902,15 @@ msgstr "Tekst opnieuw omzetten naar superscript"
 msgid "Redo set text to underline"
 msgstr "Tekst opnieuw onderstrepen"
 
-#: interface.c:1853
+#: interface.c:1856
 msgid "Reference"
 msgstr "Referentie"
 
-#: interface.c:512
+#: ui/settings1.ui:126 ui/settings.ui:125
+msgid "Reload last used PDF at program's start "
+msgstr "Laatstgebruikte pdf-bestand openen na opstarten "
+
+#: interface.c:518
 msgid ""
 "Remove all character \n"
 "formattings from current selection."
@@ -646,23 +918,42 @@ msgstr ""
 "Verwijder alle teken-\n"
 "opmaak uit de huidige selectie."
 
-#: interface.c:1258
+#: interface.c:1262
 msgid "Right"
 msgstr "Rechts"
 
-#: interface.c:1021
+#: ui/main.ui:134
+#, fuzzy
+msgid "Save _modifyed PDF file .."
+msgstr "Be_werkt pdf-bestand opslaan…"
+
+#: ui/settings1.ui:90 ui/settings.ui:89
+msgid "Save current editor document every 5 minutes"
+msgstr "Huidige document elke 5 minuten automatisch opslaan"
+
+#: ui/main.ui:157
+#, fuzzy
+msgid "Save current sketch ..."
+msgstr "Huidige schets opslaan…"
+
+#: ui/main.ui:40
+#, fuzzy
+msgid "Save the note as ...  "
+msgstr "Aantekening opslaan als…  "
+
+#: interface.c:1025
 msgid "Save your work and export to standard Word processor file..."
 msgstr "Werk opslaan en exporteren naar Word-document…"
 
-#: interface.c:1705
+#: interface.c:1708
 msgid "Second :"
 msgstr "Seconde:"
 
-#: interface.c:1627
+#: interface.c:1630
 msgid "Select a new time position"
 msgstr "Kies een nieuwe tijdspositie"
 
-#: interface.c:579
+#: interface.c:590
 msgid ""
 "Set-up text annotation inside \n"
 "selected area on PDF or sketch document. \n"
@@ -674,58 +965,74 @@ msgstr ""
 "Vergeet niet nadien uw wijzigingen\n"
 "op te slaan!"
 
-#: settings.c:66
+#: settings.c:67
 #, fuzzy
 msgid "Settings"
 msgstr "Voorkeuren"
 
-#: interface.c:1854
+#: interface.c:1857 ui/settings1.ui:729 ui/settings.ui:738
 msgid "Sketch"
 msgstr "Schets"
 
-#: interface.c:1351
+#: interface.c:1355
 msgid "Sketch : larger pen"
 msgstr "Schets: dikker potlood"
 
-#: interface.c:1360
+#: interface.c:1364
 msgid "Sketch : leaner pen"
 msgstr "Schets: dunner potlood"
 
-#: interface.c:1181
+#: ui/main.ui:147
+msgid "Sketches"
+msgstr "Schetsen"
+
+#: interface.c:1185
 #, fuzzy
 msgid "Strikethrough"
 msgstr "Doorhalen"
 
-#: interface.c:1176
+#: interface.c:1180
 #, fuzzy
 msgid "Subscript"
 msgstr "Subscript"
 
-#: interface.c:1171
+#: interface.c:1175
 #, fuzzy
 msgid "Superscript"
 msgstr "Superscript"
 
-#: interface.c:1442
+#: interface.c:1446
 #, fuzzy
 msgid "Switch to PDF pane"
 msgstr "Overschakelen naar pdf-paneel"
 
-#: interface.c:1433
+#: interface.c:1437
 #, fuzzy
 msgid "Switch to editor pane"
 msgstr "Overschakelen naar bewerkpaneel"
 
-#: interface.c:1451
+#: interface.c:1455
 #, fuzzy
 msgid "Switch to sketch pane"
 msgstr "Overschakelen naar schetspaneel"
 
-#: misc.c:961
+#: ui/settings1.ui:373 ui/settings.ui:359
+msgid "Text background color:"
+msgstr "Achtergrondkleur van tekst:"
+
+#: misc.c:990
 msgid "Text copied"
 msgstr "De tekst is gekopieerd"
 
-#: mttfiles.c:1236
+#: ui/settings1.ui:340 ui/settings.ui:326
+msgid "Text font:"
+msgstr "Lettertype:"
+
+#: ui/settings1.ui:308 ui/settings.ui:294
+msgid "Text foreground color:"
+msgstr "Voorgrondkleur van tekst:"
+
+#: mttfiles.c:1243
 #, c-format
 msgid ""
 "The file :\n"
@@ -735,7 +1042,7 @@ msgstr ""
 "‘%s’ bestaat al.\n"
 "Weet u zeker dat u het wilt overschrijven?"
 
-#: mttfiles.c:844 mttfiles.c:1316
+#: mttfiles.c:851 mttfiles.c:1323
 #, c-format
 msgid ""
 "The file :%s exists !\n"
@@ -744,7 +1051,7 @@ msgstr ""
 "‘%s’ bestaat al.\n"
 "Wilt u het overschrijven?"
 
-#: mttfiles.c:517
+#: mttfiles.c:524
 #, c-format
 msgid ""
 "The file :%s isn't a correct file\n"
@@ -753,11 +1060,11 @@ msgstr ""
 "‘%s’ is geen geldig bestand of het is\n"
 "beschadigd. De handeling is afgebroken."
 
-#: undo.c:788
+#: undo.c:800
 msgid "There is nothing to undo."
 msgstr "Er valt niks ongedaan te maken."
 
-#: interface.c:430
+#: interface.c:436
 msgid ""
 "Toggle to/from bold either \n"
 "for current selection\n"
@@ -767,7 +1074,7 @@ msgstr ""
 "op de huidige selectie of\n"
 "nieuw ingevoerde tekst."
 
-#: interface.c:436
+#: interface.c:442
 msgid ""
 "Toggle to/from italic either \n"
 "for current selection\n"
@@ -777,7 +1084,7 @@ msgstr ""
 "op de huidige selectie of\n"
 "nieuw ingevoerde tekst."
 
-#: interface.c:462
+#: interface.c:468
 msgid ""
 "Toggle to/from quotation style either \n"
 "for current selection\n"
@@ -787,7 +1094,7 @@ msgstr ""
 "op de huidige selectie of\n"
 "nieuw ingevoerde tekst."
 
-#: interface.c:454
+#: interface.c:460
 #, fuzzy
 msgid ""
 "Toggle to/from strikethrough \n"
@@ -798,7 +1105,7 @@ msgstr ""
 "op de huidige selectie of\n"
 "nieuw ingevoerde tekst."
 
-#: interface.c:450
+#: interface.c:456
 msgid ""
 "Toggle to/from subscript either \n"
 "for current selection\n"
@@ -808,7 +1115,7 @@ msgstr ""
 "op de huidige selectie of\n"
 "nieuw ingevoerde tekst."
 
-#: interface.c:446
+#: interface.c:452
 msgid ""
 "Toggle to/from superscript either \n"
 "for current selection\n"
@@ -818,7 +1125,7 @@ msgstr ""
 "op de huidige selectie of\n"
 "nieuw ingevoerde tekst."
 
-#: interface.c:441
+#: interface.c:447
 msgid ""
 "Toggle to/from underline either \n"
 "for current selection\n"
@@ -828,23 +1135,35 @@ msgstr ""
 "op de huidige selectie of\n"
 "nieuw ingevoerde tekst."
 
-#: interface.c:1196
+#: interface.c:1200
 msgid "Toggle up/lower case"
 msgstr "Omzetten naar kleine of hoofdletters"
 
-#: interface.c:643
+#: interface.c:671
 msgid "Total duration of current audio file"
 msgstr "Totaalduur van audiobestand"
 
-#: interface.c:1771
+#: interface.c:1774
 msgid "Translators credits"
 msgstr "Heimen Stoffels <vistausss@fastmail.com>"
 
-#: interface.c:1510
+#: interface.c:1514
 msgid "Type here annotation text"
 msgstr "Typ hier uw aantekeningstekst"
 
-#: interface.c:1166
+#: ui/main.ui:368
+msgid "Type here the #of PDF page where you want to jump."
+msgstr "Voer het nummer in van de pdf-pagina die u wilt openen."
+
+#: ui/main.ui:424
+msgid "Type here the expression to find."
+msgstr "Voer uw zoekopdracht in."
+
+#: ui/main.ui:547
+msgid "Type here the replacing expression."
+msgstr "Voer de vervangende tekst in."
+
+#: interface.c:1170
 #, fuzzy
 msgid "Underline"
 msgstr "Onderstrepen"
@@ -877,11 +1196,16 @@ msgstr "Afbeelding invoegen ongedaan maken"
 msgid "Undo last drawing inside sketch"
 msgstr "Recentste tekening op schets ongedaan maken"
 
-#: undo.c:200
+#: undo.c:204
 msgid "Undo last image pasting inside sketch"
 msgstr "Recentste afbeelding plakken op schets ongedaan maken"
 
-#: interface.c:517
+#: undo.c:200
+#, fuzzy
+msgid "Undo last line drawing inside sketch"
+msgstr "Recentste tekening op schets ongedaan maken"
+
+#: interface.c:523
 msgid "Undo last operation."
 msgstr "Recentste aanpassing ongedaan maken"
 
@@ -977,7 +1301,7 @@ msgstr "Superscript ongedaan maken"
 msgid "Undo set text to underline"
 msgstr "Onderstrepen ongedaan maken"
 
-#: callbacks.c:3376
+#: callbacks.c:3559
 msgid ""
 "Warning !\n"
 "I can't, for now, *undo* removing for\n"
@@ -989,85 +1313,80 @@ msgstr ""
 "van dit soort aantekeningen is momenteel niet mogelijk.\n"
 "Wilt u doorgaan?"
 
-#: mttimport.c:527
+#: mttimport.c:552
 msgid "Word processor files"
 msgstr "Word-bestanden"
 
-#: interface.c:999
+#: interface.c:1003
 msgid "_Cancel"
 msgstr "_Annuleren"
 
-#: interface.c:239
+#: interface.c:243
 msgid "_Edit annotation ... "
 msgstr "Aantekening b_ewerken… "
 
-#: interface.c:1000
+#: interface.c:1004
 msgid "_Open"
 msgstr "_Openen"
 
-#: interface.c:307
+#: interface.c:311
 msgid "_Paste image in place "
 msgstr "Afbeelding _plakken op positie "
 
-#: interface.c:247
+#: interface.c:251
 msgid "_Remove annotation "
 msgstr "Aantekening ve_rwijderen "
 
-#: mttfiles.c:1298
+#: ui/main.ui:93
+msgid "from a RTF file ..."
+msgstr "uit rtf-bestand…"
+
+#: interface.c:616
+msgid "line/arrow tool"
+msgstr ""
+
+#: mttfiles.c:1305
 msgid "noname"
 msgstr "naamloos"
 
-#: misc.c:455
+#: misc.c:482
 #, c-format
 msgid "of %d"
 msgstr "van %d"
 
-#: undo.c:204
+#: ui/main.ui:388
+msgid "of--"
+msgstr "van--"
+
+#: undo.c:208
 msgid "undo last text annot paste inside sketch - TODO"
 msgstr ""
 "recentste aantekening plakken in schets ongedaan maken - NOG NIET "
 "GEÏMPLEMENTEERD"
 
-#: interface.c:616
+#: interface.c:644
 msgid "×0.5"
 msgstr "×0.5"
 
-#: interface.c:615
+#: interface.c:643
 msgid "×0.8"
 msgstr "×0.8"
 
-#: interface.c:614
+#: interface.c:642
 msgid "×1.0"
 msgstr "×1.0"
 
-#: interface.c:613
+#: interface.c:641
 msgid "×1.2"
 msgstr "×1.2"
 
-#: interface.c:612
+#: interface.c:640
 msgid "×1.5"
 msgstr "×1.5"
-
-#~ msgid "--hits"
-#~ msgstr "--hits"
-
-#~ msgid ""
-#~ "<b>Back or forward jump in seconds.</b>\n"
-#~ "<i>Minimum : 10sec, maximum 600 secs (10 minutes).</i>"
-#~ msgstr ""
-#~ "<b>De terug-/vooruitspoelduur, in seconden.</b>\n"
-#~ "<i>Minimaal 10 sec. - Maximaal 600 sec. (10 minuten).</i>"
 
 #, fuzzy
 #~ msgid "<b>Load PDF file </b>"
 #~ msgstr "PDF-bestand openen "
-
-#~ msgid ""
-#~ "<b>Play/pause rewind jump in seconds.</b>\n"
-#~ "<i>Minimum : 1sec, maximum 10 secs.</i>"
-#~ msgstr ""
-#~ "<b>De afspeel-/pauzeerterugspoelduur, in seconden.</b>\n"
-#~ "<i>Minimaal 1 sec. - Maximaal 10 sec.</i>"
 
 #, fuzzy
 #~ msgid "<big><b>Recent notes :</b></big>"
@@ -1075,250 +1394,14 @@ msgstr "×1.5"
 #~ "<i><b>\n"
 #~ "Nieuwe positie: </b></i>"
 
-#~ msgid "<small><b>noname</b></small>"
-#~ msgstr "<small><b>naamloos</b></small>"
-
-#~ msgid "Annotation text font:"
-#~ msgstr "Aantekeningslettertype:"
-
-#~ msgid "Application settings."
-#~ msgstr "Toepassingsinstellingen."
-
-#~ msgid "Ask before overwriting files"
-#~ msgstr "Vragen alvorens bestanden te overschrijven"
-
-#~ msgid "Ask before quit program"
-#~ msgstr "Vragen alvorens af te sluiten"
-
-#~ msgid "Audio"
-#~ msgstr "Audio"
-
-#~ msgid "Auto rewind to start after playing completed."
-#~ msgstr ""
-#~ "Spoel automatisch terug naar het begin als het afspelen is afgerond."
-
-#~ msgid ""
-#~ "Automatic background saving of your work (editor part)\n"
-#~ "is activated."
-#~ msgstr ""
-#~ "Automatisch opslaan van de achtergrond (in de bewerker)\n"
-#~ "is ingeschakeld."
-
-#~ msgid "Clear current sketch"
-#~ msgstr "Huidige schets wissen"
-
-#~ msgid ""
-#~ "Click here to go to the next hit.\n"
-#~ "With PDF documents we jump to next PAGE with hits"
-#~ msgstr ""
-#~ "Klik hier om de volgende treffer te tonen.\n"
-#~ "Binnen pdf-bestanden wordt er naar de volgende pagina met treffers\n"
-#~ "geschakeld."
-
-#~ msgid ""
-#~ "Click here to replace text.\n"
-#~ "You can't change text inside PDF documents."
-#~ msgstr ""
-#~ "Klik hier om tekst te vervangen.\n"
-#~ "PDF-bestanden kunnen niet worden bewerkt."
-
-#~ msgid ""
-#~ "Click here to to go to the previous hit.\n"
-#~ "With PDF documents we jump to previous PAGE with hits"
-#~ msgstr ""
-#~ "Klik hier om de vorige treffer te tonen.\n"
-#~ "Binnen pdf-bestanden wordt er naar de vorige pagina met treffers\n"
-#~ "geschakeld."
-
-#~ msgid "Click to Zoom in the PDF document."
-#~ msgstr "Klik om het document in te zoomen."
-
-#~ msgid "Click to Zoom out the PDF document."
-#~ msgstr "Klik om het document uit te zoomen."
-
-#~ msgid "Click to display the PDF document at its best size."
-#~ msgstr "Klik om het document passend te maken."
-
-#, fuzzy
-#~ msgid ""
-#~ "Document paper color\n"
-#~ "(Please reload PDF to complete operation):"
-#~ msgstr "<i>(herlaad het pdf-bestand om de handeling af te ronden)</i>"
-
-#~ msgid "Editor"
-#~ msgstr "Bewerker"
-
-#~ msgid "File management"
-#~ msgstr "Bestandsbeheer"
-
-#~ msgid "Force a prompt before any files are overwrote"
-#~ msgstr "Vraag of bestanden overschreven mogen worden"
-
-#~ msgid ""
-#~ "Force a prompt before quit program. Take it easy, your work will be "
-#~ "automatically saved\n"
-#~ "whatever you check or not this option."
-#~ msgstr ""
-#~ "Vraag of Redac moet worden afgesloten. Geen zorgen: uw werk wordt\n"
-#~ "automatisch opgeslagen,\n"
-#~ "ook als u deze optie niet aankruist."
-
-#, fuzzy
-#~ msgid ""
-#~ "If available in your system, the last PDF document used will be "
-#~ "automatically\n"
-#~ "reload when the programm starts."
-#~ msgstr ""
-#~ "Indien beschikbaar wordt het recentst geopende pdf-bestand geladen\n"
-#~ " als u de toepassing opstart."
-
-#, fuzzy
-#~ msgid "Load _Audio file ..."
-#~ msgstr "Audiobestand openen…"
-
 #, fuzzy
 #~ msgid "PDF "
 #~ msgstr "PDF: %s"
-
-#~ msgid "PDF document"
-#~ msgstr "PDF-document"
-
-#, fuzzy
-#~ msgid ""
-#~ "Paper color \n"
-#~ "(Will be unchanged until you clear sketch):"
-#~ msgstr "<i>(blijft ongewijzigd totdat u uw schets wist)</i>"
-
-#~ msgid "Pen width in pixels :"
-#~ msgstr "Potlooddikte (in pixels):"
-
-#~ msgid "Pg:"
-#~ msgstr "Pg:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Please, notice that that the current PDF is modifyed\n"
-#~ "and should be saved."
-#~ msgstr ""
-#~ "Let op: het huidige pdf-bestand is bewerkt - wellicht\n"
-#~ "wilt u het opslaan"
-
-#~ msgid "Reload last used PDF at program's start "
-#~ msgstr "Laatstgebruikte pdf-bestand openen na opstarten "
-
-#~ msgid "Save current editor document every 5 minutes"
-#~ msgstr "Huidige document elke 5 minuten automatisch opslaan"
-
-#, fuzzy
-#~ msgid "Save current s_ketch ..."
-#~ msgstr "Huidige schets opslaan…"
-
-#~ msgid "Sketches"
-#~ msgstr "Schetsen"
-
-#~ msgid "Text background color:"
-#~ msgstr "Achtergrondkleur van tekst:"
-
-#~ msgid "Text font:"
-#~ msgstr "Lettertype:"
-
-#~ msgid "Text foreground color:"
-#~ msgstr "Voorgrondkleur van tekst:"
-
-#~ msgid "Type here the #of PDF page where you want to jump."
-#~ msgstr "Voer het nummer in van de pdf-pagina die u wilt openen."
-
-#~ msgid "Type here the expression to find."
-#~ msgstr "Voer uw zoekopdracht in."
-
-#~ msgid "Type here the replacing expression."
-#~ msgstr "Voer de vervangende tekst in."
 
 #, fuzzy
 #~ msgid "_Audio "
 #~ msgstr "Audio"
 
 #, fuzzy
-#~ msgid "_Close current Audio file"
-#~ msgstr "Huidig audiobestand sluiten"
-
-#, fuzzy
-#~ msgid "_Open a previous work ..."
-#~ msgstr "Oudere aantekening openen…"
-
-#, fuzzy
 #~ msgid "_Recent works ..."
 #~ msgstr "Recente aantekeningen…"
-
-#, fuzzy
-#~ msgid "_Save modifyed PDF file ..."
-#~ msgstr "Be_werkt pdf-bestand opslaan…"
-
-#, fuzzy
-#~ msgid "_Save your work as ...  "
-#~ msgstr "Aantekening opslaan als…  "
-
-#~ msgid "of--"
-#~ msgstr "van--"
-
-#~ msgid "   "
-#~ msgstr "   "
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "2"
-#~ msgstr "2"
-
-#~ msgid "25"
-#~ msgstr "25"
-
-#~ msgid "About Redac ..."
-#~ msgstr "Over Redac…"
-
-#~ msgid ""
-#~ "Application main menu.\n"
-#~ "Shortkey <CTRL>+<M>"
-#~ msgstr ""
-#~ "Hoofdmenu.\n"
-#~ "Sneltoets <CTRL>+<M>"
-
-#~ msgid ""
-#~ "Automatic rewind to start of media after playing\n"
-#~ "is activated."
-#~ msgstr ""
-#~ "Automatisch terugspoelen als het afspelen is afgerond\n"
-#~ "is ingeschakeld."
-
-#~ msgid "Click here to choose a font"
-#~ msgstr "Klik hier om een lettertype te kiezen"
-
-#~ msgid "Click here yo choose a color"
-#~ msgstr "Klik hier om een kleur te kiezen"
-
-#~ msgid "Document paper color : "
-#~ msgstr "Papierkleur: "
-
-#~ msgid "Insert text from a file "
-#~ msgstr "Tekst invoegen uit bestand "
-
-#~ msgid "Keyboard shortcuts ..."
-#~ msgstr "Sneltoetsen…"
-
-#~ msgid "Merge with a _note ..."
-#~ msgstr "Samenvoegen met aa_ntekening…"
-
-#~ msgid "New note"
-#~ msgstr "Nieuwe aantekening"
-
-#~ msgid "Online _Wiki ..."
-#~ msgstr "Online-_wiki…"
-
-#~ msgid "PDF"
-#~ msgstr "PDF"
-
-#~ msgid "Paper color : "
-#~ msgstr "Papierkleur: "
-
-#~ msgid "from a RTF file ..."
-#~ msgstr "uit rtf-bestand…"

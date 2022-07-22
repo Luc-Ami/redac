@@ -36,7 +36,7 @@ GtkWidget *create_prefs_dialog (GtkWidget *win, APP_data *data_app)
   GdkRGBA color;   
   gchar *newFont;
   gdouble rewGap, jumpGap, pen_width;
-
+  gint line_end_val;
   GtkWidget *notebook, *content_area, *hbar;
   GtkWidget *configDialog;
   GtkWidget *configAutoSave, *configAutoReloadPDF;
@@ -45,6 +45,7 @@ GtkWidget *create_prefs_dialog (GtkWidget *win, APP_data *data_app)
   GtkWidget *font_button_editor, *font_button_sketch;
   GtkWidget *color_button_editor_fg, *color_button_editor_bg;
   GtkWidget *color_button_PDF_bg, *color_button_sketch_bg;
+  GtkWidget *end_line_sketch;
 
   /* get datas from xml Glade file - CRITICAL : only in activate phase !!!! */
   GtkBuilder *builder = NULL;
@@ -108,35 +109,36 @@ GtkWidget *create_prefs_dialog (GtkWidget *win, APP_data *data_app)
 
   /* sketch section */
 
-  color_button_sketch_bg = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "color_button_sketch_bg"));
+  color_button_sketch_bg = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "color_button_sketch_bg"));
 
-  font_button_sketch = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "font_button_sketch"));
+  font_button_sketch = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "font_button_sketch"));
 
   GtkAdjustment *pen_width_adj = gtk_adjustment_new (1, 1, 20, 1, 10, 0);
-  GtkWidget *pen_width_Spin = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "pen_width_Spin"));
+  GtkWidget *pen_width_Spin = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "pen_width_Spin"));
  
+  end_line_sketch = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "checkbuttonFinalArrow")); 
   /* audio settings section */
   
   GtkAdjustment *rewGap_adj = gtk_adjustment_new (2, 1, 10, 1, 1, 0);
-  GtkWidget *rewGapSpin = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "rewGapSpin"));
+  GtkWidget *rewGapSpin = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "rewGapSpin"));
 
   GtkAdjustment *jumpGap_adj = gtk_adjustment_new (10, 1, 600, 1, 10, 0);
-  GtkWidget *jumpGapSpin = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "jumpGapSpin"));
+  GtkWidget *jumpGapSpin = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "jumpGapSpin"));
 
-  configAutoRewindPlayer = GTK_WIDGET(gtk_builder_get_object (data_app->tmpBuilder, "configAutoRewindPlayer"));
+  configAutoRewindPlayer = GTK_WIDGET (gtk_builder_get_object (data_app->tmpBuilder, "configAutoRewindPlayer"));
 
   /* current values */
-  keyString = g_object_get_data(G_OBJECT(data_app->appWindow), "config");
+  keyString = g_object_get_data (G_OBJECT(data_app->appWindow), "config");
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (configAutoSave), 
-           g_key_file_get_boolean(keyString, "application", "interval-save",NULL ) );
+           g_key_file_get_boolean(keyString, "application", "interval-save", NULL) );
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (configAutoReloadPDF),
-           g_key_file_get_boolean(keyString, "application", "autoreload-PDF",NULL ) );
+           g_key_file_get_boolean(keyString, "application", "autoreload-PDF", NULL) );
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (configPromptQuit),
-            g_key_file_get_boolean(keyString, "application", "prompt-before-quit",NULL ));
+            g_key_file_get_boolean(keyString, "application", "prompt-before-quit", NULL ));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (configPromptOverwrite),
-            g_key_file_get_boolean(keyString, "application", "prompt-before-overwrite",NULL ));
+            g_key_file_get_boolean(keyString, "application", "prompt-before-overwrite", NULL ));
 
   color.red = g_key_file_get_double(keyString, "editor", "text.color.red", NULL);
   color.green = g_key_file_get_double(keyString, "editor", "text.color.green", NULL);
@@ -164,6 +166,19 @@ GtkWidget *create_prefs_dialog (GtkWidget *win, APP_data *data_app)
                  g_key_file_get_string(keyString, "sketch", "font", NULL));
   pen_width = g_key_file_get_double(keyString, "sketch", "pen-width", NULL);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(pen_width_Spin), pen_width);
+
+  line_end_val = g_key_file_get_integer (keyString, "sketch", "line-end", NULL);
+  
+  printf ("valeur line end %d \n", line_end_val);
+  
+  if(line_end_val == SKETCH_LINE_END_NONE) {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (end_line_sketch),
+            FALSE);
+  }
+  else {
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (end_line_sketch),
+            TRUE);
+  }
 
   rewGap = g_key_file_get_double(keyString, "application", "audio-file-rewind-step", NULL);
   gtk_spin_button_set_value(GTK_SPIN_BUTTON(rewGapSpin), rewGap);

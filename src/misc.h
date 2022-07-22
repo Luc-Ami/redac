@@ -41,6 +41,8 @@
 #define PDF_NON_MODIF 1
 #define PDF_MODIF 2
 
+#define SKETCH_LINE_END_NONE 0
+#define SKETCH_LINE_END_ARROW_OPEN 1
 
 /* structures */
 

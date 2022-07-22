@@ -226,6 +226,8 @@ void createNewKeyFile (APP_data *data_app, GtkWidget *win, GKeyFile *keyString)
     /* default text font */
     g_key_file_set_string (keyString, "sketch", "font", "Sans 14");
     g_key_file_set_double (keyString, "sketch", "pen-width", 2);
+    g_key_file_set_integer (keyString, "sketch", "line-end", SKETCH_LINE_END_ARROW_OPEN);    
+    
 
     gchar *context = g_key_file_to_data (keyString, NULL, &error);
     g_file_set_contents (data_app->gConfigFile, context, -1, NULL);
@@ -342,7 +344,7 @@ void createGKeyFile (APP_data *data_app, GtkWidget *win)
   color.alpha = 1;
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color); 
   /* check for recent files and recent files summary */
-  for(i=0;i<MAX_RECENT_FILES;i++) {
+  for(i=0; i<MAX_RECENT_FILES; i++) {
      if(!g_key_file_has_key (keyString, "history", g_strdup_printf ("recent-file-%d",i ), NULL)) {
          g_key_file_set_string (keyString, "history", g_strdup_printf ("recent-file-%d", i),"");
      }
@@ -431,6 +433,11 @@ void createGKeyFile (APP_data *data_app, GtkWidget *win)
   if(!g_key_file_has_key (keyString, "sketch", "pen-width", NULL)) { 
      g_key_file_set_double (keyString, "sketch", "pen-width", 2);
   }
+  /* line - arrow */
+  if(!g_key_file_has_key (keyString, "sketch", "line-end", NULL)) { 
+     g_key_file_set_integer (keyString, "sketch", "line-end", SKETCH_LINE_END_ARROW_OPEN);
+  }
+
 
   /* store in main window */
   g_object_set_data (G_OBJECT(win), "config", keyString);
