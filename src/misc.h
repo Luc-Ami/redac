@@ -78,6 +78,7 @@ typedef struct {
   gboolean    button_pressed;
   gboolean    fPencilTool; /* for sketch */
   gboolean    fLineTool; /* for sketch line and arrow */
+  gboolean    fRectTool; /* for sketch rectangles */
   gboolean    fDarkTheme;
   gboolean    fPdfLoaded;
   gboolean    fAudioLoaded;

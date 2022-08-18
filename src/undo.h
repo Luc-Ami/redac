@@ -68,7 +68,7 @@
 #define OP_PASTE_PIXBUF 101
 #define OP_SKETCH_ANNOT 102
 #define OP_SKETCH_LINE 103
-
+#define OP_SKETCH_BOX 104
 
 void undo_push (gint current_stack, gint op, PopplerAnnot *annot, APP_data *data);
 void undo_pop (gint current_stack, APP_data *data);

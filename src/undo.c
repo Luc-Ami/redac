@@ -200,6 +200,10 @@ static void update_undo_tooltip (gint op, APP_data *data)
       gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last line drawing inside sketch"));
       break;
     }
+    case OP_SKETCH_BOX: {
+      gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last rectangle/box drawing inside sketch"));
+      break;
+    }    
     case OP_PASTE_PIXBUF: {
       gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last image pasting inside sketch"));
       break;
@@ -747,6 +751,7 @@ static void undo_pop_sketch (gint op, APP_data *data)
       gdk_cairo_set_source_pixbuf (cr, tmp_undo_datas->pix, tmp_undo_datas->x1, tmp_undo_datas->y1);
       break;
     }
+    case OP_SKETCH_BOX:
     case OP_SKETCH_LINE: {
 	  gdk_cairo_set_source_pixbuf (cr, tmp_undo_datas->pix, 0, 0);	
       break;

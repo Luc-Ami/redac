@@ -137,6 +137,8 @@ void on_button_button_pencil_toggled (GtkButton *button, APP_data *user_data);
 
 void on_button_button_arrow_toggled (GtkButton  *button, APP_data *user_data);
 
+void on_button_button_rectangle_toggled (GtkButton  *button, APP_data *user_data);
+
 void on_menuPasteSketch (GtkMenuItem *menuitem, APP_data *user_data);
 
 void on_menuCenteredPasteSketch (GtkMenuItem *menuitem, APP_data *user_data);
