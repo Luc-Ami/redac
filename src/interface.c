@@ -38,6 +38,8 @@
 
 #include "./icons/boxes.xpm"
 
+#include "./icons/ellipse.xpm"
+
 /*********************************
   setup default values for display
 for paddings and removing inner border from entries, many thanks to them : https://github.com/jy2wong/luakit/commit/6dfffb296f562b26c1eb6020c94b1d3e0bde336b
@@ -391,9 +393,12 @@ GtkWidget *main_wp_toolbar (GtkWidget *window, APP_data *data_app)
   GtkWidget *icon_pencil;
   GtkWidget *icon_arrow;
   GtkWidget *icon_boxes;  
+  GtkWidget *icon_ellipse;    
   GtkToolItem *button_pencil;
   GtkToolItem *button_arrow;  
   GtkToolItem *button_boxes;  
+  GtkToolItem *button_ellipse;  
+    
   GtkToolItem *color_button_item;
   GtkWidget *color_button;
   GtkAccelGroup *accel_group;
@@ -633,6 +638,18 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM (button_boxes), -1);
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(button_boxes), group_clip);
   group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (button_boxes));
+
+  /* ellipse button */
+  ico = gdk_pixbuf_new_from_xpm_data ((const char **)ellipse_xpm);
+  icon_ellipse = gtk_image_new_from_pixbuf (ico);
+  g_object_unref (ico);  
+  
+  button_ellipse = gtk_radio_tool_button_new (group_clip);  
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON(button_ellipse), icon_ellipse); 
+  gtk_widget_set_tooltip_text (GTK_WIDGET(button_ellipse), _("Ellipse tool"));
+  gtk_toolbar_insert (GTK_TOOLBAR(toolbar), GTK_TOOL_ITEM (button_ellipse), -1);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON(button_ellipse), group_clip);
+  group_clip = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (button_ellipse));
     
   /* color button */
   color_button_item = gtk_tool_item_new();
@@ -833,6 +850,8 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
  g_signal_connect (G_OBJECT(button_boxes), "toggled", 
         G_CALLBACK(on_button_button_rectangle_toggled), data_app); 
 
+ g_signal_connect (G_OBJECT(button_ellipse), "toggled", 
+        G_CALLBACK(on_button_button_ellipse_toggled), data_app); 
 
   /* register objects */
   GLADE_HOOKUP_OBJECT (window, button_bold, "button_bold");
@@ -860,6 +879,7 @@ gtk_widget_set_tooltip_text (GTK_WIDGET(button_quotation), _("Toggle to/from quo
   GLADE_HOOKUP_OBJECT (window, button_pencil, "button_pencil");
   GLADE_HOOKUP_OBJECT (window, button_arrow, "button_arrow");  
   GLADE_HOOKUP_OBJECT (window, button_boxes, "button_boxes");     
+  GLADE_HOOKUP_OBJECT (window, button_ellipse, "button_ellipse");   
   
   GLADE_HOOKUP_OBJECT (window, color_button, "color_button");
   GLADE_HOOKUP_OBJECT (window, pRadioButtonPlayPauseAudio, "pRadioButtonPlayPauseAudio");

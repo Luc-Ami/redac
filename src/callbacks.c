@@ -388,6 +388,30 @@ void on_button_button_rectangle_toggled (GtkButton  *button, APP_data *user_data
 }
 
 
+/****************************
+ ellipse button toggled
+***************************/
+void on_button_button_ellipse_toggled (GtkButton  *button, APP_data *user_data)
+{
+  GtkToolItem *tmpButton = NULL;
+
+  tmpButton = GTK_TOOL_ITEM (lookup_widget(GTK_WIDGET(button), "button_ellipse"));
+  if(gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (tmpButton)))  {
+      user_data->fPencilTool = FALSE;
+      user_data->fLineTool = FALSE;
+      user_data->fRectTool = FALSE;
+      user_data->fEllipseTool = TRUE;
+  }
+  else {
+    user_data->fPencilTool = FALSE;
+    user_data->fLineTool = FALSE;
+    user_data->fRectTool = FALSE;
+    user_data->fEllipseTool = FALSE;
+  }
+}
+
+
+
 /***************************************************
   Draw a text on the screen
   the origin of the line was stored during the lAST
@@ -583,7 +607,7 @@ static void draw_arrowHead_open (cairo_t *cr, gint x1, gint y1, gint x2, gint y2
   the origin of the line was stored during the LAST
   mouse left-click
  x, y : relative coordinates
- * flag : remove or not current arrow (xor mode)
+
 ****************************************************/
 static void draw_arrow (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
 {
@@ -621,11 +645,11 @@ static void draw_arrow (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
 }
 
 /***************************************************
-  Draw a line on the screen
+  Draw a rectangle on the screen
   the origin of the line was stored during the LAST
   mouse left-click
- x, y : relative coordinates
- * flag : remove or not current arrow (xor mode)
+ x, y : absolute coordinates
+
 ****************************************************/
 static void draw_rectangle (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
 {
@@ -676,6 +700,84 @@ static void draw_rectangle (gdouble x, gdouble y, APP_data *data, gdouble pen_wi
    gtk_widget_queue_draw (data->SketchDrawable); 
 
 }
+
+/*******************************************
+ *  function to drwa an ellpise, because it
+ * is lacking in cairo !
+ * xc, yc : center coordinates
+ * rx, ry : horizontal and vertical radius
+ * cr : cairo_t
+ * ****************************************/
+static void ellipse (cairo_t *cr, gdouble xc, gdouble yc, gdouble rx, gdouble ry)
+{
+   cairo_translate (cr, xc, yc);
+   /* in order to avoid "infinite" radius */
+   if(rx == 0) {
+	   rx = 1;
+   }
+
+   if(ry == 0) {
+	   ry = 1;
+   }
+   if (rx>ry) {
+      cairo_scale (cr, rx/ry, 1);   
+      cairo_arc (cr, 0, 0, ry, 0, 2*M_PI);
+   }
+   else {
+	  cairo_scale (cr, 1, ry/rx);    
+	  cairo_arc (cr, 0, 0, rx, 0, 2*M_PI);
+   }
+   
+   cairo_stroke (cr);
+   cairo_scale (cr, 1, 1);
+   cairo_translate (cr, 0, 0);	 
+}
+/**************************************************
+  Draw an ellipse on the screen
+  the origin of the ellipse was stored during the LAST
+  mouse left-click
+ x, y : absolute coordinates
+cairo_arc (cr, xc, yc, radius, angle1, angle2);
+* angle1 = 0
+* angle2 = 2*M_PI
+* we use cairo_scale for ellipses
+exemaple :  cairo_scale(cr, 1, 0.7);
+            cairo_arc(cr, 0, 0, 50, 0, 2*M_PI);
+            oid
+cairo_scale (cairo_t *cr,
+             double sx,
+             double sy)
+****************************************************/
+static void draw_ellipse (gdouble x, gdouble y, APP_data *data, gdouble pen_width)
+{
+  GdkRGBA color;   
+  GtkWidget *pBtnColor; 
+  cairo_t *cr = NULL;
+  GKeyFile *keyString;
+  gint line_end_val;
+  gdouble x_ratio, y_ratio;
+     
+   /* current values */
+   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
+   line_end_val = g_key_file_get_integer (keyString, "sketch", "line-end", NULL);
+        
+   /* we get the current RGBA color */
+   pBtnColor = lookup_widget (GTK_WIDGET(data->appWindow), "color_button");
+   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(pBtnColor), &color);
+   
+   /* Paint to the surface, where we store our state */
+   cr = cairo_create (data->Sketchsurface);
+   cairo_set_source_rgb (cr, color.red, color.green, color.blue);
+   cairo_set_line_width (cr, pen_width);
+   cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);        
+   
+   ellipse (cr, x1_mem_pix, y1_mem_pix, ABS (x-x1_mem_pix), ABS (y-y1_mem_pix));   
+
+   cairo_destroy (cr);
+   gtk_widget_queue_draw (data->SketchDrawable); 
+
+}
+
 
 
 
@@ -1087,7 +1189,7 @@ gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *even
        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
        return TRUE;
     }
-    if ((data->fPencilTool) || (data->fLineTool) || (data->fRectTool)) {
+    if ((data->fPencilTool) || (data->fLineTool) || (data->fRectTool) || (data->fEllipseTool)) {
         data->button_pressed = TRUE;
         /* for arrows we use a clean pixbuf */        
         x1_mem_pix = event->button.x;
@@ -1095,7 +1197,7 @@ gboolean on_sketch_draw_button_press_callback (GtkWidget *widget, GdkEvent *even
         w_mem_pix = 1;  /* default for first click */
         h_mem_pix = 1;      
 
-        if((data->fLineTool) || (data->fRectTool)) {
+        if((data->fLineTool) || (data->fRectTool) || (data->fEllipseTool)) {
            data->undo.pix = gdk_pixbuf_get_from_surface (data->Sketchsurface,
                                                          0, 0, CROBAR_VIEW_MAX_WIDTH, CROBAR_VIEW_MAX_HEIGHT );	    
         }           
@@ -1131,7 +1233,7 @@ gboolean on_sketch_draw_button_release_callback (GtkWidget *widget, GdkEvent *ev
   if(data->button_pressed) {  // différencier points et fl-=èches pour le undo  
 	  
 	    // undo_push (data->currentStack, OP_SET_ARROW, NULL, data);
-    if((data->fPencilTool) || (data->fLineTool) || (data->fRectTool)) {
+    if((data->fPencilTool) || (data->fLineTool) || (data->fRectTool) || (data->fEllipseTool)) {
       data->button_pressed = FALSE;
       /* if we are in 'line' mode, we have to push for undo line draw */
       if(data->fLineTool) {
@@ -1139,7 +1241,10 @@ gboolean on_sketch_draw_button_release_callback (GtkWidget *widget, GdkEvent *ev
       }
       if(data->fRectTool) {
 		  undo_push (data->currentStack, OP_SKETCH_BOX, NULL, data);// à changer !!!!!
-	  }        
+	  }       
+      if(data->fEllipseTool) {
+		  undo_push (data->currentStack, OP_SKETCH_ELLIPSE, NULL, data);// à changer !!!!!
+	  } 	  	   
       return TRUE;
     }
     gtk_widget_destroy (GTK_WIDGET(data->window));
@@ -1192,11 +1297,11 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
    data->y1_event_root = MIN (data->y1_event_root, event->button.y_root);
 
 
-   if ((data->fPencilTool) || (data->fLineTool) || (data->fRectTool)) {
+   if ((data->fPencilTool) || (data->fLineTool) || (data->fRectTool) || (data->fEllipseTool)) {
         if (data->button_pressed)  {
 		  if (data->fPencilTool) {
               draw_brush (event->button.x, event->button.y, data, g_key_file_get_double (keyString, "sketch", "pen-width", NULL));
-          }
+          }/* endif pencil */
 		  if (data->fLineTool) { 
 			  /* prepare restore background */ 
 			  if(w_mem_pix < 0) {
@@ -1212,9 +1317,7 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
 		      else {
 				y1 = y1_mem_pix;
 			  }
-			  			  
-		  //    printf ("arropw paste précédent  widfth %d  hih =%d \n", w_mem_pix, h_mem_pix);
-		      
+			  			  		      
 		      /* Paint to the surface, where we store our state */
               cr = cairo_create (data->Sketchsurface);
 			  /*  paste previous "clean" background image */           
@@ -1229,11 +1332,28 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
 			  y2_xor_last = event->button.y;
 			  w_mem_pix = x2_xor_last - x1_mem_pix; /* more easy with negative values */
               h_mem_pix = y2_xor_last - y1_mem_pix;                       			  
-			//  printf ("avant arrow width =%d  high =%d \n", w_mem_pix, h_mem_pix);
               draw_arrow (x2_xor_last, y2_xor_last, data, g_key_file_get_double (keyString, "sketch", "pen-width", NULL));
-          }   
-          if(data->fRectTool) {
-			  printf ("bloc motion rectangle \n");
+          } /* endif line arrow */
+            
+          if(data->fRectTool) {			 
+		      /* Paint to the surface, where we store our state */
+              cr = cairo_create (data->Sketchsurface);
+			  /*  paste previous "clean" background image */           
+	          gdk_cairo_set_source_pixbuf (cr, data->undo.pix, 0, 0);
+	          cairo_paint (cr);
+	          cairo_destroy (cr);
+			  gtk_widget_queue_draw (data->SketchDrawable);
+		   			  
+			  /* we get cleaned background, but with new dimensions */
+			  /* we have to compute various values */
+			  x2_xor_last = event->button.x;
+			  y2_xor_last = event->button.y;
+			  w_mem_pix = x2_xor_last - x1_mem_pix; /* more easy with negative values */
+              h_mem_pix = y2_xor_last - y1_mem_pix;                       			  			
+              draw_rectangle (x2_xor_last, y2_xor_last, data, g_key_file_get_double (keyString, "sketch", "pen-width", NULL));			  
+		  }/* endif rectangle */      
+
+         if(data->fEllipseTool) {			  
 		      /* Paint to the surface, where we store our state */
               cr = cairo_create (data->Sketchsurface);
 			  /*  paste previous "clean" background image */           
@@ -1249,8 +1369,10 @@ gboolean on_sketch_draw_motion_event_callback (GtkWidget *widget, GdkEvent *even
 			  w_mem_pix = x2_xor_last - x1_mem_pix; /* more easy with negative values */
               h_mem_pix = y2_xor_last - y1_mem_pix;                       			  
 			//  printf ("avant arrow width =%d  high =%d \n", w_mem_pix, h_mem_pix);
-              draw_rectangle (x2_xor_last, y2_xor_last, data, g_key_file_get_double (keyString, "sketch", "pen-width", NULL));			  
-		  }       
+              draw_ellipse (x2_xor_last, y2_xor_last, data, g_key_file_get_double (keyString, "sketch", "pen-width", NULL));			  
+		  }/* endif ellipse */ 		  
+		  		  
+		   
           return TRUE;
         } 
    }
@@ -1311,8 +1433,7 @@ gboolean on_sketch_draw_enter_event_callback (GtkWidget *widget, GdkEvent *event
 
   keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
 
-  printf ("je rentre dans la zone de dessin ! \n");
-  if(data->fPencilTool  || data->fLineTool) {
+  if(data->fPencilTool  || data->fLineTool || data->fEllipseTool) {
 	 cursor_dot_pencil (data->appWindow);
   }	
   else {
@@ -1332,12 +1453,7 @@ gboolean on_sketch_draw_enter_event_callback (GtkWidget *widget, GdkEvent *event
  * **********************************/
 gboolean on_sketch_draw_leave_event_callback (GtkWidget *widget, GdkEvent *event, APP_data *data)
 {
-  GtkWidget *window = data->window;
-  GKeyFile *keyString;
 
-  keyString = g_object_get_data (G_OBJECT(data->appWindow), "config");
-
-  printf ("je quitte  la zone de dessin ! \n");
   cursor_normal (data->appWindow);
   return TRUE;
 }

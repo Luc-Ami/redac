@@ -34,9 +34,9 @@ static void undo_free_last_data (APP_data *data)
      g_free (tmp_undo_datas->serialized_buffer);
      tmp_undo_datas->serialized_buffer = NULL;
    }
-   if(tmp_undo_datas->pix != NULL)
+   if(tmp_undo_datas->pix != NULL) {
          g_object_unref (tmp_undo_datas->pix);  
-
+   }
 //printf("apres serial dans free last \n");
    g_free (tmp_undo_datas);
    data->undoList = g_list_delete_link (data->undoList, l);  
@@ -203,7 +203,11 @@ static void update_undo_tooltip (gint op, APP_data *data)
     case OP_SKETCH_BOX: {
       gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last rectangle/box drawing inside sketch"));
       break;
-    }    
+    }     
+    case OP_SKETCH_ELLIPSE: {
+      gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last ellipse/circle drawing inside sketch"));
+      break;
+    }        
     case OP_PASTE_PIXBUF: {
       gtk_widget_set_tooltip_text (data->pBtnUndo, _("Undo last image pasting inside sketch"));
       break;
@@ -751,6 +755,7 @@ static void undo_pop_sketch (gint op, APP_data *data)
       gdk_cairo_set_source_pixbuf (cr, tmp_undo_datas->pix, tmp_undo_datas->x1, tmp_undo_datas->y1);
       break;
     }
+    case OP_SKETCH_ELLIPSE:
     case OP_SKETCH_BOX:
     case OP_SKETCH_LINE: {
 	  gdk_cairo_set_source_pixbuf (cr, tmp_undo_datas->pix, 0, 0);	
@@ -838,8 +843,9 @@ void undo_free_all_PDF_ops(APP_data *data)
         undo_datas *tmp_undo_datas;
         tmp_undo_datas = (undo_datas *)l->data;
         if(tmp_undo_datas->curStack == CURRENT_STACK_PDF) {
-           if(tmp_undo_datas->annotStr != NULL)
-              g_free (tmp_undo_datas->annotStr);   
+           if(tmp_undo_datas->annotStr != NULL) {
+              g_free (tmp_undo_datas->annotStr); 
+           }  
            g_free (tmp_undo_datas);
            nbvalRem++;
            nvalPDF--;
@@ -853,8 +859,9 @@ void undo_free_all_PDF_ops(APP_data *data)
  
 // printf("trouvé PDF ds blc rien %d elim.=%d\n", nvalPDF, nbvalRem);
   
-  if (g_list_length (data->undoList) == 0)
+  if (g_list_length (data->undoList) == 0) {
       gtk_widget_set_sensitive (data->pBtnUndo, FALSE);   
+  }
 }
 
 /***********************************
@@ -863,7 +870,7 @@ void undo_free_all_PDF_ops(APP_data *data)
   when we load another PDF document 
   in the same session
 ***********************************/
-void undo_free_all_sketch_ops(APP_data *data)
+void undo_free_all_sketch_ops (APP_data *data)
 {
   gint nvalSKETCH = 0, nbvalRem = 0, count = 0;
   gboolean found;
@@ -886,8 +893,9 @@ void undo_free_all_sketch_ops(APP_data *data)
         undo_datas *tmp_undo_datas;
         tmp_undo_datas = (undo_datas *)l->data;
         if(tmp_undo_datas->curStack == CURRENT_STACK_SKETCH) {printf("trouvé SKETCH \n");
-           if(tmp_undo_datas->pix != NULL)
+           if(tmp_undo_datas->pix != NULL) {
               g_object_unref (tmp_undo_datas->pix);   
+           }
            g_free (tmp_undo_datas);
            nbvalRem++;
            nvalSKETCH--;
@@ -916,13 +924,15 @@ void undo_free_all (APP_data *data)
   for(l; l!=NULL; l=l->next) {
      undo_datas *tmp_undo_datas;
      tmp_undo_datas = (undo_datas *)l->data;
-     if(tmp_undo_datas->annotStr != NULL)
+     if(tmp_undo_datas->annotStr != NULL) {
          g_free (tmp_undo_datas->annotStr);
-     if(tmp_undo_datas->serialized_buffer != NULL)
+     }
+     if(tmp_undo_datas->serialized_buffer != NULL) {
          g_free (tmp_undo_datas->serialized_buffer);
-     if(tmp_undo_datas->pix != NULL)
+     }
+     if(tmp_undo_datas->pix != NULL) {
          g_object_unref (tmp_undo_datas->pix);  
-
+     }
      g_free (tmp_undo_datas);
   }
   g_list_free (data->undoList);

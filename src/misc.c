@@ -167,6 +167,8 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   GtkWidget *pButtonPencil = lookup_widget (window1,"button_pencil");
   GtkWidget *pButtonArrow = lookup_widget (window1,"button_arrow");
   GtkWidget *pButtonBoxes = lookup_widget (window1,"button_boxes");
+  GtkWidget *pButtonEllipse = lookup_widget (window1,"button_ellipse");
+
   
   GtkWidget *pLabelPDFMod = GTK_WIDGET (gtk_builder_get_object (data->builder, "PDF_modified_label"));
   GtkWidget *pg_frame = GTK_WIDGET (gtk_builder_get_object (data->builder, "page_frame"));
@@ -204,7 +206,7 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   gtk_widget_set_sensitive (pButtonPencil, FALSE);
   gtk_widget_set_sensitive (pButtonArrow, FALSE);  
   gtk_widget_set_sensitive (pButtonBoxes, FALSE);
-  
+  gtk_widget_set_sensitive (pButtonEllipse, FALSE);  
   
 
   /* hide only if we are on PDF stack */
@@ -234,6 +236,7 @@ void misc_set_gui_in_PDF_mode (GtkWidget *window1, gint prevStack, APP_data *dat
   gtk_widget_hide (pButtonPencil);
   gtk_widget_hide (pButtonArrow);  
   gtk_widget_hide (pButtonBoxes); 
+  gtk_widget_hide (pButtonEllipse); 
 
     
   gtk_widget_show (pg_frame);
@@ -281,6 +284,8 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonArrow = lookup_widget(window1,"button_arrow");
 
   GtkWidget *pButtonBoxes = lookup_widget (window1,"button_boxes");
+
+  GtkWidget *pButtonEllipse = lookup_widget (window1,"button_ellipse");  
   
   GtkWidget *pLabelPDFMod = lookup_widget(window1,"PDF_modified_label");
   GtkWidget *pg_frame = lookup_widget(GTK_WIDGET(window1), "page_frame"); 
@@ -311,6 +316,7 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonPencil, FALSE);
   gtk_widget_set_sensitive (pButtonArrow, FALSE);
   gtk_widget_set_sensitive (pButtonBoxes, FALSE);  
+  gtk_widget_set_sensitive (pButtonEllipse, FALSE);    
   
   
   //gtk_widget_set_sensitive (pg_entry, FALSE);
@@ -353,6 +359,7 @@ void misc_set_gui_in_editor_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_hide (pButtonPencil);
   gtk_widget_hide (pButtonArrow);
   gtk_widget_hide (pButtonBoxes);
+  gtk_widget_hide (pButtonEllipse);
   
 }
 
@@ -380,6 +387,7 @@ void misc_set_gui_in_sketch_mode (GtkWidget *window1, gint prevStack)
   GtkWidget *pButtonPencil = lookup_widget(window1,"button_pencil");
   GtkWidget *pButtonArrow = lookup_widget(window1,"button_arrow");  
   GtkWidget *pButtonBoxes = lookup_widget (window1,"button_boxes");  
+  GtkWidget *pButtonEllipse = lookup_widget (window1,"button_ellipse");
   
   GtkWidget *pLabelPDFMod = lookup_widget(window1,"PDF_modified_label");
   GtkWidget *pg_frame = lookup_widget(GTK_WIDGET(window1), "page_frame"); 
@@ -411,6 +419,8 @@ void misc_set_gui_in_sketch_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_set_sensitive (pButtonPencil, TRUE);
   gtk_widget_set_sensitive (pButtonArrow, TRUE);  
   gtk_widget_set_sensitive (pButtonBoxes, TRUE);   
+  gtk_widget_set_sensitive (pButtonEllipse, TRUE); 
+
   
   gtk_widget_set_sensitive (pg_entry, FALSE);
   
@@ -419,7 +429,9 @@ void misc_set_gui_in_sketch_mode (GtkWidget *window1, gint prevStack)
   gtk_widget_show (pButtonPict);
   gtk_widget_show (pButtonPencil);  
   gtk_widget_show (pButtonArrow); 
-  gtk_widget_show (pButtonBoxes);   
+  gtk_widget_show (pButtonBoxes);  
+  gtk_widget_show (pButtonEllipse);  
+   
    
   /* we hide only if current stack is Sketch */
   
@@ -777,6 +789,7 @@ void misc_init_vars (APP_data *data )
   data->fPencilTool = FALSE;
   data->fLineTool = FALSE;
   data->fRectTool = FALSE;
+  data->fEllipseTool = FALSE;
   data->currentStack = CURRENT_STACK_EDITOR;
   /* we prepare Sketch area display */
   data->Sketchsurface = NULL;
